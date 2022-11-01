@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column, hasMany, HasOne, hasOne} from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, column, HasMany, hasMany, HasOne, hasOne} from '@ioc:Adonis/Lucid/Orm'
 import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
 
@@ -62,4 +62,10 @@ export default class Defect extends BaseModel {
     localKey: 'id_type_defect'
   })
   public defect_type: HasOne<typeof DefectType>
+
+  // @hasMany(() => IntermediateCheck, {
+  //   foreignKey: 'id',
+  //   localKey: 'id_intermediate_check'
+  // })
+  // public intermediate_checks: HasMany<typeof IntermediateCheck>
 }

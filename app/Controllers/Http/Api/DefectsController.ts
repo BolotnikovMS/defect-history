@@ -3,7 +3,11 @@ import Defect from 'App/Models/Defect'
 
 export default class DefectsController {
   public async index({response}: HttpContextContract) {
-    const defects = await Defect.query().preload('substation').preload('defect_type')
+    const defects = await Defect
+      .query()
+      .preload('substation')
+      .preload('defect_type')
+
 
     return response.send(defects)
   }
