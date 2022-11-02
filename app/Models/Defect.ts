@@ -2,6 +2,7 @@ import { DateTime } from 'luxon'
 import {BaseModel, column, HasMany, hasMany, HasOne, hasOne} from '@ioc:Adonis/Lucid/Orm'
 import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
@@ -15,9 +16,6 @@ export default class Defect extends BaseModel {
 
   @column()
   public id_user: number
-
-  @column()
-  public id_intermediate_check: number
 
   @column()
   public accession: string
@@ -63,9 +61,9 @@ export default class Defect extends BaseModel {
   })
   public defect_type: HasOne<typeof DefectType>
 
-  // @hasMany(() => IntermediateCheck, {
-  //   foreignKey: 'id',
-  //   localKey: 'id_intermediate_check'
-  // })
-  // public intermediate_checks: HasMany<typeof IntermediateCheck>
+  @hasMany(() => IntermediateCheck, {
+    localKey: 'id',
+    foreignKey: 'id_defect'
+  })
+  public intermediate_checks: HasMany<typeof IntermediateCheck>
 }

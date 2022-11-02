@@ -7,7 +7,7 @@ export default class DefectsController {
       .query()
       .preload('substation')
       .preload('defect_type')
-
+      .preload('intermediate_checks')
 
     return response.send(defects)
   }
