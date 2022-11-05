@@ -1,17 +1,18 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column, HasMany, hasMany, HasOne, hasOne} from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, HasOne, hasOne} from '@ioc:Adonis/Lucid/Orm'
 import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
+import Staff from 'App/Models/Staff'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({serializeAs: null})
   public id_substation: number
 
-  @column()
+  @column({serializeAs: null})
   public id_type_defect: number
 
   @column()
@@ -29,7 +30,7 @@ export default class Defect extends BaseModel {
   @column()
   public elimination_date: string
 
-  @column()
+  @column({serializeAs: null})
   public id_name_eliminated: number
 
   @column.dateTime({
@@ -62,8 +63,14 @@ export default class Defect extends BaseModel {
   public defect_type: HasOne<typeof DefectType>
 
   @hasMany(() => IntermediateCheck, {
-    localKey: 'id',
-    foreignKey: 'id_defect'
+    foreignKey: 'id_defect',
+    localKey: 'id'
   })
   public intermediate_checks: HasMany<typeof IntermediateCheck>
+
+  @belongsTo(() => Staff, {
+    foreignKey: 'id_name_eliminated',
+    localKey: 'id'
+  })
+  public name_eliminated: BelongsTo<typeof Staff>
 }

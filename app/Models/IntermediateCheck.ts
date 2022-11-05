@@ -1,13 +1,14 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column} from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, BelongsTo, belongsTo, column} from '@ioc:Adonis/Lucid/Orm'
+import Staff from 'App/Models/Staff'
 export default class IntermediateCheck extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
+  @column({ serializeAs: null} )
   public id_defect: number
 
-  @column()
+  @column( { serializeAs: null} )
   public id_inspector: number
 
   @column()
@@ -32,4 +33,10 @@ export default class IntermediateCheck extends BaseModel {
     }
   })
   public updatedAt: DateTime
+
+  @belongsTo(() => Staff, {
+    foreignKey: 'id_inspector',
+    localKey: 'id'
+  })
+  public name_inspector: BelongsTo<typeof Staff>
 }
