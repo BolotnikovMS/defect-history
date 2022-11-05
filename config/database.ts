@@ -36,6 +36,9 @@ const databaseConfig: DatabaseConfig = {
     */
     sqlite: {
       client: 'sqlite',
+      seeders: {
+        paths: ['./database/seeders/MainSeeder']
+      },
       connection: {
         filename: Application.tmpPath('db.sqlite3'),
       },

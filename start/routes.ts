@@ -22,12 +22,14 @@ Route.get('/', async ({ view }) => {
   return view.render('welcome')
 })
 
-// Route.get('', async ({}) => {})
+
+
 Route.group(() => {
   Route.group(() => {
     Route.get('/', 'DefectsController.index')
+    Route.post('/new', 'DefectsController.store')
   })
     .prefix('/defects')
 })
-  .namespace('App/Controllers/Http/Api')
+  .namespace('App/Controllers/Http/Api/v1.0')
   .prefix('/api/v1.0')
