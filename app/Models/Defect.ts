@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import {BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, HasOne, hasOne} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column, HasMany, hassMany, HasOne, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
@@ -9,10 +9,10 @@ export default class Defect extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column({serializeAs: null})
+  @column({ serializeAs: null })
   public id_substation: number
 
-  @column({serializeAs: null})
+  @column({ serializeAs: null })
   public id_type_defect: number
 
   @column()
@@ -30,7 +30,7 @@ export default class Defect extends BaseModel {
   @column()
   public elimination_date: string
 
-  @column({serializeAs: null})
+  @column({ serializeAs: null })
   public id_name_eliminated: number
 
   @column.dateTime({
