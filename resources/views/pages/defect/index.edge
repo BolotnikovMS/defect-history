@@ -1,0 +1,55 @@
+@layout('layout/master')
+
+@section('content')
+  <section class="defect">
+    <div class="container">
+      <div class="defect__titles">
+        <h2 class="defect__title">Дефекты ТМ</h2>
+      </div>
+      <div class="defect__content">
+        <table class="defect__table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Объект</th>
+              <th>Присоединение</th>
+              <th>Описание</th>
+              <th>Срок устранения</th>
+              <th>Дата устранения</th>
+              <th>
+                <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Test</td>
+              <td>ф.1</td>
+              <td>Неисправность датчика</td>
+              <td>11.11.2022</td>
+              <td>-</td>
+              <td>
+                <a href="#" title="Перейти к подробному просмотру">
+                  <img src="{{ asset('assets/icons/link.svg') }}" class="table__img" alt="Подробнее">
+                </a>
+                <a href="#" title="Меню">
+                  <img src="{{ asset('assets/icons/menu.svg') }}" class="table__img" alt="Меню">
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Test</td>
+              <td>ф.2</td>
+              <td>Неисправность датчика</td>
+              <td>11.11.2022</td>
+              <td>-</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+@endsection
