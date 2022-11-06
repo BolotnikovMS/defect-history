@@ -18,18 +18,13 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async ({ view }) => {
-  return view.render('welcome')
-})
-
-
+Route.get('/', 'DefectsController.index').as('defects.all')
 
 Route.group(() => {
   Route.group(() => {
     Route.get('/', 'DefectsController.index')
     Route.post('/new', 'DefectsController.store')
-  })
-    .prefix('/defects')
+  }).prefix('/defects')
 })
   .namespace('App/Controllers/Http/Api/v1.0')
   .prefix('/api/v1.0')
