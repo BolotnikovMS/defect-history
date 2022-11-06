@@ -1,2 +1,7 @@
-@import './base/reset';
-@import './base/base';
+@import "base/reset";
+@import "abstracts/variable";
+@import "abstracts/mixins";
+@import "base/base";
+
+@import "blocks/header";
+@import "blocks/defect";

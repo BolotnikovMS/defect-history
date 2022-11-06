@@ -1,0 +1,51 @@
+.header {
+  padding: 25px 0;
+  background-color: #edebeb;
+  box-shadow: 1px 9px 9px -10px #000000;
+
+  &-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__nav {
+    & > ul {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: 30px;
+
+      li > a {
+        position: relative;
+      }
+
+      li > a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 15px;
+        bottom: -5px;
+        height: 2px;
+        transition: all 0.3s ease-in;
+      }
+
+      li > a:hover::after {
+        background-color: #5cadf8;
+      }
+    }
+  }
+
+  &__login {
+    .btn {
+      @include btn;
+      background-color: #5cadf8;
+      border: 1px solid #5cadf8;
+
+      &:hover {
+        background-color: #edebeb;
+        color: #000;
+      }
+    }
+  }
+}

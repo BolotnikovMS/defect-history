@@ -1,24 +1,19 @@
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-  transition: background-color 600000s 0s, color 600000s 0s;
+body {
+  font-family: $font-family, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
 }
 
-input[data-autocompleted] {
-  background-color: transparent !important;
+a {
+  transition: all 0.3s ease-in;
+}
+
+a:hover {
+  color: #626262;
 }
 
 .none {
   display: none !important;
-}
-
-.hidden {
-  visibility: hidden;
-  opacity: 0;
-}
-
-.visable {
-  visibility: visible;
-  opacity: 1;
 }
 
 .container {
