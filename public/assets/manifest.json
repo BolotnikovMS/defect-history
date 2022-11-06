@@ -1,4 +1,10 @@
 {
   "assets/app.css": "http://localhost:8080/assets/app.css",
-  "assets/app.js": "http://localhost:8080/assets/app.js"
+  "assets/app.js": "http://localhost:8080/assets/app.js",
+  "assets/icons/edit.svg": "http://localhost:8080/assets/icons/edit.f3eff696.svg",
+  "assets/icons/delete.svg": "http://localhost:8080/assets/icons/delete.bed8c76b.svg",
+  "assets/icons/menu.svg": "http://localhost:8080/assets/icons/menu.09968542.svg",
+  "assets/icons/link.svg": "http://localhost:8080/assets/icons/link.b21208eb.svg",
+  "assets/icons/settings.svg": "http://localhost:8080/assets/icons/settings.01b5c95d.svg",
+  "assets/icons/journal.svg": "http://localhost:8080/assets/icons/journal.844e7823.svg"
 }
