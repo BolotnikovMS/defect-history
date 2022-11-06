@@ -1,1 +1,2 @@
-import '../css/app.css'
+// import '../css/main.css'
+import '../scss/main.scss'
