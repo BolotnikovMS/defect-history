@@ -18,7 +18,12 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', 'DefectsController.index').as('defects.all')
+Route.group(() => {
+  Route.get('/', 'DefectsController.index').as('defects.all')
+  Route.group(() => {
+    Route.post('/new', 'DefectsController.store').as('defect.store')
+  }).prefix('/defects')
+})
 
 Route.group(() => {
   Route.group(() => {
