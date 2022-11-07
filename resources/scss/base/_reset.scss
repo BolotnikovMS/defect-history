@@ -85,3 +85,11 @@ label {
 legend {
 	display: block;
 }
+
+details summary::-webkit-details-marker {
+  display: none
+}
+
+details > summary {
+  list-style: none;
+}

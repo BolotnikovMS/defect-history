@@ -20,4 +20,89 @@ a:hover {
   max-width: 1500px;
   padding: 0 15px;
   margin: 0 auto;
+  box-shadow: 2px 32px 47px -37px #000000;
+}
+
+.dialog {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  margin-bottom: 20px;
+  transition: all 0.5s ease-in;
+
+  & + * {
+    margin-top: 15px;
+  }
+
+  &.active {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.form {
+  &__title {
+    font-size: 20px;
+    font-weight: bold;
+
+    & + * {
+      margin-top: 10px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    column-gap: 15px;
+
+    & + * {
+      margin-top: 15px;
+    }
+  }
+
+  &__group {
+    display: flex;
+    text-align: center;
+  }
+
+  &__label {
+    font-size: 18px;
+  }
+
+  &__input {
+    font-size: 18px;
+    margin-top: 8px;
+    padding: 8px 10px;
+    border: 1px solid #cfcfcf;
+    text-align: center;
+    border-radius: 10px;
+
+    &::placeholder {
+      font-size: 17px;
+    }
+
+    &:focus {
+      border: 1px solid #5cadf8;
+    }
+  }
+
+  &__textarea {
+    resize: none;
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__btn {
+    @include btn;
+    background-color: #5caf5c;
+    transition: all 0.3s ease-in;
+
+    &:hover {
+      transform: scale(1.1);
+    background-color: #3b733b;
+    }
+  }
 }

@@ -1,0 +1,42 @@
+.message {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.alert {
+  opacity: 0;
+  display: none;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding: 30px;
+  border-radius: 10px;
+  font-size: 19px;
+  transition: all 0.3s ease-in;
+
+  &.active {
+    opacity: 1;
+    display: flex;
+  }
+
+  &-success {
+    background-color: rgba(169, 250, 149, 0.6);
+  }
+
+  &-danger {
+    background-color: rgba(255, 139, 139, 0.7);
+  }
+
+  &__btn {
+    width: 30px;
+    height: 30px;
+    padding: 6px 7px 0;
+    border-radius: 100%;
+    transition: all 0.3s ease-in;
+
+    &:hover {
+      background-color: rgba(169, 250, 149, 0.9);
+    }
+  }
+}
