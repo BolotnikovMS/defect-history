@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  openDialog('.dialog', '.defect__btn-open')
+  openDialog('.dialog', '.btn-open')
 
   // Alerts
   const closeBtn = document.querySelector('.alert__btn-close')
