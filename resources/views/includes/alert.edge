@@ -1,23 +1,22 @@
 <div class="message">
-  <div class="container">
-    @if(flashMessages.has('successMessage'))
-      <div class="alert alert-success active">
-        <div class="alert__text">
-          {{ flashMessages.get('successMessage') }}
-        </div>
-        <button class="alert__btn-close">
-          <img src="{{ asset('assets/icons/close.svg') }}" alt="">
-        </button>
+  {{--  {{ inspect(flashMessages.all()) }}  --}}
+  @if(flashMessages.has('successMessage'))
+    <div class="alert alert-success active">
+      <div class="alert__text">
+        {{ flashMessages.get('successMessage') }}
       </div>
-    @elseif(flashMessages.has('dangerMessage'))
-      <div class="alert alert-danger">
-        <div class="alert__text">
-          {{ flashMessages.get('dangerMessage') }}
-        </div>
-        <button class="alert__btn">
-          <img src="{{ asset('assets/icons/close.svg') }}" alt="">
-        </button>
+      <button class="alert__btn alert__btn-success alert__btn-close">
+        <img src="{{ asset('assets/icons/close.svg') }}" alt="">
+      </button>
+    </div>
+  @elseif(flashMessages.has('dangerMessage'))
+    <div class="alert alert-danger active">
+      <div class="alert__text">
+        {{ flashMessages.get('dangerMessage') }}
       </div>
-    @endif
-  </div>
+      <button class="alert__btn alert__btn-danger alert__btn-close">
+        <img src="{{ asset('assets/icons/close.svg') }}" alt="">
+      </button>
+    </div>
+  @endif
 </div>
