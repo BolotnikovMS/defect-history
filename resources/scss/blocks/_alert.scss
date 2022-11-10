@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
-  padding: 30px;
+  padding: 20px;
   border-radius: 10px;
   font-size: 19px;
   transition: all 0.3s ease-in;
@@ -35,8 +35,16 @@
     border-radius: 100%;
     transition: all 0.3s ease-in;
 
-    &:hover {
-      background-color: rgba(169, 250, 149, 0.9);
+    &-success {
+      &:hover {
+        background-color: rgba(145, 215, 128, 0.7);
+      }
+    }
+
+    &-danger {
+      &:hover {
+        background-color: rgba(255, 139, 139, 0.9);
+      }
     }
   }
 }
