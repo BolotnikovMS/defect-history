@@ -1,6 +1,6 @@
 @set('menu', {
   defects: 'defects.all',
-  typeDefects: '',
+  typesDefects: 'types-defects.all',
   substation: '',
   staff: ''
 })
@@ -14,7 +14,7 @@
       <nav class="header__nav">
         <ul>
           <li><a href="{{ route(menu.defects) }}">Дефекты</a></li>
-          <li><a href="#">Типы дефектов</a></li>
+          <li><a href="{{ route(menu.typesDefects) }}">Типы дефектов</a></li>
           <li><a href="#">Объекты</a></li>
           <li><a href="#">Персонал</a></li>
         </ul>
