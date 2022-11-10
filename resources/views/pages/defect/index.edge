@@ -3,14 +3,12 @@
 @section('content')
   <section class="defect">
     <div class="container">
-      <div class="defect__titles">
-        <h2 class="defect__title">Дефекты ТМ</h2>
-      </div>
+      <h2 class="defect__title">{{ title }}</h2>
       <div class="defect__content">
         <div class="defect__control">
-          <button class="defect__btn defect__btn-open">Добавить</button>
+          <button class="defect__btn defect__btn-open btn-open">Добавить</button>
         </div>
-        <div class="dialog active">
+        <div class="dialog">
           <form action="{{ route('defect.store') }}" method="POST">
             <h3 class="form__title">Добавление нового дефекта</h3>
             <div class="form__content">
@@ -24,6 +22,9 @@
                     @endeach
                   </select>
                 </label>
+                @if(flashMessages.has('errors.defect_type'))
+                  <span class="error-text">{{ flashMessages.get('errors.defect_type') }}</span>
+                @endif
               </div>
               <div class="form__group">
                 <label class="form__label">
@@ -35,24 +36,36 @@
                     @endeach
                   </select>
                 </label>
+                @if(flashMessages.has('errors.substation'))
+                  <span class="error-text">{{ flashMessages.get('errors.substation') }}</span>
+                @endif
               </div>
               <div class="form__group">
                 <label class="form__label">
                   Присоединение
                   <input type="text" name="accession" class="form__input" placeholder="Введите присоединение" required value="{{ flashMessages.get('accession', '') }}">
                 </label>
+                @if(flashMessages.has('errors.accession'))
+                  <span class="error-text">{{ flashMessages.get('errors.accession') }}</span>
+                @endif
               </div>
               <div class="form__group">
                 <label class="form__label">
                   Описание
                   <textarea name="description_defect" class="form__input form__textarea" cols="30" rows="3" placeholder="Введите описание дефекта..." required>{{ flashMessages.get('description_defect', '') }}</textarea>
                 </label>
+                @if(flashMessages.has('errors.description_defect'))
+                  <span class="error-text">{{ flashMessages.get('errors.description_defect') }}</span>
+                @endif
               </div>
               <div class="form__group">
                 <label class="form__label">
                   Сроки устранения
                   <input type="date" name="term_elimination" class="form__input" required value="{{ flashMessages.get('term_elimination', '') }}">
                 </label>
+                @if(flashMessages.has('errors.term_elimination'))
+                  <span class="error-text">{{ flashMessages.get('errors.term_elimination') }}</span>
+                @endif
               </div>
             </div>
             <div class="form__btns">
@@ -85,7 +98,7 @@
                 <td>{{ defect.accession }}</td>
                 <td>{{ truncate(defect.description_defect, 40) }}</td>
                 <td>{{ defect.term_elimination }}</td>
-                <td>{{ defect.elimination_date }}</td>
+                <td>{{ defect.elimination_date === null ? '' : defect.elimination_date }}</td>
                 <td>
                   <a href="#" title="Перейти к подробному просмотру">
                     <img src="{{ asset('assets/icons/link.svg') }}" class="table__img" alt="Подробнее">

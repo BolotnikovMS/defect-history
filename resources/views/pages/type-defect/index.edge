@@ -1,0 +1,75 @@
+@layout('layout/master')
+
+@section('content')
+  <section class="types-defects">
+    <div class="container">
+      <h2 class="types-defects__title">{{ title }}</h2>
+      <div class="types-defects__content">
+        <div class="types-defects__control">
+          <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button>
+        </div>
+        <div class="dialog active">
+          <form action="{{ route('types-defects.store') }}" method="POST">
+            <h3 class="form__title">Добавление нового типа дефекта</h3>
+            <div class="form__content">
+              <div class="form__group">
+                <label class="form__label">
+                  Введите название
+                  <input type="text" name="type_defect" class="form__input" placeholder="Введите название..." required value="{{ flashMessages.get('type_defect', '') }}">
+                </label>
+                @if(flashMessages.has('errors.type_defect'))
+                  <span class="error-text">{{ flashMessages.get('errors.type_defect') }}</span>
+                @endif
+              </div>
+              <div class="form__group">
+                <label class="form__label">
+                  Описание
+                  <textarea name="defect_description" class="form__input form__textarea" cols="60" rows="4"></textarea>
+                </label>
+                @if(flashMessages.has('errors.defect_description'))
+                  <span class="error-text">{{ flashMessages.get('errors.defect_description') }}</span>
+                @endif
+              </div>
+            </div>
+            <div class="form__btns">
+              <button class="form__btn" type="submit">Сохранить</button>
+            </div>
+          </form>
+        </div>
+        <hr>
+        @if(typesDefects.length)
+          <ul class="types-defects__list">
+            @each((typeDefect, i) in typesDefects)
+              <li class="list__item">
+                <div class="list__content">
+                  {{ i + 1 }}. {{ typeDefect.type_defect }} -
+                  @if(typeDefect.defect_description !== null)
+                    <span class="list__text">
+                      {{ typeDefect.defect_description }}
+                    </span>
+                  @else
+                    <span class="list__text list__text-no_text">
+                      Описание дефекта не добавлено...
+                    </span>
+                  @endif
+                </div>
+                <div class="list__control">
+                  <a href="#">
+                    <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                  </a>
+                  <a href="{{ route('types-defects.destroy', {id: typeDefect.id}) }}">
+                    <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+                  </a>
+                </div>
+              </li>
+            @endeach
+          </ul>
+        @else
+          <div class="no-content">
+            <p>Пока нет добавленых типов дефектов.</p>
+          </div>
+        @endif
+      </div>
+    </div>
+  </section>
+@endsection
