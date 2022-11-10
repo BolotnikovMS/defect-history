@@ -37,7 +37,7 @@ export default class Defect extends BaseModel {
     autoCreate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public createdAt: DateTime
 
@@ -46,31 +46,31 @@ export default class Defect extends BaseModel {
     autoUpdate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public updatedAt: DateTime
 
   @hasOne(() => Substation, {
     foreignKey: 'id',
-    localKey: 'id_substation'
+    localKey: 'id_substation',
   })
   public substation: HasOne<typeof Substation>
 
   @hasOne(() => DefectType, {
     foreignKey: 'id',
-    localKey: 'id_type_defect'
+    localKey: 'id_type_defect',
   })
   public defect_type: HasOne<typeof DefectType>
 
   @hasMany(() => IntermediateCheck, {
     foreignKey: 'id_defect',
-    localKey: 'id'
+    localKey: 'id',
   })
   public intermediate_checks: HasMany<typeof IntermediateCheck>
 
   @belongsTo(() => Staff, {
     foreignKey: 'id_name_eliminated',
-    localKey: 'id'
+    localKey: 'id',
   })
   public name_eliminated: BelongsTo<typeof Staff>
 }
