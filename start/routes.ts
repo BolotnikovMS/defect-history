@@ -22,7 +22,14 @@ Route.group(() => {
   Route.get('/', 'DefectsController.index').as('defects.all')
   Route.group(() => {
     Route.post('/new', 'DefectsController.store').as('defect.store')
+    Route.get('/delete/:id', 'DefectsController.destroy').as('defect.delete')
   }).prefix('/defects')
+
+  Route.group(() => {
+    Route.get('/', 'DefectTypesController.index').as('types-defects.all')
+    Route.post('/new', 'DefectTypesController.store').as('types-defects.store')
+    Route.get('/delete/:id', 'DefectTypesController.destroy').as('types-defects.destroy')
+  }).prefix('/types-defects')
 })
 
 Route.group(() => {
