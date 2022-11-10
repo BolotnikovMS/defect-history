@@ -4,4 +4,82 @@
   color: #fff;
   border-radius: 10px;
   transition: all 0.3s ease-in;
+
+  &-open {
+    border: 1px solid #5caf5c;
+    background-color: #5caf5c;
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+    }
+  }
+}
+
+@mixin title {
+  font-size: 25px;
+  font-weight: bold;
+
+  & + * {
+    margin-top: 20px;
+  }
+}
+
+@mixin control-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  & + * {
+    margin-top: 25px;
+  }
+}
+
+@mixin list {
+  .list {
+    &__item {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(250px, 1fr));
+      grid-template-areas:
+        "colum-1 colum-1 colum-2"
+      ;
+      align-items: center;
+      grid-column-gap: 15px;
+
+      & + * {
+        margin-top: 8px;
+      }
+    }
+
+    &__text {
+      font-style: italic;
+
+      &-no_text {
+        color: #ecb017;
+      }
+    }
+
+    &__content {
+      grid-area: colum-1;
+    }
+
+    &__control {
+      grid-area: colum-2;
+      display: flex;
+      column-gap: 8px;
+    }
+
+    &__img {
+      width: 30px;
+      height: 30px;
+      padding: 2px;
+      transition: all 0.2s ease-in;
+
+      &:hover {
+        background-color: rgb(171, 168, 168);
+        border-radius: 100%;
+        transform: scale(1.2);
+      }
+    }
+  }
 }
