@@ -1,0 +1,23 @@
+.types-defects {
+  padding: 30px 0;
+
+  &__content {
+    padding-bottom: 40px;
+  }
+
+  &__title {
+    @include title;
+  }
+
+  &__control {
+    @include control-group;
+  }
+
+  &__btn {
+    @include btn;
+  }
+
+  &__list {
+    @include list;
+  }
+}
