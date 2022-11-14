@@ -1,0 +1,43 @@
+.pagination {
+  padding: 15px 0;
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 17px;
+  }
+
+  &__item {
+    padding: 7px 10px;
+    border: 1px solid rgba(199, 199, 199, 0.5);
+    border-radius: 10px;
+    transition: all 0.3s ease-in;
+
+    &:hover {
+      background-color: #5cadf8;
+    }
+
+    &.active {
+      background-color: #5cadf8;
+    }
+
+    &.inactive {
+      background-color: unset;
+    }
+  }
+
+  &__link {
+    transition: color 0.3s ease-in;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &.disabled {
+      pointer-events: none;
+      cursor: default;
+      color: #999;
+    }
+  }
+}
