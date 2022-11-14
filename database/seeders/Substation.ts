@@ -4,16 +4,16 @@ import Substation from 'App/Models/Substation'
 export default class extends BaseSeeder {
   public static environment = ['development', 'testing']
 
-  public async run () {
+  public async run() {
     await Substation.createMany([
       {
         name: 'Тест 1',
-        voltage_class: '10/35'
+        voltage_class: '10/35',
       },
       {
         name: 'Тест 2',
-        voltage_class: '10/35'
-      }
+        voltage_class: '10/35',
+      },
     ])
   }
 }

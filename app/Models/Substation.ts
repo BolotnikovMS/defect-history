@@ -15,7 +15,7 @@ export default class Substation extends BaseModel {
     autoCreate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public createdAt: DateTime
 
@@ -24,7 +24,7 @@ export default class Substation extends BaseModel {
     autoUpdate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public updatedAt: DateTime
 }

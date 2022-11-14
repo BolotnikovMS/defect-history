@@ -4,7 +4,7 @@ import Defect from 'App/Models/Defect'
 export default class extends BaseSeeder {
   public static environment = ['development', 'testing']
 
-  public async run () {
+  public async run() {
     await Defect.createMany([
       {
         id_substation: 1,
@@ -29,7 +29,7 @@ export default class extends BaseSeeder {
         accession: 'ф.1111',
         description_defect: 'Дефект датчика I',
         term_elimination: '11.11.2022',
-      }
+      },
     ])
   }
 }
