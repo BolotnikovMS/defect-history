@@ -6,12 +6,31 @@
   transition: all 0.3s ease-in;
 
   &-open {
+    color: #fff;
     border: 1px solid #5caf5c;
     background-color: #5caf5c;
 
     &:hover {
       background-color: #fff;
-      color: #000;
+      color: #000 !important;
+    }
+  }
+
+  &-save {
+    background-color: #5caf5c;
+
+    &:hover {
+      transform: scale(1.1);
+      background-color: #3b733b;
+    }
+  }
+
+  &-cancel {
+    background-color: #838080;
+
+    &:hover {
+      transform: scale(1.1);
+      background-color: #666565;
     }
   }
 }
