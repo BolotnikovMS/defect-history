@@ -27,9 +27,16 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/', 'DefectTypesController.index').as('types-defects.all')
-    Route.post('/new', 'DefectTypesController.store').as('types-defects.store')
-    Route.get('/delete/:id', 'DefectTypesController.destroy').as('types-defects.destroy')
+    Route.get('/new', 'DefectTypesController.create').as('type-defect.create')
+    Route.post('/new', 'DefectTypesController.store').as('type-defect.store')
+    Route.get('/edit/:id', 'DefectTypesController.edit').as('type-defect.edit')
+    Route.post('/edit/:id', 'DefectTypesController.update').as('type-defect.update')
+    Route.get('/delete/:id', 'DefectTypesController.destroy').as('type-defect.destroy')
   }).prefix('/types-defects')
+
+  Route.group(() => {
+    Route.get('/', 'SubstationsController.index').as('substations.all')
+  }).prefix('/substations')
 })
 
 Route.group(() => {
