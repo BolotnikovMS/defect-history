@@ -5,6 +5,7 @@ body {
 }
 
 a {
+  color: #000;
   transition: all 0.3s ease-in;
 }
 
@@ -71,10 +72,15 @@ hr {
 
   &__content {
     display: flex;
-    column-gap: 15px;
+    gap: 15px;
 
     & + * {
       margin-top: 15px;
+    }
+
+    &-column {
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
 
@@ -89,6 +95,10 @@ hr {
     flex-direction: column;
     align-items: center;
     font-size: 18px;
+
+    &-text_left {
+      align-items: flex-start;
+    }
   }
 
   &__input {
@@ -96,7 +106,6 @@ hr {
     margin-top: 10px;
     padding: 8px 10px;
     border: 1px solid #cfcfcf;
-    text-align: center;
     border-radius: 10px;
 
     &::placeholder {
@@ -115,16 +124,10 @@ hr {
   &__btns {
     display: flex;
     justify-content: center;
+    column-gap: 10px;
   }
 
   &__btn {
     @include btn;
-    background-color: #5caf5c;
-    transition: all 0.3s ease-in;
-
-    &:hover {
-      transform: scale(1.1);
-    background-color: #3b733b;
-    }
   }
 }
