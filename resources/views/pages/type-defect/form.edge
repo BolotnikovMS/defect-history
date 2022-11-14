@@ -1,0 +1,37 @@
+@layout('layout/master')
+
+@section('content')
+  <section class="types-defects">
+    <div class="container">
+      <h2 class="types-defects__title">{{ title }}</h2>
+      <div class="types-defects__content">
+        <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
+          <div class="form__content form__content-column">
+            <div class="form__group">
+              <label class="form__label form__label-text_left">
+                Введите название
+                <input type="text" name="type_defect" class="form__input" placeholder="Введите название..." required value="{{ typeDefect ? typeDefect.type_defect : flashMessages.get('type_defect', '') }}">
+              </label>
+              @if(flashMessages.has('errors.type_defect'))
+                <span class="error-text">{{ flashMessages.get('errors.type_defect') }}</span>
+              @endif
+            </div>
+            <div class="form__group">
+              <label class="form__label form__label-text_left">
+                Описание
+                <textarea name="defect_description" class="form__input form__textarea" cols="60" rows="4">{{ typeDefect ? typeDefect.defect_description : '' }}</textarea>
+              </label>
+              @if(flashMessages.has('errors.defect_description'))
+                <span class="error-text">{{ flashMessages.get('errors.defect_description') }}</span>
+              @endif
+            </div>
+          </div>
+          <div class="form__btns">
+            <a href="{{ route('types-defects.all') }}" class="form__btn form__btn-cancel">Отмена</a>
+            <button class="form__btn form__btn-save" type="submit">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+@endsection
