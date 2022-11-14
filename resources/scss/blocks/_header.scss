@@ -33,6 +33,21 @@
       li > a:hover::after {
         background-color: #5cadf8;
       }
+
+      li > a.active {
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 25px;
+          bottom: -5px;
+          height: 2px;
+          background-color: #5cadf8;
+          transition: all 0.3s ease-in;
+        }
+      }
     }
   }
 
