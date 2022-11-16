@@ -6,16 +6,9 @@ export default class DefectTypesController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 10
-
     const typesDefects = await DefectType.query().orderBy('created_at', 'asc').paginate(page, limit)
 
     typesDefects.baseUrl('/types-defects')
-
-    typesDefects.map((typeDefect) => {
-      typeDefect.serialize({
-        fields: ['id', 'type_defect', 'defect_description'],
-      })
-    })
 
     return view.render('pages/type-defect/index', {
       title: 'Типы дефектов',
