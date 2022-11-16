@@ -119,6 +119,10 @@ hr {
 
   &__textarea {
     resize: none;
+
+    &:focus {
+      border: 1px solid #5cadf8;
+    }
   }
 
   &__btns {
