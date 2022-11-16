@@ -1,0 +1,42 @@
+@layout('layout/master')
+
+@section('content')
+  <section class="substations">
+    <div class="container">
+      <h2 class="substations__title">{{ title }}</h2>
+      <div class="substations-control">
+        <a href="{{ route('substations.create') }}" class="substations__btn substations__btn-open">Добавить</a>
+      </div>
+      <div class="substations__content">
+        <hr>
+        @if(substations.length)
+          <ul class="substations__list">
+            @each(substation in substations)
+              <li class="list__item">
+                <div class="list__content">
+                  {{ substation.nameAndClass }}
+                </div>
+                <div class="list__control">
+                  <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
+                    <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                  </a>
+                  <a href="{{ route('substations.destroy', {id: substation.id}) }}">
+                    <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+                  </a>
+                </div>
+              </li>
+            @endeach
+          </ul>
+        @else
+          <div class="no-content">
+            <p>Пока нет добавленых объектов.</p>
+          </div>
+        @endif
+        <hr>
+      </div>
+      @!component('components/pagination', {
+        pagination: substations,
+      })
+    </div>
+  </section>
+@endsection
