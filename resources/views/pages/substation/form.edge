@@ -1,0 +1,37 @@
+@layout('layout/master')
+
+@section('content')
+  <section class="substations">
+    <div class="container">
+      <h2 class="substations__title">{{ title }}</h2>
+      <div class="substations__content">
+        <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
+          <div class="form__content form__content-column">
+            <div class="form__group">
+              <label class="form__label form__label-text_left">
+                Название объекта
+                <input type="text" name="name" class="form__input" placeholder="Введите название..." required value="{{ substation ? substation.name : flashMessages.get('name', '') }}">
+              </label>
+              @if(flashMessages.has('errors.name'))
+                <span class="error-text">{{ flashMessages.get('errors.name') }}</span>
+              @endif
+            </div>
+            <div class="form__group">
+              <label class="form__label form__label-text_left">
+                Класс объекта
+                <input type="text" name="voltage_class" class="form__input" placeholder="Введите класс..." required value="{{ substation ? substation.voltage_class : flashMessages.get('voltage_class', '') }}">
+              </label>
+              @if(flashMessages.has('errors.voltage_class'))
+                <span class="error-text">{{ flashMessages.get('errors.voltage_class') }}</span>
+              @endif
+            </div>
+          </div>
+          <div class="form__btns">
+            <a href="{{ route('substations.all') }}" class="form__btn form__btn-cancel">Отмена</a>
+            <button class="form__btn form__btn-save" type="submit">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+@endsection
