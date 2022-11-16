@@ -9,7 +9,7 @@
     @include title;
   }
 
-  &__control {
+  &-control {
     @include control-group;
   }
 
