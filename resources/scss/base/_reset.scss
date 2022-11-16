@@ -60,6 +60,10 @@ input::-ms-clear {
 	display: none;
 }
 
+textarea:focus {
+  outline: none;
+}
+
 button, input[type="submit"] {
     display: inline-block;
     box-shadow: none;
