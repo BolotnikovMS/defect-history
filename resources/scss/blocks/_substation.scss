@@ -1,0 +1,23 @@
+.substations {
+  padding: 30px 0;
+
+  &__content {
+    padding-bottom: 15px;
+  }
+
+  &__title {
+    @include title;
+  }
+
+  &-control {
+    @include control-group;
+  }
+
+  &__btn {
+    @include btn;
+  }
+
+  &__list {
+    @include list;
+  }
+}
