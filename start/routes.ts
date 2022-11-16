@@ -36,6 +36,11 @@ Route.group(() => {
 
   Route.group(() => {
     Route.get('/', 'SubstationsController.index').as('substations.all')
+    Route.get('/new', 'SubstationsController.create').as('substations.create')
+    Route.post('/new', 'SubstationsController.store').as('substations.store')
+    Route.get('/edit/:id', 'SubstationsController.edit').as('substations.edit')
+    Route.post('/edit/:id', 'SubstationsController.update').as('substations.update')
+    Route.get('/delete/:id', 'SubstationsController.destroy').as('substations.destroy')
   }).prefix('/substations')
 })
 
