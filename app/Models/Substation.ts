@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
@@ -10,6 +10,11 @@ export default class Substation extends BaseModel {
 
   @column()
   public voltage_class: string
+
+  @computed()
+  public get nameAndClass() {
+    return `${this.voltage_class} ${this.name}`
+  }
 
   @column.dateTime({
     autoCreate: true,
