@@ -1,6 +1,4 @@
 .defect {
-  padding: 30px 0;
-
   &__title {
     @include title;
   }
@@ -9,54 +7,16 @@
     @include control-group;
   }
 
+  &__content {
+    padding-bottom: 15px;
+  }
+
   &__btn {
     @include btn;
 
   }
 
-  &__table {
-    padding: 10px;
-    font-size: 18px;
-    width: 100%;
-    min-width: 100%;
-    white-space: nowrap;
-    background-color: white;
-
-    td, th {
-      text-align: center;
-      padding: 10px;
-    }
-
-    td {
-      border-right: 1px solid #f8f8f8;
-      font-size: 16px;
-    }
-
-    thead th {
-      color: #ffffff;
-      background-color: #5cadf8;
-
-      &:nth-child(odd) {
-        color: #000;
-        background-color: #fff;
-      }
-    }
-
-    tr {
-      &:nth-child(even) {
-        background: #F8F8F8;
-      }
-    }
-  }
-
-  .table__img {
-    padding: 3px;
-    transition: all 0.2s ease-in;
-
-    &:hover {
-      background-color: rgb(171, 168, 168);
-      border-radius: 100%;
-      transform: scale(1.2);
-    }
+  &-table {
+    @include table;
   }
 }
