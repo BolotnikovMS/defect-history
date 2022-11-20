@@ -1,122 +1,55 @@
 @layout('layout/master')
 
 @section('content')
-  <section class="defect">
-    <div class="container">
-      <h2 class="defect__title">{{ title }}</h2>
-      <div class="defect__content">
-        <div class="defect__control">
-          <button class="defect__btn defect__btn-open btn-open">Добавить</button>
-        </div>
-        <div class="dialog">
-          <form action="{{ route('defect.store') }}" method="POST">
-            <h3 class="form__title">Добавление нового дефекта</h3>
-            <div class="form__content">
-              <div class="form__group">
-                <label class="form__label">
-                  Выберите тип дефекта
-                  <select name="defect_type" class="form__input" required>
-                    <option selected disabled>Выберите тип дефекта</option>
-                    @each(typeDefect in typeDefects)
-                      <option value="{{ typeDefect.id }}" {{ flashMessages.get('defect_type') == typeDefect.id ? 'selected' : '' }}>{{ typeDefect.type_defect }}</option>
-                    @endeach
-                  </select>
-                </label>
-                @if(flashMessages.has('errors.defect_type'))
-                  <span class="error-text">{{ flashMessages.get('errors.defect_type') }}</span>
-                @endif
-              </div>
-              <div class="form__group">
-                <label class="form__label">
-                  Выберите объект
-                  <select name="substation" class="form__input" required>
-                    <option selected disabled>Выберите объект</option>
-                    @each(substation in substations)
-                      <option value="{{ substation.id }}" {{ flashMessages.get('substation') == substation.id ? 'selected' : '' }}>{{ substation.name }}</option>
-                    @endeach
-                  </select>
-                </label>
-                @if(flashMessages.has('errors.substation'))
-                  <span class="error-text">{{ flashMessages.get('errors.substation') }}</span>
-                @endif
-              </div>
-              <div class="form__group">
-                <label class="form__label">
-                  Присоединение
-                  <input type="text" name="accession" class="form__input" placeholder="Введите присоединение" required value="{{ flashMessages.get('accession', '') }}">
-                </label>
-                @if(flashMessages.has('errors.accession'))
-                  <span class="error-text">{{ flashMessages.get('errors.accession') }}</span>
-                @endif
-              </div>
-              <div class="form__group">
-                <label class="form__label">
-                  Описание
-                  <textarea name="description_defect" class="form__input form__textarea" cols="30" rows="3" placeholder="Введите описание дефекта..." required>{{ flashMessages.get('description_defect', '') }}</textarea>
-                </label>
-                @if(flashMessages.has('errors.description_defect'))
-                  <span class="error-text">{{ flashMessages.get('errors.description_defect') }}</span>
-                @endif
-              </div>
-              <div class="form__group">
-                <label class="form__label">
-                  Сроки устранения
-                  <input type="date" name="term_elimination" class="form__input" required value="{{ flashMessages.get('term_elimination', '') }}">
-                </label>
-                @if(flashMessages.has('errors.term_elimination'))
-                  <span class="error-text">{{ flashMessages.get('errors.term_elimination') }}</span>
-                @endif
-              </div>
-            </div>
-            <div class="form__btns">
-              <button class="form__btn" type="submit">Сохранить</button>
-            </div>
-          </form>
-        </div>
-        <table class="defect__table">
-          <thead>
+  <h2 class="defect__title">{{ title }}</h2>
+  <div class="defect__control">
+    <a href="{{ route('defect.create') }}" class="types-defects__btn types-defects__btn-open">Добавить</a>
+  </div>
+  <div class="defect__content">
+    <hr>
+    <table class="defect-table">
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>Тип дефекта</th>
+          <th>Объект</th>
+          <th>Присоединение</th>
+          <th>Описание</th>
+          <th>Срок устранения</th>
+          <th>Дата устранения</th>
+          <th>
+            <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(defects.length > 0)
+          @each((defect, i) in defects)
             <tr>
-              <th>№</th>
-              <th>Тип дефекта</th>
-              <th>Объект</th>
-              <th>Присоединение</th>
-              <th>Описание</th>
-              <th>Срок устранения</th>
-              <th>Дата устранения</th>
-              <th>
-                <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
-              </th>
+              <td>{{ i + 1 }}</td>
+              <td>{{ defect.defect_type.type_defect }}</td>
+              <td>{{ defect.substation.name }}</td>
+              <td>{{ defect.accession }}</td>
+              <td>{{ truncate(defect.description_defect, 40) }}</td>
+              <td>{{ defect.term_elimination }}</td>
+              <td>{{ defect.elimination_date === null ? '' : defect.elimination_date }}</td>
+              <td>
+                <a href="#" title="Перейти к подробному просмотру">
+                  <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
+                </a>
+                <a href="#" title="Меню">
+                  <img src="{{ asset('assets/icons/menu.svg') }}" class="defect-table__icon" alt="Меню">
+                </a>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            @if(defects.length > 0)
-              @each((defect, i) in defects)
-              <tr>
-                <td>{{ i + 1 }}</td>
-                <td>{{ defect.defect_type.type_defect }}</td>
-                <td>{{ defect.substation.name }}</td>
-                <td>{{ defect.accession }}</td>
-                <td>{{ truncate(defect.description_defect, 40) }}</td>
-                <td>{{ defect.term_elimination }}</td>
-                <td>{{ defect.elimination_date === null ? '' : defect.elimination_date }}</td>
-                <td>
-                  <a href="#" title="Перейти к подробному просмотру">
-                    <img src="{{ asset('assets/icons/link.svg') }}" class="table__img" alt="Подробнее">
-                  </a>
-                  <a href="#" title="Меню">
-                    <img src="{{ asset('assets/icons/menu.svg') }}" class="table__img" alt="Меню">
-                  </a>
-                </td>
-              </tr>
-              @endeach
-            @else
-              <tr>
-                <td colspan="8">Пока нет внесенных дефектов.</td>
-              </tr>
-            @endif
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+          @endeach
+        @else
+          <tr>
+            <td colspan="8">Пока нет внесенных дефектов.</td>
+          </tr>
+        @endif
+      </tbody>
+    </table>
+    <hr>
+  </div>
 @endsection
