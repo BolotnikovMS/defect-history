@@ -23,10 +23,10 @@ View.global('menu', [
     url: 'substations.all',
     name: 'Объекты',
   },
-  // {
-  //   url: '#',
-  //   name: 'Персонал',
-  // },
+  {
+    url: 'staff.all',
+    name: 'Персонал',
+  },
 ])
 
 /*
