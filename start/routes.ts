@@ -21,6 +21,7 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.group(() => {
   Route.get('/', 'DefectsController.index').as('defects.all')
   Route.group(() => {
+    Route.get('/new', 'DefectsController.create').as('defect.create')
     Route.post('/new', 'DefectsController.store').as('defect.store')
     Route.get('/delete/:id', 'DefectsController.destroy').as('defect.delete')
   }).prefix('/defects')
@@ -42,6 +43,15 @@ Route.group(() => {
     Route.post('/edit/:id', 'SubstationsController.update').as('substations.update')
     Route.get('/delete/:id', 'SubstationsController.destroy').as('substations.destroy')
   }).prefix('/substations')
+
+  Route.group(() => {
+    Route.get('/', 'StaffController.index').as('staff.all')
+    Route.get('/new', 'StaffController.create').as('staff.create')
+    Route.post('/new', 'StaffController.store').as('staff.store')
+    Route.get('/edit/:id', 'StaffController.edit').as('staff.edit')
+    Route.post('/edit/:id', 'StaffController.update').as('staff.update')
+    Route.get('/delete/:id', 'StaffController.destroy').as('staff.destroy')
+  }).prefix('/staff')
 })
 
 Route.group(() => {
