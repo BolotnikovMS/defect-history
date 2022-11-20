@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column, computed} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Staff extends BaseModel {
   @column({ isPrimary: true })
@@ -26,7 +26,7 @@ export default class Staff extends BaseModel {
     autoCreate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public createdAt: DateTime
 
@@ -35,7 +35,7 @@ export default class Staff extends BaseModel {
     autoUpdate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public updatedAt: DateTime
 }
