@@ -80,7 +80,7 @@ export default class StaffController {
 
       await employee.save()
 
-      session.flash('successMessage', `Данные сотрудемка успешно обновлены.`)
+      session.flash('successMessage', `Данные сотрудика успешно обновлены.`)
       response.redirect().toRoute('StaffController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
