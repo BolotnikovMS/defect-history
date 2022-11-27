@@ -18,5 +18,9 @@
 
   &-table {
     @include table;
+
+    .defect-dropdown {
+      @include dropdown-menu;
+    }
   }
 }
