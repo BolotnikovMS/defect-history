@@ -80,3 +80,7 @@ View.global('pageDottedRange', (pagination, delta: number = 2) => {
 View.global('isCurrent', (pagination, page) => {
   return pagination.currentPage === page
 })
+
+View.global('dateFormat', (date: string) => {
+  return date.replace(new RegExp('-', 'g'), '.').split('.').reverse().join('.')
+})
