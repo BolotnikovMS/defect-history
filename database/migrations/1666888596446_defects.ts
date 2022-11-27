@@ -23,6 +23,7 @@ export default class extends BaseSchema {
       table.text('description_defect').notNullable()
       table.string('term_elimination', 10)
       table.string('elimination_date', 15)
+      table.text('result')
       table.integer('id_name_eliminated', 10).unsigned().index().references('staff.id')
 
       table.timestamps()
