@@ -11,6 +11,9 @@ export default class Substation extends BaseModel {
   @column()
   public voltage_class: string
 
+  @column()
+  public importance: string
+
   @computed()
   public get nameAndClass() {
     return `${this.voltage_class} ${this.name}`
