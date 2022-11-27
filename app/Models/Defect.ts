@@ -18,10 +18,10 @@ export default class Defect extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column({ serializeAs: null })
+  @column()
   public id_substation: number
 
-  @column({ serializeAs: null })
+  @column()
   public id_type_defect: number
 
   @column()
@@ -38,6 +38,9 @@ export default class Defect extends BaseModel {
 
   @column()
   public elimination_date: string
+
+  @column()
+  public result: string
 
   @column({ serializeAs: null })
   public id_name_eliminated: number
