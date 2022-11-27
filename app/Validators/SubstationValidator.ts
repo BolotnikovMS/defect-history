@@ -26,6 +26,7 @@ export default class SubstationValidator {
   public schema = schema.create({
     name: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
     voltage_class: schema.string({}, [rules.trim(), rules.minLength(2)]),
+    importance: schema.string.optional(),
   })
 
   /**
