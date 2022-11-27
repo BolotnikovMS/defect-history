@@ -1,0 +1,74 @@
+@layout('layout/master')
+
+@section('content')
+  <div class="defect__content">
+    <div class="defect__control defect__control-row">
+      <a href="#" class="types-defects__btn types-defects__btn-color_green">Закрыть дефект</a>
+      <a href="{{ route('defect.checkup-create', {id: defectSerialize.id}) }}" class="types-defects__btn types-defects__btn-color_orange">Добавить проверку</a>
+      <a href="#" class="types-defects__btn types-defects__btn-color_blue">Редактировать дефект</a>
+    </div>
+    <hr>
+    <table class="defect-table">
+      <thead>
+        <tr>
+          <th>Тип дефекта</th>
+          <th>Объект</th>
+          <th>Присоединение</th>
+          <th>Описание</th>
+          <th>Срок устранения</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="5">Общая информация</td>
+        </tr>
+        <tr>
+          <td>{{ defectSerialize.defect_type.type_defect }}</td>
+          <td>{{ defectSerialize.substation.nameAndClass }}</td>
+          <td>{{ defectSerialize.accession }}</td>
+          <td>{{ defectSerialize.description_defect }}</td>
+          <td>{{ defectSerialize.term_elimination }}</td>
+        </tr>
+        <tr style="background-color: #f6d875;">
+          <td colspan="5">Промежуточные результаты</td>
+        </tr>
+        @if(defectSerialize.intermediate_checks.length)
+          <tr>
+            <th >Сотрудник</th>
+            <th>Дата проверки</th>
+            <th colspan="3">Результаты</th>
+          </tr>
+          @each(inter in defectSerialize.intermediate_checks)
+            <tr>
+              <td>{{ inter.id_inspector }}</td>
+              <td>{{ inter.check_date }}</td>
+              <td colspan="3">{{ inter.test_result }}</td>
+            </tr>
+          @endeach
+        @else
+          <tr>
+            <td colspan="5">Пока нет внесенных проверок.</td>
+          </tr>
+        @endif
+          <tr style="background-color: #bdfc50;">
+            <td colspan="5">Выполненые работы по устранению</td>
+          </tr>
+        @if(defectSerialize.result !== null)
+          <tr>
+            <th colspan="4">Результаты</th>
+            <th>Дата устранения</th>
+          </tr>
+          <tr>
+            <td colspan="4">{{ defectSerialize.result }}</td>
+            <td>{{ defectSerialize.elimination_date }}</td>
+          </tr>
+        @else
+          <tr>
+            <td colspan="5">Дефект не устранен.</td>
+          </tr>
+        @endif
+      </tbody>
+    </table>
+    <hr>
+  </div>
+@endsection
