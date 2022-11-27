@@ -3,7 +3,7 @@
 @section('content')
   <h2 class="substations__title">{{ title }}</h2>
   <div class="substations-control">
-    <a href="{{ route('substations.create') }}" class="substations__btn substations__btn-open">Добавить</a>
+    <a href="{{ route('substations.create') }}" class="substations__btn substations__btn-color_green">Добавить</a>
   </div>
   <div class="substations__content">
     <hr>
@@ -13,13 +13,16 @@
           <li class="list__item">
             <div class="list__content">
               {{ substation.nameAndClass }}
+              @if(substation.importance === 'true')
+                <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+              @endif
             </div>
             <div class="list__control">
               <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
                 <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
               </a>
               <a href="{{ route('substations.destroy', {id: substation.id}) }}">
-                <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+                <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
               </a>
             </div>
           </li>

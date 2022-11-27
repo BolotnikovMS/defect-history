@@ -3,53 +3,66 @@
 @section('content')
   <h2 class="defect__title">{{ title }}</h2>
   <div class="defect__control">
-    <a href="{{ route('defect.create') }}" class="types-defects__btn types-defects__btn-open">Добавить</a>
+    <a href="{{ route('defect.create') }}" class="types-defects__btn types-defects__btn-color_green">Добавить</a>
   </div>
   <div class="defect__content">
     <hr>
-    <table class="defect-table">
-      <thead>
-        <tr>
-          <th>№</th>
-          <th>Тип дефекта</th>
-          <th>Объект</th>
-          <th>Присоединение</th>
-          <th>Описание</th>
-          <th>Срок устранения</th>
-          <th>Дата устранения</th>
-          <th>
-            <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        @if(defects.length > 0)
+    @if(defects.length)
+      <table class="defect-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Тип дефекта</th>
+            <th>Объект</th>
+            <th>Присоединение</th>
+            <th>Описание</th>
+            <th>
+              Срок устранения
+              <svg class="question-icon" width="25" height="28" viewBox="0 0 25 28" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12.5" cy="15.5" r="12" fill="none"/><path d="M9.729 10.255C9.915 10.081 10.119 9.916 10.341 9.76C10.569 9.604 10.815 9.466 11.079 9.346C11.349 9.226 11.637 9.133 11.943 9.067C12.255 8.995 12.591 8.959 12.951 8.959C13.425 8.959 13.863 9.028 14.265 9.166C14.673 9.304 15.024 9.499 15.318 9.751C15.612 10.003 15.843 10.309 16.011 10.669C16.179 11.029 16.263 11.434 16.263 11.884C16.263 12.34 16.194 12.733 16.056 13.063C15.924 13.393 15.753 13.684 15.543 13.936C15.339 14.182 15.114 14.398 14.868 14.584C14.628 14.764 14.4 14.935 14.184 15.097C13.968 15.259 13.782 15.421 13.626 15.583C13.476 15.745 13.389 15.925 13.365 16.123L13.203 17.5H12.105L11.997 16.006C11.973 15.736 12.024 15.502 12.15 15.304C12.276 15.1 12.441 14.911 12.645 14.737C12.849 14.557 13.074 14.383 13.32 14.215C13.566 14.041 13.794 13.849 14.004 13.639C14.22 13.429 14.4 13.192 14.544 12.928C14.688 12.658 14.76 12.337 14.76 11.965C14.76 11.707 14.709 11.473 14.607 11.263C14.505 11.053 14.367 10.876 14.193 10.732C14.019 10.582 13.812 10.468 13.572 10.39C13.338 10.312 13.086 10.273 12.816 10.273C12.45 10.273 12.135 10.318 11.871 10.408C11.613 10.498 11.394 10.597 11.214 10.705C11.034 10.813 10.887 10.912 10.773 11.002C10.665 11.092 10.575 11.137 10.503 11.137C10.353 11.137 10.236 11.068 10.152 10.93L9.729 10.255ZM11.484 21.01C11.484 20.854 11.511 20.707 11.565 20.569C11.625 20.431 11.703 20.311 11.799 20.209C11.901 20.107 12.021 20.026 12.159 19.966C12.297 19.906 12.444 19.876 12.6 19.876C12.756 19.876 12.903 19.906 13.041 19.966C13.179 20.026 13.299 20.107 13.401 20.209C13.503 20.311 13.584 20.431 13.644 20.569C13.704 20.707 13.734 20.854 13.734 21.01C13.734 21.172 13.704 21.322 13.644 21.46C13.584 21.592 13.503 21.709 13.401 21.811C13.299 21.913 13.179 21.991 13.041 22.045C12.903 22.105 12.756 22.135 12.6 22.135C12.444 22.135 12.297 22.105 12.159 22.045C12.021 21.991 11.901 21.913 11.799 21.811C11.703 21.709 11.625 21.592 11.565 21.46C11.511 21.322 11.484 21.172 11.484 21.01Z" fill="none"/>
+            </th>
+            <th>Дата устранения</th>
+            <th>
+              <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
           @each((defect, i) in defects)
             <tr>
               <td>{{ i + 1 }}</td>
               <td>{{ defect.defect_type.type_defect }}</td>
-              <td>{{ defect.substation.name }}</td>
+              <td>{{ defect.substation.nameAndClass }}</td>
               <td>{{ defect.accession }}</td>
               <td>{{ truncate(defect.description_defect, 40) }}</td>
-              <td>{{ defect.term_elimination }}</td>
+              <td>{{ dateFormat(defect.term_elimination) }}</td>
               <td>{{ defect.elimination_date === null ? '' : defect.elimination_date }}</td>
-              <td>
-                <a href="#" title="Перейти к подробному просмотру">
+              <td style="display: flex;">
+                <a href="{{ route('defect.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
                   <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
                 </a>
-                <a href="#" title="Меню">
-                  <img src="{{ asset('assets/icons/menu.svg') }}" class="defect-table__icon" alt="Меню">
-                </a>
+                <div class="defect-dropdown">
+                  <button class="btn-menu">
+                    <img src="{{ asset('assets/icons/menu.svg') }}" class="btn-menu__icon defect-table__icon" alt="Меню">
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a href="{{ route('defect.edit', {id: defect.id}) }}" class="dropdown__item" title="Редактировать">Редактировать</a>
+                    </li>
+                    <li>
+                      <a href="{{ route('defect.destroy', {id: defect.id}) }}" class="dropdown__item" title="Удалить">Удалить</a>
+                    </li>
+                  </ul>
+                </div>
               </td>
             </tr>
           @endeach
-        @else
-          <tr>
-            <td colspan="8">Пока нет внесенных дефектов.</td>
-          </tr>
-        @endif
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых дефектов.</p>
+      </div>
+    @endif
     <hr>
   </div>
 @endsection
