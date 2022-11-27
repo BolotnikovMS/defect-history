@@ -75,6 +75,9 @@ export default class SubstationsController {
 
       substation.name = validateSubstation.name
       substation.voltage_class = validateSubstation.voltage_class
+      substation.importance = validateSubstation.importance
+        ? validateSubstation.importance
+        : 'false'
 
       await substation.save()
 
