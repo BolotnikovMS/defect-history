@@ -1,0 +1,74 @@
+@layout('layout/master')
+
+@section('content')
+<h2 class="defect__title">{{ title }}</h2>
+<div class="defect__content">
+  <form action="{{ route(options.routes.saveData, {idDefect: options.defect}) }}" method="POST">
+    <div class="form__content form__content-column">
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Сотрудник
+          <select name="employee" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.employee') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+          }}" required>
+            <option selected disabled>Выберите сотрудника</option>
+            @each(empolyee in staff)
+            <option value="{{ empolyee.id }}" {{ flashMessages.get('employee')==empolyee.id ? 'selected' : '' }}>
+              {{ empolyee.fullName }}
+            </option>
+            @endeach
+          </select>
+        </label>
+        @if(flashMessages.has('errors.employee'))
+        <span class="error-text">{{ flashMessages.get('errors.employee') }}</span>
+        @endif
+      </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Описание результатов работы
+          <textarea name="description_results" class="form__input form__textarea {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.description_results') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+          }}" cols="30" rows="3" placeholder="Введите описание результатов..."
+            required>{{ flashMessages.get('description_results', '') }}</textarea>
+        </label>
+        @if(flashMessages.has('errors.description_results'))
+        <span class="error-text">{{ flashMessages.get('errors.description_results') }}</span>
+        @endif
+      </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Дата работ
+          <input type="date" name="date" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.date') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+          }}" required value="{{  flashMessages.get('date', '') }}">
+        </label>
+        @if(flashMessages.has('errors.date'))
+        <span class="error-text">{{ flashMessages.get('errors.date') }}</span>
+        @endif
+      </div>
+    </div>
+    <div class="form__btns">
+      <a href="{{ route(options.routes.back, {id: options.defect}) }}" class="form__btn form__btn-cancel">Отмена</a>
+      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">Сохранить</button>
+    </div>
+  </form>
+</div>
+@endsection
