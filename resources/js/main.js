@@ -37,15 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dropdown menu
 
-  const openDropdownMenu = () => {
-    const btnTriggers = document.querySelectorAll('.btn-menu')
-    const dropdownMenus = document.querySelectorAll('.dropdown-menu')
+  const openDropdownMenu = (btnSelector, dropdownSelector) => {
+    const btnTrigger = document.querySelectorAll(btnSelector)
+    const dropdownContent = document.querySelectorAll(dropdownSelector)
 
-    if (btnTriggers && dropdownMenus) {
-      btnTriggers.forEach((btnTrigger, i) => {
-        btnTrigger.addEventListener('click', () => {
-          dropdownMenus[i].classList.add('active')
-          closeDropdownMenu(dropdownMenus[i])
+    if (btnTrigger && dropdownContent) {
+      btnTrigger.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          dropdownContent[i].classList.toggle('active')
+          dropdownContent.forEach((item, j) => (i !== j ? item.classList.remove('active') : null))
+          closeDropdownMenu(dropdownContent[i])
         })
       })
     }
@@ -63,5 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  openDropdownMenu()
+  openDropdownMenu('.btn-menu', '.dropdown-menu')
 })
