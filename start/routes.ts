@@ -26,8 +26,19 @@ Route.group(() => {
     Route.get('/show/:id', 'DefectsController.show').as('defect.show')
     Route.get('/edit/:id', 'DefectsController.edit').as('defect.edit')
     Route.post('/edit/:id', 'DefectsController.update').as('defect.update')
-    Route.get('/checkup-create/:id', 'DefectsController.checkupCreate').as('defect.checkup-create')
     Route.get('/delete/:id', 'DefectsController.destroy').as('defect.destroy')
+    Route.get('/checkup-create/:idDefect', 'DefectsController.checkupCreate').as(
+      'defect.checkup-create'
+    )
+    Route.post('/checkup-create/:idDefect', 'DefectsController.checkupStore').as(
+      'defect.checkup.store'
+    )
+    Route.get('/close-defect/:idDefect', 'DefectsController.closeDefectCreate').as(
+      'defect.close.create'
+    )
+    Route.post('/close-defect/:idDefect', 'DefectsController.closeDefectStore').as(
+      'defect.close.store'
+    )
   }).prefix('/defects')
 
   Route.group(() => {
