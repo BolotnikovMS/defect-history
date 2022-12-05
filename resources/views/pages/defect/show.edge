@@ -3,11 +3,14 @@
 @section('content')
   <div class="defect__content">
     <div class="defect__control defect__control-row">
-      <a href="#" class="types-defects__btn types-defects__btn-color_green">Закрыть дефект</a>
-      <a href="{{ route('defect.checkup-create', {id: defectSerialize.id}) }}" class="types-defects__btn types-defects__btn-color_orange">Добавить проверку</a>
-      <a href="#" class="types-defects__btn types-defects__btn-color_blue">Редактировать дефект</a>
+      @if(!defectSerialize.result && !defectSerialize.elimination_date)
+        <a href="{{ route('defect.close.create', {idDefect: defectSerialize.id}) }}" class="types-defects__btn types-defects__btn-color_green">Закрыть дефект</a>
+        <a href="{{ route('defect.checkup-create', {idDefect: defectSerialize.id}) }}" class="types-defects__btn types-defects__btn-color_orange">Добавить проверку</a>
+        <a href="{{ route('defect.edit', {id: defectSerialize.id}) }}" class="types-defects__btn types-defects__btn-color_blue">Редактировать дефект</a>
+      @endif
     </div>
     <hr>
+    {{--  {{ inspect(defectSerialize) }}  --}}
     <table class="defect-table">
       <thead>
         <tr>
@@ -27,7 +30,7 @@
           <td>{{ defectSerialize.substation.nameAndClass }}</td>
           <td>{{ defectSerialize.accession }}</td>
           <td>{{ defectSerialize.description_defect }}</td>
-          <td>{{ defectSerialize.term_elimination }}</td>
+          <td>{{ dateFormat(defectSerialize.term_elimination) }}</td>
         </tr>
         <tr style="background-color: #f6d875;">
           <td colspan="5">Промежуточные результаты</td>
@@ -36,13 +39,13 @@
           <tr>
             <th >Сотрудник</th>
             <th>Дата проверки</th>
-            <th colspan="3">Результаты</th>
+            <th colspan="3">Результаты проверки</th>
           </tr>
           @each(inter in defectSerialize.intermediate_checks)
             <tr>
-              <td>{{ inter.id_inspector }}</td>
-              <td>{{ inter.check_date }}</td>
-              <td colspan="3">{{ inter.test_result }}</td>
+              <td>{{ inter.name_inspector.fullName }}</td>
+              <td>{{ dateFormat(inter.check_date) }}</td>
+              <td colspan="3">{{ inter.description_results }}</td>
             </tr>
           @endeach
         @else
@@ -53,14 +56,16 @@
           <tr style="background-color: #bdfc50;">
             <td colspan="5">Выполненые работы по устранению</td>
           </tr>
-        @if(defectSerialize.result !== null)
+        @if(defectSerialize.result)
           <tr>
-            <th colspan="4">Результаты</th>
+            <th>Сотрудник</th>
             <th>Дата устранения</th>
+            <th colspan="3">Результаты</th>
           </tr>
           <tr>
-            <td colspan="4">{{ defectSerialize.result }}</td>
-            <td>{{ defectSerialize.elimination_date }}</td>
+            <td>{{ defectSerialize.name_eliminated.fullName }}</td>
+            <td>{{ dateFormat(defectSerialize.elimination_date) }}</td>
+            <td colspan="3">{{ defectSerialize.result }}</td>
           </tr>
         @else
           <tr>
