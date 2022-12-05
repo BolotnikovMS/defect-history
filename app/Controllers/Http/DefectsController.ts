@@ -3,10 +3,24 @@ import Defect from 'App/Models/Defect'
 import Substation from 'App/Models/Substation'
 import DefectValidator from 'App/Validators/DefectValidator'
 import DefectType from '../../Models/DefectType'
+import Staff from '../../Models/Staff'
+import IntermediateCheck from '../../Models/IntermediateCheck'
+import DefectResultValidator from '../../Validators/DefectResultValidator'
 
 export default class DefectsController {
-  public async index({ view }: HttpContextContract) {
-    const defects = await Defect.query().preload('defect_type').preload('substation')
+  public async index({ request, view }: HttpContextContract) {
+    const page = request.input('page', 1)
+    const limit = 10
+
+    const defects = await Defect.query()
+      .orderBy('elimination_date', 'asc')
+      .preload('defect_type')
+      .preload('substation')
+      .paginate(page, limit)
+
+    defects.baseUrl('/')
+
+    // console.log(defects)
 
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
@@ -57,10 +71,41 @@ export default class DefectsController {
       .where('id', '=', params.id)
       .preload('substation')
       .preload('defect_type')
-      .preload('intermediate_checks')
+      .preload('intermediate_checks', (interQuery) => {
+        interQuery.preload('name_inspector')
+      })
+      .preload('name_eliminated')
 
     const [defectDes] = defect
-    const defectSerialize = defectDes.serialize()
+    const defectSerialize = defectDes.serialize({
+      fields: [
+        'id',
+        'accession',
+        'description_defect',
+        'term_elimination',
+        'elimination_date',
+        'result',
+      ],
+      relations: {
+        substation: {
+          fields: ['name', 'voltage_class', 'nameAndClass'],
+        },
+        defect_type: {
+          fields: ['type_defect'],
+        },
+        intermediate_checks: {
+          fields: ['check_date', 'description_results'],
+          relations: {
+            name_inspector: {
+              fields: ['fullName', 'position'],
+            },
+          },
+        },
+        name_eliminated: {
+          fields: ['fullName', 'position'],
+        },
+      },
+    })
 
     return view.render('pages/defect/show', {
       title: 'Подробный просмотр',
@@ -93,8 +138,6 @@ export default class DefectsController {
       response.redirect().back()
     }
   }
-
-  public async checkupCreate({}: HttpContextContract) {}
 
   public async update({ params, request, response, session }: HttpContextContract) {
     const defect = await Defect.find(params.id)
@@ -129,6 +172,83 @@ export default class DefectsController {
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().back()
+    }
+  }
+
+  public async checkupCreate({ params, view }: HttpContextContract) {
+    const idDefect = await params.idDefect
+    const staff = await Staff.all()
+
+    return view.render('pages/defect/form_checkupandclose', {
+      title: 'Добавление проверки',
+      options: {
+        defect: idDefect,
+        routes: {
+          saveData: 'defect.checkup.store',
+          back: 'defect.show',
+        },
+      },
+      staff,
+    })
+  }
+
+  public async checkupStore({ params, request, response, session }: HttpContextContract) {
+    const validateData = await request.validate(DefectResultValidator)
+
+    if (validateData) {
+      const checkupDefect = {
+        id_defect: +params.idDefect,
+        id_inspector: +validateData.employee,
+        check_date: validateData.date,
+        description_results: validateData.description_results,
+      }
+
+      // const test = ({ employee, ...rest }) => rest
+
+      await IntermediateCheck.create(checkupDefect)
+
+      session.flash('successMessage', `Проверка успешно добавлена!`)
+      response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().toRoute('DefectsController.index')
+    }
+  }
+
+  public async closeDefectCreate({ params, view }: HttpContextContract) {
+    const idDefect = await params.idDefect
+    const staff = await Staff.all()
+
+    return view.render('pages/defect/form_checkupandclose', {
+      title: 'Закрытие дефекта',
+      options: {
+        defect: idDefect,
+        routes: {
+          saveData: 'defect.close.store',
+          back: 'defect.show',
+        },
+      },
+      staff,
+    })
+  }
+
+  public async closeDefectStore({ params, request, response, session }: HttpContextContract) {
+    const defect = await Defect.find(params.idDefect)
+
+    if (defect) {
+      const validateData = await request.validate(DefectResultValidator)
+
+      defect.id_name_eliminated = +validateData.employee
+      defect.result = validateData.description_results
+      defect.elimination_date = validateData.date
+
+      await defect.save()
+
+      session.flash('successMessage', `Дефект закрыт.`)
+      response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().toRoute('DefectsController.index')
     }
   }
 }
