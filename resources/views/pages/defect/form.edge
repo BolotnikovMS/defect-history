@@ -1,84 +1,125 @@
 @layout('layout/master')
 
 @section('content')
-  <h2 class="defect__title">{{ title }}</h2>
-  <div class="defect__content">
-    <form action="{{ route(options.routePath.savePath, {id: options.idData}) }}" method="POST">
-      <div class="form__content form__content-column">
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Выберите тип дефекта
-            <select name="defect_type" class="form__input {{ flashMessages.get('errors.defect_type') ? 'form__input-invalid' : '' }}" required>
-              <option selected disabled>Выберите тип дефекта</option>
-              @each(typeDefect in typeDefects)
-                <option value="{{ typeDefect.id }}" {{
-                defectSerialize ?
-                defectSerialize.id_type_defect == typeDefect.id ?
-                'selected' : ''
-                :
-                flashMessages.get('defect_type') == typeDefect.id ? 'selected' : '' }}>
-                  {{ typeDefect.type_defect }}
-                </option>
-              @endeach
-            </select>
-          </label>
-          @if(flashMessages.has('errors.defect_type'))
-            <span class="error-text">{{ flashMessages.get('errors.defect_type') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Выберите объект
-            <select name="substation" class="form__input {{ flashMessages.get('errors.substation') ? 'form__input-invalid' : '' }}" required>
-              <option selected disabled>Выберите объект</option>
-              @each(substation in substations)
-                <option value="{{ substation.id }}" {{
-                defectSerialize ?
-                defectSerialize.id_substation == substation.id ?
-                'selected' : ''
-                :
-                flashMessages.get('substation') == substation.id ? 'selected' : '' }}>
-                  {{ substation.name }}
-                </option>
-              @endeach
-            </select>
-          </label>
-          @if(flashMessages.has('errors.substation'))
-            <span class="error-text">{{ flashMessages.get('errors.substation') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Присоединение
-            <input type="text" name="accession" class="form__input {{ flashMessages.get('errors.accession') ? 'form__input-invalid' : '' }}" placeholder="Введите присоединение" required value="{{ defectSerialize ? defectSerialize.accession : flashMessages.get('accession', '') }}">
-          </label>
-          @if(flashMessages.has('errors.accession'))
-            <span class="error-text">{{ flashMessages.get('errors.accession') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Описание
-            <textarea name="description_defect" class="form__input form__textarea {{ flashMessages.get('errors.description_defect') ? 'form__input-invalid' : '' }}" cols="30" rows="3" placeholder="Введите описание дефекта..." required>{{ defectSerialize ? defectSerialize.description_defect : flashMessages.get('description_defect', '') }}</textarea>
-          </label>
-          @if(flashMessages.has('errors.description_defect'))
-            <span class="error-text">{{ flashMessages.get('errors.description_defect') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Сроки устранения
-            <input type="date" name="term_elimination" class="form__input {{ flashMessages.get('errors.term_elimination') ? 'form__input-invalid' : '' }}" required value="{{ defectSerialize ? defectSerialize.term_elimination : flashMessages.get('term_elimination', '') }}">
-          </label>
-          @if(flashMessages.has('errors.term_elimination'))
-            <span class="error-text">{{ flashMessages.get('errors.term_elimination') }}</span>
-          @endif
-        </div>
+<h2 class="defect__title">{{ title }}</h2>
+<div class="defect__content">
+  <form action="{{ route(options.routePath.savePath, {id: options.idData}) }}" method="POST">
+    <div class="form__content form__content-column">
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Выберите тип дефекта
+          <select name="defect_type" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.defect_type') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+            }}" required>
+            <option selected disabled>Выберите тип дефекта</option>
+            @each(typeDefect in typeDefects)
+            <option value="{{ typeDefect.id }}" {{ defectSerialize ? defectSerialize.id_type_defect==typeDefect.id
+              ? 'selected' : '' : flashMessages.get('defect_type')==typeDefect.id ? 'selected' : '' }}>
+              {{ typeDefect.type_defect }}
+            </option>
+            @endeach
+          </select>
+        </label>
+        @if(flashMessages.has('errors.defect_type'))
+        <span class="error-text">{{ flashMessages.get('errors.defect_type') }}</span>
+        @endif
       </div>
-      <div class="form__btns">
-        <a href="{{ route('defects.all') }}" class="form__btn form__btn-cancel">Отмена</a>
-        <button class="form__btn form__btn-save" type="submit">Сохранить</button>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Выберите объект
+          <select name="substation" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.substation') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+            ''
+            }}" required>
+            <option selected disabled>Выберите объект</option>
+            @each(substation in substations)
+            <option value="{{ substation.id }}" {{ defectSerialize ? defectSerialize.id_substation==substation.id
+              ? 'selected' : '' : flashMessages.get('substation')==substation.id ? 'selected' : '' }}>
+              {{ substation.name }}
+            </option>
+            @endeach
+          </select>
+        </label>
+        @if(flashMessages.has('errors.substation'))
+        <span class="error-text">{{ flashMessages.get('errors.substation') }}</span>
+        @endif
       </div>
-    </form>
-  </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Присоединение
+          <input type="text" name="accession" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.accession') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+            }}" placeholder="Введите присоединение" required
+            value="{{ defectSerialize ? defectSerialize.accession : flashMessages.get('accession', '') }}">
+        </label>
+        @if(flashMessages.has('errors.accession'))
+        <span class="error-text">{{ flashMessages.get('errors.accession') }}</span>
+        @endif
+      </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Описание
+          <textarea name="description_defect" class="form__input form__textarea {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.description_defect') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+          }}" cols="30" rows="3" placeholder="Введите описание дефекта..." required>{{
+            defectSerialize ?
+              defectSerialize.description_defect
+            :
+              flashMessages.get('description_defect', '')
+            }}</textarea>
+        </label>
+        @if(flashMessages.has('errors.description_defect'))
+        <span class="error-text">{{ flashMessages.get('errors.description_defect') }}</span>
+        @endif
+      </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Сроки устранения
+          <input type="date" name="term_elimination" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.term_elimination') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''}}" required value="{{
+          defectSerialize ?
+            defectSerialize.term_elimination
+          :
+            flashMessages.get('term_elimination', '') }}">
+        </label>
+        @if(flashMessages.has('errors.term_elimination'))
+        <span class="error-text">{{ flashMessages.get('errors.term_elimination') }}</span>
+        @endif
+      </div>
+    </div>
+    <div class="form__btns">
+      <a href="{{ route('defects.all') }}" class="form__btn form__btn-cancel">Отмена</a>
+      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">Сохранить</button>
+    </div>
+  </form>
+</div>
 @endsection

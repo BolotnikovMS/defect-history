@@ -1,51 +1,99 @@
 @layout('layout/master')
 
 @section('content')
-  <h2 class="substations__title">{{ title }}</h2>
-  <div class="staff__content">
-    <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
-      <div class="form__content form__content-column">
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Фамилия
-            <input type="text" name="surname" class="form__input {{ flashMessages.get('errors.surname') ? 'form__input-invalid' : '' }}" placeholder="Введите фамилию" required value="{{ employee ? employee.surname : flashMessages.get('surname', '') }}">
-          </label>
-          @if(flashMessages.has('errors.surname'))
-            <span class="error-text">{{ flashMessages.get('errors.surname') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Имя
-            <input type="text" name="name" class="form__input {{ flashMessages.get('errors.name') ? 'form__input-invalid' : '' }}" placeholder="Введите имя" required value="{{ employee ? employee.name : flashMessages.get('name', '') }}">
-          </label>
-          @if(flashMessages.has('errors.name'))
-            <span class="error-text">{{ flashMessages.get('errors.name') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Отчество
-            <input type="text" name="patronymic" class="form__input {{ flashMessages.get('errors.patronymic') ? 'form__input-invalid' : '' }}" placeholder="Введите название..." required value="{{ employee ? employee.patronymic : flashMessages.get('patronymic', '') }}">
-          </label>
-          @if(flashMessages.has('errors.patronymic'))
-            <span class="error-text">{{ flashMessages.get('errors.patronymic') }}</span>
-          @endif
-        </div>
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Должность
-            <input type="text" name="position" class="form__input {{ flashMessages.get('errors.position') ? 'form__input-invalid' : '' }}" placeholder="Введите должность" required value="{{ employee ? employee.position : flashMessages.get('position', '') }}">
-          </label>
-          @if(flashMessages.has('errors.position'))
-            <span class="error-text">{{ flashMessages.get('errors.position') }}</span>
-          @endif
-        </div>
+<h2 class="substations__title">{{ title }}</h2>
+<div class="staff__content">
+  <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
+    <div class="form__content form__content-column">
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Фамилия
+          <input type="text" name="surname" class="form__input {{
+              flashMessages.all() !== null ?
+                flashMessages.get('errors.surname') ?
+                  'form__input-invalid'
+                :
+                  'form__input-correctly'
+              :
+                ''
+            }}" placeholder="Введите фамилию" required value="{{
+            employee ?
+              employee.surname
+            :
+              flashMessages.get('surname', '') }}">
+        </label>
+        @if(flashMessages.has('errors.surname'))
+        <span class="error-text">{{ flashMessages.get('errors.surname') }}</span>
+        @endif
       </div>
-      <div class="form__btns">
-        <a href="{{ route('staff.all') }}" class="form__btn form__btn-cancel">Отмена</a>
-        <button class="form__btn form__btn-save" type="submit">Сохранить</button>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Имя
+          <input type="text" name="name" class="form__input {{
+              flashMessages.all() !== null ?
+                flashMessages.get('errors.name') ?
+                  'form__input-invalid'
+                :
+                  'form__input-correctly'
+              :
+                ''
+            }}" placeholder="Введите имя" required value="{{
+            employee ?
+              employee.name
+            :
+              flashMessages.get('name', '') }}">
+        </label>
+        @if(flashMessages.has('errors.name'))
+        <span class="error-text">{{ flashMessages.get('errors.name') }}</span>
+        @endif
       </div>
-    </form>
-  </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Отчество
+          <input type="text" name="patronymic" class="form__input {{
+              flashMessages.all() !== null ?
+                flashMessages.get('errors.patronymic') ?
+                  'form__input-invalid'
+                :
+                  'form__input-correctly'
+              :
+                ''
+            }}" placeholder="Введите отчество" required value="{{
+            employee ?
+              employee.patronymic
+            :
+              flashMessages.get('patronymic', '') }}">
+        </label>
+        @if(flashMessages.has('errors.patronymic'))
+        <span class="error-text">{{ flashMessages.get('errors.patronymic') }}</span>
+        @endif
+      </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Должность
+          <input type="text" name="position" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.position') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+          }}" placeholder="Введите должность" required value="{{
+          employee ?
+            employee.position
+          :
+            flashMessages.get('position', '') }}">
+        </label>
+        @if(flashMessages.has('errors.position'))
+        <span class="error-text">{{ flashMessages.get('errors.position') }}</span>
+        @endif
+      </div>
+    </div>
+    <div class="form__btns">
+      <a href="{{ route('staff.all') }}" class="form__btn form__btn-cancel">Отмена</a>
+      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">Сохранить</button>
+    </div>
+  </form>
+</div>
 @endsection
