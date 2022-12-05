@@ -6,44 +6,39 @@
   transition: all 0.3s ease-in;
 
   &-color_green {
-    color: #fff;
+    color: #000;
     border: 1px solid #5caf5c;
-    background-color: #5caf5c;
 
     &:hover {
-      background-color: #fff;
-      color: #000 !important;
+      background-color: #5caf5c;
+      color: #fff;
+    }
+
+    &-save {
+      &:hover {
+        transform: scale(1.1);
+        background-color: #5caf5c;
+      }
     }
   }
 
   &-color_orange {
-    color: #fff;
+    color: #000;
     border: 1px solid #f8bf05;
-    background-color: #f8bf05;
 
     &:hover {
-      background-color: #fff;
-      color: #000 !important;
+      background-color: #f8bf05;
+      color: #fff;
     }
   }
 
   &-color_blue {
-    color: #fff;
+    color: #000;
     border: 1px solid #39baff;
-    background-color: #39baff;
 
     &:hover {
-      background-color: #fff;
-      color: #000 !important;
-    }
-  }
-
-  &-save {
-    background-color: #5caf5c;
-
-    &:hover {
-      transform: scale(1.1);
-      background-color: #3b733b;
+      background-color: #39baff;
+      color: #fff;
     }
   }
 

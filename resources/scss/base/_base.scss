@@ -112,6 +112,10 @@ hr {
     border: 1px solid #cfcfcf;
     border-radius: 10px;
 
+    &-correctly {
+      border: 1px solid #009f00;
+    }
+
     &-invalid {
       border: 1px solid red;
     }
