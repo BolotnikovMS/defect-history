@@ -1,27 +1,33 @@
 @set('resultPageDottedRange', pageDottedRange(pagination, deltaValue))
 
 @if(pagination.hasPages)
-  <nav class="pagination">
-    <ul class="pagination__list">
-      <li class="pagination__item {{ pagination.getPreviousPageUrl() ? '' : 'inactive' }}">
-        <a href="{{ pagination.getPreviousPageUrl() }}" class="pagination__link {{ pagination.getPreviousPageUrl() ? '' : 'disabled' }}">Предыдущая</a>
-      </li>
-      @each(page in resultPageDottedRange.pages)
-        @if(page === '...')
-          <li class="pagination__item inactive">
-            <a href="#" class="pagination__link disabled">...</a>
-          </li>
-        @else
-          <li class="pagination__item {{ pagination.currentPage == page ? 'active' : '' }}">
-            <a {{!isCurrent(resultPageDottedRange.pages, page) ? 'href=?page=' + page : '' }} class="pagination__link ">
-              {{ page }}
-            </a>
-          </li>
-        @endif
-      @endeach
-      <li class="pagination__item {{ pagination.getNextPageUrl() ? '' : 'inactive' }}">
-        <a href="{{ pagination.getNextPageUrl() }}" class="pagination__link {{ pagination.getNextPageUrl() ? '' : 'disabled' }}">Следущая</a>
-      </li>
-    </ul>
-  </nav>
+<nav class="pagination">
+  <div class="pagination__control {{ pagination.getPreviousPageUrl() ? '' : 'inactive' }}">
+    <a href="{{ pagination.getPreviousPageUrl() }}"
+      class="pagination__link {{ pagination.getPreviousPageUrl() ? '' : 'disabled' }}">
+      <img src="{{ asset('assets/icons/arrow-left.svg') }}" class="pagination__icon" alt="Предыдущая страница">
+    </a>
+  </div>
+  <ul class="pagination__list">
+    @each(page in resultPageDottedRange.pages)
+    @if(page === '...')
+    <li class="pagination__item inactive">
+      <a href="#" class="pagination__link disabled">...</a>
+    </li>
+    @else
+    <li class="pagination__item {{ pagination.currentPage == page ? 'active' : '' }}">
+      <a {{!isCurrent(resultPageDottedRange.pages, page) ? 'href=?page=' + page : '' }} class="pagination__link ">
+        {{ page }}
+      </a>
+    </li>
+    @endif
+    @endeach
+  </ul>
+  <div class="pagination__control {{ pagination.getNextPageUrl() ? '' : 'inactive' }}">
+    <a href="{{ pagination.getNextPageUrl() }}"
+      class="pagination__link {{ pagination.getNextPageUrl() ? '' : 'disabled' }}">
+      <img src="{{ asset('assets/icons/arrow-right.svg') }}" class="pagination__icon" alt="Предыдущая страница">
+    </a>
+  </div>
+</nav>
 @endif
