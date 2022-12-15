@@ -64,5 +64,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  openDropdownMenu('.btn-menu', '.dropdown-menu')
+  openDropdownMenu('.btn-menu', '.dropdown__menu')
 })
