@@ -1,0 +1,25 @@
+@if(data)
+<div class="dropdown">
+  <button class="btn-menu">
+    <img src="{{ asset('assets/icons/menu.svg') }}" class="btn-menu__icon defect-table__icon" alt="Меню">
+  </button>
+  <ul class="dropdown__menu">
+    <li>
+      <a href="{{ route(routes.edit, {id: data.id}) }}" class="dropdown__item" title="Редактировать">
+        <img src="{{ asset('assets/icons/edit.svg') }}" alt="Редактировать">
+        Редактировать
+      </a>
+    </li>
+    <li>
+      <a href="{{ route(routes.delete, {id: data.id}) }}" class="dropdown__item" title="Удалить">
+        <img src="{{ asset('assets/icons/delete.svg') }}" alt="Удалить">
+        Удалить
+      </a>
+    </li>
+  </ul>
+</div>
+@else
+<div>
+  <span>Error!</span>
+</div>
+@endif
