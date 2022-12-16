@@ -1,38 +1,41 @@
 @layout('layout/master')
 
 @section('content')
-  <h2 class="staff__title">{{ title }}</h2>
-  <div class="staff-control">
-    <a href="{{ route('staff.create') }}" class="staff__btn staff__btn-color_green">Добавить</a>
-  </div>
-  <div class="staff__content">
-    <hr>
-    @if(staff.length)
-      <ul class="substations__list">
-        @each(employee in staff)
-          <li class="list__item">
-            <div class="list__content">
-              {{ employee.position }} {{ employee.fullName }}
-            </div>
-            <div class="list__control">
-              <a href="{{ route('staff.edit', {id: employee.id}) }}" class="edit">
-                <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-              </a>
-              <a href="{{ route('staff.destroy', {id: employee.id}) }}">
-                <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
-              </a>
-            </div>
-          </li>
-        @endeach
-      </ul>
-    @else
-      <div class="no-content">
-        <p>Пока нет добавленых сотрудников.</p>
+<h2 class="staff__title">{{ title }}</h2>
+<div class="staff-control">
+  <a href="{{ route('staff.create') }}" class="btn btn-color_green">
+    <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
+    Добавить
+  </a>
+</div>
+<div class="staff__content">
+  <hr>
+  @if(staff.length)
+  <ul class="substations__list">
+    @each(employee in staff)
+    <li class="list__item">
+      <div class="list__content">
+        {{ employee.position }} {{ employee.fullName }}
       </div>
-    @endif
-    <hr>
+      <div class="list__control">
+        <a href="{{ route('staff.edit', {id: employee.id}) }}" class="edit">
+          <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+        </a>
+        <a href="{{ route('staff.destroy', {id: employee.id}) }}">
+          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+        </a>
+      </div>
+    </li>
+    @endeach
+  </ul>
+  @else
+  <div class="no-content">
+    <p>Пока нет добавленых сотрудников.</p>
   </div>
-  @!component('components/pagination', {
-    pagination: staff,
-  })
+  @endif
+  <hr>
+</div>
+@!component('components/pagination', {
+pagination: staff,
+})
 @endsection

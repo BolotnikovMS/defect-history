@@ -3,11 +3,15 @@
 @section('content')
 <h2 class="defect__title">{{ title }}</h2>
 <div class="defect__control">
-  <a href="{{ route('defect.create') }}" class="types-defects__btn types-defects__btn-color_green">Добавить</a>
+  <a href="{{ route('defect.create') }}" class="btn btn-color_green">
+    <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
+    Добавить
+  </a>
 </div>
 <div class="defect__content">
+  {{-- {{inspect(defects)}} --}}
   <hr>
-  @if(defects.length)
+  @if(defects)
   <table class="defect-table">
     <thead>
       <tr>
@@ -37,25 +41,42 @@
           <a href="{{ route('defect.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
             <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
           </a>
-          <div class="defect-dropdown">
-            <button class="btn-menu">
-              <img src="{{ asset('assets/icons/menu.svg') }}" class="btn-menu__icon defect-table__icon" alt="Меню">
-            </button>
-            <ul class="dropdown-menu">
-              <li>
-                <a href="{{ route('defect.edit', {id: defect.id}) }}" class="dropdown__item"
-                  title="Редактировать">Редактировать</a>
-              </li>
-              <li>
-                <a href="{{ route('defect.destroy', {id: defect.id}) }}" class="dropdown__item"
-                  title="Удалить">Удалить</a>
-              </li>
-            </ul>
-          </div>
+          @!component('components/dropdown-menu', {
+          data: defect,
+          routes: {
+          edit: 'defect.edit',
+          delete: 'defect.destroy',
+          },
+          })
         </td>
       </tr>
       @endeach
     </tbody>
+    {{-- <tbody>
+      @each((defect, i) in defectsSerialize.data)
+      <tr>
+        <td>{{ i + 1 }}</td>
+        <td>{{ defect.defect_type.type_defect }}</td>
+        <td>{{ defect.substation.nameAndClass }}</td>
+        <td>{{ defect.accession }}</td>
+        <td>{{ truncate(defect.description_defect, 40) }}</td>
+        <td>{{ dateFormat(defect.term_elimination) }}</td>
+        <td>{{ defect.elimination_date === null ? '' : dateFormat(defect.elimination_date) }}</td>
+        <td style="display: flex;">
+          <a href="{{ route('defect.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
+            <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
+          </a>
+          @!component('components/dropdown-menu', {
+          data: defect,
+          routes: {
+          edit: 'defect.edit',
+          delete: 'defect.destroy',
+          },
+          })
+        </td>
+      </tr>
+      @endeach
+    </tbody> --}}
   </table>
   @else
   <div class="no-content">

@@ -38,8 +38,14 @@
       </div>
     </div>
     <div class="form__btns">
-      <a href="{{ route('types-defects.all') }}" class="form__btn form__btn-cancel">Отмена</a>
-      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">Сохранить</button>
+      <a href="{{ route('types-defects.all') }}" class="form__btn form__btn-cancel">
+        <img src="{{ asset('assets/icons/undo.svg') }}" alt="Отмена">
+        Отмена
+      </a>
+      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">
+        <img src="{{ asset('assets/icons/save.svg') }}" alt="Сохранить">
+        Сохранить
+      </button>
     </div>
   </form>
 </div>
