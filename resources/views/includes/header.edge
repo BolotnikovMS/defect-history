@@ -7,15 +7,19 @@
       <nav class="header__nav">
         <ul>
           @each(menuItem in menu)
-            <li>
-              <a href="{{ route(menuItem.url) }}" class="{{ menuItem.url == activeMenuLink ? 'active' : '' }}">{{ menuItem.name }}</a>
-            </li>
+          <li>
+            <a href="{{ route(menuItem.url) }}" class="{{ menuItem.url == activeMenuLink ? 'active' : '' }}">{{
+              menuItem.name }}</a>
+          </li>
           @endeach
         </ul>
       </nav>
       <div class="header__login">
-        <a href="#" class="btn btn-signup">Войти</a>
+        <a href="#" class="btn btn-signup">
+          <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
+          Войти
+        </a>
       </div>
     </div>
-    </div>
+  </div>
 </header>
