@@ -17,6 +17,9 @@ export default class IntermediateCheck extends BaseModel {
   @column()
   public description_results: string
 
+  @column()
+  public transferred: string
+
   @column.dateTime({
     autoCreate: true,
     serialize: (value?: DateTime) => {

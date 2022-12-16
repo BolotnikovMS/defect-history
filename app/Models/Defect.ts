@@ -15,6 +15,9 @@ import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Staff from 'App/Models/Staff'
 
 export default class Defect extends BaseModel {
+  map(arg0: (defect: any) => any) {
+    throw new Error('Method not implemented.')
+  }
   @column({ isPrimary: true })
   public id: number
 
