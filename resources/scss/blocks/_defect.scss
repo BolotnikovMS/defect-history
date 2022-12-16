@@ -5,15 +5,14 @@
 
   &__control {
     @include control-group;
+
+    &:nth-child(even){
+      margin-top: 20px;
+    }
   }
 
   &__content {
     padding-bottom: 15px;
-  }
-
-  &__btn {
-    @include btn;
-
   }
 
   &-table {

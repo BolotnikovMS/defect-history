@@ -11,10 +11,6 @@
     @include control-group;
   }
 
-  &__btn {
-    @include btn;
-  }
-
   &__list {
     @include list;
   }
