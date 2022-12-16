@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.integer('id_inspector', 10).notNullable().unsigned().index().references('staff.id')
       table.string('check_date', 15).notNullable()
       table.text('description_results').notNullable()
+      table.text('transferred')
 
       table.timestamps()
     })

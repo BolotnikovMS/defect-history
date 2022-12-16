@@ -27,6 +27,7 @@ export default class DefectResultValidator {
     employee: schema.string(),
     description_results: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
     date: schema.string(),
+    transferred: schema.string.optional({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
   })
 
   /**

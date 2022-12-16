@@ -10,7 +10,7 @@ import DefectResultValidator from '../../Validators/DefectResultValidator'
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = 5
 
     const defects = await Defect.query()
       .orderBy('elimination_date', 'asc')
@@ -20,7 +20,17 @@ export default class DefectsController {
 
     defects.baseUrl('/')
 
-    // console.log(defects)
+    // const defectsSerialize = defects.serialize({
+    //   fields: ['id', 'accession', 'description_defect', 'term_elimination', 'elimination_date'],
+    //   relations: {
+    //     substation: {
+    //       fields: ['nameAndClass'],
+    //     },
+    //     defect_type: {
+    //       fields: ['type_defect'],
+    //     },
+    //   },
+    // })
 
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
@@ -94,7 +104,7 @@ export default class DefectsController {
           fields: ['type_defect'],
         },
         intermediate_checks: {
-          fields: ['check_date', 'description_results'],
+          fields: ['check_date', 'description_results', 'transferred'],
           relations: {
             name_inspector: {
               fields: ['fullName', 'position'],
@@ -181,6 +191,7 @@ export default class DefectsController {
 
     return view.render('pages/defect/form_checkupandclose', {
       title: 'Добавление проверки',
+      checkup: true,
       options: {
         defect: idDefect,
         routes: {
@@ -201,6 +212,7 @@ export default class DefectsController {
         id_inspector: +validateData.employee,
         check_date: validateData.date,
         description_results: validateData.description_results,
+        transferred: validateData.transferred,
       }
 
       // const test = ({ employee, ...rest }) => rest
