@@ -19,6 +19,7 @@ a:hover {
 
 .page-content {
   padding: 30px 0;
+  min-height: calc(100vh - 80px - 63px);
 }
 
 .container {
@@ -37,6 +38,10 @@ a:hover {
 .no-content {
   padding: 40px 0;
   text-align: center;
+}
+
+.btn {
+  @include btn;
 }
 
 hr {
