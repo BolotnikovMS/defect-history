@@ -64,6 +64,30 @@
         <span class="error-text">{{ flashMessages.get('errors.date') }}</span>
         @endif
       </div>
+      @if(checkup)
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          Передано для дальнейших действий
+          <input type="text" name="transferred" class="form__input {{
+            flashMessages.all() !== null ?
+              flashMessages.get('errors.transferred') ?
+                'form__input-invalid'
+              :
+                'form__input-correctly'
+            :
+              ''
+          }}" value="{{
+            flashMessages.get('transferred') === null ?
+              ''
+            :
+              flashMessages.get('transferred', '')
+          }}" placeholder="Введите кому передано...">
+        </label>
+        @if(flashMessages.has('errors.transferred'))
+        <span class="error-text">{{ flashMessages.get('errors.transferred') }}</span>
+        @endif
+      </div>
+      @endif
     </div>
     <div class="form__btns">
       <a href="{{ route(options.routes.back, {id: options.defect}) }}" class="form__btn form__btn-cancel">Отмена</a>
