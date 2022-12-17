@@ -10,12 +10,13 @@ import DefectResultValidator from '../../Validators/DefectResultValidator'
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
-    const limit = 5
+    const limit = 7
 
     const defects = await Defect.query()
       .orderBy('elimination_date', 'asc')
       .preload('defect_type')
       .preload('substation')
+      .preload('intermediate_checks')
       .paginate(page, limit)
 
     defects.baseUrl('/')
@@ -160,6 +161,7 @@ export default class DefectsController {
       defect.accession = validateDefectData.accession
       defect.description_defect = validateDefectData.description_defect
       defect.term_elimination = validateDefectData.term_elimination
+      defect.importance = validateDefectData.importance ? validateDefectData.importance : 'false'
 
       await defect.save()
 
