@@ -50,7 +50,7 @@
       <div class="form__group">
         <label class="form__label form__label-text_left">
           Важность объекта
-          <input type="checkbox" name="importance" class="form__input" value="true" {{ substation ?
+          <input type="checkbox" name="importance" class="form__input form__input-checkbox" value="true" {{ substation ?
             substation.importance==='true' ? 'checked' : '' : '' }}>
         </label>
         @if(flashMessages.has('errors.importance'))
