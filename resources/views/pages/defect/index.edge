@@ -12,7 +12,7 @@
   {{-- {{inspect(defects)}} --}}
   <hr>
   @if(defects)
-  <table class="defect-table">
+  <table class="defect-table" align="center">
     <thead>
       <tr>
         <th>№</th>
@@ -21,6 +21,7 @@
         <th>Присоединение</th>
         <th>Описание</th>
         <th>Срок устранения</th>
+        <th>Кол-во проверок</th>
         <th>Дата устранения</th>
         <th>
           <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
@@ -29,25 +30,31 @@
     </thead>
     <tbody>
       @each((defect, i) in defects)
-      <tr>
+      <tr {{ defect.elimination_date !==null ? 'class=defect__completed' : defect.importance==='true'
+        ? 'class=defect__danger' : '' }}>
         <td>{{ i + 1 }}</td>
         <td>{{ defect.defect_type.type_defect }}</td>
         <td>{{ defect.substation.nameAndClass }}</td>
         <td>{{ defect.accession }}</td>
-        <td>{{ truncate(defect.description_defect, 40) }}</td>
+        <td class="defect-table__td-width-all">{{
+          truncate(defect.description_defect, 80) }}</td>
         <td>{{ dateFormat(defect.term_elimination) }}</td>
+        <td>{{ defect.countIntermediateChecks }}</td>
         <td>{{ defect.elimination_date === null ? '' : dateFormat(defect.elimination_date) }}</td>
-        <td style="display: flex;">
-          <a href="{{ route('defect.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
-            <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
-          </a>
-          @!component('components/dropdown-menu', {
-          data: defect,
-          routes: {
-          edit: 'defect.edit',
-          delete: 'defect.destroy',
-          },
-          })
+        <td class="defect-table__td-control">
+          {{-- <div style="display: flex; align-items: center;max-height: 50px;"> --}}
+            <a href="{{ route('defect.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
+              <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
+            </a>
+            @!component('components/dropdown-menu', {
+            data: defect,
+            routes: {
+            edit: 'defect.edit',
+            delete: 'defect.destroy',
+            },
+            })
+            {{--
+          </div> --}}
         </td>
       </tr>
       @endeach
