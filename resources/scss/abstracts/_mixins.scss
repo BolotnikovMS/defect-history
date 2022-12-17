@@ -134,11 +134,14 @@
 }
 
 @mixin table {
+  table-layout: fixed;
+  white-space: normal !important;
+  display: block;
+  overflow: auto;
+  width: 100%;
+  white-space: nowrap;
   padding: 10px;
   font-size: 18px;
-  width: 100%;
-  min-width: 100%;
-  white-space: nowrap;
   background-color: white;
 
   td, th {
@@ -162,9 +165,30 @@
   }
 
   tr {
+    transition: all 0.3s ease-in;
+
     &:nth-child(even) {
       background: #F8F8F8;
     }
+
+    &:hover {
+      background-color: rgba(51, 51, 153, .1) !important;
+    }
+  }
+
+  &__td-width-all {
+    min-width: 349px;
+  }
+
+  &__td-width-show {
+    min-width: 920px;
+  }
+
+  &__td-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
   }
 
   &__icon {
