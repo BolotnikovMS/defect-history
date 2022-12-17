@@ -13,11 +13,9 @@ import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Staff from 'App/Models/Staff'
+import { computed } from '@ioc:Adonis/Lucid/Orm';
 
 export default class Defect extends BaseModel {
-  map(arg0: (defect: any) => any) {
-    throw new Error('Method not implemented.')
-  }
   @column({ isPrimary: true })
   public id: number
 
@@ -38,6 +36,9 @@ export default class Defect extends BaseModel {
 
   @column()
   public term_elimination: string
+
+  @column()
+  public importance: string
 
   @column()
   public elimination_date: string
@@ -64,6 +65,11 @@ export default class Defect extends BaseModel {
     },
   })
   public updatedAt: DateTime
+
+  @computed()
+  public get countIntermediateChecks() {
+    return this.intermediate_checks.length
+  }
 
   @hasOne(() => Substation, {
     foreignKey: 'id',
