@@ -22,4 +22,12 @@
       @include dropdown-menu;
     }
   }
+
+  &__completed {
+    background-color: rgba(195, 248, 160, 0.6) !important;
+  }
+
+  &__danger {
+    background-color: rgb(246, 73, 73) !important;
+  }
 }
