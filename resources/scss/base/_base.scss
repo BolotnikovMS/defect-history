@@ -111,11 +111,16 @@ hr {
   }
 
   &__input {
+    width: 350px;
     font-size: 18px;
     margin-top: 10px;
     padding: 8px 10px;
     border: 1px solid #cfcfcf;
     border-radius: 10px;
+
+    &-checkbox {
+      width: unset;
+    }
 
     &-correctly {
       border: 1px solid #009f00;
