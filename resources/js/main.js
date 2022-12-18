@@ -65,4 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   openDropdownMenu('.btn-menu', '.dropdown__menu')
+
+  // Searchable list
+  $('.searchable-list').select2({
+    width: '350px',
+    placeholder: 'Select an option',
+    maximumSelectionLength: 2,
+    language: 'ru',
+  })
 })
