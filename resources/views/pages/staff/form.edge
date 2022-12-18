@@ -7,7 +7,9 @@
     <div class="form__content form__content-column">
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Фамилия
+          <div class="label__text">
+            Фамилия
+          </div>
           <input type="text" name="surname" class="form__input {{
               flashMessages.all() !== null ?
                 flashMessages.get('errors.surname') ?
@@ -28,7 +30,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Имя
+          <div class="label__text">
+            Имя
+          </div>
           <input type="text" name="name" class="form__input {{
               flashMessages.all() !== null ?
                 flashMessages.get('errors.name') ?
@@ -49,7 +53,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Отчество
+          <div class="label__text">
+            Отчество
+          </div>
           <input type="text" name="patronymic" class="form__input {{
               flashMessages.all() !== null ?
                 flashMessages.get('errors.patronymic') ?
@@ -70,7 +76,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Должность
+          <div class="label__text">
+            Должность
+          </div>
           <input type="text" name="position" class="form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.position') ?

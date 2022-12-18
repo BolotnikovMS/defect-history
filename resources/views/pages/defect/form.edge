@@ -7,8 +7,10 @@
     <div class="form__content form__content-column">
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Выберите тип дефекта
-          <select name="defect_type" class="form__input {{
+          <div class="label__text">
+            Выберите тип дефекта
+          </div>
+          <select name="defect_type" class="searchable-list form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.defect_type') ?
                 'form__input-invalid'
@@ -32,8 +34,10 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Выберите объект
-          <select name="substation" class="form__input {{
+          <div class="label__text">
+            Выберите объект
+          </div>
+          <select name="substation" class="searchable-list form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.substation') ?
                 'form__input-invalid'
@@ -57,7 +61,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Присоединение
+          <div class="label__text">
+            Присоединение
+          </div>
           <input type="text" name="accession" class="form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.accession') ?
@@ -75,7 +81,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Описание
+          <div class="label__text">
+            Описание
+          </div>
           <textarea name="description_defect" class="form__input form__textarea {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.description_defect') ?
@@ -97,7 +105,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Сроки устранения
+          <div class="label__text">
+            Сроки устранения
+          </div>
           <input type="date" name="term_elimination" class="form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.term_elimination') ?
@@ -117,7 +127,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Важность устранения дефекта
+          <div class="label__text">
+            Важность устранения дефекта
+          </div>
           <input type="checkbox" name="importance" class="form__input form__input-checkbox" value="true" {{
             defectSerialize ? defectSerialize.importance==='true' ? 'checked' : '' : '' }}>
         </label>

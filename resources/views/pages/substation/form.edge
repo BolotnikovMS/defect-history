@@ -7,7 +7,9 @@
     <div class="form__content form__content-column">
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Название объекта
+          <div class="label__text">
+            Название объекта
+          </div>
           <input type="text" name="name" class="form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.name') ?
@@ -28,7 +30,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Класс объекта
+          <div class="label__text">
+            Класс объекта
+          </div>
           <input type="text" name="voltage_class" class="form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.voltage_class') ?
@@ -49,7 +53,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Важность объекта
+          <div class="label__text">
+            Важность объекта
+          </div>
           <input type="checkbox" name="importance" class="form__input form__input-checkbox" value="true" {{ substation ?
             substation.importance==='true' ? 'checked' : '' : '' }}>
         </label>

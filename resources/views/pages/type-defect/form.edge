@@ -7,7 +7,9 @@
     <div class="form__content form__content-column">
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Название дефекта
+          <div class="label__text">
+            Название дефекта
+          </div>
           <input type="text" name="type_defect" class="form__input {{
             flashMessages.all() !== null ?
               flashMessages.get('errors.type_defect') ?
@@ -28,7 +30,9 @@
       </div>
       <div class="form__group">
         <label class="form__label form__label-text_left">
-          Описание дефекта
+          <div class="label__text">
+            Описание дефекта
+          </div>
           <textarea name="defect_description" class="form__input form__textarea" cols="60"
             rows="4">{{ typeDefect ? typeDefect.defect_description : '' }}</textarea>
         </label>
