@@ -68,7 +68,7 @@ export default class Defect extends BaseModel {
 
   @computed()
   public get countIntermediateChecks() {
-    return this.intermediate_checks.length
+    return this.intermediate_checks?.length
   }
 
   @hasOne(() => Substation, {
