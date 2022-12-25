@@ -19,6 +19,19 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
+  Route.group(() => {
+    Route.get('/register', 'AuthController.registerShow').as('auth.register.show')
+    Route.post('/register', 'AuthController.register').as('auth.register')
+    Route.get('/login', 'AuthController.loginShow').as('auth.login.show')
+    Route.post('/login', 'AuthController.login').as('auth.login')
+    Route.get('/logout', 'AuthController.logout').as('auth.logout')
+  }).prefix('/auth')
+
+  Route.group(() => {
+    Route.get('/', 'UsersController.index').as('users.all')
+    Route.get('/delete/:id', 'UsersController.destroy').as('user.destroy')
+  }).prefix('users')
+
   Route.get('/', 'DefectsController.index').as('defects.all')
   Route.group(() => {
     Route.get('/new', 'DefectsController.create').as('defect.create')
