@@ -1,0 +1,42 @@
+@layout('layout/master')
+
+@section('content')
+<h2 class="user__title">{{ title }}</h2>
+
+<div class="user__control">
+  <a href="{{ route('auth.register.show') }}" class="btn btn-color_green">
+    <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
+    Добавить
+  </a>
+</div>
+<div class="user__content">
+  <hr>
+  @if(users.length)
+  <ul class="user__list">
+    @each(user in users)
+    <li class="list__item">
+      <div class="list__content">
+        "{{ user.role.name }}" | {{ user.fullName }}
+      </div>
+      <div class="list__control">
+        <a href="#" class="edit">
+          <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+        </a>
+        <a href="{{ route('user.destroy', {id: user.id}) }}">
+          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+        </a>
+      </div>
+    </li>
+    @endeach
+  </ul>
+  @else
+  <div class="no-content">
+    <p>Пока нет добавленых пользователей.</p>
+  </div>
+  @endif
+  <hr>
+</div>
+@!component('components/pagination', {
+pagination: users,
+})
+@endsection

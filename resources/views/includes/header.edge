@@ -15,10 +15,18 @@
         </ul>
       </nav>
       <div class="header__login">
-        <a href="#" class="btn btn-signup">
+        @if(auth.user)
+        {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
+        <a href="{{ route('auth.logout') }}" class="btn btn-signup">
+          <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти">
+          Выйти
+        </a>
+        @else
+        <a href="{{ route('auth.login.show') }}" class="btn btn-signup">
           <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
           Войти
         </a>
+        @endif
       </div>
     </div>
   </div>

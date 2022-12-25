@@ -1,0 +1,33 @@
+@layout('layout/master')
+
+@section('content')
+<div class="login__content">
+  <h2 class="login__title">{{ title }}</h2>
+  <form action="{{ route('auth.login') }}" method="POST">
+    <div class="form__content form__content-column">
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          <input type="text" name="uid" class="form__input" placeholder="Введите 'Username' или email" required>
+        </label>
+        @if(flashMessages.has('errors.uid'))
+        <span class="error-text">{{ flashMessages.get('errors.uid') }}</span>
+        @endif
+      </div>
+      <div class="form__group">
+        <label class="form__label form__label-text_left">
+          <input type="password" name="password" class="form__input" placeholder="Введите пароль" required>
+        </label>
+        @if(flashMessages.has('errors.uid'))
+        <span class="error-text">{{ flashMessages.get('errors.uid') }}</span>
+        @endif
+      </div>
+    </div>
+    <div class="form__btns">
+      <button class="form__btn form__btn-color_blue form__btn-color_blue-save" type="submit">
+        <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
+        Войти
+      </button>
+    </div>
+  </form>
+</div>
+@endsection
