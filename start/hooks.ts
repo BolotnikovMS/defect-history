@@ -27,6 +27,10 @@ View.global('menu', [
     url: 'staff.all',
     name: 'Персонал',
   },
+  {
+    url: 'users.all',
+    name: 'Пользователи',
+  },
 ])
 
 /*
