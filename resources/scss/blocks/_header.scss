@@ -54,6 +54,10 @@
   }
 
   &__login {
+    display: flex;
+    align-items: center;
+    column-gap: 15px;
+
     .btn {
       @include btn;
       background-color: #5cadf8;
