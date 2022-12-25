@@ -56,14 +56,14 @@ export default class DefectsController {
     })
   }
 
-  public async store({ request, response, session }: HttpContextContract) {
+  public async store({ request, response, auth, session }: HttpContextContract) {
     const validateDefectData = await request.validate(DefectValidator)
 
     if (validateDefectData) {
       const defect = {
         id_substation: +validateDefectData.substation,
         id_type_defect: +validateDefectData.defect_type,
-        id_user: 1,
+        id_user: auth.user!.id,
         ...validateDefectData,
       }
 
@@ -205,12 +205,13 @@ export default class DefectsController {
     })
   }
 
-  public async checkupStore({ params, request, response, session }: HttpContextContract) {
+  public async checkupStore({ params, request, response, auth, session }: HttpContextContract) {
     const validateData = await request.validate(DefectResultValidator)
 
     if (validateData) {
       const checkupDefect = {
         id_defect: +params.idDefect,
+        id_user: auth.user!.id,
         id_inspector: +validateData.employee,
         check_date: validateData.date,
         description_results: validateData.description_results,
