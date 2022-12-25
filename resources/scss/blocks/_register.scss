@@ -1,0 +1,9 @@
+.register {
+  &__title {
+    @include title;
+  }
+
+  &__content {
+    padding-bottom: 15px;
+  }
+}
