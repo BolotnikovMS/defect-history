@@ -2,12 +2,14 @@
 
 @section('content')
 <h2 class="substations__title">{{ title }}</h2>
+@can('noAccess')
 <div class="substations-control">
   <a href="{{ route('substations.create') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
   </a>
 </div>
+@endcan
 <div class="substations__content">
   <hr>
   @if(substations.length)
@@ -20,6 +22,7 @@
         <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
         @endif
       </div>
+      @can('noAccess')
       <div class="list__control">
         <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
           <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
@@ -28,6 +31,7 @@
           <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
         </a>
       </div>
+      @endcan
     </li>
     @endeach
   </ul>

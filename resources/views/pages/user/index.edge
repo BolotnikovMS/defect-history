@@ -2,13 +2,14 @@
 
 @section('content')
 <h2 class="user__title">{{ title }}</h2>
-
+@can('noAccess')
 <div class="user__control">
   <a href="{{ route('auth.register.show') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
   </a>
 </div>
+@endcan
 <div class="user__content">
   <hr>
   @if(users.length)
@@ -19,12 +20,16 @@
         "{{ user.role.name }}" | {{ user.fullName }}
       </div>
       <div class="list__control">
+        @can('editUser')
         <a href="#" class="edit">
           <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
         </a>
+        @endcan
+        @can('deleteUser')
         <a href="{{ route('user.destroy', {id: user.id}) }}">
           <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
         </a>
+        @endcan
       </div>
     </li>
     @endeach

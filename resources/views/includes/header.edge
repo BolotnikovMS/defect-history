@@ -4,7 +4,7 @@
       <div class="header__logo">
         <img src="{{ asset('assets/icons/journal.svg') }}" alt="Журнал">
       </div>
-      <nav class="header__nav">
+      {{-- <nav class="header__nav">
         <ul>
           @each(menuItem in menu)
           <li>
@@ -12,6 +12,37 @@
               menuItem.name }}</a>
           </li>
           @endeach
+        </ul>
+      </nav> --}}
+      <nav class="header__nav">
+        <ul>
+          <li>
+            <a href="{{ route('defects.all') }}"
+              class="{{ 'defects.all' == activeMenuLink ? 'active' : '' }}">Дефекты</a>
+          </li>
+          @can('viewTypesDefects')
+          <li>
+            <a href="{{ route('types-defects.all') }}"
+              class="{{ 'types-defects.all' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
+          </li>
+          @endcan
+          @can('noAccess')
+          <li>
+            <a href="{{ route('substations.all') }}"
+              class="{{ 'substations.all' == activeMenuLink ? 'active' : '' }}">Объекты</a>
+          </li>
+          @endcan
+          @can('noAccess')
+          <li>
+            <a href="{{ route('staff.all') }}" class="{{ 'staff.all' == activeMenuLink ? 'active' : '' }}">Персонал</a>
+          </li>
+          @endcan
+          @can('viewUsers')
+          <li>
+            <a href="{{ route('users.all') }}"
+              class="{{ 'users.all' == activeMenuLink ? 'active' : '' }}">Пользователи</a>
+          </li>
+          @endcan
         </ul>
       </nav>
       <div class="header__login">

@@ -1,21 +1,28 @@
-@if(data)
+@if(await bouncer.denies(routes.edit.access, data) && await bouncer.denies(routes.delete.access, data))
+
+@elseif(data)
+{{-- @if(data) --}}
 <div class="dropdown">
   <button class="btn-menu">
     <img src="{{ asset('assets/icons/menu.svg') }}" class="btn-menu__icon defect-table__icon" alt="Меню">
   </button>
   <ul class="dropdown__menu">
+    @can(routes.edit.access, data)
     <li>
-      <a href="{{ route(routes.edit, {id: data.id}) }}" class="dropdown__item" title="Редактировать">
+      <a href="{{ route(routes.edit.action, {id: data.id}) }}" class="dropdown__item" title="Редактировать">
         <img src="{{ asset('assets/icons/edit.svg') }}" alt="Редактировать">
         Редактировать
       </a>
     </li>
+    @endcan
+    @can(routes.delete.access, data)
     <li>
-      <a href="{{ route(routes.delete, {id: data.id}) }}" class="dropdown__item" title="Удалить">
+      <a href="{{ route(routes.delete.action, {id: data.id}) }}" class="dropdown__item" title="Удалить">
         <img src="{{ asset('assets/icons/delete.svg') }}" alt="Удалить">
         Удалить
       </a>
     </li>
+    @endcan
   </ul>
 </div>
 @else
