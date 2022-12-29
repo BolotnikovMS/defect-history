@@ -34,6 +34,7 @@ export default class AuthValidator {
     name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
     patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
     position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+    role: schema.number(),
     email: schema.string([
       rules.email(),
       rules.unique({ table: 'users', column: 'email' }),
