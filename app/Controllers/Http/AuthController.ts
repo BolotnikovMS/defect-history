@@ -4,7 +4,13 @@ import User from 'App/Models/User'
 import Role from 'App/Models/Role'
 
 export default class AuthController {
-  public async registerShow({ view }: HttpContextContract) {
+  public async registerShow({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createUser')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
+
+      return response.redirect().toPath('/')
+    }
+
     const roles = await Role.all()
 
     const dataSerialize = roles.map((role) => {
@@ -22,11 +28,17 @@ export default class AuthController {
     })
   }
 
-  public async register({ request, response, session }: HttpContextContract) {
-    const data = await request.validate(AuthValidator)
+  public async register({ request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createUser')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление нового пользователя!')
+
+      return response.redirect().toPath('/')
+    }
+
+    let data = await request.validate(AuthValidator)
 
     if (data) {
-      await User.create(data)
+      await User.create({ ...data, id_role: data.role })
 
       session.flash(
         'successMessage',
@@ -64,8 +76,6 @@ export default class AuthController {
   }
 
   public async logout({ response, auth, session }: HttpContextContract) {
-    console.log(auth.user)
-
     if (!auth.user) {
       return response.redirect().toPath('/')
     }
