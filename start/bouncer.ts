@@ -101,10 +101,16 @@ export const { actions } = Bouncer.before((user: User | null) => {
     return [Roles.USER, Roles.MODERATOR].includes(user.id_role)
   })
   .define('editDefect', (user: User, defect: Defect) => {
-    return defect.id_user === user.id || user.id_role === Roles.MODERATOR
+    return (
+      user.id_role === Roles.MODERATOR ||
+      (defect.id_user === user.id && defect.elimination_date === null)
+    )
   })
   .define('deleteDefect', (user: User, defect: Defect) => {
-    return defect.id_user === user.id || user.id_role === Roles.MODERATOR
+    return (
+      user.id_role === Roles.MODERATOR ||
+      (defect.id_user === user.id && defect.elimination_date === null)
+    )
   })
 
   // Checkup
