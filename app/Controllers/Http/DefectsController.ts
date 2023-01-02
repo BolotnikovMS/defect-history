@@ -10,7 +10,7 @@ import DefectResultValidator from '../../Validators/DefectResultValidator'
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
-    const limit = 7
+    const limit = 10
 
     const defects = await Defect.query()
       .orderBy('elimination_date', 'asc')
