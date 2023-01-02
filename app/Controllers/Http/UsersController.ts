@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-import Roles from '../../Enums/Roles';
+import Roles from '../../Enums/Roles'
 
 export default class UsersController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -45,8 +45,7 @@ export default class UsersController {
       session.flash('successMessage', `Пользователь успешно удален!`)
       response.redirect().back()
     } else {
-      console.log(`Пользователь является админом.`)
-      session.flash('dangerMessage', 'Пользователя с ролью "Админ" нельзя удалить!')
+      session.flash('dangerMessage', 'Пользователя с ролью "Admin" нельзя удалить!')
       response.redirect().back()
     }
   }
