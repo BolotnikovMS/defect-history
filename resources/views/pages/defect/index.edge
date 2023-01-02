@@ -3,13 +3,16 @@
 @section('content')
 <h2 class="defect__title">{{ title }}</h2>
 <div class="defect__control">
+  @can('createDefect')
   <a href="{{ route('defect.create') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
   </a>
+  @endcan
 </div>
 <div class="defect__content">
   {{-- {{inspect(defects)}} --}}
+  {{-- {{inspect(auth.user.surname)}} --}}
   <hr>
   @if(defects)
   <table class="defect-table" align="center">
@@ -49,8 +52,14 @@
             @!component('components/dropdown-menu', {
             data: defect,
             routes: {
-            edit: 'defect.edit',
-            delete: 'defect.destroy',
+            edit: {
+            action: 'defect.edit',
+            access: 'editDefect',
+            },
+            delete: {
+            action: 'defect.destroy',
+            access: 'deleteDefect',
+            },
             },
             })
             {{--

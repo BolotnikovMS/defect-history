@@ -3,7 +3,13 @@ import Substation from '../../Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
 
 export default class SubstationsController {
-  public async index({ request, view }: HttpContextContract) {
+  public async index({ request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('noAccess')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
+
+      return response.redirect().toPath('/')
+    }
+
     const page = request.input('page', 1)
     const limit = 10
     const substations = await Substation.query().orderBy('created_at', 'asc').paginate(page, limit)
@@ -17,7 +23,13 @@ export default class SubstationsController {
     })
   }
 
-  public async create({ view }: HttpContextContract) {
+  public async create({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('noAccess')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     return view.render('pages/substation/form', {
       title: 'Добавление нового объкта',
       options: {
@@ -28,7 +40,13 @@ export default class SubstationsController {
     })
   }
 
-  public async store({ request, response, session }: HttpContextContract) {
+  public async store({ request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('noAccess')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const validateSubstation = await request.validate(SubstationValidator)
 
     if (validateSubstation) {
@@ -47,8 +65,14 @@ export default class SubstationsController {
 
   public async show({}: HttpContextContract) {}
 
-  public async edit({ params, response, view, session }: HttpContextContract) {
+  public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
+
+    if (await bouncer.denies('noAccess')) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (substation) {
       return view.render('pages/substation/form', {
@@ -67,8 +91,14 @@ export default class SubstationsController {
     }
   }
 
-  public async update({ params, request, response, session }: HttpContextContract) {
+  public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
+
+    if (await bouncer.denies('noAccess')) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (substation) {
       const validateSubstation = await request.validate(SubstationValidator)
@@ -89,8 +119,14 @@ export default class SubstationsController {
     }
   }
 
-  public async destroy({ response, params, session }: HttpContextContract) {
+  public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
+
+    if (await bouncer.denies('noAccess')) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (substation) {
       await substation.delete()

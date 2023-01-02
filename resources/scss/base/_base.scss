@@ -19,14 +19,14 @@ a:hover {
 
 .page-content {
   padding: 30px 0;
-  min-height: calc(100vh - 80px - 63px);
+  min-height: calc(100vh - 86px - 63px);
 }
 
 .container {
   max-width: 1500px;
   padding: 0 15px;
   margin: 0 auto;
-  box-shadow: 2px 32px 47px -37px #000000;
+  // box-shadow: 2px 32px 47px -37px #000000;
 }
 
 .error-text {
@@ -49,6 +49,7 @@ hr {
   border-top: 1px solid #333;
   width: 95%;
   align-items: center;
+  z-index: -2;
 }
 
 .dialog {

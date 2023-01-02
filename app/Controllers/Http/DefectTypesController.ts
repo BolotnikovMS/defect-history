@@ -3,7 +3,13 @@ import DefectType from '../../Models/DefectType'
 import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 
 export default class DefectTypesController {
-  public async index({ request, view }: HttpContextContract) {
+  public async index({ request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewTypesDefects')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
+
+      return response.redirect().toPath('/')
+    }
+
     const page = request.input('page', 1)
     const limit = 10
     const typesDefects = await DefectType.query().orderBy('created_at', 'asc').paginate(page, limit)
@@ -17,7 +23,13 @@ export default class DefectTypesController {
     })
   }
 
-  public async create({ view }: HttpContextContract) {
+  public async create({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createTypeDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     return view.render('pages/type-defect/form', {
       title: 'Добавление нового типа дефекта',
       options: {
@@ -28,7 +40,13 @@ export default class DefectTypesController {
     })
   }
 
-  public async store({ request, response, session }: HttpContextContract) {
+  public async store({ request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createTypeDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
     if (validateTypeDefectData) {
@@ -47,8 +65,14 @@ export default class DefectTypesController {
 
   public async show({}: HttpContextContract) {}
 
-  public async edit({ params, response, view, session }: HttpContextContract) {
+  public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
+
+    if (await bouncer.denies('editTypeDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (typeDefect) {
       return view.render('pages/type-defect/form', {
@@ -67,8 +91,14 @@ export default class DefectTypesController {
     }
   }
 
-  public async update({ request, response, params, session }: HttpContextContract) {
+  public async update({ request, response, params, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
+
+    if (await bouncer.denies('editTypeDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (typeDefect) {
       const validateTypeDefectData = await request.validate(TypesDefectValidator)
@@ -89,8 +119,14 @@ export default class DefectTypesController {
     }
   }
 
-  public async destroy({ params, response, session }: HttpContextContract) {
+  public async destroy({ params, response, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
+
+    if (await bouncer.denies('deleteTypeDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+      return response.redirect().back()
+    }
 
     if (typeDefect) {
       await typeDefect.delete()
@@ -99,7 +135,7 @@ export default class DefectTypesController {
       response.redirect().back()
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
+      response.redirect().toPath('/')
     }
   }
 }

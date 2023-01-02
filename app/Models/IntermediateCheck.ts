@@ -8,6 +8,9 @@ export default class IntermediateCheck extends BaseModel {
   @column({ serializeAs: null })
   public id_defect: number
 
+  @column()
+  public id_user: number
+
   @column({ serializeAs: null })
   public id_inspector: number
 

@@ -1,0 +1,17 @@
+.user {
+  &__title {
+    @include title;
+  }
+
+  &__control {
+    @include control-group;
+  }
+
+  &__content {
+    padding-bottom: 15px;
+  }
+
+  &__list {
+    @include list;
+  }
+}

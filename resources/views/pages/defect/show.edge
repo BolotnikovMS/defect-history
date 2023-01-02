@@ -2,6 +2,7 @@
 
 @section('content')
 <div class="defect__content">
+  @if(auth.isLoggedIn)
   <div class="defect__control defect__control-row">
     @if(!defectSerialize.result && !defectSerialize.elimination_date)
     <a href="{{ route('defect.close.create', {idDefect: defectSerialize.id}) }}" class="btn btn-color_green">
@@ -12,12 +13,15 @@
       <img src="{{ asset('assets/icons/magnifier.svg') }}" alt="Добавить проверку">
       Добавить проверку
     </a>
+    @can('editDefect', defectSerialize)
     <a href="{{ route('defect.edit', {id: defectSerialize.id}) }}" class="btn btn-color_blue">
       <img src="{{ asset('assets/icons/edit-2.svg') }}" alt="Редактировать дефект">
       Редактировать дефект
     </a>
+    @endcan
     @endif
   </div>
+  @endif
   <hr>
   {{-- {{ inspect(defectSerialize) }} --}}
   <table class="defect-table">

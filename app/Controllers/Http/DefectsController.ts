@@ -40,7 +40,13 @@ export default class DefectsController {
     })
   }
 
-  public async create({ view }: HttpContextContract) {
+  public async create({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const typeDefects = await DefectType.all()
     const substations = await Substation.all()
 
@@ -56,14 +62,20 @@ export default class DefectsController {
     })
   }
 
-  public async store({ request, response, session }: HttpContextContract) {
+  public async store({ request, response, auth, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const validateDefectData = await request.validate(DefectValidator)
 
     if (validateDefectData) {
       const defect = {
         id_substation: +validateDefectData.substation,
         id_type_defect: +validateDefectData.defect_type,
-        id_user: 1,
+        id_user: auth.user!.id,
         ...validateDefectData,
       }
 
@@ -124,8 +136,14 @@ export default class DefectsController {
     })
   }
 
-  public async edit({ params, response, view, session }: HttpContextContract) {
+  public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
+
+    if (await bouncer.denies('editDefect', defect)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (defect) {
       const defectSerialize = defect.serialize()
@@ -150,8 +168,14 @@ export default class DefectsController {
     }
   }
 
-  public async update({ params, request, response, session }: HttpContextContract) {
+  public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
+
+    if (await bouncer.denies('editDefect', defect)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toPath('/')
+    }
 
     if (defect) {
       const validateDefectData = await request.validate(DefectValidator)
@@ -173,10 +197,17 @@ export default class DefectsController {
     }
   }
 
-  public async destroy({ response, params, session }: HttpContextContract) {
+  public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
 
+    if (await bouncer.denies('deleteDefect', defect)) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     if (defect) {
+      await defect.related('intermediate_checks').query().delete()
       await defect.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
@@ -187,66 +218,116 @@ export default class DefectsController {
     }
   }
 
-  public async checkupCreate({ params, view }: HttpContextContract) {
+  public async checkupCreate({ response, params, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createCheckup')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление проверки!')
+
+      return response.redirect().toPath('/')
+    }
+
     const idDefect = await params.idDefect
-    const staff = await Staff.all()
+    const defect = await Defect.find(idDefect)
 
-    return view.render('pages/defect/form_checkupandclose', {
-      title: 'Добавление проверки',
-      checkup: true,
-      options: {
-        defect: idDefect,
-        routes: {
-          saveData: 'defect.checkup.store',
-          back: 'defect.show',
+    if (defect) {
+      const staff = await Staff.all()
+
+      return view.render('pages/defect/form_checkupandclose', {
+        title: 'Добавление проверки',
+        checkup: true,
+        options: {
+          defect: idDefect,
+          routes: {
+            saveData: 'defect.checkup.store',
+            back: 'defect.show',
+          },
         },
-      },
-      staff,
-    })
-  }
-
-  public async checkupStore({ params, request, response, session }: HttpContextContract) {
-    const validateData = await request.validate(DefectResultValidator)
-
-    if (validateData) {
-      const checkupDefect = {
-        id_defect: +params.idDefect,
-        id_inspector: +validateData.employee,
-        check_date: validateData.date,
-        description_results: validateData.description_results,
-        transferred: validateData.transferred,
-      }
-
-      // const test = ({ employee, ...rest }) => rest
-
-      await IntermediateCheck.create(checkupDefect)
-
-      session.flash('successMessage', `Проверка успешно добавлена!`)
-      response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+        staff,
+      })
     } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('DefectsController.index')
+      session.flash('dangerMessage', 'Вы не можете добавить проверку к не существующему дефекту!')
+
+      return response.redirect().toPath('/')
     }
   }
 
-  public async closeDefectCreate({ params, view }: HttpContextContract) {
-    const idDefect = await params.idDefect
-    const staff = await Staff.all()
+  public async checkupStore({ params, request, response, auth, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createCheckup')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление проверки!')
 
-    return view.render('pages/defect/form_checkupandclose', {
-      title: 'Закрытие дефекта',
-      options: {
-        defect: idDefect,
-        routes: {
-          saveData: 'defect.close.store',
-          back: 'defect.show',
-        },
-      },
-      staff,
-    })
+      return response.redirect().toPath('/')
+    }
+
+    const idDefect = await params.idDefect
+    const defect = await Defect.find(idDefect)
+
+    if (defect) {
+      const validateData = await request.validate(DefectResultValidator)
+
+      if (validateData) {
+        const checkupDefect = {
+          id_defect: +idDefect,
+          id_user: auth.user!.id,
+          id_inspector: +validateData.employee,
+          check_date: validateData.date,
+          description_results: validateData.description_results,
+          transferred: validateData.transferred,
+        }
+
+        // const test = ({ employee, ...rest }) => rest
+
+        await IntermediateCheck.create(checkupDefect)
+
+        session.flash('successMessage', `Проверка успешно добавлена!`)
+        response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+      } else {
+        session.flash('dangerMessage', 'Что-то пошло не так!')
+        response.redirect().toRoute('DefectsController.index')
+      }
+    } else {
+      session.flash('dangerMessage', 'Вы не можете добавить проверку к не существующему дефекту!')
+
+      return response.redirect().toPath('/')
+    }
   }
 
-  public async closeDefectStore({ params, request, response, session }: HttpContextContract) {
+  public async closeDefectCreate({ response, params, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createCloseDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const idDefect = await params.idDefect
+    const defect = await Defect.find(idDefect)
+
+    if (defect) {
+      const staff = await Staff.all()
+
+      return view.render('pages/defect/form_checkupandclose', {
+        title: 'Закрытие дефекта',
+        options: {
+          defect: idDefect,
+          routes: {
+            saveData: 'defect.close.store',
+            back: 'defect.show',
+          },
+        },
+        staff,
+      })
+    } else {
+      session.flash('dangerMessage', 'Вы не можете закрыть несуществующий дефект!')
+
+      return response.redirect().toPath('/')
+    }
+  }
+
+  public async closeDefectStore({ params, request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createCloseDefect')) {
+      session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта!')
+
+      return response.redirect().toPath('/')
+    }
+
     const defect = await Defect.find(params.idDefect)
 
     if (defect) {

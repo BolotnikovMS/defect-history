@@ -1,45 +1,47 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="staff__title">{{ title }}</h2>
+<h2 class="user__title">{{ title }}</h2>
 @can('noAccess')
-<div class="staff-control">
-  <a href="{{ route('staff.create') }}" class="btn btn-color_green">
+<div class="user__control">
+  <a href="{{ route('auth.register.show') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
   </a>
 </div>
 @endcan
-<div class="staff__content">
+<div class="user__content">
   <hr>
-  @if(staff.length)
-  <ul class="substations__list">
-    @each(employee in staff)
+  @if(users.length)
+  <ul class="user__list">
+    @each(user in users)
     <li class="list__item">
       <div class="list__content">
-        {{ employee.position }} {{ employee.fullName }}
+        "{{ user.role.name }}" | {{ user.fullName }}
       </div>
-      @can('noAccess')
       <div class="list__control">
-        <a href="{{ route('staff.edit', {id: employee.id}) }}" class="edit">
+        @can('editUser')
+        <a href="#" class="edit">
           <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
         </a>
-        <a href="{{ route('staff.destroy', {id: employee.id}) }}">
+        @endcan
+        @can('deleteUser')
+        <a href="{{ route('user.destroy', {id: user.id}) }}">
           <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
         </a>
+        @endcan
       </div>
-      @endcan
     </li>
     @endeach
   </ul>
   @else
   <div class="no-content">
-    <p>Пока нет добавленых сотрудников.</p>
+    <p>Пока нет добавленых пользователей.</p>
   </div>
   @endif
   <hr>
 </div>
 @!component('components/pagination', {
-pagination: staff,
+pagination: users,
 })
 @endsection
