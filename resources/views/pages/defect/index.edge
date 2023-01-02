@@ -18,7 +18,6 @@
   <table class="defect-table" align="center">
     <thead>
       <tr>
-        <th>№</th>
         <th>Тип дефекта</th>
         <th>Объект</th>
         <th>Присоединение</th>
@@ -32,10 +31,9 @@
       </tr>
     </thead>
     <tbody>
-      @each((defect, i) in defects)
+      @each(defect in defects)
       <tr {{ defect.elimination_date !==null ? 'class=defect__completed' : defect.importance==='true'
         ? 'class=defect__danger' : '' }}>
-        <td>{{ i + 1 }}</td>
         <td>{{ defect.defect_type.type_defect }}</td>
         <td>{{ defect.substation.nameAndClass }}</td>
         <td>{{ defect.accession }}</td>
