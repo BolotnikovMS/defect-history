@@ -19,7 +19,7 @@ export default class DefectTypesController {
     return view.render('pages/type-defect/index', {
       title: 'Типы дефектов',
       typesDefects,
-      activeMenuLink: 'types-defects.all',
+      activeMenuLink: 'types-defects.index',
     })
   }
 
@@ -34,7 +34,7 @@ export default class DefectTypesController {
       title: 'Добавление нового типа дефекта',
       options: {
         routePath: {
-          saveData: 'type-defect.store',
+          saveData: 'types-defects.store',
         },
       },
     })
@@ -80,7 +80,7 @@ export default class DefectTypesController {
         options: {
           idData: typeDefect.id,
           routePath: {
-            saveData: 'type-defect.update',
+            saveData: 'types-defects.update',
           },
         },
         typeDefect,

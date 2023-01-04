@@ -36,7 +36,7 @@ export default class DefectsController {
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
       defects,
-      activeMenuLink: 'defects.all',
+      activeMenuLink: 'defects.index',
     })
   }
 
@@ -54,7 +54,7 @@ export default class DefectsController {
       title: 'Добавление нового дефекта',
       options: {
         routePath: {
-          savePath: 'defect.store',
+          savePath: 'defects.store',
         },
       },
       typeDefects,
@@ -155,7 +155,7 @@ export default class DefectsController {
         options: {
           idData: defect.id,
           routePath: {
-            savePath: 'defect.update',
+            savePath: 'defects.update',
           },
         },
         defectSerialize,
@@ -237,8 +237,8 @@ export default class DefectsController {
         options: {
           defect: idDefect,
           routes: {
-            saveData: 'defect.checkup.store',
-            back: 'defect.show',
+            saveData: 'defects.checkup.store',
+            back: 'defects.show',
           },
         },
         staff,
@@ -308,8 +308,8 @@ export default class DefectsController {
         options: {
           defect: idDefect,
           routes: {
-            saveData: 'defect.close.store',
-            back: 'defect.show',
+            saveData: 'defects.close.store',
+            back: 'defects.show',
           },
         },
         staff,

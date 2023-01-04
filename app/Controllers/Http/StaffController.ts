@@ -19,7 +19,7 @@ export default class StaffController {
     return view.render('pages/staff/index', {
       title: 'Список сотрудников',
       staff,
-      activeMenuLink: 'staff.all',
+      activeMenuLink: 'staff.index',
     })
   }
 

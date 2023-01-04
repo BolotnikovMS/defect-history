@@ -20,7 +20,7 @@ export default class UsersController {
     return view.render('pages/user/index', {
       title: 'Пользователи',
       users,
-      activeMenuLink: 'users.all',
+      activeMenuLink: 'users.index',
     })
   }
 
