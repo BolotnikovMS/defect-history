@@ -17,30 +17,31 @@
       <nav class="header__nav">
         <ul>
           <li>
-            <a href="{{ route('defects.all') }}"
-              class="{{ 'defects.all' == activeMenuLink ? 'active' : '' }}">Дефекты</a>
+            <a href="{{ route('defects.index') }}"
+              class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты</a>
           </li>
           @can('viewTypesDefects')
           <li>
-            <a href="{{ route('types-defects.all') }}"
-              class="{{ 'types-defects.all' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
+            <a href="{{ route('types-defects.index') }}"
+              class="{{ 'types-defects.index' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
           </li>
           @endcan
           @can('noAccess')
           <li>
-            <a href="{{ route('substations.all') }}"
-              class="{{ 'substations.all' == activeMenuLink ? 'active' : '' }}">Объекты</a>
+            <a href="{{ route('substations.index') }}"
+              class="{{ 'substations.index' == activeMenuLink ? 'active' : '' }}">Объекты</a>
           </li>
           @endcan
           @can('noAccess')
           <li>
-            <a href="{{ route('staff.all') }}" class="{{ 'staff.all' == activeMenuLink ? 'active' : '' }}">Персонал</a>
+            <a href="{{ route('staff.index') }}"
+              class="{{ 'staff.index' == activeMenuLink ? 'active' : '' }}">Персонал</a>
           </li>
           @endcan
           @can('viewUsers')
           <li>
-            <a href="{{ route('users.all') }}"
-              class="{{ 'users.all' == activeMenuLink ? 'active' : '' }}">Пользователи</a>
+            <a href="{{ route('users.index') }}"
+              class="{{ 'users.index' == activeMenuLink ? 'active' : '' }}">Пользователи</a>
           </li>
           @endcan
         </ul>
@@ -48,12 +49,12 @@
       <div class="header__login">
         @if(auth.user)
         {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
-        <a href="{{ route('auth.logout') }}" class="btn btn-signup">
+        <a href="{{ route('auth.logout') }}" class="btn btn-color_blue btn-logout">
           <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти">
           Выйти
         </a>
         @else
-        <a href="{{ route('auth.login.show') }}" class="btn btn-signup">
+        <a href="{{ route('auth.login.show') }}" class="btn btn-color_blue btn-signup">
           <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
           Войти
         </a>
