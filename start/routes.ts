@@ -19,77 +19,14 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
-  Route.group(() => {
-    Route.get('/register', 'AuthController.registerShow')
-      .as('auth.register.show')
-      .middleware(['auth'])
-    Route.post('/register', 'AuthController.register').as('auth.register').middleware(['auth'])
-    Route.get('/login', 'AuthController.loginShow').as('auth.login.show')
-    Route.post('/login', 'AuthController.login').as('auth.login')
-    Route.get('/logout', 'AuthController.logout').as('auth.logout')
-  }).prefix('/auth')
+  Route.get('/', 'DefectsController.index').as('defects.index')
 
-  Route.group(() => {
-    Route.get('/', 'UsersController.index').as('users.all').middleware(['auth'])
-    Route.get('/delete/:id', 'UsersController.destroy').as('user.destroy').middleware(['auth'])
-  }).prefix('users')
-
-  Route.get('/', 'DefectsController.index').as('defects.all')
-  Route.group(() => {
-    Route.get('/new', 'DefectsController.create').as('defect.create').middleware(['auth'])
-    Route.post('/new', 'DefectsController.store').as('defect.store').middleware(['auth'])
-    Route.get('/show/:id', 'DefectsController.show').as('defect.show')
-    Route.get('/edit/:id', 'DefectsController.edit').as('defect.edit').middleware(['auth'])
-    Route.post('/edit/:id', 'DefectsController.update').as('defect.update').middleware(['auth'])
-    Route.get('/delete/:id', 'DefectsController.destroy').as('defect.destroy')
-    Route.get('/checkup-create/:idDefect', 'DefectsController.checkupCreate')
-      .as('defect.checkup-create')
-      .middleware(['auth'])
-    Route.post('/checkup-create/:idDefect', 'DefectsController.checkupStore')
-      .as('defect.checkup.store')
-      .middleware(['auth'])
-    Route.get('/close-defect/:idDefect', 'DefectsController.closeDefectCreate')
-      .as('defect.close.create')
-      .middleware(['auth'])
-    Route.post('/close-defect/:idDefect', 'DefectsController.closeDefectStore')
-      .as('defect.close.store')
-      .middleware(['auth'])
-  }).prefix('/defects')
-
-  Route.group(() => {
-    Route.get('/', 'DefectTypesController.index').as('types-defects.all').middleware(['auth'])
-    Route.get('/new', 'DefectTypesController.create').as('type-defect.create').middleware(['auth'])
-    Route.post('/new', 'DefectTypesController.store').as('type-defect.store').middleware(['auth'])
-    Route.get('/edit/:id', 'DefectTypesController.edit').as('type-defect.edit').middleware(['auth'])
-    Route.post('/edit/:id', 'DefectTypesController.update')
-      .as('type-defect.update')
-      .middleware(['auth'])
-    Route.get('/delete/:id', 'DefectTypesController.destroy')
-      .as('type-defect.destroy')
-      .middleware(['auth'])
-  }).prefix('/types-defects')
-
-  Route.group(() => {
-    Route.get('/', 'SubstationsController.index').as('substations.all').middleware(['auth'])
-    Route.get('/new', 'SubstationsController.create').as('substations.create').middleware(['auth'])
-    Route.post('/new', 'SubstationsController.store').as('substations.store').middleware(['auth'])
-    Route.get('/edit/:id', 'SubstationsController.edit').as('substations.edit').middleware(['auth'])
-    Route.post('/edit/:id', 'SubstationsController.update')
-      .as('substations.update')
-      .middleware(['auth'])
-    Route.get('/delete/:id', 'SubstationsController.destroy')
-      .as('substations.destroy')
-      .middleware(['auth'])
-  }).prefix('/substations')
-
-  Route.group(() => {
-    Route.get('/', 'StaffController.index').as('staff.all').middleware(['auth'])
-    Route.get('/new', 'StaffController.create').as('staff.create').middleware(['auth'])
-    Route.post('/new', 'StaffController.store').as('staff.store').middleware(['auth'])
-    Route.get('/edit/:id', 'StaffController.edit').as('staff.edit').middleware(['auth'])
-    Route.post('/edit/:id', 'StaffController.update').as('staff.update').middleware(['auth'])
-    Route.get('/delete/:id', 'StaffController.destroy').as('staff.destroy').middleware(['auth'])
-  }).prefix('/staff')
+  require('./routes/auth')
+  require('./routes/users')
+  require('./routes/defects')
+  require('./routes/types-defects')
+  require('./routes/substations')
+  require('./routes/staff')
 }).namespace('App/Controllers/Http')
 
 // Route.group(() => {
