@@ -1,9 +1,9 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="substations__title">{{ title }}</h2>
+<h2 class="title">{{ title }}</h2>
 @can('noAccess')
-<div class="substations-control">
+<div class="control">
   <a href="{{ route('substations.create') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
@@ -13,7 +13,14 @@
 <div class="substations__content">
   <hr>
   @if(substations.length)
-  <ul class="substations__list">
+  <ul class="list">
+    <li class="list__item">
+      <div class="list__content">
+        <span class="list__text list__text-header">
+          Класс напряжения / Название ПС
+        </span>
+      </div>
+    </li>
     @each(substation in substations)
     <li class="list__item">
       <div class="list__content">

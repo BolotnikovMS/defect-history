@@ -1,7 +1,7 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="types-defects__title">{{ title }}</h2>
+<h2 class="title">{{ title }}</h2>
 <div class="types-defects__content">
   <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
     <div class="form__content form__content-column">
@@ -42,11 +42,11 @@
       </div>
     </div>
     <div class="form__btns">
-      <a href="{{ route('types-defects.all') }}" class="form__btn form__btn-cancel">
+      <a href="{{ route('types-defects.index') }}" class="btn btn-cancel">
         <img src="{{ asset('assets/icons/undo.svg') }}" alt="Отмена">
         Отмена
       </a>
-      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">
+      <button class="btn btn-color_green btn-color_green-save" type="submit">
         <img src="{{ asset('assets/icons/save.svg') }}" alt="Сохранить">
         Сохранить
       </button>

@@ -1,10 +1,10 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="types-defects__title">{{ title }}</h2>
-<div class="types-defects-control">
+<h2 class="title">{{ title }}</h2>
+<div class="control">
   {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
-  <a href="{{ route('type-defect.create') }}" class="btn btn-color_green">
+  <a href="{{ route('types-defects.create') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
   </a>
@@ -13,12 +13,19 @@
   {{-- <div class="dialog"></div> --}}
   <hr>
   @if(typesDefects.length)
-  <ul class="types-defects__list">
+  <ul class="list">
+    <li class="list__item">
+      <div class="list__content">
+        <span class="list__text list__text-header">
+          Название / описание вида дефекта
+        </span>
+      </div>
+    </li>
     @each((typeDefect, i) in typesDefects)
     <li class="list__item">
       <div class="list__content">
-        - {{ typeDefect.type_defect }} -
-        @if(typeDefect.defect_description !== null)
+        {{ typeDefect.type_defect }} -
+        @if(typeDefect.defect_description !== null && typeDefect.defect_description !== 'null')
         <span class="list__text">
           {{ typeDefect.defect_description }}
         </span>
@@ -29,11 +36,11 @@
         @endif
       </div>
       <div class="list__control">
-        <a href="{{ route('type-defect.edit', {id: typeDefect.id}) }}" class="edit">
+        <a href="{{ route('types-defects.edit', {id: typeDefect.id}) }}" class="edit">
           <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
         </a>
-        <a href="{{ route('type-defect.destroy', {id: typeDefect.id}) }}">
-          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+        <a href="{{ route('types-defects.destroy', {id: typeDefect.id}) }}">
+          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
         </a>
       </div>
     </li>

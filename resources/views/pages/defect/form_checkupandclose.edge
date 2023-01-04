@@ -1,7 +1,7 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="defect__title">{{ title }}</h2>
+<h2 class="title">{{ title }}</h2>
 <div class="defect__content">
   <form action="{{ route(options.routes.saveData, {idDefect: options.defect}) }}" method="POST">
     <div class="form__content form__content-column">
@@ -90,8 +90,8 @@
       @endif
     </div>
     <div class="form__btns">
-      <a href="{{ route(options.routes.back, {id: options.defect}) }}" class="form__btn form__btn-cancel">Отмена</a>
-      <button class="form__btn form__btn-color_green form__btn-color_green-save" type="submit">Сохранить</button>
+      <a href="{{ route(options.routes.back, {id: options.defect}) }}" class="btn btn-cancel">Отмена</a>
+      <button class="btn btn-color_green btn-color_green-save" type="submit">Сохранить</button>
     </div>
   </form>
 </div>

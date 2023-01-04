@@ -1,10 +1,10 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="defect__title">{{ title }}</h2>
-<div class="defect__control">
+<h2 class="title">{{ title }}</h2>
+<div class="control">
   @can('createDefect')
-  <a href="{{ route('defect.create') }}" class="btn btn-color_green">
+  <a href="{{ route('defects.create') }}" class="btn btn-color_green">
     <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
     Добавить
   </a>
@@ -43,25 +43,22 @@
         <td>{{ defect.countIntermediateChecks }}</td>
         <td>{{ defect.elimination_date === null ? '' : dateFormat(defect.elimination_date) }}</td>
         <td class="defect-table__td-control">
-          {{-- <div style="display: flex; align-items: center;max-height: 50px;"> --}}
-            <a href="{{ route('defect.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
-              <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
-            </a>
-            @!component('components/dropdown-menu', {
-            data: defect,
-            routes: {
-            edit: {
-            action: 'defect.edit',
-            access: 'editDefect',
-            },
-            delete: {
-            action: 'defect.destroy',
-            access: 'deleteDefect',
-            },
-            },
-            })
-            {{--
-          </div> --}}
+          <a href="{{ route('defects.show', {id: defect.id}) }}" title="Перейти к подробному просмотру">
+            <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
+          </a>
+          @!component('components/dropdown-menu', {
+          data: defect,
+          routes: {
+          edit: {
+          action: 'defects.edit',
+          access: 'editDefect',
+          },
+          delete: {
+          action: 'defects.destroy',
+          access: 'deleteDefect',
+          },
+          },
+          })
         </td>
       </tr>
       @endeach

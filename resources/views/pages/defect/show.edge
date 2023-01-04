@@ -3,18 +3,19 @@
 @section('content')
 <div class="defect__content">
   @if(auth.isLoggedIn)
-  <div class="defect__control defect__control-row">
+  <div class="control">
     @if(!defectSerialize.result && !defectSerialize.elimination_date)
-    <a href="{{ route('defect.close.create', {idDefect: defectSerialize.id}) }}" class="btn btn-color_green">
+    <a href="{{ route('defects.close.create', {idDefect: defectSerialize.id}) }}" class="btn btn-color_green">
       <img src="{{ asset('assets/icons/close.svg') }}" alt="Добавить">
       Закрыть дефект
     </a>
-    <a href="{{ route('defect.checkup-create', {idDefect: defectSerialize.id}) }}" class="btn btn-color_orange">
+    <a href="{{ route('defects.checkup-create', {idDefect: defectSerialize.id}) }}" class="btn btn-color_orange">
       <img src="{{ asset('assets/icons/magnifier.svg') }}" alt="Добавить проверку">
       Добавить проверку
     </a>
     @can('editDefect', defectSerialize)
-    <a href="{{ route('defect.edit', {id: defectSerialize.id}) }}" class="btn btn-color_blue">
+    <a href="{{ route('defects.edit', {id: defectSerialize.id}) }}"
+      class="btn btn-color_blue btn-color_blue-transparent">
       <img src="{{ asset('assets/icons/edit-2.svg') }}" alt="Редактировать дефект">
       Редактировать дефект
     </a>
@@ -90,8 +91,8 @@
       @endif
     </tbody>
   </table>
-  <div class="defect__control defect__control-row defect__control-center">
-    <a href="{{ route('defects.all') }}" class="btn btn-cancel">
+  <div class="control control-item_center">
+    <a href="{{ route('defects.index') }}" class="btn btn-cancel">
       <img src="{{ asset('assets/icons/undo.svg') }}" alt="К списку дефектов">
       К списку дефектов
     </a>

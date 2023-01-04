@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="login__content">
-  <h2 class="login__title">{{ title }}</h2>
+  <h2 class="title">{{ title }}</h2>
   <form action="{{ route('auth.login') }}" method="POST">
     <div class="form__content form__content-column">
       <div class="form__group">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="form__btns">
-      <button class="form__btn form__btn-color_blue form__btn-color_blue-save" type="submit">
+      <button class="btn btn-color_blue" type="submit">
         <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
         Войти
       </button>
