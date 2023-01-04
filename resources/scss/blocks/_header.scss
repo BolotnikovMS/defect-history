@@ -57,16 +57,5 @@
     display: flex;
     align-items: center;
     column-gap: 15px;
-
-    .btn {
-      @include btn;
-      background-color: #5cadf8;
-      border: 1px solid #5cadf8;
-
-      &:hover {
-        background-color: #edebeb;
-        color: #000;
-      }
-    }
   }
 }

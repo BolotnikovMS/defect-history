@@ -1,0 +1,61 @@
+.btn {
+  @include btn;
+
+  &-color_green {
+    color: #000;
+    border: 1px solid #5caf5c;
+
+    &:hover {
+      background-color: #5caf5c;
+      color: #fff;
+    }
+
+    &-save {
+      &:hover {
+        transform: scale(1.1);
+        background-color: #5caf5c;
+      }
+    }
+  }
+
+  &-color_orange {
+    color: #000;
+    border: 1px solid #f8bf05;
+
+    &:hover {
+      background-color: #f8bf05;
+      color: #fff;
+    }
+  }
+
+  &-color_blue {
+    color: #fff;
+    background-color: #39baff;
+    border: 1px solid #39baff;
+
+    &:hover {
+      background-color: #fff;
+      color: #000;
+    }
+
+    &-transparent {
+      color: #000;
+      background-color: #fff;
+
+      &:hover {
+        background-color: #39baff;
+        color: #fff;
+      }
+    }
+  }
+
+  &-cancel {
+    background-color: #9a9898;
+
+    &:hover {
+      transform: scale(1.1);
+      color: #fff;
+      background-color: #807f7f;
+    }
+  }
+}

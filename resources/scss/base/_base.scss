@@ -40,9 +40,30 @@ a:hover {
   text-align: center;
 }
 
-.btn {
-  @include btn;
+.title {
+  @extend %title;
 }
+
+.control {
+  @extend %control-group;
+
+  &-column {
+    flex-direction: column;
+  }
+
+  &-item_center {
+    justify-content: center;
+  }
+
+  & + * {
+    margin-top: 25px;
+  }
+}
+
+.list {
+  @extend %list;
+}
+
 
 hr {
   margin: 15px auto;
@@ -156,41 +177,5 @@ hr {
     display: flex;
     justify-content: center;
     column-gap: 10px;
-  }
-
-  &__btn {
-    @include btn;
-  }
-}
-
-.question-icon {
-  width: 19px;
-  height: 19px;
-
-  circle {
-    stroke: #fff;
-    transition: all 0.3s ease-in;
-  }
-
-  path {
-    fill: #fff;
-    transition: all 0.3s ease-in;
-  }
-
-  &:hover {
-    cursor: pointer;
-
-    circle {
-      stroke: #000;
-    }
-
-    path {
-      fill: #000;
-    }
-  }
-
-  &:hover + .prompt {
-    visibility: visible;
-    opacity: 1;
   }
 }

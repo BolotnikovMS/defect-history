@@ -1,8 +1,4 @@
 .login {
-  &__title {
-    @include title;
-  }
-
   &__content {
     display: flex;
     flex-direction: column;

@@ -1,17 +1,1 @@
-.staff {
-  &__content {
-    padding-bottom: 15px;
-  }
-
-  &__title {
-    @include title;
-  }
-
-  &-control {
-    @include control-group;
-  }
-
-  &__list {
-    @include list;
-  }
-}
+.staff {}
