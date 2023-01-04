@@ -12,23 +12,23 @@ import View from '@ioc:Adonis/Core/View'
 
 View.global('menu', [
   {
-    url: 'defects.all',
+    url: 'defects.index',
     name: 'Дефекты',
   },
   {
-    url: 'types-defects.all',
+    url: 'types-defects.index',
     name: 'Типы дефектов',
   },
   {
-    url: 'substations.all',
+    url: 'substations.index',
     name: 'Объекты',
   },
   {
-    url: 'staff.all',
+    url: 'staff.index',
     name: 'Персонал',
   },
   {
-    url: 'users.all',
+    url: 'users.index',
     name: 'Пользователи',
   },
 ])
