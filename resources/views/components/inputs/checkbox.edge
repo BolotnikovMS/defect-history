@@ -1,0 +1,8 @@
+<div class="form__group">
+  <label class="form__label {{ labelPosition ?? '' }}">
+    <span class="label__text">
+      {{ label }}
+    </span>
+    <input type="checkbox" name="{{ name }}" {{{ checked ? 'checked=checked' : '' }}}>
+  </label>
+</div>
