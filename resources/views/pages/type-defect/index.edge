@@ -4,10 +4,9 @@
 <h2 class="title">{{ title }}</h2>
 <div class="control">
   {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
-  <a href="{{ route('types-defects.create') }}" class="btn btn-color_green">
-    <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
-    Добавить
-  </a>
+  @buttons.add({ href: 'types-defects.create' })
+  Добавить
+  @end
 </div>
 <div class="types-defects__content">
   {{-- <div class="dialog"></div> --}}
@@ -36,7 +35,7 @@
         @endif
       </div>
       <div class="list__control">
-        <a href="{{ route('types-defects.edit', {id: typeDefect.id}) }}" class="edit">
+        <a href="{{ route('types-defects.edit', {id: typeDefect.id}) }}">
           <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
         </a>
         <a href="{{ route('types-defects.destroy', {id: typeDefect.id}) }}">

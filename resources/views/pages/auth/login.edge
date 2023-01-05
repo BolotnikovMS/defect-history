@@ -23,10 +23,10 @@
       </div>
     </div>
     <div class="form__btns">
-      <button class="btn btn-color_blue" type="submit">
-        <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
-        Войти
-      </button>
+      @buttons.base({ className: 'btn-color_blue', type: 'submit' })
+      <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
+      Войти
+      @end
     </div>
   </form>
 </div>

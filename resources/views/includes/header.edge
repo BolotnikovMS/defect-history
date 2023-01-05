@@ -49,15 +49,16 @@
       <div class="header__login">
         @if(auth.user)
         {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
-        <a href="{{ route('auth.logout') }}" class="btn btn-color_blue btn-logout">
-          <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти">
-          Выйти
-        </a>
+
+        @buttons.base({ href: 'auth.logout', className: 'btn-color_blue btn-logout' })
+        <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти">
+        Выйти
+        @end
         @else
-        <a href="{{ route('auth.login.show') }}" class="btn btn-color_blue btn-signup">
-          <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
-          Войти
-        </a>
+        @buttons.base({ href: 'auth.login.show', className: 'btn-color_blue btn-signup' })
+        <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
+        Войти
+        @end
         @endif
       </div>
     </div>

@@ -4,10 +4,9 @@
 <h2 class="title">{{ title }}</h2>
 @can('noAccess')
 <div class="control">
-  <a href="{{ route('staff.create') }}" class="btn btn-color_green">
-    <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
-    Добавить
-  </a>
+  @buttons.add({ href: 'staff.create' })
+  Добавить
+  @end
 </div>
 @endcan
 <div class="staff__content">

@@ -139,14 +139,13 @@
       </div>
     </div>
     <div class="form__btns">
-      <a href="{{ route('defects.index') }}" class="btn btn-cancel">
-        <img src="{{ asset('assets/icons/undo.svg') }}" alt="Отмена">
-        Отмена
-      </a>
-      <button class="btn btn-color_green btn-color_green-save" type="submit">
-        <img src="{{ asset('assets/icons/save.svg') }}" alt="Сохранить">
-        Сохранить
-      </button>
+      @buttons.cancel({ href: 'defects.index' })
+      Отмена
+      @end
+
+      @buttons.save({ type: 'submit'})
+      Сохранить
+      @end
     </div>
   </form>
 </div>
