@@ -1,0 +1,10 @@
+@if(href)
+{{-- {{ inspect(params ?? '')}} --}}
+<a href="{{ route(href, params ?? '') }}" class="btn {{ className ?? '' }}">
+  {{{ await $slots.main() }}}
+</a>
+@else
+<button type="{{ type ?? 'button' }}" class="btn {{ className ?? '' }}">
+  {{{ await $slots.main() }}}
+</button>
+@endif
