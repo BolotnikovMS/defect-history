@@ -2,6 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import AuthValidator from '../../Validators/AuthValidator'
 import User from 'App/Models/User'
 import Role from 'App/Models/Role'
+import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class AuthController {
   public async registerShow({ response, view, session, bouncer }: HttpContextContract) {
@@ -62,17 +63,23 @@ export default class AuthController {
   }
 
   public async login({ request, response, auth, session }: HttpContextContract) {
-    const { uid, password } = request.only(['uid', 'password'])
+    const _schema = schema.create({
+      uid: schema.string(),
+      password: schema.string(),
+      remember_me: schema.boolean.optional(),
+    })
+
+    const { uid, password, remember_me = false } = await request.validate({ schema: _schema })
 
     try {
-      await auth.attempt(uid, password)
+      await auth.attempt(uid, password, remember_me)
+
+      return response.redirect().toPath('/')
     } catch (err) {
       session.flash('dangerMessage', 'Не верно введен "username", "email" или пароль!')
 
       response.redirect().back()
     }
-
-    return response.redirect().toPath('/')
   }
 
   public async logout({ response, auth, session }: HttpContextContract) {
