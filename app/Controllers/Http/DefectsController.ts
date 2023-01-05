@@ -103,6 +103,7 @@ export default class DefectsController {
     const defectSerialize = defectDes.serialize({
       fields: [
         'id',
+        'id_user',
         'accession',
         'description_defect',
         'term_elimination',
