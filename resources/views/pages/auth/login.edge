@@ -21,6 +21,8 @@
         <span class="error-text">{{ flashMessages.get('errors.uid') }}</span>
         @endif
       </div>
+      @!inputs.checkbox({ label: 'Запомнить меня', labelPosition: 'form__label-row', name:
+      'remember_me' })
     </div>
     <div class="form__btns">
       @buttons.base({ className: 'btn-color_blue', type: 'submit' })
