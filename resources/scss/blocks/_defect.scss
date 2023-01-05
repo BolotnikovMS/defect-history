@@ -1,4 +1,13 @@
 .defect {
+  &__info {
+    padding: 10px 15px;
+  }
+
+  &__text {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
   &-table {
     @extend %table;
 
