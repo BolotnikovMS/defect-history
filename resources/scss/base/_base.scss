@@ -19,7 +19,7 @@ a:hover {
 
 .page-content {
   padding: 30px 0;
-  min-height: calc(100vh - 86px - 63px);
+  min-height: calc(100vh - 90px - 63px);
 }
 
 .container {
@@ -103,10 +103,10 @@ hr {
 
   &__content {
     display: flex;
-    gap: 15px;
+    gap: 20px;
 
     & + * {
-      margin-top: 15px;
+      margin-top: 30px;
     }
 
     &-column {
@@ -125,15 +125,20 @@ hr {
     display: flex;
     flex-direction: column;
     align-items: center;
+    column-gap: 7px;
     font-size: 18px;
+
+    &-row {
+      flex-direction: row;
+    }
 
     &-text_left {
       align-items: flex-start;
     }
 
-    .label__text {
-      margin-bottom: 10px;
-    }
+    // .label__text + * {
+    //   margin-bottom: 10px;
+    // }
   }
 
   &__input  {
