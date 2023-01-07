@@ -1,8 +1,18 @@
+@set('checkedValue', checked && checked === 'true' ? 'checked=checked' : '')
+
 <div class="form__group">
-  <label class="form__label {{ labelPosition ?? '' }}">
-    <span class="label__text">
+  <label class="form__label {{ classlabel ?? '' }}">
+    <span
+      class="label__text {{ classLabelText ?? '' }}"
+    >
       {{ label }}
     </span>
-    <input type="checkbox" name="{{ name }}" {{{ checked ? 'checked=checked' : '' }}}>
+    <input
+      type="checkbox"
+      name="{{ name }}"
+      class="form__input form__input-checkbox"
+      value="true"
+      {{ checkedValue }}
+    >
   </label>
 </div>

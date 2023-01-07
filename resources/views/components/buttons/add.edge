@@ -1,4 +1,10 @@
-<a href="{{ route(href, params ?? '') }}" class="btn btn-color_green {{ className ?? '' }}">
-  <img src="{{ asset('assets/icons/add.svg') }}" alt="Добавить">
+<a
+  href="{{ route(href, params ?? '') }}"
+  class="btn btn-color_green {{ className ?? '' }}"
+>
+  <img
+    src="{{ asset('assets/icons/add.svg') }}"
+    alt="Добавить"
+  >
   {{{ await $slots.main() }}}
 </a>

@@ -1,4 +1,10 @@
-<a href="{{ route(href, params ?? '') }}" class="btn btn-cancel {{ className ?? '' }}">
-  <img src="{{ asset('assets/icons/undo.svg') }}" alt="Отмена">
+<a
+  href="{{ route(href, params ?? '') }}"
+  class="btn btn-cancel {{ className ?? '' }}"
+  >
+    <img
+      src="{{ asset('assets/icons/undo.svg') }}"
+      alt="Отмена"
+    >
   {{{ await $slots.main() }}}
 </a>
