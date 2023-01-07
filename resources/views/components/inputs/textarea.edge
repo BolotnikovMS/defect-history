@@ -6,21 +6,19 @@
 <div class="form__group">
   <label class="form__label">
     @if(label)
-      <span
-        class="label__text {{ labelPosition ?? '' }}"
-      >
+      <span class="label__text {{ labelPosition ?? '' }}">
         {{ label }}
       </span>
     @endif
 
-    <input
-      type="{{ type ?? 'text' }}"
+    <textarea
       name="{{ name }}"
-      class="form__input {{ classError }}"
+      class="form__input form__textarea {{ classError }}"
+      cols="{{ cols ?? 60 }}"
+      rows="{{ rows ?? 4 }}"
       {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
-      {{{ value ? 'value="' +  value + '"' : '' }}}
-      {{{ required ? 'required' : '' }}}
-    />
+      {{ required ? 'required' : '' }}
+      >{{ value }}</textarea>
   </label>
 
   @if(Array.isArray(errors) && errors.length)

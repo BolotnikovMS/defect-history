@@ -2,19 +2,18 @@
 @set('value', flashMessages.get(name) || defaultValue)
 @set('errors', flashMessages.get(`errors.${name}`) ?? errors)
 @set('classError', errors ? 'form__input-invalid' : '')
+{{--  @set('errorsTest', ['Поле является обязательным.', 'Минимальная длина поля 2 символа.'])  --}}
 
 <div class="form__group">
   <label class="form__label">
     @if(label)
-      <span
-        class="label__text {{ labelPosition ?? '' }}"
-      >
+      <span class="label__text {{ labelPosition ?? '' }}">
         {{ label }}
       </span>
     @endif
 
     <input
-      type="{{ type ?? 'text' }}"
+      type="text"
       name="{{ name }}"
       class="form__input {{ classError }}"
       {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
