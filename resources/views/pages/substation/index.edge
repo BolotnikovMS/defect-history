@@ -1,54 +1,54 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="title">{{ title }}</h2>
-@can('noAccess')
-<div class="control">
-  @buttons.add({ href: 'substations.create' })
-  Добавить
-  @end
-</div>
-@endcan
-<div class="substations__content">
-  <hr>
-  @if(substations.length)
-  <ul class="list">
-    <li class="list__item">
-      <div class="list__content">
-        <span class="list__text list__text-header">
-          Класс напряжения / Название ПС
-        </span>
+  <h2 class="title">{{ title }}</h2>
+  @can('noAccess')
+    <div class="control">
+      @buttons.add({ href: 'substations.create' })
+        Добавить
+      @end
+    </div>
+  @endcan
+  <div class="substations__content">
+    <hr>
+    @if(substations.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Класс напряжения / Название ПС
+            </span>
+          </div>
+        </li>
+        @each(substation in substations)
+          <li class="list__item">
+            <div class="list__content">
+              {{ substation.nameAndClass }}
+              @if(substation.importance === 'true')
+              <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+              @endif
+            </div>
+            @can('noAccess')
+              <div class="list__control">
+                <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
+                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                </a>
+                <a href="{{ route('substations.destroy', {id: substation.id}) }}">
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                </a>
+              </div>
+            @endcan
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых объектов.</p>
       </div>
-    </li>
-    @each(substation in substations)
-    <li class="list__item">
-      <div class="list__content">
-        {{ substation.nameAndClass }}
-        @if(substation.importance === 'true')
-        <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
-        @endif
-      </div>
-      @can('noAccess')
-      <div class="list__control">
-        <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
-          <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-        </a>
-        <a href="{{ route('substations.destroy', {id: substation.id}) }}">
-          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
-        </a>
-      </div>
-      @endcan
-    </li>
-    @endeach
-  </ul>
-  @else
-  <div class="no-content">
-    <p>Пока нет добавленых объектов.</p>
+    @endif
+    <hr>
   </div>
-  @endif
-  <hr>
-</div>
-@!component('components/pagination', {
-pagination: substations,
-})
+  @!component('components/pagination', {
+    pagination: substations,
+  })
 @endsection

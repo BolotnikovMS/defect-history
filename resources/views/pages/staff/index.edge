@@ -1,51 +1,51 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="title">{{ title }}</h2>
-@can('noAccess')
-<div class="control">
-  @buttons.add({ href: 'staff.create' })
-  Добавить
-  @end
-</div>
-@endcan
-<div class="staff__content">
-  <hr>
-  @if(staff.length)
-  <ul class="list">
-    <li class="list__item">
-      <div class="list__content">
-        <span class="list__text list__text-header">
-          Должность / Ф.И.О. сотрудника
-        </span>
+  <h2 class="title">{{ title }}</h2>
+  @can('noAccess')
+    <div class="control">
+      @buttons.add({ href: 'staff.create' })
+        Добавить
+      @end
+    </div>
+  @endcan
+  <div class="staff__content">
+    <hr>
+    @if(staff.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Должность / Ф.И.О. сотрудника
+            </span>
+          </div>
+        </li>
+        @each(employee in staff)
+          <li class="list__item">
+            <div class="list__content">
+              {{ employee.position }} {{ employee.fullName }}
+            </div>
+            @can('noAccess')
+              <div class="list__control">
+                <a href="{{ route('staff.edit', {id: employee.id}) }}" class="edit">
+                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                </a>
+                <a href="{{ route('staff.destroy', {id: employee.id}) }}">
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+                </a>
+              </div>
+            @endcan
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых сотрудников.</p>
       </div>
-    </li>
-    @each(employee in staff)
-    <li class="list__item">
-      <div class="list__content">
-        {{ employee.position }} {{ employee.fullName }}
-      </div>
-      @can('noAccess')
-      <div class="list__control">
-        <a href="{{ route('staff.edit', {id: employee.id}) }}" class="edit">
-          <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-        </a>
-        <a href="{{ route('staff.destroy', {id: employee.id}) }}">
-          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
-        </a>
-      </div>
-      @endcan
-    </li>
-    @endeach
-  </ul>
-  @else
-  <div class="no-content">
-    <p>Пока нет добавленых сотрудников.</p>
+    @endif
+    <hr>
   </div>
-  @endif
-  <hr>
-</div>
-@!component('components/pagination', {
-pagination: staff,
-})
+  @!component('components/pagination', {
+    pagination: staff,
+  })
 @endsection
