@@ -50,6 +50,10 @@ export default class DefectTypesController {
     const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
     if (validateTypeDefectData) {
+      validateTypeDefectData.defect_description = validateTypeDefectData.defect_description
+        ? validateTypeDefectData.defect_description
+        : 'Описание дефекта не добавлено...'
+
       await DefectType.create(validateTypeDefectData)
 
       session.flash(
@@ -105,6 +109,8 @@ export default class DefectTypesController {
 
       typeDefect.type_defect = validateTypeDefectData.type_defect
       typeDefect.defect_description = validateTypeDefectData.defect_description
+        ? validateTypeDefectData.defect_description
+        : 'Описание дефекта не добавлено...'
 
       await typeDefect.save()
 
