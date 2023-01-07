@@ -43,6 +43,6 @@ export default class DefectResultValidator {
    */
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
-    minLength: 'Минимальная длинна поля 2 символа.',
+    minLength: 'Минимальная длина поля 2 символа.',
   }
 }

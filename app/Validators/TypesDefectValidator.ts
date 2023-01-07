@@ -40,7 +40,7 @@ export default class TypesDefectValidator {
    *
    */
   public messages: CustomMessages = {
-    'type_defect.required': 'Поле "Название" является обязательным.',
-    'type_defect.minLength': 'Минимальная длинна поля "Название" 2 символа.',
+    required: 'Поле является обязательным.',
+    minLength: 'Минимальная длина поля 2 символа.',
   }
 }

@@ -45,11 +45,7 @@ export default class DefectValidator {
    *
    */
   public messages: CustomMessages = {
-    'defect_type.required': 'Поле "Тип дефекта" является обязательным.',
-    'substation.required': 'Поле "Объект" является обязательным.',
-    'accession.required': 'Поле "Присоединение" является обязательным.',
-    'accession.minLength': 'Минимальная длинна поля "Присоединение" 2 символа.',
-    'description_defect.required': 'Поле "Описание дефекта" является обязательным.',
-    'description_defect.minLength': 'Минимальная длинна поля "Описание дефекта" 2 символа.',
+    required: 'Поле является обязательным.',
+    minLength: 'Минимальная длина поля 2 символа.',
   }
 }
