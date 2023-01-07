@@ -26,7 +26,7 @@ export default class AuthValidator {
   public schema = schema.create({
     username: schema.string([
       rules.minLength(2),
-      rules.unique({ table: 'users', column: 'username' }),
+      rules.unique({ table: 'users', column: 'username', caseInsensitive: true }),
       rules.trim(),
       rules.escape(),
     ]),
@@ -37,7 +37,7 @@ export default class AuthValidator {
     role: schema.number(),
     email: schema.string([
       rules.email(),
-      rules.unique({ table: 'users', column: 'email' }),
+      rules.unique({ table: 'users', column: 'email', caseInsensitive: true }),
       rules.trim(),
       rules.escape(),
     ]),
@@ -57,7 +57,7 @@ export default class AuthValidator {
    */
   public messages: CustomMessages = {
     'required': 'Поле является обязательным.',
-    'minLength': 'Минимальная длинна поля 2 символа.',
+    'minLength': 'Минимальная длина поля 2 символа.',
     'password.minLength': 'Минимальная длина пароля 8 символов!',
     'unique': 'Введенное значение должно быть уникальным!',
   }
