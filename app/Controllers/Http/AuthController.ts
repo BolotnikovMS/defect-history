@@ -13,14 +13,13 @@ export default class AuthController {
     }
 
     const roles = await Role.all()
-
-    const dataSerialize = roles.map((role) => {
+    const rolesSerialize = roles.map((role) => {
       return role.serialize()
     })
 
     return view.render('pages/auth/register', {
       title: 'Добавление нового пользователя',
-      dataSerialize,
+      rolesSerialize,
       options: {
         routePath: {
           savePath: 'auth.register',
