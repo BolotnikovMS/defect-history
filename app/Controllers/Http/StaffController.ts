@@ -56,10 +56,11 @@ export default class StaffController {
         'successMessage',
         `Сотрудник "${validateStaffData.surname} ${validateStaffData.name} ${validateStaffData.patronymic}" успешно добавлен!`
       )
-      response.redirect().toRoute('StaffController.index')
+
+      response.redirect().toRoute('staff.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('StaffController.index')
+      response.redirect().toRoute('staff.index')
     }
   }
 
