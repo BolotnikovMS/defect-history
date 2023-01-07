@@ -124,7 +124,7 @@ hr {
   &__label {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    // align-items: center;
     column-gap: 7px;
     font-size: 18px;
 
@@ -136,9 +136,27 @@ hr {
       align-items: flex-start;
     }
 
-    // .label__text + * {
-    //   margin-bottom: 10px;
-    // }
+    .label__text {
+      text-align: center;
+
+      &_left {
+        text-align: left;
+      }
+
+      &_right {
+        text-align: right;
+      }
+
+      &_nomargin {
+        & + * {
+          margin-top: unset !important;
+        }
+      }
+
+      & + * {
+        margin-top: 7px;
+      }
+    }
   }
 
   &__input  {
