@@ -75,6 +75,8 @@ export default class SubstationsController {
     }
 
     if (substation) {
+      console.log(substation)
+
       return view.render('pages/substation/form', {
         title: 'Редактирование',
         options: {
