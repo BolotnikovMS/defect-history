@@ -1,35 +1,36 @@
 @layout('layout/master')
 
 @section('content')
-<div class="login__content">
-  <h2 class="title">{{ title }}</h2>
-  <form action="{{ route('auth.login') }}" method="POST">
-    <div class="form__content form__content-column">
-      <div class="form__group">
-        <label class="form__label form__label-text_left">
-          <input type="text" name="uid" class="form__input" placeholder="Введите 'Username' или email" required>
-        </label>
-        @if(flashMessages.has('errors.uid'))
-        <span class="error-text">{{ flashMessages.get('errors.uid') }}</span>
-        @endif
+  <div class="login__content">
+    <h2 class="title">{{ title }}</h2>
+    <form action="{{ route('auth.login') }}" method="POST">
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          name: 'uid',
+          placeholderText: 'Введите `Username` или email',
+          required: true,
+        })
+
+        @!inputs.base({
+          type: 'password',
+          name: 'password',
+          placeholderText: 'Введите пароль',
+          required: true,
+        })
+
+        @!inputs.checkbox({
+          label: 'Запомнить меня',
+          classlabel: 'form__label-row',
+          classLabelText: 'label__text_nomargin',
+          name: 'remember_me'
+        })
       </div>
-      <div class="form__group">
-        <label class="form__label form__label-text_left">
-          <input type="password" name="password" class="form__input" placeholder="Введите пароль" required>
-        </label>
-        @if(flashMessages.has('errors.uid'))
-        <span class="error-text">{{ flashMessages.get('errors.uid') }}</span>
-        @endif
+      <div class="form__btns">
+        @buttons.base({ className: 'btn-color_blue', type: 'submit' })
+          <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
+          Войти
+        @end
       </div>
-      @!inputs.checkbox({ label: 'Запомнить меня', labelPosition: 'form__label-row', name:
-      'remember_me' })
-    </div>
-    <div class="form__btns">
-      @buttons.base({ className: 'btn-color_blue', type: 'submit' })
-      <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
-      Войти
-      @end
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
 @endsection

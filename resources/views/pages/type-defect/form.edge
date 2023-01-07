@@ -5,49 +5,30 @@
 <div class="types-defects__content">
   <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
     <div class="form__content form__content-column">
-      <div class="form__group">
-        <label class="form__label form__label-text_left">
-          <div class="label__text">
-            Название дефекта
-          </div>
-          <input type="text" name="type_defect" class="form__input {{
-            flashMessages.all() !== null ?
-              flashMessages.get('errors.type_defect') ?
-                'form__input-invalid'
-              :
-                'form__input-correctly'
-            :
-              ''
-            }}" placeholder="Введите название..." required value="{{
-            typeDefect ?
-              typeDefect.type_defect
-            :
-              flashMessages.get('type_defect', '') }}">
-        </label>
-        @if(flashMessages.has('errors.type_defect'))
-        <span class="error-text">{{ flashMessages.get('errors.type_defect') }}</span>
-        @endif
-      </div>
-      <div class="form__group">
-        <label class="form__label form__label-text_left">
-          <div class="label__text">
-            Описание дефекта
-          </div>
-          <textarea name="defect_description" class="form__input form__textarea" cols="60"
-            rows="4">{{ typeDefect ? typeDefect.defect_description : '' }}</textarea>
-        </label>
-        @if(flashMessages.has('errors.defect_description'))
-        <span class="error-text">{{ flashMessages.get('errors.defect_description') }}</span>
-        @endif
-      </div>
+      @!inputs.base({
+        label: 'Название "Типа" дефекта',
+        labelPosition: 'label__text_left',
+        name: 'type_defect',
+        placeholderText: 'Введите название...',
+        required: true,
+        value: typeDefect ? typeDefect.type_defect : ''
+      })
+
+      @!inputs.textarea({
+        label: 'Описание дефекта',
+        labelPosition: 'label__text_left',
+        name: 'defect_description',
+        rows: 5,
+        value: typeDefect ? typeDefect.defect_description : ''
+      })
     </div>
     <div class="form__btns">
       @buttons.cancel({ href: 'types-defects.index' })
-      Отмена
+        Отмена
       @end
 
       @buttons.save({ type: 'submit'})
-      Сохранить
+        Сохранить
       @end
     </div>
   </form>
