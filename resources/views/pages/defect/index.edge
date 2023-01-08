@@ -15,7 +15,7 @@
     <hr>
 
     @if(defects)
-      <table class="defect-table" align="center">
+      <table class="table defect-table" align="center">
         <thead>
           <tr>
             <th>Тип дефекта</th>
@@ -32,32 +32,32 @@
         </thead>
         <tbody>
           @each(defect in defects)
-            <tr {{ defect.elimination_date !==null ? 'class=defect__completed' : defect.importance==='true'
-              ? 'class=defect__danger' : '' }}>
+            <tr {{ defect.elimination_date !==null ? 'class=defect__completed' : defect.importance==='true' ? 'class=defect__danger' : '' }}>
               <td>{{ defect.defect_type.type_defect }}</td>
               <td>{{ defect.substation.nameAndClass }}</td>
               <td>{{ defect.accession }}</td>
-              <td class="defect-table__td-width-all">{{
-                truncate(defect.description_defect, 80) }}</td>
+              <td class="defect-table__td-width-all">
+                {{ truncate(defect.description_defect, 80) }}
+              </td>
               <td>{{ dateFormat(defect.term_elimination) }}</td>
               <td>{{ defect.countIntermediateChecks }}</td>
               <td>{{ defect.elimination_date === null ? '' : dateFormat(defect.elimination_date) }}</td>
-              <td class="defect-table__td-control">
+              <td class="table__td-control">
                 @buttons.base({ href: 'defects.show', params: {id: defect.id} })
-                <img src="{{ asset('assets/icons/link.svg') }}" class="defect-table__icon" alt="Подробнее">
+                  <img src="{{ asset('assets/icons/link.svg') }}" class="table__icon" alt="Подробнее">
                 @end
                 @!component('components/dropdown-menu', {
-                data: defect,
-                routes: {
-                edit: {
-                action: 'defects.edit',
-                access: 'editDefect',
-                },
-                delete: {
-                action: 'defects.destroy',
-                access: 'deleteDefect',
-                },
-                },
+                  data: defect,
+                  routes: {
+                    edit: {
+                      action: 'defects.edit',
+                      access: 'editDefect',
+                    },
+                    delete: {
+                      action: 'defects.destroy',
+                      access: 'deleteDefect',
+                    },
+                  },
                 })
               </td>
             </tr>
