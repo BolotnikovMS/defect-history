@@ -70,6 +70,12 @@ export default class AuthMiddleware {
      * the config file
      */
     const guards = customGuards.length ? customGuards : [auth.name]
+
+    console.log(Boolean(auth.user?.blocked))
+    if (auth.user?.blocked === 'true') {
+      await auth.logout()
+    }
+
     await this.authenticate(auth, guards)
     await next()
   }
