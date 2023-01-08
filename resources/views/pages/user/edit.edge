@@ -1,0 +1,107 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+
+  <div class="user__content">
+    @forms.post({
+      action: route('users.update', {id: user.id})
+    })
+
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          label: 'Username',
+          labelPosition: 'label__text_left',
+          name: 'username',
+          placeholderText: 'Введите username...',
+          required: true,
+          value: user ? user.username : ''
+        })
+
+        @!inputs.base({
+          label: 'Фамилия',
+          labelPosition: 'label__text_left',
+          name: 'surname',
+          placeholderText: 'Введите фамилию...',
+          required: true,
+          value: user ? user.surname : ''
+        })
+
+        @!inputs.base({
+          label: 'Имя',
+          labelPosition: 'label__text_left',
+          name: 'name',
+          placeholderText: 'Введите имя...',
+          required: true,
+          value: user ? user.name : ''
+        })
+
+        @!inputs.base({
+          label: 'Отчество',
+          labelPosition: 'label__text_left',
+          name: 'patronymic',
+          placeholderText: 'Введите отчество...',
+          required: true,
+          value: user ? user.patronymic : ''
+        })
+
+        @!inputs.base({
+          label: 'Должность',
+          labelPosition: 'label__text_left',
+          name: 'position',
+          placeholderText: 'Введите должность...',
+          required: true,
+          value: user ? user.position : ''
+        })
+
+        <div class="form__group">
+          <label class="form__label form__label-text_left">
+            <div class="label__text">
+              Выберите роль пользователя
+            </div>
+            <select name="role" class="searchable-list form__input">
+              <option selected disabled>Выберите роль</option>
+              @each(role in rolesSerialize)
+                <option
+                  value="{{ role.id }}"
+                  {{
+                    user ?
+                    user.id_role == role.id ?
+                        'selected'
+                      :
+                        ''
+                    :
+                      flashMessages.get('role') == role.id ? 'selected' : ''
+                  }}
+                >
+                  {{ role.name }}
+                </option>
+              @endeach
+            </select>
+          </label>
+          @if(flashMessages.has('errors.role'))
+            <span class="error-text">{{ flashMessages.get('errors.role') }}</span>
+          @endif
+        </div>
+
+        @!inputs.checkbox({
+          label: 'Заблокировать УЗ',
+          classlabel: 'form__label-row',
+          classLabelText: 'label__text_nomargin',
+          name: 'blocked',
+          checked: user ? user.blocked : 'false'
+        })
+
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'users.index' })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection
