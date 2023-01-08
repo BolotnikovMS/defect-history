@@ -7,6 +7,9 @@ export default class DefectType extends BaseModel {
   public id: number
 
   @column()
+  public id_user: number
+
+  @column()
   public type_defect: string
 
   @column()
@@ -17,7 +20,7 @@ export default class DefectType extends BaseModel {
     autoCreate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public createdAt: DateTime
 
@@ -26,14 +29,14 @@ export default class DefectType extends BaseModel {
     autoUpdate: true,
     serialize: (value?: DateTime) => {
       return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    }
+    },
   })
   public updatedAt: DateTime
 
   // Relations
   @hasMany(() => Defect, {
     foreignKey: 'id_type_defect',
-    localKey: 'id'
+    localKey: 'id',
   })
   public defects: HasMany<typeof Defect>
 }

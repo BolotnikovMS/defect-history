@@ -6,6 +6,9 @@ export default class Substation extends BaseModel {
   public id: number
 
   @column()
+  public id_user: number
+
+  @column()
   public name: string
 
   @column()
