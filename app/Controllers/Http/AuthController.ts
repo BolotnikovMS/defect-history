@@ -73,6 +73,14 @@ export default class AuthController {
     try {
       await auth.attempt(uid, password, remember_me)
 
+      if (auth.user?.blocked === 'true') {
+        await auth.logout()
+
+        session.flash('dangerMessage', 'Ваша учетная запись заблокирована!')
+
+        return response.redirect().back()
+      }
+
       return response.redirect().toPath('/')
     } catch (err) {
       session.flash('dangerMessage', 'Не верно введен "username", "email" или пароль!')
