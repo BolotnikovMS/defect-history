@@ -64,6 +64,27 @@ a:hover {
   @extend %list;
 }
 
+.table {
+  @extend %table;
+
+  &__td-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+  }
+
+  &__icon {
+    padding: 3px;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background-color: rgb(171, 168, 168);
+      border-radius: 100%;
+      transform: scale(1.2);
+    }
+  }
+}
 
 hr {
   margin: 15px auto;
