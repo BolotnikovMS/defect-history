@@ -1,53 +1,69 @@
 @layout('layout/master')
 
 @section('content')
-<h2 class="title">{{ title }}</h2>
-@can('noAccess')
-<div class="control">
-  @buttons.add({ href: 'auth.register.show' })
-  Добавить
-  @end
-</div>
-@endcan
-<div class="user__content">
-  <hr>
-  @if(users.length)
-  <ul class="list">
-    <li class="list__item">
-      <div class="list__content">
-        <span class="list__text list__text-header">
-          Роль / Ф.И.О.
-        </span>
-      </div>
-    </li>
-    @each(user in users)
-    <li class="list__item">
-      <div class="list__content">
-        "{{ user.role.name }}" | {{ user.fullName }}
-      </div>
-      <div class="list__control">
-        @can('editUser')
-        <a href="#" class="edit">
-          <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-        </a>
-        @endcan
-        @can('deleteUser')
-        <a href="{{ route('users.destroy', {id: user.id}) }}">
-          <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
-        </a>
-        @endcan
-      </div>
-    </li>
-    @endeach
-  </ul>
-  @else
-  <div class="no-content">
-    <p>Пока нет добавленых пользователей.</p>
+  <h2 class="title">{{ title }}</h2>
+  @can('noAccess')
+    <div class="control">
+      @buttons.add({ href: 'auth.register.show' })
+        Добавить
+      @end
+    </div>
+  @endcan
+  <div class="user__content">
+    <hr>
+    @if(users.length)
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Роль пользователя</th>
+            <th>УЗ заблокирована</th>
+            <th>Ф.И.О.</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>
+              <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(user in users)
+            <tr>
+              <td>{{ user.role.name }}</td>
+              <td>{{ user.blocked === 'true' ? 'Да' : 'Нет' }}</td>
+              <td>{{ user.fullName }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td class="table__td-control">
+                @can('editUser')
+                  @buttons.base({
+                    href: 'users.edit',
+                    params: {id: user.id },
+                  })
+                  <img src="{{ asset('assets/icons/edit.svg') }}" class="table__icon" alt="Подробнее">
+                  @end
+                @end
+
+                @can('deleteUser')
+                  @buttons.base({
+                    href: 'users.destroy',
+                    params: {id: user.id },
+                  })
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="table__icon" alt="Подробнее">
+                  @end
+                @end
+              </td>
+            </tr>
+          @endeach
+        </tbody>
+      </table>
+    @else
+    <div class="no-content">
+      <p>Пока нет добавленых пользователей.</p>
+    </div>
+    @endif
+    <hr>
   </div>
-  @endif
-  <hr>
-</div>
-@!component('components/pagination', {
-pagination: users,
-})
+  @!component('components/pagination', {
+    pagination: users,
+  })
 @endsection
