@@ -40,7 +40,7 @@ export default class DefectTypesController {
     })
   }
 
-  public async store({ request, response, session, bouncer }: HttpContextContract) {
+  public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
     if (await bouncer.denies('createTypeDefect')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
@@ -54,7 +54,7 @@ export default class DefectTypesController {
         ? validateTypeDefectData.defect_description
         : 'Описание дефекта не добавлено...'
 
-      await DefectType.create(validateTypeDefectData)
+      await DefectType.create({ ...validateTypeDefectData, id_user: auth.user?.id })
 
       session.flash(
         'successMessage',
@@ -115,7 +115,7 @@ export default class DefectTypesController {
       await typeDefect.save()
 
       session.flash(
-        'successmessage',
+        'successMessage',
         `Данные "${validateTypeDefectData.type_defect}" успешно обновлены.`
       )
       response.redirect().toRoute('DefectTypesController.index')

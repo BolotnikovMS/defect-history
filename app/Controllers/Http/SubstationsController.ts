@@ -40,7 +40,7 @@ export default class SubstationsController {
     })
   }
 
-  public async store({ request, response, session, bouncer }: HttpContextContract) {
+  public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
     if (await bouncer.denies('noAccess')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
@@ -50,7 +50,7 @@ export default class SubstationsController {
     const validateSubstation = await request.validate(SubstationValidator)
 
     if (validateSubstation) {
-      await Substation.create(validateSubstation)
+      await Substation.create({ ...validateSubstation, id_user: auth.user?.id })
 
       session.flash(
         'successMessage',
