@@ -2,7 +2,8 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import Roles from '../../Enums/Roles'
 import Role from 'App/Models/Role'
-import { schema, rules } from '@ioc:Adonis/Core/Validator';
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import Department from 'App/Models/Department'
 
 export default class UsersController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -15,7 +16,7 @@ export default class UsersController {
     const page = request.input('page', 1)
     const limit = 10
 
-    const users = await User.query().preload('role').paginate(page, limit)
+    const users = await User.query().preload('role').preload('department').paginate(page, limit)
 
     users.baseUrl('/users')
 
@@ -37,17 +38,20 @@ export default class UsersController {
 
     const user = await User.find(params.id)
     const roles = await Role.all()
+    const departments = await Department.all()
     const rolesSerialize = roles.map((role) => {
       return role.serialize({
         fields: ['id', 'name'],
       })
     })
+    const departmentsSerialize = departments.map((department) => department.serialize())
 
     if (user) {
       return view.render('pages/user/edit', {
         title: 'Редактирование',
         user,
         rolesSerialize,
+        departmentsSerialize,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -69,6 +73,7 @@ export default class UsersController {
       name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
       patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
       position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+      department: schema.number(),
       role: schema.number(),
       blocked: schema.string.optional(),
     })
@@ -79,7 +84,8 @@ export default class UsersController {
       await user
         .merge({
           ...validateData,
-          blocked: validateData.blocked ? validateData.blocked : 'false',
+          blocked: !!validateData.blocked + '',
+          id_department: validateData.department,
           id_role: validateData.role,
         })
         .save()
