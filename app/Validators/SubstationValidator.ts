@@ -24,31 +24,18 @@ export default class SubstationValidator {
    *    ```
    */
   public schema = schema.create({
-    name: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
-    voltage_class: schema.string({}, [rules.trim(), rules.minLength(2)]),
+    name: schema.string({}, [
+      rules.trim(),
+      rules.escape(),
+      rules.minLength(2),
+      rules.maxLength(70),
+    ]),
     importance: schema.string.optional(),
   })
-
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   *
-   */
-  // public messages: CustomMessages = {
-  //   'name.required': 'Поле "Название объекта" является обязательным.',
-  //   'name.minLength': 'Минимальная длинна поля "Название объекта" 2 символа.',
-  //   'voltage_class.required': 'Поле "Класс объекта" является обязательным.',
-  //   'voltage_class.minLength': 'Минимальная длинна поля "Класс объекта" 2 символа.',
-  // }
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
     minLength: 'Минимальная длина поля 2 символа.',
+    maxLength: 'Максимальная длина поля 70 символов.',
   }
 }
