@@ -6,6 +6,7 @@ import DefectType from '../../Models/DefectType'
 import Staff from '../../Models/Staff'
 import IntermediateCheck from '../../Models/IntermediateCheck'
 import DefectResultValidator from '../../Validators/DefectResultValidator'
+import Department from '../../Models/Department'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -32,6 +33,7 @@ export default class DefectsController {
     //     },
     //   },
     // })
+    // return await defects
 
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
@@ -77,6 +79,7 @@ export default class DefectsController {
         id_type_defect: +validateDefectData.defect_type,
         id_user: auth.user!.id,
         ...validateDefectData,
+        importance: !!validateDefectData.importance + '',
       }
 
       await Defect.create(defect)
@@ -186,7 +189,7 @@ export default class DefectsController {
       defect.accession = validateDefectData.accession
       defect.description_defect = validateDefectData.description_defect
       defect.term_elimination = validateDefectData.term_elimination
-      defect.importance = validateDefectData.importance ? validateDefectData.importance : 'false'
+      defect.importance = !!validateDefectData.importance + ''
 
       await defect.save()
 
@@ -231,6 +234,7 @@ export default class DefectsController {
 
     if (defect) {
       const staff = await Staff.all()
+      const departments = await Department.all()
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Добавление проверки',
@@ -243,6 +247,7 @@ export default class DefectsController {
           },
         },
         staff,
+        departments,
       })
     } else {
       session.flash('dangerMessage', 'Вы не можете добавить проверку к не существующему дефекту!')
@@ -263,6 +268,7 @@ export default class DefectsController {
 
     if (defect) {
       const validateData = await request.validate(DefectResultValidator)
+      console.log(validateData)
 
       if (validateData) {
         const checkupDefect = {
@@ -276,10 +282,10 @@ export default class DefectsController {
 
         // const test = ({ employee, ...rest }) => rest
 
-        await IntermediateCheck.create(checkupDefect)
+        // await IntermediateCheck.create(checkupDefect)
 
-        session.flash('successMessage', `Проверка успешно добавлена!`)
-        response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+        // session.flash('successMessage', `Проверка успешно добавлена!`)
+        // response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
       } else {
         session.flash('dangerMessage', 'Что-то пошло не так!')
         response.redirect().toRoute('DefectsController.index')
