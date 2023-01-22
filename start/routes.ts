@@ -23,6 +23,7 @@ Route.group(() => {
 
   require('./routes/auth')
   require('./routes/users')
+  require('./routes/departments')
   require('./routes/defects')
   require('./routes/types-defects')
   require('./routes/substations')
