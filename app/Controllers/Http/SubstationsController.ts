@@ -50,7 +50,11 @@ export default class SubstationsController {
     const validateSubstation = await request.validate(SubstationValidator)
 
     if (validateSubstation) {
-      await Substation.create({ ...validateSubstation, id_user: auth.user?.id })
+      await Substation.create({
+        ...validateSubstation,
+        importance: !!validateSubstation.importance + '',
+        id_user: auth.user?.id,
+      })
 
       session.flash(
         'successMessage',
@@ -63,7 +67,49 @@ export default class SubstationsController {
     }
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ response, params, view, session }: HttpContextContract) {
+    const substation = await Substation.find(params.id)
+
+    if (substation) {
+      await substation.load('defects', (query) => {
+        query
+          .orderBy('elimination_date', 'asc')
+          .preload('defect_type')
+          .preload('intermediate_checks')
+      })
+
+      const dataSerialize = substation.serialize({
+        fields: ['name', 'importance'],
+        relations: {
+          defects: {
+            fields: [
+              'id',
+              'accession',
+              'description_defect',
+              'term_elimination',
+              'elimination_date',
+              'result',
+              'importance',
+              'created_at',
+            ],
+            relations: {
+              defect_type: {
+                fields: ['type_defect'],
+              },
+            },
+          },
+        },
+      })
+
+      return view.render('pages/substation/show', {
+        title: substation.name,
+        dataSerialize,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
@@ -75,8 +121,6 @@ export default class SubstationsController {
     }
 
     if (substation) {
-      console.log(substation)
-
       return view.render('pages/substation/form', {
         title: 'Редактирование',
         options: {
@@ -105,13 +149,9 @@ export default class SubstationsController {
     if (substation) {
       const validateSubstation = await request.validate(SubstationValidator)
 
-      substation.name = validateSubstation.name
-      substation.voltage_class = validateSubstation.voltage_class
-      substation.importance = validateSubstation.importance
-        ? validateSubstation.importance
-        : 'false'
+      validateSubstation.importance = !!validateSubstation.importance + ''
 
-      await substation.save()
+      await substation.merge(validateSubstation).save()
 
       session.flash('successmessage', `Данные "${validateSubstation.name}" успешно обновлены.`)
       response.redirect().toRoute('SubstationsController.index')
