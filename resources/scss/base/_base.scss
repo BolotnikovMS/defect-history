@@ -13,6 +13,11 @@ a:hover {
   color: #626262;
 }
 
+.active-link {
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
+}
+
 .none {
   display: none !important;
 }
@@ -23,7 +28,7 @@ a:hover {
 }
 
 .container {
-  max-width: 1500px;
+  max-width: 1400px;
   padding: 0 15px;
   margin: 0 auto;
   // box-shadow: 2px 32px 47px -37px #000000;
@@ -113,6 +118,13 @@ hr {
 }
 
 .form {
+  &-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 15px;
+  }
+
   &__title {
     font-size: 20px;
     font-weight: bold;
@@ -221,5 +233,9 @@ hr {
     display: flex;
     justify-content: center;
     column-gap: 10px;
+
+    &-row {
+      margin-top: 0;
+    }
   }
 }
