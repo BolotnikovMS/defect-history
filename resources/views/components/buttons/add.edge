@@ -1,5 +1,10 @@
 <a
-  href="{{ route(href, params ?? '') }}"
+  href="{{
+    href ?
+      route(href, params ?? '')
+    :
+      '#'
+  }}"
   class="btn btn-color_green {{ className ?? '' }}"
 >
   <img
