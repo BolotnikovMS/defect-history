@@ -38,6 +38,12 @@
               class="{{ 'staff.index' == activeMenuLink ? 'active' : '' }}">Персонал</a>
           </li>
           @endcan
+          @can('viewDepartment')
+          <li>
+            <a href="{{ route('departments.index') }}"
+              class="{{ 'departments.index' == activeMenuLink ? 'active' : '' }}">Отделы</a>
+          </li>
+          @endcan
           @can('viewUsers')
           <li>
             <a href="{{ route('users.index') }}"
