@@ -16,16 +16,18 @@
         <li class="list__item">
           <div class="list__content">
             <span class="list__text list__text-header">
-              Класс напряжения / Название ПС
+              Название ПС
             </span>
           </div>
         </li>
         @each(substation in substations)
           <li class="list__item">
             <div class="list__content">
-              {{ substation.nameAndClass }}
+              <a href="{{ route('substations.show', {id: substation.id}) }}" class="active-link">
+                {{ substation.name }}
+              </a>
               @if(substation.importance === 'true')
-              <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+                <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
               @endif
             </div>
             @can('noAccess')

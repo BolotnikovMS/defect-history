@@ -38,9 +38,6 @@
     @endif
     <hr>
     {{-- {{ inspect(defectSerialize) }} --}}
-    <div class="defect__info">
-      <p class="defect__text">№ Дефекта: {{ defectSerialize.id }}</p>
-    </div>
     <table class="table defect-table">
       <thead>
         <tr>
@@ -57,7 +54,7 @@
         </tr>
         <tr>
           <td>{{ defectSerialize.defect_type.type_defect }}</td>
-          <td>{{ defectSerialize.substation.nameAndClass }}</td>
+          <td>{{ defectSerialize.substation.name }}</td>
           <td>{{ defectSerialize.accession }}</td>
           <td class="defect-table__td-width-show">{{ defectSerialize.description_defect }}</td>
           <td>{{ dateFormat(defectSerialize.term_elimination) }}</td>

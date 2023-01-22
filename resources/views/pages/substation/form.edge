@@ -14,15 +14,6 @@
           value: substation ? substation.name : ''
         })
 
-        @!inputs.base({
-          label: 'Класс объекта',
-          labelPosition: 'label__text_left',
-          name: 'voltage_class',
-          placeholderText: 'Введите класс...',
-          required: true,
-          value: substation ? substation.voltage_class : ''
-        })
-
         @!inputs.checkbox({
           label: 'Важность объекта',
           classlabel: 'form__label-row',

@@ -3,14 +3,43 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
   <div class="control">
-    @can('createDefect')
-      @buttons.add({ href: 'defects.create' })
-        Добавить
-      @end
-    @endcan
+    <div class="control__btns">
+      @can('createDefect')
+        @buttons.add({ href: 'defects.create' })
+          Добавить
+        @end
+      @endcan
+    </div>
+    {{--  <div class="filters">
+      <form action="{{ route('defects.index') }}" class="form form-row">
+        <div class="form__content form__content-row">
+          <div class="form__group">
+            <label class="form__label form__label-text_left">
+              <select name="defect_type" class="searchable-list form__input">
+                <option selected disabled>Выберите тип дефекта</option>
+                @each(typeDefect in typesDefects)
+                  <option value="{{ typeDefect.id }}">
+                    {{ typeDefect.type_defect }}
+                  </option>
+                @endeach
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="form__btns form__btns-row">
+          @buttons.base({ type: 'submit', className: 'btn-color_green' })
+            Применить
+          @end
+
+          @buttons.cancel({ href: 'defects.index' })
+            Сбросить
+          @end
+        </div>
+      </form>
+    </div>  --}}
   </div>
   <div class="defect__content">
-    {{-- {{inspect(defects)}} --}}
+    {{--  {{inspect(defects)}}  --}}
     {{-- {{inspect(auth.user.surname)}} --}}
     <hr>
 
@@ -32,12 +61,16 @@
         </thead>
         <tbody>
           @each(defect in defects)
-            <tr {{ defect.elimination_date !==null ? 'class=defect__completed' : defect.importance==='true' ? 'class=defect__danger' : '' }}>
+            <tr {{ defect.elimination_date !== null ? 'class=defect__completed' : defect.importance === 'true' ? 'class=defect__danger' : '' }}>
               <td>{{ defect.defect_type.type_defect }}</td>
-              <td>{{ defect.substation.nameAndClass }}</td>
+              <td>
+                <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
+                  {{ defect.substation.name }}
+                </a>
+              </td>
               <td>{{ defect.accession }}</td>
               <td class="defect-table__td-width-all">
-                {{ truncate(defect.description_defect, 80) }}
+                {{ truncate(defect.description_defect, 50) }}
               </td>
               <td>{{ dateFormat(defect.term_elimination) }}</td>
               <td>{{ defect.countIntermediateChecks }}</td>

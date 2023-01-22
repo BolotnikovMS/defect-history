@@ -35,7 +35,7 @@
             @each(substation in substations)
               <option value="{{ substation.id }}" {{ defectSerialize ? defectSerialize.id_substation == substation.id
                 ? 'selected' : '' : flashMessages.get('substation') == substation.id ? 'selected' : '' }}>
-                {{ substation.nameAndClass }}
+                {{ substation.name }}
               </option>
             @endeach
           </select>
