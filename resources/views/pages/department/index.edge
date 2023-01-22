@@ -1,0 +1,53 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @can('createDepartment')
+      @buttons.add({ href: 'departments.create' })
+        Добавить
+      @end
+    @endcan
+  </div>
+  <div class="departments__content">
+    <hr>
+    @if(departments)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Название отдела
+            </span>
+          </div>
+          @each(department in departments)
+            <li class="list__item">
+              <div class="list__content">
+                {{ department.name }}
+              </div>
+              <div class="list__control">
+                @can('updateDepartment')
+                  <a href="{{ route('departments.edit', {id: department.id}) }}" class="edit">
+                    <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                  </a>
+                @endcan
+                @can('deleteDepartment')
+                  <a href="{{ route('departments.destroy', {id: department.id}) }}">
+                    <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                  </a>
+                @endcan
+              </div>
+            </li>
+          @endeach
+        </li>
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых отделов.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+  @!component('components/pagination', {
+    pagination: departments,
+  })
+@endsection
