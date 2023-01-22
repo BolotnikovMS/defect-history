@@ -2,10 +2,14 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, hasOne, HasOne, computed } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
+import Department from './Department'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  @column()
+  public id_user_create: number
 
   @column()
   public blocked: string
@@ -24,6 +28,9 @@ export default class User extends BaseModel {
 
   @column()
   public position: string
+
+  @column()
+  public id_department: number
 
   @column()
   public id_role: number
@@ -60,4 +67,10 @@ export default class User extends BaseModel {
     localKey: 'id_role',
   })
   public role: HasOne<typeof Role>
+
+  @hasOne(() => Department, {
+    foreignKey: 'id',
+    localKey: 'id_department',
+  })
+  public department: HasOne<typeof Department>
 }
