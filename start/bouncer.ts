@@ -1,10 +1,3 @@
-/**
- * Contract source: https://git.io/Jte3T
- *
- * Feel free to let us know via PR, if you find something broken in this config
- * file.
- */
-
 import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Roles from 'App/Enums/Roles'
@@ -120,6 +113,21 @@ export const { actions } = Bouncer.before((user: User | null) => {
   .define('createCloseDefect', (user: User) => {
     return [Roles.USER, Roles.MODERATOR].includes(user.id_role)
   })
+
+  // Department
+  .define('viewDepartment', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+  .define('createDepartment', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+  .define('updateDepartment', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+  .define('deleteDepartment', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
 /*
 |--------------------------------------------------------------------------
 | Bouncer Policies
