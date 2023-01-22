@@ -51,6 +51,36 @@
         <div class="form__group">
           <label class="form__label form__label-text_left">
             <div class="label__text">
+              Выберите отдел
+            </div>
+            <select name="department" class="searchable-list form__input">
+              <option selected disabled>Выберите отдел</option>
+              @each(department in departmentsSerialize)
+                <option
+                  value="{{ department.id }}"
+                  {{
+                    user ?
+                    user.id_department == department.id ?
+                        'selected'
+                      :
+                        ''
+                    :
+                      flashMessages.get('department') == department.id ? 'selected' : ''
+                  }}
+                >
+                  {{ department.name }}
+                </option>
+              @endeach
+            </select>
+          </label>
+          @if(flashMessages.has('errors.role'))
+            <span class="error-text">{{ flashMessages.get('errors.role') }}</span>
+          @endif
+        </div>
+
+        <div class="form__group">
+          <label class="form__label form__label-text_left">
+            <div class="label__text">
               Выберите роль пользователя
             </div>
             <select name="role" class="searchable-list form__input">
