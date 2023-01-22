@@ -13,7 +13,7 @@ import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Staff from 'App/Models/Staff'
-import { computed } from '@ioc:Adonis/Lucid/Orm';
+import { computed } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
@@ -52,10 +52,10 @@ export default class Defect extends BaseModel {
   @column.dateTime({
     autoCreate: true,
     serialize: (value?: DateTime) => {
-      return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
+      return value ? value.toFormat('dd.MM.yyyy') : value
     },
   })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({
     autoCreate: true,
@@ -68,7 +68,7 @@ export default class Defect extends BaseModel {
 
   @computed()
   public get countIntermediateChecks() {
-    return this.intermediate_checks?.length
+    return this.intermediate_checks.length
   }
 
   @hasOne(() => Substation, {

@@ -9,13 +9,15 @@
 
 %control-group {
   display: flex;
+  align-items: center;
   column-gap: 15px;
 }
 
 %table {
+  margin: auto;
   table-layout: fixed;
   white-space: normal !important;
-  display: block;
+  // display: block;
   overflow: auto;
   width: 100%;
   padding: 10px;

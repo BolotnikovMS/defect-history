@@ -3,6 +3,7 @@ import AuthValidator from '../../Validators/AuthValidator'
 import User from 'App/Models/User'
 import Role from 'App/Models/Role'
 import { schema } from '@ioc:Adonis/Core/Validator'
+import Department from '../../Models/Department'
 
 export default class AuthController {
   public async registerShow({ response, view, session, bouncer }: HttpContextContract) {
@@ -13,13 +14,14 @@ export default class AuthController {
     }
 
     const roles = await Role.all()
-    const rolesSerialize = roles.map((role) => {
-      return role.serialize()
-    })
+    const departments = await Department.all()
+    const rolesSerialize = roles.map((role) => role.serialize())
+    const departmentsSerialize = departments.map((department) => department.serialize())
 
     return view.render('pages/auth/register', {
       title: 'Добавление нового пользователя',
       rolesSerialize,
+      departmentsSerialize,
       options: {
         routePath: {
           savePath: 'auth.register',
@@ -38,7 +40,7 @@ export default class AuthController {
     let data = await request.validate(AuthValidator)
 
     if (data) {
-      await User.create({ ...data, id_role: data.role })
+      await User.create({ ...data, id_department: data.department, id_role: data.role })
 
       session.flash(
         'successMessage',
@@ -68,10 +70,10 @@ export default class AuthController {
       remember_me: schema.boolean.optional(),
     })
 
-    const { uid, password, remember_me = false } = await request.validate({ schema: _schema })
+    const { uid, password, remember_me } = await request.validate({ schema: _schema })
 
     try {
-      await auth.attempt(uid, password, remember_me)
+      await auth.attempt(uid, password, !!remember_me)
 
       if (auth.user?.blocked === 'true') {
         await auth.logout()
