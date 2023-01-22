@@ -17,6 +17,7 @@
           <tr>
             <th>Роль пользователя</th>
             <th>УЗ заблокирована</th>
+            <th>Отдел</th>
             <th>Ф.И.О.</th>
             <th>Username</th>
             <th>Email</th>
@@ -30,6 +31,7 @@
             <tr>
               <td>{{ user.role.name }}</td>
               <td>{{ user.blocked === 'true' ? 'Да' : 'Нет' }}</td>
+              <td>{{ user.department.name }}</td>
               <td>{{ user.fullName }}</td>
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
