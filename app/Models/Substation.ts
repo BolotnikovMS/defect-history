@@ -1,5 +1,6 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import Defect from './Defect'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
@@ -8,34 +9,28 @@ export default class Substation extends BaseModel {
   @column()
   public id_user: number
 
-  @column()
+  @column({
+    consume: (data) => data.replace(new RegExp('&#x2F;', 'g'), '/'),
+  })
   public name: string
-
-  @column()
-  public voltage_class: string
 
   @column()
   public importance: string
 
-  @computed()
-  public get nameAndClass() {
-    return `${this.voltage_class} ${this.name}`
-  }
-
   @column.dateTime({
     autoCreate: true,
-    serialize: (value?: DateTime) => {
-      return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    },
   })
   public createdAt: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value?: DateTime) => {
-      return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    },
   })
   public updatedAt: DateTime
+
+  @hasMany(() => Defect, {
+    localKey: 'id',
+    foreignKey: 'id_substation',
+  })
+  public defects: HasMany<typeof Defect>
 }
