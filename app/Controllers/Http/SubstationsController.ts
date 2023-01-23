@@ -1,15 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Substation from '../../Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
+import District from 'App/Models/District'
 
 export default class SubstationsController {
-  public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('noAccess')) {
-      session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
-
-      return response.redirect().toPath('/')
-    }
-
+  public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 10
     const substations = await Substation.query().orderBy('created_at', 'asc').paginate(page, limit)
@@ -30,8 +25,14 @@ export default class SubstationsController {
       return response.redirect().toPath('/')
     }
 
+    const districts = await District.query()
+    const districtsSerialize = districts.map((district) =>
+      district.serialize({ fields: ['id', 'name'] })
+    )
+
     return view.render('pages/substation/form', {
       title: 'Добавление нового объкта',
+      districtsSerialize,
       options: {
         routePath: {
           saveData: 'substations.store',
@@ -51,9 +52,10 @@ export default class SubstationsController {
 
     if (validateSubstation) {
       await Substation.create({
-        ...validateSubstation,
-        importance: !!validateSubstation.importance + '',
+        id_district: validateSubstation.district,
         id_user: auth.user?.id,
+        name: validateSubstation.name,
+        importance: !!validateSubstation.importance + '',
       })
 
       session.flash(
@@ -121,6 +123,14 @@ export default class SubstationsController {
     }
 
     if (substation) {
+      const districts = await District.query()
+      const districtsSerialize = districts.map((district) =>
+        district.serialize({ fields: ['id', 'name'] })
+      )
+      const substationSerialize = substation.serialize({
+        fields: ['id', 'id_district', 'name', 'importance'],
+      })
+
       return view.render('pages/substation/form', {
         title: 'Редактирование',
         options: {
@@ -129,7 +139,8 @@ export default class SubstationsController {
             saveData: 'substations.update',
           },
         },
-        substation,
+        districtsSerialize,
+        substationSerialize,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -149,9 +160,13 @@ export default class SubstationsController {
     if (substation) {
       const validateSubstation = await request.validate(SubstationValidator)
 
-      validateSubstation.importance = !!validateSubstation.importance + ''
-
-      await substation.merge(validateSubstation).save()
+      await substation
+        .merge({
+          id_district: validateSubstation.district,
+          name: validateSubstation.name,
+          importance: !!validateSubstation.importance + '',
+        })
+        .save()
 
       session.flash('successmessage', `Данные "${validateSubstation.name}" успешно обновлены.`)
       response.redirect().toRoute('SubstationsController.index')
