@@ -26,12 +26,14 @@
               class="{{ 'types-defects.index' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
           </li>
           @endcan
-          @can('noAccess')
+          <li>
+            <a href="{{ route('districts.index') }}"
+              class="{{ 'districts.index' == activeMenuLink ? 'active' : '' }}">Районы</a>
+          </li>
           <li>
             <a href="{{ route('substations.index') }}"
               class="{{ 'substations.index' == activeMenuLink ? 'active' : '' }}">Объекты</a>
           </li>
-          @endcan
           @can('noAccess')
           <li>
             <a href="{{ route('staff.index') }}"
