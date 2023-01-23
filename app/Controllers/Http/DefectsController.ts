@@ -282,10 +282,10 @@ export default class DefectsController {
 
         // const test = ({ employee, ...rest }) => rest
 
-        // await IntermediateCheck.create(checkupDefect)
+        await IntermediateCheck.create(checkupDefect)
 
-        // session.flash('successMessage', `Проверка успешно добавлена!`)
-        // response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+        session.flash('successMessage', `Проверка успешно добавлена!`)
+        response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
       } else {
         session.flash('dangerMessage', 'Что-то пошло не так!')
         response.redirect().toRoute('DefectsController.index')

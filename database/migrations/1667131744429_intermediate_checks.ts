@@ -29,7 +29,7 @@ export default class extends BaseSchema {
         .inTable('staff')
       table.string('check_date', 15).notNullable()
       table.text('description_results').notNullable()
-      table.text('transferred')
+      table.integer('transferred', 10)
 
       table.timestamps()
     })

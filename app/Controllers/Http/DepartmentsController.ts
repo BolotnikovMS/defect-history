@@ -59,7 +59,7 @@ export default class DepartmentsController {
   public async show({}: HttpContextContract) {}
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDepartment')) {
+    if (await bouncer.denies('updateDepartment')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -120,7 +120,7 @@ export default class DepartmentsController {
     if (department) {
       await department.delete()
 
-      session.flash('successMessage', `Сотрудник успешно удален из базы!`)
+      session.flash('successMessage', `Отдел успешно удален из базы!`)
       response.redirect().back()
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -128,5 +128,3 @@ export default class DepartmentsController {
     }
   }
 }
-
-// http://127.0.0.1:3333/departments
