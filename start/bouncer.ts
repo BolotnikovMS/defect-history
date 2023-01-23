@@ -128,6 +128,20 @@ export const { actions } = Bouncer.before((user: User | null) => {
     return user.id_role === Roles.MODERATOR
   })
 
+  // Districts
+  .define('viewDistrict', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+  .define('createDistrict', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+  .define('updateDistrict', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+  .define('deleteDistrict', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
 /*
 |--------------------------------------------------------------------------
 | Bouncer Policies
