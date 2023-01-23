@@ -24,6 +24,7 @@ export default class SubstationValidator {
    *    ```
    */
   public schema = schema.create({
+    district: schema.number(),
     name: schema.string({}, [
       rules.trim(),
       rules.escape(),
