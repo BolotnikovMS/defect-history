@@ -1,0 +1,30 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="districts__content">
+    @forms.post({
+      action: route(options.routePath.saveData, {id: options.idData})
+    })
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          label: 'Название',
+          labelPosition: 'label__text_left',
+          name: 'name',
+          placeholderText: 'Введите название...',
+          required: true,
+          value: dataSerialize ? dataSerialize.name : ''
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'districts.index' })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection

@@ -1,0 +1,53 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @can('createDistrict')
+      @buttons.add({ href: 'districts.create' })
+        Добавить
+      @end
+    @endcan
+  </div>
+  <div class="districts__content">
+    <hr>
+    @if(districts)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Название района
+            </span>
+          </div>
+        </li>
+        @each(district in districts)
+          <li class="list__item">
+            <div class="list__content">
+              {{ district.name }}
+            </div>
+            <div class="list__control">
+              @can('updateDistrict')
+                <a href="{{ route('districts.edit', {id: district.id}) }}" class="edit">
+                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                </a>
+              @endcan
+              @can('deleteDistrict')
+                <a href="{{ route('districts.destroy', {id: district.id}) }}">
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                </a>
+              @endcan
+            </div>
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых районов.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+  @!component('components/pagination', {
+    pagination: districts,
+  })
+@endsection
