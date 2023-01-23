@@ -7,6 +7,13 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('id_user', 10).notNullable()
+      table
+        .integer('id_district', 10)
+        .notNullable()
+        .unsigned()
+        .index()
+        .references('id')
+        .inTable('districts')
       table.text('name').notNullable()
       table.text('importance').checkIn(['true', 'false']).defaultTo('false')
 

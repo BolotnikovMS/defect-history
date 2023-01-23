@@ -9,6 +9,9 @@ export default class Substation extends BaseModel {
   @column()
   public id_user: number
 
+  @column()
+  public id_district: number
+
   @column({
     consume: (data) => data.replace(new RegExp('&#x2F;', 'g'), '/'),
   })
