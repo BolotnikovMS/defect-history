@@ -50,7 +50,31 @@ export default class DistrictsController {
     response.redirect().toRoute('districts.index')
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ response, params, view, session }: HttpContextContract) {
+    const district = await District.find(params.id)
+
+    if (district) {
+      await district.load('substations')
+
+      const districtsSerialize = district.serialize({
+        fields: ['name'],
+        relations: {
+          substations: {
+            fields: ['id', 'name'],
+          },
+        },
+      })
+
+      console.log(districtsSerialize)
+      return view.render('pages/district/show', {
+        title: districtsSerialize.name,
+        districtsSerialize,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.denies('updateDistrict')) {
