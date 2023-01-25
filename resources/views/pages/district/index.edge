@@ -23,7 +23,9 @@
         @each(district in districts)
           <li class="list__item">
             <div class="list__content">
-              {{ district.name }}
+              <a href="{{ route('districts.show', {id: district.id}) }}" class="active-link">
+                {{ district.name }}
+              </a>
             </div>
             <div class="list__control">
               @can('updateDistrict')
