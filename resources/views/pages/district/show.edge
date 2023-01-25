@@ -1,0 +1,46 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="districts__content">
+    <hr>
+    @if(districtsSerialize.substations)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Название ПС
+            </span>
+          </div>
+        </li>
+        @each(substation in districtsSerialize.substations)
+          <li class="list__item">
+            <div class="list__content">
+              <a href="{{ route('substations.show', {id: substation.id}) }}" class="active-link">
+                {{ substation.name }}
+              </a>
+              @if(substation.importance === 'true')
+                <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+              @endif
+            </div>
+            @can('noAccess')
+              <div class="list__control">
+                <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
+                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                </a>
+                <a href="{{ route('substations.destroy', {id: substation.id}) }}">
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                </a>
+              </div>
+            @endcan
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых объектов.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+@endsection
