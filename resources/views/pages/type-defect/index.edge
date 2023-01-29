@@ -23,11 +23,13 @@
         @each((typeDefect, i) in typesDefects)
           <li class="list__item">
             <div class="list__content">
-              {{ typeDefect.type_defect }} -
-              <span class="list__text">
-                {{ typeDefect.defect_description }}
-              </span>
-            </div>
+              <a href="{{ route('types-defects.show', {id: typeDefect.id}) }}">
+                {{ typeDefect.type_defect }} -
+                <span class="list__text">
+                  {{ typeDefect.defect_description }}
+                </span>
+              </div>
+              </a>
             <div class="list__control">
               <a href="{{ route('types-defects.edit', {id: typeDefect.id}) }}">
                 <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
