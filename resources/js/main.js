@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.addEventListener('click', (e) => {
         const target = e.target
 
-        if (!target.closest('.btn-menu') && !target.closest('.dropdown-menu')) {
+        if (!target.closest('.btn-dropdown') && !target.closest('.dropdown-menu')) {
           if (dropdownItem.classList.contains('active')) {
             dropdownItem.classList.toggle('active')
           }
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  openDropdownMenu('.btn-menu', '.dropdown__menu')
+  openDropdownMenu('.btn-dropdown', '.dropdown__menu')
 
   // Searchable list
   $('.searchable-list').select2({

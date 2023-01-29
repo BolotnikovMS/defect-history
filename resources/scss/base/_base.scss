@@ -24,7 +24,7 @@ a:hover {
 
 .page-content {
   padding: 30px 0;
-  min-height: calc(100vh - 90px - 63px);
+  min-height: calc(100vh - 70px - 63px);
 }
 
 .container {
@@ -60,6 +60,10 @@ a:hover {
     justify-content: center;
   }
 
+  &-items_sb {
+    justify-content: space-between;
+  }
+
   & + * {
     margin-top: 25px;
   }
@@ -84,7 +88,7 @@ a:hover {
     transition: all 0.2s ease-in;
 
     &:hover {
-      background-color: rgb(171, 168, 168);
+      background-color: #aba8a8;
       border-radius: 100%;
       transform: scale(1.2);
     }
