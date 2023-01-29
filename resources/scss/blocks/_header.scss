@@ -1,5 +1,5 @@
 .header {
-  padding: 20px 0;
+  padding: 10px 0;
   background-color: #edebeb;
   box-shadow: 1px 9px 9px -10px #000000;
 
@@ -10,44 +10,46 @@
   }
 
   &__nav {
-    & > ul {
+    .nav-list {
       display: flex;
       justify-content: center;
       align-items: center;
       column-gap: 30px;
 
-      li > a {
-        position: relative;
-      }
+      &__item {
+        & > a {
+          position: relative;
+        }
 
-      li > a::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 25px;
-        bottom: -5px;
-        height: 2px;
-        border-radius: 10px;
-        transition: all 0.3s ease-in;
-      }
-
-      li > a:hover::after {
-        background-color: #5cadf8;
-      }
-
-      li > a.active {
-        position: relative;
-
-        &::after {
+        & > a::after {
           content: '';
           position: absolute;
           left: 0;
           right: 25px;
           bottom: -5px;
-          height: 3px;
+          height: 2px;
           border-radius: 10px;
-          background-color: #5cadf8;
           transition: all 0.3s ease-in;
+        }
+
+        & > a:hover::after {
+          background-color: #5cadf8;
+        }
+
+        & > a.active {
+          position: relative;
+
+          &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 25px;
+            bottom: -5px;
+            height: 3px;
+            border-radius: 10px;
+            background-color: #5cadf8;
+            transition: all 0.3s ease-in;
+          }
         }
       }
     }
