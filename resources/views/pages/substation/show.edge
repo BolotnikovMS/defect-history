@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="substations__content">
     <hr>
-    @if(dataSerialize.defects.length)
+    @if(substation.defects.length)
       <table class="table defect-table" align="center">
         <thead>
           <tr>
@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          @each(defect in dataSerialize.defects)
+          @each(defect in substation.defects)
             <tr {{ defect.elimination_date !==null ? 'class=defect__completed' : defect.importance==='true' ? 'class=defect__danger' : '' }}>
               <td>{{ defect.defect_type.type_defect }}</td>
               <td>{{ defect.accession }}</td>

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import {BaseModel, column, HasMany, hasMany} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Defect from 'App/Models/Defect'
 
 export default class DefectType extends BaseModel {
@@ -15,21 +15,14 @@ export default class DefectType extends BaseModel {
   @column()
   public defect_description: string
 
-  // Time
   @column.dateTime({
     autoCreate: true,
-    serialize: (value?: DateTime) => {
-      return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    },
   })
   public createdAt: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value?: DateTime) => {
-      return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    },
   })
   public updatedAt: DateTime
 
