@@ -80,32 +80,9 @@ export default class SubstationsController {
           .preload('intermediate_checks')
       })
 
-      const dataSerialize = substation.serialize({
-        fields: ['name', 'importance'],
-        relations: {
-          defects: {
-            fields: [
-              'id',
-              'accession',
-              'description_defect',
-              'term_elimination',
-              'elimination_date',
-              'result',
-              'importance',
-              'created_at',
-            ],
-            relations: {
-              defect_type: {
-                fields: ['type_defect'],
-              },
-            },
-          },
-        },
-      })
-
       return view.render('pages/substation/show', {
-        title: substation.name,
-        dataSerialize,
+        title: `Дефекты ${substation.name}`,
+        substation,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
