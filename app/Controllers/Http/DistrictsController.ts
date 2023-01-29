@@ -8,7 +8,7 @@ export default class DistrictsController {
     const limit = 10
     const districts = await District.query().orderBy('created_at', 'asc').paginate(page, limit)
 
-    districts.baseUrl('/staff')
+    districts.baseUrl('/districts')
 
     return view.render('pages/district/index', {
       title: 'Список районов',
