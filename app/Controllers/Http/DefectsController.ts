@@ -2,17 +2,18 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Defect from 'App/Models/Defect'
 import Substation from 'App/Models/Substation'
 import DefectValidator from 'App/Validators/DefectValidator'
-import DefectType from '../../Models/DefectType'
 import Staff from '../../Models/Staff'
 import IntermediateCheck from '../../Models/IntermediateCheck'
 import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
+import DefectType from 'App/Models/DefectType'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 10
 
+    const typesDefects = await DefectType.query()
     const defects = await Defect.query()
       .orderBy('elimination_date', 'asc')
       .preload('defect_type')
@@ -22,21 +23,9 @@ export default class DefectsController {
 
     defects.baseUrl('/')
 
-    // const defectsSerialize = defects.serialize({
-    //   fields: ['id', 'accession', 'description_defect', 'term_elimination', 'elimination_date'],
-    //   relations: {
-    //     substation: {
-    //       fields: ['nameAndClass'],
-    //     },
-    //     defect_type: {
-    //       fields: ['type_defect'],
-    //     },
-    //   },
-    // })
-    // return await defects
-
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
+      typesDefects,
       defects,
       activeMenuLink: 'defects.index',
     })
@@ -143,13 +132,13 @@ export default class DefectsController {
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
 
-    if (await bouncer.denies('editDefect', defect)) {
-      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
-
-      return response.redirect().toPath('/')
-    }
-
     if (defect) {
+      if (await bouncer.denies('editDefect', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+        return response.redirect().toPath('/')
+      }
+
       const defectSerialize = defect.serialize()
       const typeDefects = await DefectType.all()
       const substations = await Substation.all()
