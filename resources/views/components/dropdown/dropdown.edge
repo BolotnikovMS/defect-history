@@ -1,0 +1,22 @@
+<div class="dropdown">
+  <button class="btn btn-dropdown {{ classBtnDropdown ?? '' }}">
+    {{{ await $slots.main() }}}
+  </button>
+  <ul class="dropdown__menu {{ classDropdownMenu ?? '' }}">
+    @each(item in dropdownData)
+      @dropdown.dropdownItem({
+        access: item.access,
+        data: item.data,
+        href: item.path,
+        params: item.params,
+      })
+        @slot('contenDropdownItem')
+          @if(item.icon)
+            <img src="{{ asset(`assets/icons/${item.icon}`) }}">
+          @endif
+          {{ item.name }}
+        @end
+      @end
+    @endeach
+  </ul>
+</div>

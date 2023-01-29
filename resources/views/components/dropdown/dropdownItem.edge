@@ -1,0 +1,21 @@
+@if(access)
+  @can(access, data ?? '')
+    <li>
+      <a
+        href="{{ route(href, params ?? '') }}"
+        class="dropdown__item {{ classNameDropdownItem ?? '' }}"
+      >
+        {{{ await $slots.contenDropdownItem() }}}
+      </a>
+    </li>
+  @end
+@else
+  <li>
+    <a
+      href="{{ route(href, params ?? '') }}"
+      class="dropdown__item {{ classNameDropdownItem ?? '' }}"
+    >
+      {{{ await $slots.contenDropdownItem() }}}
+    </a>
+  </li>
+@endif
