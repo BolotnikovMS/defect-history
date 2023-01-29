@@ -25,4 +25,11 @@
   &__danger {
     background-color: rgb(246, 73, 73) !important;
   }
+
+  &__tabs{
+    ul {
+      display: flex;
+      column-gap: 10px;
+    }
+  }
 }
