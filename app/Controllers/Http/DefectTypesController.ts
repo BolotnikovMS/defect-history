@@ -67,7 +67,30 @@ export default class DefectTypesController {
     }
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ response, params, view, session }: HttpContextContract) {
+    const typeDefect = await DefectType.find(params.id)
+    const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
+
+    if (typeDefect) {
+      await typeDefect.load('defects', (query) => {
+        query
+          .orderBy('elimination_date', 'asc')
+          .preload('substation')
+          .preload('intermediate_checks')
+      })
+
+      return view.render('pages/defect/index', {
+        title: `Дефекты '${typeDefect.type_defect}'`,
+        typeDefect,
+        typesDefects,
+        defects: typeDefect.defects,
+        activeTabLink: typeDefect.id,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
