@@ -1,19 +1,27 @@
 .dropdown {
   position: relative;
+  display: inline-block;
 
   .dropdown__menu {
     visibility: hidden;
     opacity: 0;
     position: absolute;
     min-width: 170px;
-    bottom: 27px;
+    bottom: 35px;
     right: 20px;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
-    background-color: rgba(227, 225, 225, 0.95);
+    background-color: rgba(201, 198, 198, 0.95);
     font-size: 16px;
     transition: all 0.2s ease-in;
+
+    &-menu_bottom {
+      bottom: unset;
+      right: unset;
+      top: 35px;
+      left: 0;
+    }
 
     li {
       padding: 6px 10px;
@@ -35,5 +43,10 @@
     display: flex;
     align-items: center;
     column-gap: 5px;
+  }
+
+  &-icon {
+    width: 20px;
+    height: 20px;
   }
 }

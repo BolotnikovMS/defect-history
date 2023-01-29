@@ -58,4 +58,23 @@
       background-color: #807f7f;
     }
   }
+
+  &-dropdown {
+    padding: 5px 10px;
+    color: #000;
+
+    &-icon {
+      padding: 3px !important;
+
+      &:hover {
+        background-color: #aba8a8;
+        border-radius: 100%;
+        transform: scale(1.2);
+      }
+    }
+
+    &:hover {
+      background-color: #c9c6c6;
+    }
+  }
 }
