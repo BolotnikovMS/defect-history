@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { string } from '@ioc:Adonis/Core/Helpers'
 import {
   BaseModel,
   BelongsTo,
@@ -14,6 +15,7 @@ import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Staff from 'App/Models/Staff'
 import { computed } from '@ioc:Adonis/Lucid/Orm'
+import { replacementEscapeSymbols } from 'App/Utils/utils'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
@@ -31,7 +33,9 @@ export default class Defect extends BaseModel {
   @column()
   public accession: string
 
-  @column()
+  @column({
+    consume: (value: string) => replacementEscapeSymbols(value),
+  })
   public description_defect: string
 
   @column()
@@ -65,6 +69,11 @@ export default class Defect extends BaseModel {
     },
   })
   public updatedAt: DateTime
+
+  @computed()
+  public get excerptText() {
+    return string.truncate(this.description_defect, 50)
+  }
 
   @computed()
   public get countIntermediateChecks() {

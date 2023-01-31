@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Defect from './Defect'
+import { replacementEscapeSymbols } from 'App/Utils/utils'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
@@ -13,7 +14,7 @@ export default class Substation extends BaseModel {
   public id_district: number
 
   @column({
-    consume: (data) => data.replace(new RegExp('&#x2F;', 'g'), '/'),
+    consume: (value: string) => replacementEscapeSymbols(value),
   })
   public name: string
 

@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import Staff from 'App/Models/Staff'
+import { replacementEscapeSymbols } from 'App/Utils/utils'
 export default class IntermediateCheck extends BaseModel {
   @column({ isPrimary: true })
   public id: number
@@ -17,7 +18,9 @@ export default class IntermediateCheck extends BaseModel {
   @column()
   public check_date: string
 
-  @column()
+  @column({
+    consume: (value: string) => replacementEscapeSymbols(value),
+  })
   public description_results: string
 
   @column()
