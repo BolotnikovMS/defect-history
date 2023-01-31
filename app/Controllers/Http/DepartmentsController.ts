@@ -68,17 +68,15 @@ export default class DepartmentsController {
     const department = await Department.find(params.id)
 
     if (department) {
-      const dataSerialize = department.serialize()
-
       return view.render('pages/department/form', {
         title: 'Редактирование',
         options: {
-          idData: dataSerialize.id,
+          idData: department.id,
           routePath: {
             saveData: 'departments.update',
           },
         },
-        dataSerialize,
+        department,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')

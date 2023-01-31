@@ -6,7 +6,10 @@ export default class DistrictsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
     const limit = 10
-    const districts = await District.query().orderBy('created_at', 'asc').paginate(page, limit)
+    const districts = await District.query()
+      .orderBy('created_at', 'asc')
+      .preload('substations')
+      .paginate(page, limit)
 
     districts.baseUrl('/districts')
 
@@ -56,19 +59,9 @@ export default class DistrictsController {
     if (district) {
       await district.load('substations')
 
-      const districtsSerialize = district.serialize({
-        fields: ['name'],
-        relations: {
-          substations: {
-            fields: ['id', 'name'],
-          },
-        },
-      })
-
-      console.log(districtsSerialize)
       return view.render('pages/district/show', {
-        title: districtsSerialize.name,
-        districtsSerialize,
+        title: district.name,
+        district,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -86,17 +79,15 @@ export default class DistrictsController {
     const district = await District.find(params.id)
 
     if (district) {
-      const dataSerialize = district.serialize()
-
       return view.render('pages/district/form', {
         title: 'Редактирование',
         options: {
-          idData: dataSerialize.id,
+          idData: district.id,
           routePath: {
             saveData: 'districts.update',
           },
         },
-        dataSerialize,
+        district,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')

@@ -12,8 +12,8 @@
             </div>
             <select name="district" class="searchable-list form__input">
               <option selected disabled>Выберите район</option>
-              @each(district in districtsSerialize)
-                <option value="{{ district.id }}" {{ substationSerialize ? substationSerialize.id_district == district.id
+              @each(district in districts)
+                <option value="{{ district.id }}" {{ substation ? substation.id_district == district.id
                   ? 'selected' : '' : flashMessages.get('district') == district.id ? 'selected' : '' }}>
                   {{ district.name }}
                 </option>
@@ -31,7 +31,7 @@
           name: 'name',
           placeholderText: 'Введите название...',
           required: true,
-          value: substationSerialize ? substationSerialize.name : ''
+          value: substation ? substation.name : ''
         })
 
         @!inputs.checkbox({
@@ -39,7 +39,7 @@
           classlabel: 'form__label-row',
           classLabelText: 'label__text_nomargin',
           name: 'importance',
-          checked: substationSerialize ? substationSerialize.importance : 'false'
+          checked: substation ? substation.importance : 'false'
         })
       </div>
       <div class="form__btns">

@@ -26,13 +26,10 @@ export default class SubstationsController {
     }
 
     const districts = await District.query()
-    const districtsSerialize = districts.map((district) =>
-      district.serialize({ fields: ['id', 'name'] })
-    )
 
     return view.render('pages/substation/form', {
       title: 'Добавление нового объкта',
-      districtsSerialize,
+      districts,
       options: {
         routePath: {
           saveData: 'substations.store',
@@ -101,12 +98,6 @@ export default class SubstationsController {
 
     if (substation) {
       const districts = await District.query()
-      const districtsSerialize = districts.map((district) =>
-        district.serialize({ fields: ['id', 'name'] })
-      )
-      const substationSerialize = substation.serialize({
-        fields: ['id', 'id_district', 'name', 'importance'],
-      })
 
       return view.render('pages/substation/form', {
         title: 'Редактирование',
@@ -116,8 +107,8 @@ export default class SubstationsController {
             saveData: 'substations.update',
           },
         },
-        districtsSerialize,
-        substationSerialize,
+        districts,
+        substation,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')

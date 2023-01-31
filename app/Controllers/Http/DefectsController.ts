@@ -81,52 +81,25 @@ export default class DefectsController {
     }
   }
 
-  public async show({ params, view }: HttpContextContract) {
-    const defect = await Defect.query()
-      .where('id', '=', params.id)
-      .preload('substation')
-      .preload('defect_type')
-      .preload('intermediate_checks', (interQuery) => {
-        interQuery.preload('name_inspector')
+  public async show({ response, params, view, session }: HttpContextContract) {
+    const defect = await Defect.find(params.id)
+
+    if (defect) {
+      await defect.load('substation')
+      await defect.load('defect_type')
+      await defect.load('intermediate_checks', (query) => {
+        query.preload('name_inspector')
       })
-      .preload('name_eliminated')
+      await defect.load('name_eliminated')
 
-    const [defectDes] = defect
-    const defectSerialize = defectDes.serialize({
-      fields: [
-        'id',
-        'id_user',
-        'accession',
-        'description_defect',
-        'term_elimination',
-        'elimination_date',
-        'result',
-      ],
-      relations: {
-        substation: {
-          fields: ['name', 'voltage_class', 'nameAndClass'],
-        },
-        defect_type: {
-          fields: ['type_defect'],
-        },
-        intermediate_checks: {
-          fields: ['check_date', 'description_results', 'transferred'],
-          relations: {
-            name_inspector: {
-              fields: ['fullName', 'position'],
-            },
-          },
-        },
-        name_eliminated: {
-          fields: ['fullName', 'position'],
-        },
-      },
-    })
-
-    return view.render('pages/defect/show', {
-      title: 'Подробный просмотр',
-      defectSerialize,
-    })
+      return view.render('pages/defect/show-new', {
+        title: 'Подробный просмотр',
+        defect,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().toRoute('defects.index')
+    }
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
@@ -164,13 +137,13 @@ export default class DefectsController {
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
 
-    if (await bouncer.denies('editDefect', defect)) {
-      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
-
-      return response.redirect().toPath('/')
-    }
-
     if (defect) {
+      if (await bouncer.denies('editDefect', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+        return response.redirect().toPath('/')
+      }
+
       const validateDefectData = await request.validate(DefectValidator)
 
       defect.id_type_defect = +validateDefectData.defect_type
@@ -193,13 +166,13 @@ export default class DefectsController {
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
 
-    if (await bouncer.denies('deleteDefect', defect)) {
-      session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
-
-      return response.redirect().toPath('/')
-    }
-
     if (defect) {
+      if (await bouncer.denies('deleteDefect', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+        return response.redirect().toPath('/')
+      }
+
       await defect.related('intermediate_checks').query().delete()
       await defect.delete()
 

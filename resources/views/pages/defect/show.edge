@@ -4,10 +4,10 @@
   <div class="defect__content">
     @if(auth.isLoggedIn)
       <div class="control">
-        @if(!defectSerialize.result && !defectSerialize.elimination_date)
+        @if(!defect.result && !defect.elimination_date)
           @buttons.base({
             href: 'defects.close.create',
-            params: {idDefect: defectSerialize.id},
+            params: {idDefect: defect.id},
             className: 'btn-color_green'
           })
             <img src="{{ asset('assets/icons/close.svg') }}" alt="Добавить">
@@ -16,17 +16,17 @@
 
           @buttons.base({
             href: 'defects.checkup-create',
-            params: {idDefect: defectSerialize.id},
+            params: {idDefect: defect.id},
             className: 'btn-color_orange'
           })
             <img src="{{ asset('assets/icons/magnifier.svg') }}" alt="Добавить проверку">
             Добавить проверку
           @end
 
-          @can('editDefect', defectSerialize)
+          @can('editDefect', defect)
             @buttons.base({
               href: 'defects.edit',
-              params: {id: defectSerialize.id},
+              params: {id: defect.id},
               className: 'btn-color_blue btn-color_blue-transparent'
             })
               <img src="{{ asset('assets/icons/edit-2.svg') }}" alt="Редактировать дефект">
@@ -53,23 +53,23 @@
           <td colspan="5">Общая информация</td>
         </tr>
         <tr>
-          <td>{{ defectSerialize.defect_type.type_defect }}</td>
-          <td>{{ defectSerialize.substation.name }}</td>
-          <td>{{ defectSerialize.accession }}</td>
-          <td class="defect-table__td-width-show">{{ defectSerialize.description_defect }}</td>
-          <td>{{ dateFormat(defectSerialize.term_elimination) }}</td>
+          <td>{{ defect.defect_type.type_defect }}</td>
+          <td>{{ defect.substation.name }}</td>
+          <td>{{ defect.accession }}</td>
+          <td class="defect-table__td-width-show">{{ defect.description_defect }}</td>
+          <td>{{ dateFormat(defect.term_elimination) }}</td>
         </tr>
         <tr style="background-color: #f6d875;">
           <td colspan="5">Промежуточные результаты</td>
         </tr>
-        @if(defectSerialize.intermediate_checks.length)
+        @if(defect.intermediate_checks.length)
           <tr>
             <th>Сотрудник</th>
             <th>Дата проверки</th>
             <th colspan="2">Результаты проверки</th>
             <th>Кому передано</th>
           </tr>
-        @each(inter in defectSerialize.intermediate_checks)
+        @each(inter in defect.intermediate_checks)
           <tr>
             <td>{{ inter.name_inspector.fullName }}</td>
             <td>{{ dateFormat(inter.check_date) }}</td>
@@ -83,18 +83,18 @@
           </tr>
         @endif
           <tr style="background-color: #bdfc50;">
-            <td colspan="5">Выполненые работы по устранению</td>
+            <td colspan="5">Выполненные работы по устранению</td>
           </tr>
-        @if(defectSerialize.result)
+        @if(defect.result)
           <tr>
             <th>Сотрудник</th>
             <th>Дата устранения</th>
             <th colspan="3">Результаты</th>
           </tr>
           <tr>
-            <td>{{ defectSerialize.name_eliminated.fullName }}</td>
-            <td>{{ dateFormat(defectSerialize.elimination_date) }}</td>
-            <td colspan="3">{{ defectSerialize.result }}</td>
+            <td>{{ defect.name_eliminated.fullName }}</td>
+            <td>{{ dateFormat(defect.elimination_date) }}</td>
+            <td colspan="3">{{ defect.result }}</td>
           </tr>
         @else
           <tr>
