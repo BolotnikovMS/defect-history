@@ -116,16 +116,16 @@ export const { actions } = Bouncer.before((user: User | null) => {
 
   // Department
   .define('viewDepartment', (user: User) => {
-    return user.id_role === Roles.MODERATOR
+    return false
   })
   .define('createDepartment', (user: User) => {
-    return user.id_role === Roles.MODERATOR
+    return false
   })
   .define('updateDepartment', (user: User) => {
-    return user.id_role === Roles.MODERATOR
+    return false
   })
   .define('deleteDepartment', (user: User) => {
-    return user.id_role === Roles.MODERATOR
+    return false
   })
 
   // Districts
