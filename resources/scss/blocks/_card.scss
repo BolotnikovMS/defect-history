@@ -1,0 +1,55 @@
+.card {
+  & + * {
+    margin-top: 45px;
+  }
+
+  &__info {
+    & + * {
+      margin-top: 16px;
+    }
+  }
+
+  &__text {
+    line-height: 30px;
+
+    span {
+      font-weight: bold;
+    }
+
+    &-center {
+      text-align: center;
+    }
+  }
+
+  &__group {
+    & + & {
+      margin-top: 10px;
+    }
+
+    &-line {
+      display: flex;
+      column-gap: 15px;
+    }
+  }
+
+  &__titles {
+    text-align: center;
+
+    & + * {
+      margin-top: 25px;
+    }
+  }
+
+  &__title {
+    font-size: 23px;
+    font-weight: bold;
+  }
+
+  &__description {
+    margin-top: 20px;
+  }
+
+  &__close {
+    margin-top: 20px;
+  }
+}
