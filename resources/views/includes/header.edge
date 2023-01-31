@@ -34,38 +34,29 @@
                 { name: 'Объекты', path: 'substations.index' },
               ],
             })
-              @slot('main')
-                Районы
-                <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
-              @end
+              Районы
+              <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
-          {{--  <li>
-            <a href="{{ route('districts.index') }}"
-              class="{{ 'districts.index' == activeMenuLink ? 'active' : '' }}">Районы</a>
-          </li>
-          <li>
-            <a href="{{ route('substations.index') }}"
-              class="{{ 'substations.index' == activeMenuLink ? 'active' : '' }}">Объекты</a>
-          </li>  --}}
           @can('noAccess')
             <li  class="nav-list__item">
               <a href="{{ route('staff.index') }}"
                 class="{{ 'staff.index' == activeMenuLink ? 'active' : '' }}">Персонал</a>
             </li>
           @endcan
-          @can('viewDepartment')
-            <li  class="nav-list__item">
-              <a href="{{ route('departments.index') }}"
-                class="{{ 'departments.index' == activeMenuLink ? 'active' : '' }}">Отделы</a>
-            </li>
-          @endcan
-          @can('viewUsers')
-            <li  class="nav-list__item">
-              <a href="{{ route('users.index') }}"
-                class="{{ 'users.index' == activeMenuLink ? 'active' : '' }}">Пользователи</a>
-            </li>
-          @endcan
+
+          @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers'))
+            @dropdown.dropdown({
+              classDropdownMenu: 'dropdown__menu-menu_bottom',
+              dropdownData: [
+                { name: 'Отделы', access: 'viewDepartment', path: 'departments.index' },
+                { name: 'Пользователи', access: 'viewUsers', path: 'users.index' },
+              ],
+            })
+              Пользователи
+              <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
+            @end
+          @endif
         </ul>
       </nav>
       <div class="header__login">
