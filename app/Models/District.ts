@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import Substation from './Substation'
 
 export default class District extends BaseModel {
@@ -17,6 +17,11 @@ export default class District extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get substationsCount() {
+    return this.substations?.length
+  }
 
   @hasMany(() => Substation, {
     localKey: 'id',
