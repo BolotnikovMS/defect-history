@@ -1,0 +1,16 @@
+.badge {
+  display: inline-block;
+  position: relative;
+
+&__counter {
+  position: absolute;
+  bottom: -5px;
+  right: 0;
+  padding: 2px 6px;
+  font-size: 16px;
+  text-align: center;
+  color: #fff;
+  background-color: #3b8de2;
+  border-radius: 10px;
+}
+}
