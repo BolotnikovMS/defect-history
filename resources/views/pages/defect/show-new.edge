@@ -1,0 +1,139 @@
+@layout('layout/master')
+
+@section('content')
+  <div class="defect__content">
+    @if(auth.isLoggedIn)
+      <div class="control">
+        @if(!defect.result && !defect.elimination_date)
+          @buttons.base({
+            href: 'defects.close.create',
+            params: {idDefect: defect.id},
+            className: 'btn-color_green'
+          })
+            <img src="{{ asset('assets/icons/close.svg') }}" alt="Добавить">
+            Закрыть дефект
+          @end
+
+          @buttons.base({
+            href: 'defects.checkup-create',
+            params: {idDefect: defect.id},
+            className: 'btn-color_orange'
+          })
+            <img src="{{ asset('assets/icons/magnifier.svg') }}" alt="Добавить проверку">
+            Добавить проверку
+          @end
+
+          @can('editDefect', defect)
+            @buttons.base({
+              href: 'defects.edit',
+              params: {id: defect.id},
+              className: 'btn-color_blue btn-color_blue-transparent'
+            })
+              <img src="{{ asset('assets/icons/edit-2.svg') }}" alt="Редактировать дефект">
+              Редактировать дефект
+            @end
+          @endcan
+        @endif
+      </div>
+    @endif
+  </div>
+  <hr>
+  <div class="card">
+    <div class="card__titles">
+      <h3 class="card__title">Общая информация по дефекту</h3>
+    </div>
+    <div class="card__info">
+      <div class="card__group">
+        <div class="card__text">Тип дефекта:
+          <span>{{ defect.defect_type.type_defect }}</span>
+        </div>
+      </div>
+      <div class="card__group card__group-line">
+        <div class="card__text">Объект:
+          <span>{{ defect.substation.name }}</span>
+        </div>
+        <div class="card__text">Присоединение:
+          <span>{{ defect.accession }}</span>
+        </div>
+      </div>
+      <div class="card__group">
+        <div class="card__text">Срок устранения:
+          <span>{{ dateFormat(defect.term_elimination) }}</span>
+        </div>
+      </div>
+      <div class="card__description">
+        <div class="card__titles">
+          <h3 class="card__title">Описание дефекта</h3>
+        </div>
+        <div class="card__text">{{ defect.description_defect }}</div>
+      </div>
+    </div>
+    @if(defect.intermediate_checks.length)
+      <div class="card__checks">
+        <div class="card__titles">
+          <h3 class="card__title">Промежуточные результаты</h3>
+        </div>
+        <table class="table defect-table">
+          <thead>
+            <th>Сотрудник</th>
+            <th>Дата проверки</th>
+            <th colspan="2">Результаты проверки</th>
+            <th>Кому передано</th>
+          </thead>
+          <tbody>
+            @each(inter in defect.intermediate_checks)
+              <tr>
+                <td>{{ inter.name_inspector.fullName }}</td>
+                <td>{{ dateFormat(inter.check_date) }}</td>
+                <td colspan="2">{{ inter.description_results }}</td>
+                <td>{{ inter.transferred ? inter.transferred : '-' }}</td>
+              </tr>
+            @else
+              <tr>
+                <td colspan="5">Пока нет внесенных проверок.</td>
+              </tr>
+            @endeach
+          </tbody>
+        </table>
+      </div>
+    @endif
+
+    <div class="card__close">
+      <div class="card__titles">
+        <h3 class="card__title">Выполненные работы по устранению</h3>
+      </div>
+      @if(defect.result)
+        <table class="table defect-table">
+          <thead>
+            <th>Сотрудник</th>
+            <th>Дата устранения</th>
+            <th colspan="2">Результаты</th>
+          </thead>
+          <tbody>
+            @if(defect.result)
+              <tr>
+                <td>{{ defect.name_eliminated.fullName }}</td>
+                <td>{{ dateFormat(defect.elimination_date) }}</td>
+                <td colspan="2">{{ defect.result }}</td>
+              </tr>
+            @else
+              <tr>
+                <td colspan="4">Дефект не устранен.</td>
+              </tr>
+            @endif
+          </tbody>
+        </table>
+      @else
+        <div class="card__group">
+          <div class="card__text card__text-center">Дефект не устранен.</div>
+        </div>
+      @endif
+    </div>
+  </div>
+  <div class="control control-item_center">
+    @buttons.cancel({ href: 'defects.index', className: 'btn-cancel'})
+      К списку дефектов
+    @end
+  </div>
+  <hr>
+@endsection
