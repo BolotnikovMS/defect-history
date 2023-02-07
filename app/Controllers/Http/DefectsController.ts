@@ -94,7 +94,7 @@ export default class DefectsController {
 
       return view.render('pages/defect/show-new', {
         title: 'Подробный просмотр',
-        defect,
+        defect: defect.serialize(),
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -218,7 +218,14 @@ export default class DefectsController {
     }
   }
 
-  public async checkupStore({ params, request, response, auth, session, bouncer }: HttpContextContract) {
+  public async checkupStore({
+    params,
+    request,
+    response,
+    auth,
+    session,
+    bouncer,
+  }: HttpContextContract) {
     if (await bouncer.denies('createCheckup')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление проверки!')
 
@@ -259,7 +266,13 @@ export default class DefectsController {
     }
   }
 
-  public async closeDefectCreate({ response, params, view, session, bouncer }: HttpContextContract) {
+  public async closeDefectCreate({
+    response,
+    params,
+    view,
+    session,
+    bouncer,
+  }: HttpContextContract) {
     if (await bouncer.denies('createCloseDefect')) {
       session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта!')
 
@@ -290,7 +303,13 @@ export default class DefectsController {
     }
   }
 
-  public async closeDefectStore({ params, request, response, session, bouncer }: HttpContextContract) {
+  public async closeDefectStore({
+    params,
+    request,
+    response,
+    session,
+    bouncer,
+  }: HttpContextContract) {
     if (await bouncer.denies('createCloseDefect')) {
       session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта!')
 
