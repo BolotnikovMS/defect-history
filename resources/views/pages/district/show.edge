@@ -2,9 +2,16 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
+  @can('noAccess')
+    <div class="control">
+      @buttons.add({ href: 'substations.create' })
+        Добавить
+      @end
+    </div>
+  @endcan
   <div class="districts__content">
     <hr>
-    @if(district.substations)
+    @if(district.substations.length)
       <ul class="list">
         <li class="list__item">
           <div class="list__content">
