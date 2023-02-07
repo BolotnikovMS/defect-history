@@ -3,47 +3,47 @@
 @section('content')
 <h2 class="title">{{ title }}</h2>
 <div class="defect__content">
-  <form action="{{ route(options.routePath.savePath, {id: options.idData}) }}" method="POST">
+  @forms.post({
+    action: route(options.routePath.savePath, {id: options.idData})
+  })
     <div class="form__content form__content-column">
-      <div class="form__group">
-        <label class="form__label form__label-text_left">
-          <div class="label__text">
-            Выберите тип дефекта
-          </div>
-          <select name="defect_type" class="searchable-list form__input">
-            <option selected disabled>Выберите тип дефекта</option>
-            @each(typeDefect in typeDefects)
-              <option value="{{ typeDefect.id }}" {{ defectSerialize ? defectSerialize.id_type_defect == typeDefect.id
-                ? 'selected' : '' : flashMessages.get('defect_type') == typeDefect.id ? 'selected' : '' }}>
-                {{ typeDefect.type_defect }}
-              </option>
-            @endeach
-          </select>
-        </label>
-        @if(flashMessages.has('errors.defect_type'))
-          <span class="error-text">{{ flashMessages.get('errors.defect_type') }}</span>
-        @endif
-      </div>
+      @!inputs.select({
+        label: 'Выберите тип дефекта',
+        labelPosition: 'label__text_left',
+        name: 'defect_type',
+        optionClass: 'searchable-list',
+        defaultOptionConfig: {
+          defaultOption: true,
+          defaultOptionText: 'Выберите тип дефекта'
+        },
+        dataOptionsConfig: {
+          dataOptions: typeDefects,
+          dataNameOption: 'type_defect'
+        },
+        currentDataConfig: {
+          currentData: defectSerialize ? defectSerialize : '',
+          currentDataId: defectSerialize ? defectSerialize.id_type_defect : '',
+        }
+      })
 
-      <div class="form__group">
-        <label class="form__label form__label-text_left">
-          <div class="label__text">
-            Выберите объект
-          </div>
-          <select name="substation" class="searchable-list form__input">
-            <option selected disabled>Выберите объект</option>
-            @each(substation in substations)
-              <option value="{{ substation.id }}" {{ defectSerialize ? defectSerialize.id_substation == substation.id
-                ? 'selected' : '' : flashMessages.get('substation') == substation.id ? 'selected' : '' }}>
-                {{ substation.name }}
-              </option>
-            @endeach
-          </select>
-        </label>
-        @if(flashMessages.has('errors.substation'))
-          <span class="error-text">{{ flashMessages.get('errors.substation') }}</span>
-        @endif
-      </div>
+      @!inputs.select({
+        label: 'Выберите объект',
+        labelPosition: 'label__text_left',
+        name: 'substation',
+        optionClass: 'searchable-list',
+        defaultOptionConfig: {
+          defaultOption: true,
+          defaultOptionText: 'Выберите объект'
+        },
+        dataOptionsConfig: {
+          dataOptions: substations,
+          dataNameOption: 'name'
+        },
+        currentDataConfig: {
+          currentData: defectSerialize ? defectSerialize : '',
+          currentDataId: defectSerialize ? defectSerialize.id_substation : '',
+        }
+      })
 
       @!inputs.base({
         label: 'Присоединение',
@@ -90,6 +90,6 @@
         Сохранить
       @end
     </div>
-  </form>
+  @end
 </div>
 @endsection

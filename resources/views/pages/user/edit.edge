@@ -54,65 +54,43 @@
           value: user ? user.position : ''
         })
 
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            <div class="label__text">
-              Выберите отдел
-            </div>
-            <select name="department" class="searchable-list form__input">
-              <option selected disabled>Выберите отдел</option>
-              @each(department in departmentsSerialize)
-                <option
-                  value="{{ department.id }}"
-                  {{
-                    user ?
-                    user.id_department == department.id ?
-                        'selected'
-                      :
-                        ''
-                    :
-                      flashMessages.get('department') == department.id ? 'selected' : ''
-                  }}
-                >
-                  {{ department.name }}
-                </option>
-              @endeach
-            </select>
-          </label>
-          @if(flashMessages.has('errors.role'))
-            <span class="error-text">{{ flashMessages.get('errors.role') }}</span>
-          @endif
-        </div>
+        @!inputs.select({
+          label: 'Выберите отдел',
+          labelPosition: 'label__text_left',
+          name: 'department',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите отдел'
+          },
+          dataOptionsConfig: {
+            dataOptions: departmentsSerialize,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: user ? user : '',
+            currentDataId: user ? user.id_department : '',
+          }
+        })
 
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            <div class="label__text">
-              Выберите роль пользователя
-            </div>
-            <select name="role" class="searchable-list form__input">
-              <option selected disabled>Выберите роль</option>
-              @each(role in rolesSerialize)
-                <option
-                  value="{{ role.id }}"
-                  {{
-                    user ?
-                    user.id_role == role.id ?
-                        'selected'
-                      :
-                        ''
-                    :
-                      flashMessages.get('role') == role.id ? 'selected' : ''
-                  }}
-                >
-                  {{ role.name }}
-                </option>
-              @endeach
-            </select>
-          </label>
-          @if(flashMessages.has('errors.role'))
-            <span class="error-text">{{ flashMessages.get('errors.role') }}</span>
-          @endif
-        </div>
+        @!inputs.select({
+          label: 'Выберите роль пользователя',
+          labelPosition: 'label__text_left',
+          name: 'role',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите роль пользователя'
+          },
+          dataOptionsConfig: {
+            dataOptions: rolesSerialize,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: user ? user : '',
+            currentDataId: user ? user.id_role : '',
+          }
+        })
 
         @!inputs.checkbox({
           label: 'Заблокировать УЗ',
