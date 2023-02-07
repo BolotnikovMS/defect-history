@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Defect from './Defect'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
 
@@ -31,6 +31,11 @@ export default class Substation extends BaseModel {
     autoUpdate: true,
   })
   public updatedAt: DateTime
+
+  @computed()
+  public get numberOpenDefects() {
+    return this.defects?.filter((item) => item.elimination_date === null).length
+  }
 
   @hasMany(() => Defect, {
     localKey: 'id',
