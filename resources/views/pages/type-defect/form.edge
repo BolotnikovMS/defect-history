@@ -3,7 +3,9 @@
 @section('content')
 <h2 class="title">{{ title }}</h2>
 <div class="types-defects__content">
-  <form action="{{ route(options.routePath.saveData, {id: options.idData}) }}" method="POST">
+  @forms.post({
+    action: route(options.routePath.saveData, {id: options.idData})
+  })
     <div class="form__content form__content-column">
       @!inputs.base({
         label: 'Название "Типа" дефекта',
@@ -31,6 +33,6 @@
         Сохранить
       @end
     </div>
-  </form>
+  @end
 </div>
 @endsection

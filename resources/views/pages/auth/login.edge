@@ -3,7 +3,9 @@
 @section('content')
   <div class="login__content">
     <h2 class="title">{{ title }}</h2>
-    <form action="{{ route('auth.login') }}" method="POST">
+    @forms.post({
+      action: route('auth.login')
+    })
       <div class="form__content form__content-column">
         @!inputs.base({
           name: 'uid',
@@ -31,6 +33,6 @@
           Войти
         @end
       </div>
-    </form>
+    @end
   </div>
 @endsection
