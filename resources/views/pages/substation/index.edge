@@ -23,6 +23,12 @@
         @each(substation in substations)
           <li class="list__item">
             <div class="list__content">
+              {{--  substation.numberOpenDefects  --}}
+              <div class="badge">
+                <span class="badge__counter badge__counter-red" title="Количество открытых дефектов">
+                  {{ substation.numberOpenDefects }}
+                </span>
+              </div>
               <a href="{{ route('substations.show', {id: substation.id}) }}" class="active-link">
                 {{ substation.name }}
               </a>
