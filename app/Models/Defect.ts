@@ -55,18 +55,13 @@ export default class Defect extends BaseModel {
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value?: DateTime) => {
-      return value ? value.toFormat('dd.MM.yyyy') : value
-    },
+    serialize: (value) => value.toFormat('dd.MM.yyyy'),
   })
   public created_at: DateTime
 
   @column.dateTime({
     autoCreate: true,
     autoUpdate: true,
-    serialize: (value?: DateTime) => {
-      return value ? value.toFormat('HH:mm dd.MM.yyyy') : value
-    },
   })
   public updatedAt: DateTime
 
