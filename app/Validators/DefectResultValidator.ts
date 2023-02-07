@@ -7,7 +7,7 @@ export default class DefectResultValidator {
   public schema = schema.create({
     employee: schema.string(),
     description_results: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
-    date: schema.string(),
+    date: schema.date(),
     transferred: schema.string.optional({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
   })
 
