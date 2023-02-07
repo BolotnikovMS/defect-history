@@ -6,10 +6,14 @@ import District from 'App/Models/District'
 export default class SubstationsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
-    const limit = 10
-    const substations = await Substation.query().orderBy('created_at', 'asc').paginate(page, limit)
+    const limit = 15
+    const substations = await Substation.query().preload('defects').paginate(page, limit)
 
     substations.baseUrl('/substations')
+
+    substations.sort(
+      (prevItem, nextItem) => nextItem.numberOpenDefects - prevItem.numberOpenDefects
+    )
 
     return view.render('pages/substation/index', {
       title: 'Список объектов',
@@ -59,10 +63,10 @@ export default class SubstationsController {
         'successMessage',
         `Объект с названием "${validateSubstation.name}" успешно добавлен!`
       )
-      response.redirect().toRoute('SubstationsController.index')
+      response.redirect().toRoute('substations.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('SubstationsController.index')
+      response.redirect().toRoute('substations.index')
     }
   }
 
