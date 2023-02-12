@@ -25,11 +25,11 @@
           {{
             currentDataConfig?.currentData
             ?
-            currentDataConfig.currentDataId == data.id
-              ?
-                'selected'
-              :
-                ''
+              currentDataConfig.currentDataId == data.id
+                ?
+                  'selected'
+                :
+                  ''
             :
               flashMessages.get(name) == data.id ? 'selected' : ''
           }}
