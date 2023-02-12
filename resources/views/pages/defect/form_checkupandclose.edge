@@ -7,22 +7,20 @@
       action: route(options.routes.saveData, {idDefect: options.defect})
     })
       <div class="form__content form__content-column">
-        <div class="form__group">
-          <label class="form__label form__label-text_left">
-            Сотрудник
-            <select name="employee" class="searchable-list form__input">
-              <option selected disabled>Выберите сотрудника</option>
-              @each(empolyee in staff)
-                <option value="{{ empolyee.id }}" {{ flashMessages.get('employee')==empolyee.id ? 'selected' : '' }}>
-                  {{ empolyee.fullName }}
-                </option>
-              @endeach
-            </select>
-          </label>
-          @if(flashMessages.has('errors.employee'))
-            <span class="error-text">{{ flashMessages.get('errors.employee') }}</span>
-          @endif
-        </div>
+        @!inputs.select({
+          label: 'Сотрудник',
+          labelPosition: 'label__text_left',
+          name: 'employee',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите сотрудника'
+          },
+          dataOptionsConfig: {
+            dataOptions: staff,
+            dataNameOption: 'fullName'
+          }
+        })
 
         @!inputs.textarea({
           label: 'Описание результатов работы',
