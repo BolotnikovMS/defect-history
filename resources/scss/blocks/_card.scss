@@ -1,23 +1,55 @@
+.cards {
+
+}
+
 .card {
-  & + * {
-    margin-top: 45px;
+  padding: 10px 15px;
+  border: 1px solid black;
+  border-radius: 10px;
+  transition: all 0.3s ease-in;
+
+  &:hover {
+    background-color: rgb(243, 240, 240);
   }
 
-  &__info {
-    & + * {
-      margin-top: 16px;
-    }
+  & + * {
+    margin-top: 10px;
+  }
+
+  &-completed {
+    background-color: rgba(195, 248, 160, 0.6) !important;
+  }
+
+  &-danger {
+    background-color: rgb(246, 73, 73) !important;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__badge {
+    padding: 4px 8px;
+    color: #fff;
+    background-color: #3b8de2;
+    border-radius: 10px;
   }
 
   &__text {
-    line-height: 30px;
+    font-size: 19px;
 
-    span {
-      font-weight: bold;
+    &-body {
+      font-size: 20px;
     }
 
-    &-center {
-      text-align: center;
+    &-fs_17 {
+      font-size: 17px;
+    }
+
+    &-bold {
+      font-weight: bold;
     }
 
     &-red {
@@ -25,35 +57,34 @@
     }
   }
 
-  &__group {
-    & + & {
-      margin-top: 10px;
-    }
-
-    &-line {
-      display: flex;
-      column-gap: 15px;
-    }
+  &__object-info {
+    display: flex;
+    column-gap: 20px;
   }
 
-  &__titles {
-    text-align: center;
-
-    & + * {
-      margin-top: 25px;
-    }
+  &__hr {
+    margin: 8px auto;
+    width: 100%;
+    border-top: 2px dashed #c8c8c8;
   }
 
-  &__title {
-    font-size: 23px;
-    font-weight: bold;
+  &__body-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px 0;
   }
 
-  &__description {
+  &__data-info {
     margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  &__close {
-    margin-top: 20px;
+  &__footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }

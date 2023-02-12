@@ -1,8 +1,8 @@
-@mixin btn($padd: 12px, $color: #fff, $fontSize: 18px, $borderRadius: 10px) {
-  padding: $padd;
-  font-size: $fontSize;
-  color: $color;
-  border-radius: $borderRadius;
+@mixin btn {
+  padding: 8px 12px;
+  font-size: 18px;
+  color: #fff;
+  border-radius: 10px;
 
   @extend %btn;
 }
