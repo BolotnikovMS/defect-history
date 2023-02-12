@@ -23,11 +23,9 @@
         @each(district in districts)
           <li class="list__item">
             <div class="list__content">
-              <div class="badge">
-                <span class="badge__counter" title="Количество подстанций">
-                  {{ district.substationsCount }}
-                </span>
-              </div>
+              @!badge.badge({
+                data: district.substationsCount,
+              })
               <a href="{{ route('districts.show', {id: district.id}) }}" class="active-link">
                 {{ district.name }}
               </a>
