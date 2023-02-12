@@ -73,4 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
     maximumSelectionLength: 2,
     language: 'ru',
   })
+
+  // Print PDF
+  $('.btn-save-pdf').on('click', () => {
+    $('.defect-info').printThis()
+  })
 })
