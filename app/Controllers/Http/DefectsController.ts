@@ -74,10 +74,10 @@ export default class DefectsController {
       await Defect.create(defect)
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
-      response.redirect().toRoute('DefectsController.index')
+      response.redirect().toRoute('defects.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('DefectsController.index')
+      response.redirect().toRoute('defects.index')
     }
   }
 
@@ -92,7 +92,7 @@ export default class DefectsController {
       })
       await defect.load('name_eliminated')
 
-      return view.render('pages/defect/show-new', {
+      return view.render('pages/defect/show', {
         title: 'Подробный просмотр',
         defect: defect.serialize(),
       })
@@ -328,10 +328,10 @@ export default class DefectsController {
       await defect.save()
 
       session.flash('successMessage', `Дефект закрыт.`)
-      response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+      response.redirect().toRoute('defects.show', { id: params.idDefect })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('DefectsController.index')
+      response.redirect().toRoute('defects.index')
     }
   }
 }

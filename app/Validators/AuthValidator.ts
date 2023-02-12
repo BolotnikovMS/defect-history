@@ -5,10 +5,9 @@ export default class AuthValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    username: schema.string([
+    username: schema.string({ trim: true }, [
       rules.minLength(2),
       rules.unique({ table: 'users', column: 'username', caseInsensitive: true }),
-      rules.trim(),
       rules.escape(),
     ]),
     surname: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
@@ -17,13 +16,12 @@ export default class AuthValidator {
     position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
     department: schema.number(),
     role: schema.number(),
-    email: schema.string([
+    email: schema.string({ trim: true }, [
       rules.email(),
       rules.unique({ table: 'users', column: 'email', caseInsensitive: true }),
-      rules.trim(),
       rules.escape(),
     ]),
-    password: schema.string([rules.minLength(8)]),
+    password: schema.string({}, [rules.minLength(8)]),
   })
 
   /**
