@@ -237,7 +237,6 @@ export default class DefectsController {
 
     if (defect) {
       const validateData = await request.validate(DefectResultValidator)
-      console.log(validateData)
 
       if (validateData) {
         const checkupDefect = {

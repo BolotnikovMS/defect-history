@@ -38,14 +38,14 @@ export default class Defect extends BaseModel {
   })
   public description_defect: string
 
-  @column()
-  public term_elimination: string
+  @column.date()
+  public term_elimination: DateTime
 
   @column()
   public importance: string
 
-  @column()
-  public elimination_date: string
+  @column.date()
+  public elimination_date: DateTime
 
   @column()
   public result: string
