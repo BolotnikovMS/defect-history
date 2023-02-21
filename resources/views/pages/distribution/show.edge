@@ -1,0 +1,37 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control"></div>
+  <div class="content">
+    <hr>
+    @if(group.group_users.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Пользователь
+            </span>
+          </div>
+        </li>
+        @each(user in group.group_users)
+          <li class="list__item">
+            <div class="list__content">
+              {{ user.fullName }}
+            </div>
+            <div class="list__control">
+              <a href="{{ route('distribution.remove-user', {idGroup: group.id, idUser: user.id}) }}">
+                <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+              </a>
+            </div>
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых пользователей для рассылки.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+@endsection
