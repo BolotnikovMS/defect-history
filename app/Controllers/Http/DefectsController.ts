@@ -7,6 +7,7 @@ import IntermediateCheck from '../../Models/IntermediateCheck'
 import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
 import DefectType from 'App/Models/DefectType'
+import Mail from '@ioc:Adonis/Addons/Mail'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -71,7 +72,33 @@ export default class DefectsController {
         importance: !!validateDefectData.importance + '',
       }
 
-      await Defect.create(defect)
+      const newDefect = await Defect.create(defect)
+
+      await newDefect.load('defect_type', (queryGroup) => {
+        queryGroup.whereNotNull('id_distribution_group').preload('group', (queryGroupUsers) => {
+          queryGroupUsers.preload('group_users')
+        })
+      })
+
+      const arrayUsers = newDefect.defect_type?.group.group_users
+
+      if (arrayUsers?.length) {
+        arrayUsers.forEach(async (users) => {
+          await Mail.sendLater((message) => {
+            message
+              .from('testsend@examp.com')
+              .to(users.email)
+              .subject('Новая запись в журнале дефектов!')
+              .htmlView('emails/new_defect', {
+                user: { fullName: users.fullName },
+                text: 'В журнал дефектов была добавлена новая запись',
+                defectId: newDefect.id,
+              })
+          })
+        })
+      } else {
+        console.log('array users empty')
+      }
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
       response.redirect().toRoute('defects.index')
