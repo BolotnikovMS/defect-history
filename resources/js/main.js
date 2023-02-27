@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Searchable list
   $('.searchable-list').select2({
     width: '350px',
-    placeholder: 'Select an option',
+    placeholder: 'Выберите вариант',
     maximumSelectionLength: 2,
     language: 'ru',
   })
