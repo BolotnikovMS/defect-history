@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DefectType from '../../Models/DefectType'
 import TypesDefectValidator from '../../Validators/TypesDefectValidator'
+import DistributionGroup from 'App/Models/DistributionGroup'
 
 export default class DefectTypesController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -12,7 +13,10 @@ export default class DefectTypesController {
 
     const page = request.input('page', 1)
     const limit = 10
-    const typesDefects = await DefectType.query().orderBy('created_at', 'asc').paginate(page, limit)
+    const typesDefects = await DefectType.query()
+      .orderBy('created_at', 'asc')
+      .preload('group')
+      .paginate(page, limit)
 
     typesDefects.baseUrl('/types-defects')
 
@@ -30,6 +34,8 @@ export default class DefectTypesController {
       return response.redirect().toPath('/')
     }
 
+    const groups = await DistributionGroup.all()
+
     return view.render('pages/type-defect/form', {
       title: 'Добавление нового типа дефекта',
       options: {
@@ -37,6 +43,7 @@ export default class DefectTypesController {
           saveData: 'types-defects.store',
         },
       },
+      groups,
     })
   }
 
@@ -50,11 +57,14 @@ export default class DefectTypesController {
     const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
     if (validateTypeDefectData) {
-      validateTypeDefectData.defect_description = validateTypeDefectData.defect_description
-        ? validateTypeDefectData.defect_description
-        : 'Описание дефекта не добавлено...'
-
-      await DefectType.create({ ...validateTypeDefectData, id_user: auth.user?.id })
+      await DefectType.create({
+        id_user: auth.user?.id,
+        id_distribution_group: validateTypeDefectData.group,
+        type_defect: validateTypeDefectData.type_defect,
+        defect_description: validateTypeDefectData.defect_description
+          ? validateTypeDefectData.defect_description
+          : 'Описание дефекта не добавлено...',
+      })
 
       session.flash(
         'successMessage',
@@ -93,15 +103,17 @@ export default class DefectTypesController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    const typeDefect = await DefectType.find(params.id)
-
     if (await bouncer.denies('editTypeDefect')) {
       session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
 
       return response.redirect().toPath('/')
     }
 
+    const typeDefect = await DefectType.find(params.id)
+
     if (typeDefect) {
+      const groups = await DistributionGroup.all()
+
       return view.render('pages/type-defect/form', {
         title: 'Редактирование',
         options: {
@@ -111,6 +123,7 @@ export default class DefectTypesController {
           },
         },
         typeDefect,
+        groups,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -130,12 +143,16 @@ export default class DefectTypesController {
     if (typeDefect) {
       const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
-      typeDefect.type_defect = validateTypeDefectData.type_defect
-      typeDefect.defect_description = validateTypeDefectData.defect_description
-        ? validateTypeDefectData.defect_description
-        : 'Описание дефекта не добавлено...'
-
-      await typeDefect.save()
+      await typeDefect
+        .merge({
+          id_distribution_group:
+            validateTypeDefectData.group === 0 ? null : validateTypeDefectData.group,
+          type_defect: validateTypeDefectData.type_defect,
+          defect_description: validateTypeDefectData.defect_description
+            ? validateTypeDefectData.defect_description
+            : 'Описание дефекта не добавлено...',
+        })
+        .save()
 
       session.flash(
         'successMessage',
