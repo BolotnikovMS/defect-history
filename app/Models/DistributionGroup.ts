@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, ManyToMany, column, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, ManyToMany, column, computed, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 
 export default class DistributionGroup extends BaseModel {
@@ -17,6 +17,11 @@ export default class DistributionGroup extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get usersCount() {
+    return this.group_users?.length
+  }
 
   @manyToMany(() => User, {
     localKey: 'id',
