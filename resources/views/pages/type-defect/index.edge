@@ -11,19 +11,25 @@
   <div class="types-defects__content">
     {{-- <div class="dialog"></div> --}}
     <hr>
+    {{--  {{inspect(typesDefects)}}  --}}
     @if(typesDefects.length)
       <ul class="list">
         <li class="list__item">
           <div class="list__content">
             <span class="list__text list__text-header">
-              Название / описание вида дефекта
+              Название / Группа рассылки / Описание вида дефекта
             </span>
           </div>
         </li>
         @each((typeDefect, i) in typesDefects)
           <li class="list__item">
             <div class="list__content">
-              {{ typeDefect.type_defect }} -
+              {{ typeDefect.type_defect }} |
+              @if(typeDefect.group)
+                {{ typeDefect.group.name }} |
+              @else
+                Группы нету |
+              @endif
               <span class="list__text">
                 {{ typeDefect.defect_description }}
               </span>
