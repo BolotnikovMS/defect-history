@@ -21,6 +21,9 @@
         @each(distributionGroup in distributionGroups)
           <li class="list__item">
             <div class="list__content">
+              @!badge.badge({
+                data: distributionGroup.usersCount
+              })
               <a href="{{ route('distribution.show', {id: distributionGroup.id}) }}" class="active-link">
                 {{ distributionGroup.name }}
               </a>
