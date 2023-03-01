@@ -6,7 +6,13 @@ import DistributionGroupValidator from 'App/Validators/DistributionGroupValidato
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 
 export default class DistributionGroupsController {
-  public async index({ view }: HttpContextContract) {
+  public async index({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на просмотр страницы!')
+
+      return response.redirect().toPath('/')
+    }
+
     const distributionGroups = await DistributionGroup.query()
       .orderBy('created_at', 'asc')
       .preload('group_users')
@@ -14,10 +20,17 @@ export default class DistributionGroupsController {
     return view.render('pages/distribution/index', {
       title: 'Группы рассылок',
       distributionGroups,
+      activeMenuLink: 'distribution.index',
     })
   }
 
-  public async create({ response, view, session }: HttpContextContract) {
+  public async create({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     return view.render('pages/distribution/form', {
       title: 'Добавление новой записи',
       options: {
@@ -28,7 +41,13 @@ export default class DistributionGroupsController {
     })
   }
 
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('createDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const validateDataGroup = await request.validate(DistributionGroupValidator)
 
     await DistributionGroup.create(validateDataGroup)
@@ -36,17 +55,30 @@ export default class DistributionGroupsController {
     response.redirect().toRoute('distribution.index')
   }
 
-  public async show({ response, params, view, session }: HttpContextContract) {
+  public async show({ response, params, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('showDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на просмотр группы!')
+
+      return response.redirect().toPath('/')
+    }
+
     const group = await DistributionGroup.find(params.id)
-    const users = await User.all()
 
     if (group) {
+      const users = await User.all()
+
       await group.load('group_users')
+
+      const filteredArrayUsers = users.filter((user) => {
+        return group.group_users.every((userInGroup) => {
+          return userInGroup.id !== user.id
+        })
+      })
 
       return view.render('pages/distribution/show', {
         title: `Подробный просмотр группы: '${group.name}'`,
         group,
-        users,
+        users: filteredArrayUsers,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -54,7 +86,13 @@ export default class DistributionGroupsController {
     }
   }
 
-  public async addUserInGroup({ params, request, response, session }: HttpContextContract) {
+  public async addUserInGroup({ params, request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('addUserInGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление пользователя в группу!')
+
+      return response.redirect().toPath('/')
+    }
+
     const idGroup = await params.idGroup
     const _schema = schema.create({
       user: schema.array([rules.minLength(1), rules.maxLength(15)]).members(schema.number()),
@@ -76,7 +114,13 @@ export default class DistributionGroupsController {
     response.redirect().back()
   }
 
-  public async removeUserFromGroup({ response, params, session }: HttpContextContract) {
+  public async removeUserFromGroup({ response, params, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('removeUserFromGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление пользователя из группы!')
+
+      return response.redirect().toPath('/')
+    }
+
     const userGroup = await DistributionGroupsUser.query().where(
       'id_distribution_group',
       '=',
@@ -96,7 +140,13 @@ export default class DistributionGroupsController {
     }
   }
 
-  public async edit({ params, response, view, session }: HttpContextContract) {
+  public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('updateDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const group = await DistributionGroup.find(params.id)
 
     if (group) {
@@ -116,7 +166,13 @@ export default class DistributionGroupsController {
     }
   }
 
-  public async update({ params, request, response, session }: HttpContextContract) {
+  public async update({ params, request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('updateDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const group = await DistributionGroup.find(params.id)
 
     const validateDataGroup = await request.validate(DistributionGroupValidator)
@@ -127,7 +183,13 @@ export default class DistributionGroupsController {
     response.redirect().toRoute('distribution.index')
   }
 
-  public async destroy({ response, params, session }: HttpContextContract) {
+  public async destroy({ response, params, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('deleteDistributionGroup')) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const group = await DistributionGroup.find(params.id)
 
     if (group) {
