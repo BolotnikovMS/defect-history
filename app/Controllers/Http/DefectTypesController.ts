@@ -56,25 +56,19 @@ export default class DefectTypesController {
 
     const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
-    if (validateTypeDefectData) {
-      await DefectType.create({
-        id_user: auth.user?.id,
-        id_distribution_group: validateTypeDefectData.group,
-        type_defect: validateTypeDefectData.type_defect,
-        defect_description: validateTypeDefectData.defect_description
-          ? validateTypeDefectData.defect_description
-          : 'Описание дефекта не добавлено...',
-      })
+    await DefectType.create({
+      id_user: auth.user?.id,
+      id_distribution_group: validateTypeDefectData.group,
+      type_defect: validateTypeDefectData.type_defect,
+      defect_description: validateTypeDefectData.defect_description
+        ? validateTypeDefectData.defect_description
+        : 'Описание дефекта не добавлено...',
+    })
 
-      session.flash(
-        'successMessage',
-        `Тип дефекта с названием "${validateTypeDefectData.type_defect}" успешно добавлен!`
-      )
-      response.redirect().toRoute('DefectTypesController.index')
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('DefectTypesController.index')
-    }
+    session.flash(
+      'successMessage',
+      `Тип дефекта с названием "${validateTypeDefectData.type_defect}" успешно добавлен!`
+    )
   }
 
   public async show({ response, params, view, session }: HttpContextContract) {
@@ -158,7 +152,7 @@ export default class DefectTypesController {
         'successMessage',
         `Данные "${validateTypeDefectData.type_defect}" успешно обновлены.`
       )
-      response.redirect().toRoute('DefectTypesController.index')
+      response.redirect().toRoute('types-defects.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().back()
