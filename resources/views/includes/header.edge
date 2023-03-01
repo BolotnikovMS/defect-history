@@ -57,11 +57,12 @@
               <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
-
-          <li class="nav-list__item">
-            <a href="{{ route('distribution.index') }}"
-              class="">Группы рассылок</a>
-          </li>
+          @can('viewDistributionGroup')
+            <li class="nav-list__item">
+              <a href="{{ route('distribution.index') }}"
+                class="{{ 'distribution.index' == activeMenuLink ? 'active' : '' }}">Группы рассылок</a>
+            </li>
+          @end
         </ul>
       </nav>
       <div class="header__login">
