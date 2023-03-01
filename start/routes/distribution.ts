@@ -18,4 +18,4 @@ Route.group(() => {
 })
   .prefix('/distribution-groups')
   .as('distribution')
-  // .middleware(['auth'])
+  .middleware(['auth'])
