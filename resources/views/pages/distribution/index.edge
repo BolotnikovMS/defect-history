@@ -2,11 +2,13 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  <div class="control">
-    @buttons.add({ href: 'distribution.create' })
-      Добавить
-    @end
-  </div>
+  @can('createDistributionGroup')
+    <div class="control">
+      @buttons.add({ href: 'distribution.create' })
+        Добавить
+      @end
+    </div>
+  @end
   <div class="content">
     <hr>
     @if(distributionGroups.length)
@@ -26,15 +28,20 @@
               })
               <a href="{{ route('distribution.show', {id: distributionGroup.id}) }}" class="active-link">
                 {{ distributionGroup.name }}
+                <img src="{{ asset('assets/icons/link.svg') }}" alt="Редактировать" title="Редактировать">
               </a>
             </div>
             <div class="list__control">
-              <a href="{{ route('distribution.edit', {id: distributionGroup.id}) }}" class="edit">
-                <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-              </a>
-              <a href="{{ route('distribution.destroy', {id: distributionGroup.id}) }}">
-                <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
-              </a>
+              @can('updateDistributionGroup')
+                <a href="{{ route('distribution.edit', {id: distributionGroup.id}) }}" class="edit">
+                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                </a>
+              @end
+              @can('deleteDistributionGroup')
+                <a href="{{ route('distribution.destroy', {id: distributionGroup.id}) }}">
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                </a>
+              @end
             </div>
           </li>
         @endeach
