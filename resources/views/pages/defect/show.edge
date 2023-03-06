@@ -96,7 +96,14 @@
                 <td>{{ inter.name_inspector.fullName }}</td>
                 <td>{{ inter.check_date }}</td>
                 <td colspan="2">{{ inter.description_results }}</td>
-                <td>{{ inter.transferred ? inter.transferred : '-' }}</td>
+                <td>
+                  {{
+                    inter.responsible_department ?
+                      inter.responsible_department.name
+                    :
+                      '-'
+                  }}
+                </td>
               </tr>
             @else
               <tr>
