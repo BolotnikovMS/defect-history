@@ -39,11 +39,20 @@
         })
 
         @if(checkup)
-          @!inputs.base({
+          @!inputs.select({
             label: 'Передано для дальнейших действий',
             labelPosition: 'label__text_left',
             name: 'transferred',
-            placeholderText: 'Введите кому передано...',
+            optionClass: 'searchable-list',
+            defaultOptionConfig: {
+              defaultOption: true,
+              defaultOptionText: '---',
+              disabledOption: false,
+            },
+            dataOptionsConfig: {
+              dataOptions: departments,
+              dataNameOption: 'name'
+            },
           })
         @endif
       </div>
