@@ -8,7 +8,7 @@ export default class DefectResultValidator {
     employee: schema.string(),
     description_results: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
     date: schema.date(),
-    transferred: schema.string.optional({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
+    transferred: schema.number.optional(),
   })
 
   public messages: CustomMessages = {
