@@ -9,7 +9,7 @@
     <div class="form__content form__content-column">
       @!inputs.base({
         label: 'Название "Типа" дефекта',
-        labelPosition: 'label__text_left',
+        labelPositionText: 'label__text_left',
         name: 'type_defect',
         placeholderText: 'Введите название...',
         required: true,
@@ -18,7 +18,7 @@
 
       @!inputs.select({
         label: 'Выберете группу рассылки',
-        labelPosition: 'label__text_left',
+        labelPositionText: 'label__text_left',
         name: 'group',
         optionClass: 'searchable-list',
         defaultOptionConfig: {
@@ -38,7 +38,7 @@
 
       @!inputs.textarea({
         label: 'Описание дефекта',
-        labelPosition: 'label__text_left',
+        labelPositionText: 'label__text_left',
         name: 'defect_description',
         rows: 5,
         value: typeDefect ? typeDefect.defect_description : ''
