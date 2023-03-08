@@ -31,18 +31,17 @@
                 <img src="{{ asset('assets/icons/link.svg') }}" alt="Редактировать" title="Редактировать">
               </a>
             </div>
-            <div class="list__control">
-              @can('updateDistributionGroup')
-                <a href="{{ route('distribution.edit', {id: distributionGroup.id}) }}" class="edit">
-                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-                </a>
+            @if(!await bouncer.denies('updateDistributionGroup') || !await bouncer.denies('deleteDistributionGroup'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'updateDistributionGroup', data: distributionGroup, path: 'distribution.edit', params: { id: distributionGroup.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'deleteDistributionGroup', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
+                ],
+              })
+                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
               @end
-              @can('deleteDistributionGroup')
-                <a href="{{ route('distribution.destroy', {id: distributionGroup.id}) }}">
-                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
-                </a>
-              @end
-            </div>
+            @endif
           </li>
         @endeach
       </ul>
