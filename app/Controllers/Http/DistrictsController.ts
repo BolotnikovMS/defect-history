@@ -57,7 +57,13 @@ export default class DistrictsController {
     const district = await District.find(params.id)
 
     if (district) {
-      await district.load('substations')
+      await district.load('substations', (query) => {
+        query.preload('defects')
+      })
+
+      district.substations.sort(
+        (prevItem, nextItem) => nextItem.numberOpenDefects - prevItem.numberOpenDefects
+      )
 
       return view.render('pages/district/show', {
         title: district.name,
