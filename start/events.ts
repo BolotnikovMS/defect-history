@@ -12,7 +12,7 @@ import Defect from 'App/Models/Defect'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import User from 'App/Models/User'
 
-interface SendMailDefect {
+interface SendMailNewEntry {
   users: object[]
   templateMail: string
   subjectMail: string
@@ -21,14 +21,14 @@ interface SendMailDefect {
   note: Defect | IntermediateCheck
 }
 
-const creatingDefectLetter = async ({
+const creatingNewEntryEmail = async ({
   users,
   templateMail,
   subjectMail,
   textMail,
   defectId,
   note,
-}: SendMailDefect) => {
+}: SendMailNewEntry) => {
   users.forEach(async (user: User) => {
     await Mail.sendLater((message) => {
       message
@@ -45,6 +45,4 @@ const creatingDefectLetter = async ({
   })
 }
 
-Event.on('send:mail-new-defect', creatingDefectLetter)
-
-Event.on('send:mail-new-check', creatingDefectLetter)
+Event.on('send:mail-new-entry', creatingNewEntryEmail)

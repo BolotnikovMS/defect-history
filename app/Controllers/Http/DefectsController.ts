@@ -83,7 +83,7 @@ export default class DefectsController {
       const arrayUsers = newDefect.defect_type?.group.group_users
 
       if (arrayUsers?.length) {
-        Event.emit('send:mail-new-defect', {
+        Event.emit('send:mail-new-entry', {
           users: arrayUsers,
           templateMail: 'emails/template_mail_defects',
           subjectMail: 'Новая запись в журнале дефектов!',
@@ -284,7 +284,7 @@ export default class DefectsController {
         // console.log(newCheck?.responsible_department.serialize())
 
         if (arrayUsers?.length) {
-          Event.emit('send:mail-new-check', {
+          Event.emit('send:mail-new-entry', {
             users: arrayUsers,
             templateMail: 'emails/template_mail_defects',
             subjectMail: 'Добавлена промежуточная проверка по дефекту!',
