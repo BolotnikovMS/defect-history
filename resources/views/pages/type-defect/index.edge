@@ -12,6 +12,51 @@
     {{-- <div class="dialog"></div> --}}
     <hr>
     @if(typesDefects.length)
+      <div class="cards">
+        @each((typeDefect, i) in typesDefects)
+          <div class="card">
+            <div class="card__body">
+              <div class="card__text card__text-body">
+                {{ typeDefect.type_defect }} - {{ typeDefect.defect_description }}
+              </div>
+            </div>
+            <hr class="card__hr">
+            <div class="card__footer">
+              <div class="card__footer-content">
+                <div class="card__text card__text-fs_17">
+                  @if(typeDefect.group)
+                    Группа рассылки: {{ typeDefect.group.name }}
+                  @else
+                    <span class="card__text card__text-fs_17 card__text-red">
+                      Группа рассылки не указана.
+                    </span>
+                  @endif
+                </div>
+                <div class="card__menu">
+                  @if(!await bouncer.denies('editTypeDefect') || !await bouncer.denies('deleteTypeDefect'))
+                    @dropdown.dropdown({
+                      classBtnDropdown: 'btn-dropdown-icon',
+                      dropdownData: [
+                        { name: 'Редактировать', access: 'editTypeDefect', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit.svg' },
+                        { name: 'Удалить', access: 'deleteTypeDefect', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
+                      ],
+                    })
+                      <img src="{{ asset('assets/icons/menu.svg') }}" class="icon icon-size_20">
+                    @end
+                  @endif
+                </div>
+              </div>
+            </div>
+          </div>
+        @endeach
+      </div>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых типов дефектов.</p>
+      </div>
+    @endif
+
+    {{--  @if(typesDefects.length)
       <ul class="list">
         <li class="list__item">
           <div class="list__content">
@@ -48,7 +93,7 @@
       <div class="no-content">
         <p>Пока нет добавленых типов дефектов.</p>
       </div>
-    @endif
+    @endif  --}}
     <hr>
   </div>
   @!component('components/pagination', {
