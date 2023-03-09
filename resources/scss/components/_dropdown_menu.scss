@@ -2,6 +2,16 @@
   position: relative;
   display: inline-block;
 
+  &-logout {
+    padding: 0 10px 10px;
+  }
+
+  &-line {
+    margin: 8px auto;
+    width: 90%;
+    border-top: 1px solid #000;
+  }
+
   .dropdown__menu {
     visibility: hidden;
     opacity: 0;
@@ -49,4 +59,5 @@
     width: 20px;
     height: 20px;
   }
+
 }
