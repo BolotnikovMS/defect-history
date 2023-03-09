@@ -18,5 +18,14 @@
         @end
       @end
     @endeach
+    @if(dropdownLogout)
+      <div class="dropdown-logout">
+        <hr class="dropdown-line">
+        @buttons.base({ href: 'auth.logout', className: 'btn-small btn-color_blue btn-logout' })
+          <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти" class="icon icon-size_20">
+          Выйти
+        @end
+      </div>
+    @endif
   </ul>
 </div>
