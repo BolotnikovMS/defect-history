@@ -67,14 +67,19 @@
       </nav>
       <div class="header__login">
         @if(auth.user)
-          {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
+          @dropdown.dropdown({
+            classDropdownMenu: 'dropdown__menu-menu_bottom',
+            dropdownData: [],
+            dropdownLogout: true,
+          })
+          <img src="{{ asset('assets/icons/user-1.svg') }}" class="dropdown-icon">
 
-          @buttons.base({ href: 'auth.logout', className: 'btn-color_blue btn-logout' })
-            <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти">
-            Выйти
+            {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
+
+            <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
           @end
         @else
-          @buttons.base({ href: 'auth.login.show', className: 'btn-color_blue btn-signup' })
+          @buttons.base({ href: 'auth.login.show', className: 'btn-small btn-color_blue btn-signup' })
             <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
             Войти
           @end
