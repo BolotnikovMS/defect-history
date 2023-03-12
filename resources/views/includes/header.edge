@@ -69,7 +69,10 @@
         @if(auth.user)
           @dropdown.dropdown({
             classDropdownMenu: 'dropdown__menu-menu_bottom',
-            dropdownData: [],
+            dropdownData: [
+              { name: 'Профиль', path: 'users.profile', params: {idUser: auth.user.id}, icon: 'profile.svg' },
+              { name: 'Сменить пароль', path: 'users.change.password', icon: 'key.svg' },
+            ],
             dropdownLogout: true,
           })
           <img src="{{ asset('assets/icons/user-1.svg') }}" class="dropdown-icon">
