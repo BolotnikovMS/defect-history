@@ -24,17 +24,6 @@ export default class AuthValidator {
     password: schema.string({}, [rules.minLength(8)]),
   })
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   *
-   */
   public messages: CustomMessages = {
     'required': 'Поле является обязательным.',
     'minLength': 'Минимальная длина поля 2 символа.',
