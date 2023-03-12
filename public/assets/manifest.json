@@ -1,9 +1,11 @@
 {
   "assets/app.css": "http://localhost:8080/assets/app.css",
   "assets/app.js": "http://localhost:8080/assets/app.js",
+  "assets/icons/user-2.svg": "http://localhost:8080/assets/icons/user-2.0cd8dc3a.svg",
   "assets/icons/login-2.svg": "http://localhost:8080/assets/icons/login-2.be1fbe52.svg",
   "assets/icons/settings.svg": "http://localhost:8080/assets/icons/settings.01b5c95d.svg",
   "assets/icons/login.svg": "http://localhost:8080/assets/icons/login.092e7316.svg",
+  "assets/icons/user-1.svg": "http://localhost:8080/assets/icons/user-1.a359e769.svg",
   "assets/icons/save.svg": "http://localhost:8080/assets/icons/save.fb98e609.svg",
   "assets/icons/magnifier.svg": "http://localhost:8080/assets/icons/magnifier.595a9558.svg",
   "assets/icons/edit-2.svg": "http://localhost:8080/assets/icons/edit-2.523435ec.svg",
@@ -23,8 +25,6 @@
   "assets/icons/logout.svg": "http://localhost:8080/assets/icons/logout.97e50219.svg",
   "assets/icons/arrow-up.svg": "http://localhost:8080/assets/icons/arrow-up.684e3746.svg",
   "assets/icons/arrow-down.svg": "http://localhost:8080/assets/icons/arrow-down.99ebc4d4.svg",
-  "assets/icons/user_2.svg": "http://localhost:8080/assets/icons/user_2.0cd8dc3a.svg",
-  "assets/icons/user_1.svg": "http://localhost:8080/assets/icons/user_1.ef6f6e03.svg",
-  "assets/icons/user-1.svg": "http://localhost:8080/assets/icons/user-1.a359e769.svg",
-  "assets/icons/user-2.svg": "http://localhost:8080/assets/icons/user-2.0cd8dc3a.svg"
+  "assets/icons/profile.svg": "http://localhost:8080/assets/icons/profile.64a23ae8.svg",
+  "assets/icons/key.svg": "http://localhost:8080/assets/icons/key.66cdb616.svg"
 }
