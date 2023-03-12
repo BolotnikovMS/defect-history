@@ -1,6 +1,4 @@
-.cards {
-
-}
+.cards {}
 
 .card {
   padding: 10px 15px;
@@ -10,6 +8,12 @@
 
   &:hover {
     background-color: rgb(243, 240, 240);
+  }
+
+  &-hover_no {
+    &:hover {
+      background-color: unset;
+    }
   }
 
   & + * {
@@ -55,6 +59,12 @@
     &-red {
       color: red;
     }
+
+    &-mt_20 {
+      & + * {
+        margin-top: 20px;
+      }
+    }
   }
 
   &__object-info {
@@ -86,5 +96,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+
+  &__btns {
+    display: flex;
   }
 }
