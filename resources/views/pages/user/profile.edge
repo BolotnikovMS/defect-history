@@ -1,0 +1,79 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="content">
+    <div class="profile-info">
+      <div class="card card-profile card-hover_no">
+        <div class="card__body">
+          <div class="card__body-content">
+            <div class="card__text card__text-mt_20">
+              <span class="card__text card__text-bold">Ф.И.О.:</span>
+              {{ user.fullName }}
+            </div>
+            <div class="card__text card__text-mt_20">
+              <span class="card__text card__text-bold">Email:</span>
+              {{ user.email }}
+            </div>
+            <div class="card__text card__text-mt_20">
+              <span class="card__text card__text-bold">Должность:</span>
+              {{ user.position }}
+            </div>
+            <div class="card__text card__text-mt_20">
+              <span class="card__text card__text-bold">Отдел:</span>
+              {{ user.department.name }}
+            </div>
+            <div class="card__text card__text-mt_20">
+              <span class="card__text card__text-bold">Роль в системе:</span>
+              {{ user.role.name }}
+            </div>
+            <div class="card__btns">
+              @buttons.base({
+                href: 'users.change.password',
+                className: 'btn-small btn-color_blue',
+              })
+                <img src="{{ asset('assets/icons/key.svg') }}">
+                Сменить пароль
+              @end
+            </div>
+          </div>
+        </div>
+      </div>
+      @if(user.defects.length)
+        <h3 class="title">Последние внесенные дефекты.</h3>
+        <div class="cards">
+          @each(defect in user.defects)
+            <div class="card card-last_defects {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === 'true' ? 'card-danger' : '' }}">
+              <div class="card__header">
+                <div class="card__header-content">
+                  <div class="card__object-info">
+                    <span class="card__text">
+                      <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
+                        {{ defect.substation.name }}
+                      </a>
+                    </span>
+                    <span class="card__text">{{ defect.accession }}</span>
+                  </div>
+                  <div class="card__badge">
+                    <span class="card__text card__text-fs_17">{{ defect.defect_type.type_defect }}</span>
+                  </div>
+                </div>
+              </div>
+              <hr class="card__hr">
+              <div class="card__body">
+                <div class="card__body-content">
+                  <div class="card__text">
+                    <a href="{{ route('defects.show', {id: defect.id}) }}" class="active-link">
+                      {{ defect.excerptText }}
+                    </a>
+                    <img src="{{ asset('assets/icons/link.svg') }}">
+                  </div>
+                </div>
+              </div>
+            </div>
+          @endeach
+        </div>
+      @endif
+    </div>
+  </div>
+@endsection
