@@ -9,10 +9,13 @@ import {
   computed,
   manyToMany,
   ManyToMany,
+  hasMany,
+  HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
 import Department from './Department'
 import DistributionGroup from './DistributionGroup'
+import Defect from 'App/Models/Defect'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -86,4 +89,10 @@ export default class User extends BaseModel {
 
   @manyToMany(() => DistributionGroup)
   public distribution_groups: ManyToMany<typeof DistributionGroup>
+
+  @hasMany(() => Defect, {
+    localKey: 'id',
+    foreignKey: 'id_user',
+  })
+  public defects: HasMany<typeof Defect>
 }
