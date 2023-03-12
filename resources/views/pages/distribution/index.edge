@@ -1,0 +1,55 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  @can('createDistributionGroup')
+    <div class="control">
+      @buttons.add({ href: 'distribution.create' })
+        Добавить
+      @end
+    </div>
+  @end
+  <div class="content">
+    <hr>
+    @if(distributionGroups.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Название группы
+            </span>
+          </div>
+        </li>
+        @each(distributionGroup in distributionGroups)
+          <li class="list__item">
+            <div class="list__content">
+              @!badge.badge({
+                data: distributionGroup.usersCount
+              })
+              <a href="{{ route('distribution.show', {id: distributionGroup.id}) }}" class="active-link">
+                {{ distributionGroup.name }}
+                <img src="{{ asset('assets/icons/link.svg') }}">
+              </a>
+            </div>
+            @if(!await bouncer.denies('updateDistributionGroup') || !await bouncer.denies('deleteDistributionGroup'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'updateDistributionGroup', data: distributionGroup, path: 'distribution.edit', params: { id: distributionGroup.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'deleteDistributionGroup', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
+                ],
+              })
+                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+              @end
+            @endif
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых групп для рассылок.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+@endsection

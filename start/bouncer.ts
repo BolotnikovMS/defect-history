@@ -142,6 +142,35 @@ export const { actions } = Bouncer.before((user: User | null) => {
     return user.id_role === Roles.MODERATOR
   })
 
+  // Distribution groups
+  .define('viewDistributionGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
+  .define('createDistributionGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
+  .define('showDistributionGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
+  .define('addUserInGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
+  .define('removeUserFromGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
+  .define('updateDistributionGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
+  .define('deleteDistributionGroup', (user: User) => {
+    return user.id_role === Roles.MODERATOR
+  })
+
 /*
 |--------------------------------------------------------------------------
 | Bouncer Policies

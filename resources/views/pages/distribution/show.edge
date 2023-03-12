@@ -1,0 +1,63 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  @can('addUserInGroup')
+    <div class="control">
+      @forms.post({
+        action: route('distribution.add-user', {idGroup: group.id}),
+        className: 'form form-row',
+      })
+        <div class="form__content">
+          @!inputs.select({
+            name: 'user[]',
+            optionClass: 'searchable-list',
+            multiple: true,
+            dataOptionsConfig: {
+              dataOptions: users,
+              dataNameOption: 'fullName'
+            },
+          })
+        </div>
+        <div class="form__btns form__btns-row">
+          @buttons.save({ type: 'submit'})
+            Добавить
+          @end
+        </div>
+      @end
+    </div>
+  @end
+  <div class="content">
+    <hr>
+    @if(group.group_users.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Пользователи группы
+            </span>
+          </div>
+        </li>
+        @each(user in group.group_users)
+          <li class="list__item">
+            <div class="list__content">
+              {{ user.fullName }}
+            </div>
+            @can('removeUserFromGroup')
+              <div class="list__control">
+                <a href="{{ route('distribution.remove-user', {idGroup: group.id, idUser: user.id}) }}">
+                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                </a>
+              </div>
+            @end
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых пользователей для рассылки.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+@endsection

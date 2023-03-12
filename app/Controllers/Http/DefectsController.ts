@@ -7,6 +7,7 @@ import IntermediateCheck from '../../Models/IntermediateCheck'
 import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
 import DefectType from 'App/Models/DefectType'
+import Event from '@ioc:Adonis/Core/Event'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -71,7 +72,28 @@ export default class DefectsController {
         importance: !!validateDefectData.importance + '',
       }
 
-      await Defect.create(defect)
+      const newDefect = await Defect.create(defect)
+
+      await newDefect.load('defect_type', (queryGroup) => {
+        queryGroup.whereNotNull('id_distribution_group').preload('group', (queryGroupUsers) => {
+          queryGroupUsers.preload('group_users')
+        })
+      })
+
+      const arrayUsers = newDefect.defect_type?.group.group_users
+
+      if (arrayUsers?.length) {
+        Event.emit('send:mail-new-entry', {
+          users: arrayUsers,
+          templateMail: 'emails/template_mail_defects',
+          subjectMail: 'Новая запись в журнале дефектов!',
+          textMail: 'В журнал дефектов была добавлена новая запись.',
+          defectId: newDefect.id,
+          note: newDefect,
+        })
+      } else {
+        console.log('array users empty')
+      }
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
       response.redirect().toRoute('defects.index')
@@ -89,6 +111,7 @@ export default class DefectsController {
       await defect.load('defect_type')
       await defect.load('intermediate_checks', (query) => {
         query.preload('name_inspector')
+        query.preload('responsible_department')
       })
       await defect.load('name_eliminated')
 
@@ -250,7 +273,29 @@ export default class DefectsController {
 
         // const test = ({ employee, ...rest }) => rest
 
-        await IntermediateCheck.create(checkupDefect)
+        const newCheck = await IntermediateCheck.create(checkupDefect)
+
+        await newCheck.load('responsible_department', (query) => {
+          query.preload('department_users')
+        })
+
+        const arrayUsers = newCheck?.responsible_department?.department_users
+
+        // console.log(newCheck?.responsible_department.serialize())
+
+        if (arrayUsers?.length) {
+          Event.emit('send:mail-new-entry', {
+            users: arrayUsers,
+            templateMail: 'emails/template_mail_defects',
+            subjectMail: 'Добавлена промежуточная проверка по дефекту!',
+            textMail:
+              'В журнал дефектов были добавлены результаты проверки. Дефект относится к вашему отделу.',
+            defectId: newCheck.id_defect,
+            note: newCheck,
+          })
+        } else {
+          console.log('array users empty')
+        }
 
         session.flash('successMessage', `Проверка успешно добавлена!`)
         response.redirect().toRoute('DefectsController.show', { id: params.idDefect })

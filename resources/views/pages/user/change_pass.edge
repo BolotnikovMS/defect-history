@@ -1,0 +1,34 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="content">
+    @forms.post({
+      action: route(options.routePath.savePath),
+    })
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          label: 'Введите новый пароль',
+          labelPositionText: 'label__text_left',
+          type: 'password',
+          name: 'password',
+          placeholderText: 'Введите пароль...',
+          required: true,
+        })
+        @!inputs.base({
+          label: 'Подтвердите пароль',
+          labelPositionText: 'label__text_left',
+          type: 'password',
+          name: 'password_confirmation',
+          placeholderText: 'Введите пароль повторно...',
+          required: true,
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.save({ type: 'submit' })
+          Изменить пароль
+        @end
+      </div>
+    @end
+  </div>
+@endsection

@@ -30,18 +30,17 @@
                 {{ district.name }}
               </a>
             </div>
-            <div class="list__control">
-              @can('updateDistrict')
-                <a href="{{ route('districts.edit', {id: district.id}) }}" class="edit">
-                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-                </a>
-              @endcan
-              @can('deleteDistrict')
-                <a href="{{ route('districts.destroy', {id: district.id}) }}">
-                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
-                </a>
-              @endcan
-            </div>
+            @if(!await bouncer.denies('updateDistrict') || !await bouncer.denies('deleteDistrict'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'updateDistrict', data: district, path: 'districts.edit', params: { id: district.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'deleteDistrict', data: district, path: 'districts.destroy', params: { id: district.id }, icon: 'delete.svg' },
+                ],
+              })
+                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+              @end
+            @endif
           </li>
         @endeach
       </ul>

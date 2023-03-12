@@ -24,18 +24,17 @@
               <div class="list__content">
                 {{ department.name }}
               </div>
-              <div class="list__control">
-                @can('updateDepartment')
-                  <a href="{{ route('departments.edit', {id: department.id}) }}" class="edit">
-                    <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-                  </a>
-                @endcan
-                @can('deleteDepartment')
-                  <a href="{{ route('departments.destroy', {id: department.id}) }}">
-                    <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
-                  </a>
-                @endcan
-              </div>
+              @if(!await bouncer.denies('updateDepartment') || !await bouncer.denies('deleteDepartment'))
+                @dropdown.dropdown({
+                  classBtnDropdown: 'btn-dropdown-icon',
+                  dropdownData: [
+                    { name: 'Редактировать', access: 'updateDepartment', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit.svg' },
+                    { name: 'Удалить', access: 'deleteDepartment', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
+                  ],
+                })
+                  <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+                @end
+              @endif
             </li>
           @endeach
         </li>

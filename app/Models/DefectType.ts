@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, belongsTo, column, HasMany, hasMany, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Defect from 'App/Models/Defect'
+import DistributionGroup from 'App/Models/DistributionGroup'
 
 export default class DefectType extends BaseModel {
   @column({ isPrimary: true })
@@ -8,6 +9,9 @@ export default class DefectType extends BaseModel {
 
   @column()
   public id_user: number
+
+  @column()
+  public id_distribution_group: number | null
 
   @column()
   public type_defect: string
@@ -32,4 +36,10 @@ export default class DefectType extends BaseModel {
     localKey: 'id',
   })
   public defects: HasMany<typeof Defect>
+
+  @belongsTo(() => DistributionGroup, {
+    foreignKey: 'id_distribution_group',
+    localKey: 'id',
+  })
+  public group: BelongsTo<typeof DistributionGroup>
 }

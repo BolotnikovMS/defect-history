@@ -4,7 +4,7 @@
 <div class="form__group">
   <label class="form__label">
     @if(label)
-      <span class="label__text {{ labelPosition ?? '' }}">
+      <span class="label__text {{ labelPositionText ?? '' }}">
         {{ label }}
       </span>
     @endif
@@ -13,9 +13,10 @@
       name="{{ name }}"
       class="form__input {{ classError, optionClass ?? '' }}"
       {{{ required ? 'required' : '' }}}
+      {{ multiple ? 'multiple' : '' }}
     >
       @if(defaultOptionConfig?.defaultOption)
-        <option selected disabled>
+        <option selected {{ defaultOptionConfig.disabledOption === false ? 'value=0' : 'disabled' }}>
           {{ defaultOptionConfig.defaultOptionText }}
         </option>
       @endif

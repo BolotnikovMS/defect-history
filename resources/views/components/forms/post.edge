@@ -1,3 +1,5 @@
-<form method="POST" action="{{ action }}">
+@set('elementСlass', className ? `class="${className}"` : '')
+
+<form method="POST" action="{{ action }}" {{{ elementСlass }}}>
   {{{ await $slots.main() }}}
 </form>

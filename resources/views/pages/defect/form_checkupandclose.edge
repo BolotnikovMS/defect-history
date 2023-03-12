@@ -9,7 +9,7 @@
       <div class="form__content form__content-column">
         @!inputs.select({
           label: 'Сотрудник',
-          labelPosition: 'label__text_left',
+          labelPositionText: 'label__text_left',
           name: 'employee',
           optionClass: 'searchable-list',
           defaultOptionConfig: {
@@ -24,7 +24,7 @@
 
         @!inputs.textarea({
           label: 'Описание результатов работы',
-          labelPosition: 'label__text_left',
+          labelPositionText: 'label__text_left',
           name: 'description_results',
           rows: 6,
           placeholderText: 'Введите описание результатов...',
@@ -33,17 +33,26 @@
 
         @!inputs.base({
           label: 'Дата работ',
-          labelPosition: 'label__text_left',
+          labelPositionText: 'label__text_left',
           type: 'date',
           name: 'date',
         })
 
         @if(checkup)
-          @!inputs.base({
+          @!inputs.select({
             label: 'Передано для дальнейших действий',
-            labelPosition: 'label__text_left',
+            labelPositionText: 'label__text_left',
             name: 'transferred',
-            placeholderText: 'Введите кому передано...',
+            optionClass: 'searchable-list',
+            defaultOptionConfig: {
+              defaultOption: true,
+              defaultOptionText: '---',
+              disabledOption: false,
+            },
+            dataOptionsConfig: {
+              dataOptions: departments,
+              dataNameOption: 'name'
+            },
           })
         @endif
       </div>

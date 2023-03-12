@@ -6,6 +6,10 @@
     font-size: 16px;
   }
 
+  &-logout {
+    justify-content: center;
+  }
+
   &-color_green {
     color: #000;
     border: 1px solid #5caf5c;
@@ -39,7 +43,7 @@
     border: 1px solid #39baff;
 
     &:hover {
-      background-color: #fff;
+      background-color: transparent;
       color: #000;
     }
 

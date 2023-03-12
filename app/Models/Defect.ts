@@ -14,6 +14,7 @@ import Substation from 'App/Models/Substation'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Staff from 'App/Models/Staff'
+import User from 'App/Models/User'
 import { computed } from '@ioc:Adonis/Lucid/Orm'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
 
@@ -98,4 +99,10 @@ export default class Defect extends BaseModel {
     localKey: 'id',
   })
   public name_eliminated: BelongsTo<typeof Staff>
+
+  @belongsTo(() => User, {
+    foreignKey: 'id_user',
+    localKey: 'id',
+  })
+  public user: BelongsTo<typeof User>
 }

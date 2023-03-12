@@ -1,8 +1,21 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, hasOne, HasOne, computed } from '@ioc:Adonis/Lucid/Orm'
+import {
+  column,
+  beforeSave,
+  BaseModel,
+  hasOne,
+  HasOne,
+  computed,
+  manyToMany,
+  ManyToMany,
+  hasMany,
+  HasMany,
+} from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
 import Department from './Department'
+import DistributionGroup from './DistributionGroup'
+import Defect from 'App/Models/Defect'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -73,4 +86,13 @@ export default class User extends BaseModel {
     localKey: 'id_department',
   })
   public department: HasOne<typeof Department>
+
+  @manyToMany(() => DistributionGroup)
+  public distribution_groups: ManyToMany<typeof DistributionGroup>
+
+  @hasMany(() => Defect, {
+    localKey: 'id',
+    foreignKey: 'id_user',
+  })
+  public defects: HasMany<typeof Defect>
 }

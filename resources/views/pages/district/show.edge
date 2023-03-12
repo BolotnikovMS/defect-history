@@ -23,6 +23,10 @@
         @each(substation in district.substations)
           <li class="list__item">
             <div class="list__content">
+              @!badge.badge({
+                optionClass: substation.numberOpenDefects > 0 ? 'badge__counter-red' : '',
+                data: substation.numberOpenDefects,
+              })
               <a href="{{ route('substations.show', {id: substation.id}) }}" class="active-link">
                 {{ substation.name }}
               </a>
