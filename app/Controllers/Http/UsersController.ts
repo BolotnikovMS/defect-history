@@ -4,6 +4,7 @@ import Roles from '../../Enums/Roles'
 import Role from 'App/Models/Role'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import Department from 'App/Models/Department'
+import ChangePasswordValidator from 'App/Validators/ChangePasswordValidator'
 
 export default class UsersController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -25,6 +26,55 @@ export default class UsersController {
       users,
       activeMenuLink: 'users.index',
     })
+  }
+
+  public async profile({ view, response, session, auth }: HttpContextContract) {
+    const authUser = auth.user
+
+    if (authUser) {
+      await authUser.load('role')
+      await authUser.load('department')
+      await authUser.load('defects', (query) => {
+        query.limit(3).orderBy('created_at', 'desc')
+        query.preload('substation')
+        query.preload('defect_type')
+      })
+
+      // console.log(authUser.serialize())
+      return view.render('pages/user/profile', {
+        title: 'Профиль',
+        user: authUser,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async changePassword({ view }: HttpContextContract) {
+    return view.render('pages/user/change_pass', {
+      title: 'Смена пароля',
+      options: {
+        routePath: {
+          savePath: 'users.save.password',
+        },
+      },
+    })
+  }
+
+  public async saveChangesPassword({ request, response, session, auth }: HttpContextContract) {
+    const validateData = await request.validate(ChangePasswordValidator)
+    const user = await User.find(auth.user?.id)
+
+    if (user) {
+      await user.merge(validateData).save()
+
+      session.flash('successMessage', 'Пароль успешно изменен!')
+      response.redirect().toRoute('defects.index')
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().toRoute('defects.index')
+    }
   }
 
   public async show({}: HttpContextContract) {}
