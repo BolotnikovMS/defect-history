@@ -11,7 +11,19 @@
       @endcan
     </div>
     <div class="defect__tabs">
-      <ul>
+      @dropdown.dropdown({
+        classDropdownMenu: 'dropdown__menu-menu_bottom_right',
+        dropdownData: [
+          { name: 'Все', path: 'defects.index' },
+          ...typesDefectsToSort
+        ],
+      })
+        <img src="{{ asset('assets/icons/sort.svg') }}" class="dropdown-icon dropdown-icon-size_15">
+        {{ typeDefect?.type_defect ? typeDefect.type_defect : 'Все' }}
+        <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
+      @end
+
+      {{--  <ul>
         @buttons.base({
           href: 'defects.index',
           className: `btn-color_blue ${activeMenuLink ? '' : 'btn-color_blue-transparent'} `,
@@ -29,14 +41,14 @@
             @end
           </li>
         @endeach
-      </ul>
+      </ul>  --}}
     </div>
   </div>
   <div class="defect__content">
     {{--  {{inspect(defects[0]?.defect_type)}}  --}}
     {{--  {{inspect(defect.defect_type ?? 'false')}}  --}}
     <hr>
-
+    {{--  {{inspect(typesFilter)}}  --}}
       @if(defects.length)
         <div class="cards defect__cards">
           @each(defect in defects)
