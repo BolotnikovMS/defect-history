@@ -74,6 +74,11 @@ export default class DefectTypesController {
   public async show({ response, params, view, session }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
     const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
+    const typesDefectsToSort = typesDefects.map((type) => ({
+      name: type.type_defect,
+      path: 'types-defects.show',
+      params: { id: type.id },
+    }))
 
     if (typeDefect) {
       await typeDefect.load('defects', (query) => {
@@ -87,6 +92,7 @@ export default class DefectTypesController {
         title: `Дефекты '${typeDefect.type_defect}'`,
         typeDefect,
         typesDefects,
+        typesDefectsToSort,
         defects: typeDefect.defects,
         activeTabLink: typeDefect.id,
       })

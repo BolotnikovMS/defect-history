@@ -15,6 +15,13 @@ export default class DefectsController {
     const limit = 10
 
     const typesDefects = await DefectType.query()
+
+    const typesDefectsToSort = typesDefects.map((type) => ({
+      name: type.type_defect,
+      path: 'types-defects.show',
+      params: { id: type.id },
+    }))
+
     const defects = await Defect.query()
       .orderBy('elimination_date', 'asc')
       .preload('defect_type')
@@ -27,6 +34,7 @@ export default class DefectsController {
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
       typesDefects,
+      typesDefectsToSort,
       defects,
       activeMenuLink: 'defects.index',
     })
