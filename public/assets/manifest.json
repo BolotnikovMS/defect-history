@@ -13,18 +13,19 @@
   "assets/icons/add.svg": "http://localhost:8080/assets/icons/add.a578580d.svg",
   "assets/icons/close.svg": "http://localhost:8080/assets/icons/close.24760351.svg",
   "assets/icons/edit.svg": "http://localhost:8080/assets/icons/edit.3c158ee8.svg",
+  "assets/icons/profile.svg": "http://localhost:8080/assets/icons/profile.64a23ae8.svg",
   "assets/icons/arrow-left.svg": "http://localhost:8080/assets/icons/arrow-left.fa202a33.svg",
   "assets/icons/arrow-right.svg": "http://localhost:8080/assets/icons/arrow-right.62f670c2.svg",
   "assets/icons/journal.svg": "http://localhost:8080/assets/icons/journal.844e7823.svg",
+  "assets/icons/sort.svg": "http://localhost:8080/assets/icons/sort.91f35c05.svg",
   "assets/icons/star.svg": "http://localhost:8080/assets/icons/star.45d5590c.svg",
   "assets/icons/delete.svg": "http://localhost:8080/assets/icons/delete.68d24f25.svg",
+  "assets/icons/key.svg": "http://localhost:8080/assets/icons/key.66cdb616.svg",
   "assets/icons/link.svg": "http://localhost:8080/assets/icons/link.c57ed2c2.svg",
   "assets/icons/menu.svg": "http://localhost:8080/assets/icons/menu.029dfe71.svg",
   "assets/icons/undo.svg": "http://localhost:8080/assets/icons/undo.829c810c.svg",
   "assets/icons/login-3.svg": "http://localhost:8080/assets/icons/login-3.9640ecb4.svg",
   "assets/icons/logout.svg": "http://localhost:8080/assets/icons/logout.97e50219.svg",
   "assets/icons/arrow-up.svg": "http://localhost:8080/assets/icons/arrow-up.684e3746.svg",
-  "assets/icons/arrow-down.svg": "http://localhost:8080/assets/icons/arrow-down.99ebc4d4.svg",
-  "assets/icons/profile.svg": "http://localhost:8080/assets/icons/profile.64a23ae8.svg",
-  "assets/icons/key.svg": "http://localhost:8080/assets/icons/key.66cdb616.svg"
+  "assets/icons/arrow-down.svg": "http://localhost:8080/assets/icons/arrow-down.99ebc4d4.svg"
 }
