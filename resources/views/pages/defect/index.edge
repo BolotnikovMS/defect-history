@@ -87,6 +87,10 @@
                       {{ dateFormat(defect.created_at) }}
                     </div>
                     <div class="card__text card__text-fs_17">
+                      <span class="card__text card__text-bold">Срок устранения:</span>
+                      {{ dateFormat(defect.term_elimination) }}
+                    </div>
+                    <div class="card__text card__text-fs_17">
                       <span class="card__text card__text-bold">Дата устранения:</span>
                       @if(defect.elimination_date === null)
                         <span class="card__text card__text-red">Не устранен</span>
@@ -114,8 +118,9 @@
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
+                          { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
                           { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' }
+                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
                         <img src="{{ asset('assets/icons/menu.svg') }}">

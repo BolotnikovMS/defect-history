@@ -90,6 +90,6 @@ View.global('dateFormat', (date: string | DateTime): string | DateTime => {
   if (typeof date === 'string') {
     return date.replace(new RegExp('-', 'g'), '.').split('.').reverse().join('.')
   } else {
-    return date.toFormat('dd.MM.yyyy')
+    return date.toFormat('dd.MM.yyyy HH:mm')
   }
 })

@@ -64,15 +64,6 @@
         value: defectSerialize ? defectSerialize.description_defect : ''
       })
 
-      @!inputs.base({
-        label: 'Сроки устранения',
-        labelPositionText: 'label__text_left',
-        type: 'date',
-        name: 'term_elimination',
-        required: true,
-        value: defectSerialize ? defectSerialize.term_elimination : ''
-      })
-
       @!inputs.checkbox({
         label: 'Важность устранения дефекта',
         classlabel: 'form__label-row',

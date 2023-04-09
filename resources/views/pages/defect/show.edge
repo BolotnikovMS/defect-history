@@ -33,6 +33,17 @@
               Редактировать дефект
             @end
           @endcan
+
+          @can('editDefectDeadline', defect)
+            @buttons.base({
+              href: 'defects.edit.deadline',
+              params: {id: defect.id},
+              className: 'btn-color_blue btn-color_blue-transparent'
+            })
+              <img src="{{ asset('assets/icons/calendar-1.svg') }}" alt="Увеличить срок">
+              Увеличить срок
+            @end
+          @endcan
         @endif
         @buttons.base({
           className: 'btn-color_green btn-save-pdf'
@@ -68,7 +79,7 @@
       </div>
       <div class="defect-info__group">
         <div class="defect-info__text">Срок устранения:
-          <span>{{ dateFormat(defect.term_elimination) }}</span>
+          <span>{{ defect.term_elimination }}</span>
         </div>
       </div>
       <div class="defect-info__description">
