@@ -14,7 +14,7 @@ export default class DistrictsController {
     districts.baseUrl('/districts')
 
     return view.render('pages/district/index', {
-      title: 'Список районов',
+      title: 'Список районов и ГП',
       districts,
       activeMenuLink: 'districts.index',
     })

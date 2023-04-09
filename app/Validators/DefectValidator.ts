@@ -29,7 +29,6 @@ export default class DefectValidator {
     substation: schema.string(),
     accession: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
     description_defect: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
-    term_elimination: schema.date(),
     importance: schema.string.optional(),
   })
 

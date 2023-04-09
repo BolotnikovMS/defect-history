@@ -16,7 +16,7 @@ export default class SubstationsController {
     )
 
     return view.render('pages/substation/index', {
-      title: 'Список объектов',
+      title: 'Список ПС',
       substations,
       activeMenuLink: 'substations.index',
     })

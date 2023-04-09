@@ -21,10 +21,10 @@ export default class extends BaseSchema {
       table.integer('id_user', 10).notNullable().unsigned().index()
       table.string('accession', 255).notNullable()
       table.text('description_defect').notNullable()
-      table.string('term_elimination', 10)
+      table.dateTime('term_elimination').nullable().defaultTo(null)
       table.string('importance').checkIn(['true', 'false']).defaultTo('false')
       table.string('elimination_date', 15)
-      table.text('result')
+      table.text('result').nullable().defaultTo(null)
       table.integer('id_name_eliminated', 10).unsigned().index().references('staff.id')
 
       table.timestamps()

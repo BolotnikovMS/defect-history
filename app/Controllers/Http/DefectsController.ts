@@ -8,6 +8,8 @@ import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
 import DefectType from 'App/Models/DefectType'
 import Event from '@ioc:Adonis/Core/Event'
+import { addDays } from 'App/Utils/utils'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -77,6 +79,7 @@ export default class DefectsController {
         id_type_defect: +validateDefectData.defect_type,
         id_user: auth.user!.id,
         ...validateDefectData,
+        term_elimination: addDays(15),
         importance: !!validateDefectData.importance + '',
       }
 
@@ -151,6 +154,7 @@ export default class DefectsController {
         title: 'Редактирование',
         options: {
           idData: defect.id,
+          edit: true,
           routePath: {
             savePath: 'defects.update',
           },
@@ -181,7 +185,6 @@ export default class DefectsController {
       defect.id_substation = +validateDefectData.substation
       defect.accession = validateDefectData.accession
       defect.description_defect = validateDefectData.description_defect
-      defect.term_elimination = validateDefectData.term_elimination
       defect.importance = !!validateDefectData.importance + ''
 
       await defect.save()
@@ -209,6 +212,54 @@ export default class DefectsController {
 
       session.flash('successMessage', `Дефект успешно удален!`)
       response.redirect().back()
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async editDeadline({ response, params, view, session, bouncer }: HttpContextContract) {
+    const defect = await Defect.find(params.id)
+
+    if (defect) {
+      if (await bouncer.denies('editDefectDeadline', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+        return response.redirect().toPath('/')
+      }
+
+      return view.render('pages/defect/form_edit_deadline', {
+        title: 'Изменение даты устранения дефекта',
+        defect: defect.serialize(),
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async updateDeadline({
+    params,
+    request,
+    response,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const defect = await Defect.find(params.id)
+
+    if (defect) {
+      if (await bouncer.denies('editDefectDeadline', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+        return response.redirect().toPath('/')
+      }
+
+      const validateDefectData = await request.validate(DefectDeadlineValidator)
+
+      await defect.merge(validateDefectData).save()
+
+      session.flash('successMessage', `Сроки устранения дефекта успешно обновлены!!`)
+      response.redirect().toRoute('DefectsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().back()

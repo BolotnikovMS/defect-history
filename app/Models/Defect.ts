@@ -39,24 +39,26 @@ export default class Defect extends BaseModel {
   })
   public description_defect: string
 
-  @column.date()
+  @column.dateTime({
+    serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
+  })
   public term_elimination: DateTime
 
   @column()
   public importance: string
 
   @column.date()
-  public elimination_date: DateTime
+  public elimination_date: DateTime | null
 
   @column()
-  public result: string
+  public result: string | null
 
   @column({ serializeAs: null })
   public id_name_eliminated: number
 
   @column.dateTime({
     autoCreate: true,
-    serialize: (value) => value.toFormat('dd.MM.yyyy'),
+    serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
   })
   public created_at: DateTime
 

@@ -1,0 +1,29 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="defect__content">
+    @forms.post({
+      action: route('defects.update.deadline', {id: defect.id})
+    })
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          label: 'Сроки устранения',
+          labelPositionText: 'label__text_left',
+          type: 'datetime',
+          name: 'term_elimination',
+          value: defect ? defect.term_elimination : ''
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'defects.index' })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection
