@@ -15,3 +15,5 @@ export const replacementEscapeSymbols = (text: string) => {
 }
 
 export const addDays = (days: number) => DateTime.now().plus({ day: days })
+
+export const randomStr = () => Math.random().toString(36).slice(2, 7)

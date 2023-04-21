@@ -39,6 +39,11 @@ export default class Defect extends BaseModel {
   })
   public description_defect: string
 
+  @column({
+    consume: (value: string) => value && value.split(','),
+  })
+  public defect_img: string[] | null
+
   @column.dateTime({
     serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
   })

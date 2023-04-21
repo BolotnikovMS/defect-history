@@ -22,7 +22,7 @@
             <th>Username</th>
             <th>Email</th>
             <th>
-              <img src="{{ asset('assets/icons/settings.svg') }}" alt="Действия">
+              <img src="{{ asset('assets/images/icons/settings.svg') }}" alt="Действия">
             </th>
           </tr>
         </thead>
@@ -41,7 +41,7 @@
                     href: 'users.edit',
                     params: {id: user.id },
                   })
-                  <img src="{{ asset('assets/icons/edit.svg') }}" class="table__icon" alt="Подробнее">
+                  <img src="{{ asset('assets/images/icons/edit.svg') }}" class="table__icon" alt="Подробнее">
                   @end
                 @end
 
@@ -50,7 +50,7 @@
                     href: 'users.destroy',
                     params: {id: user.id },
                   })
-                  <img src="{{ asset('assets/icons/delete.svg') }}" class="table__icon" alt="Подробнее">
+                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="table__icon" alt="Подробнее">
                   @end
                 @end
               </td>

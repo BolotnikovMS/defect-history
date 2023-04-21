@@ -8,8 +8,9 @@ import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
 import DefectType from 'App/Models/DefectType'
 import Event from '@ioc:Adonis/Core/Event'
-import { addDays } from 'App/Utils/utils'
+import { addDays, randomStr } from 'App/Utils/utils'
 import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
+import Application from '@ioc:Adonis/Core/Application'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -74,11 +75,23 @@ export default class DefectsController {
     const validateDefectData = await request.validate(DefectValidator)
 
     if (validateDefectData) {
+      const imgName: string[] = []
+
+      if (validateDefectData.defect_img) {
+        validateDefectData.defect_img.forEach((img) => {
+          img.clientName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+          img.move(Application.resourcesPath('images/uploads/defects/'))
+
+          imgName.push(img.clientName)
+        })
+      }
+
       const defect = {
         id_substation: +validateDefectData.substation,
         id_type_defect: +validateDefectData.defect_type,
         id_user: auth.user!.id,
         ...validateDefectData,
+        defect_img: imgName.length ? imgName : null,
         term_elimination: addDays(15),
         importance: !!validateDefectData.importance + '',
       }
@@ -208,6 +221,7 @@ export default class DefectsController {
       }
 
       await defect.related('intermediate_checks').query().delete()
+
       await defect.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)

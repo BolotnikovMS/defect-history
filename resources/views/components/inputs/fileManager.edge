@@ -1,0 +1,33 @@
+@set('errors', flashMessages.get(`errors.${name}`) ?? errors)
+@set('classError', errors ? 'form__input-invalid' : '')
+
+<div class="form__group">
+  <label class="form__label form__label-file-input">
+    @if(label)
+      <span
+        class="label__text {{ labelPositionText ?? '' }}"
+      >
+        <img src="{{ asset('assets/images/icons/upload-file-2.svg') }}" class="icon icon-size_40" alt="Upload image">
+        <span class="text-file-input">
+          {{ label }}
+        </span>
+      </span>
+    @endif
+
+    <input
+      type="file"
+      name="{{ name }}"
+      class="form__file-input {{ classError }}"
+      {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
+      {{{ acceptData ? 'accept="' +  acceptData + '"' : '' }}}
+      {{{ multiple ? 'multiple' : '' }}}
+      {{{ required ? 'required' : '' }}}
+    />
+  </label>
+
+  @if(Array.isArray(errors) && errors.length)
+    <span class="error-text">
+      {{ errors.join(', ') }}
+    </span>
+  @endif
+</div>

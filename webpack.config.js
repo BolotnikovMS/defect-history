@@ -58,8 +58,8 @@ Encore.addEntry('app', './resources/js/app.js')
 |
 */
 Encore.copyFiles({
-  from: './resources/icons',
-  to: 'icons/[path][name].[hash:8].[ext]',
+  from: './resources/images',
+  to: 'images/[path][name].[hash:8].[ext]',
 })
 
 /*

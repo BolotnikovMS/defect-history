@@ -32,11 +32,16 @@ Route.group(() => {
   require('./routes/distribution')
 }).namespace('App/Controllers/Http')
 
-// Route.group(() => {
-//   Route.group(() => {
-//     Route.get('/', 'DefectsController.index')
-//     Route.post('/new', 'DefectsController.store')
-//   }).prefix('/defects')
-// })
-//   .namespace('App/Controllers/Http/Api/v1.0')
-//   .prefix('/api/v1.0')
+Route.group(() => {
+  Route.group(() => {
+    Route.get('/', 'DefectsController.index')
+    Route.post('/new', 'DefectsController.store')
+  }).prefix('/defects')
+  Route.group(() => {
+    Route.get('/', 'DefectTypesController.index')
+    Route.get('/:id', 'DefectTypesController.show')
+    Route.get('/:id/defects', 'DefectTypesController.showDefects')
+  }).prefix('/types-defects')
+})
+  .namespace('App/Controllers/Http/Api/v1.0')
+  .prefix('/api/v1.0')
