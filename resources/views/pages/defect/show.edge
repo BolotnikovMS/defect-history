@@ -10,7 +10,7 @@
             params: {idDefect: defect.id},
             className: 'btn-color_green'
           })
-            <img src="{{ asset('assets/icons/close.svg') }}" alt="Добавить">
+            <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Добавить">
             Закрыть дефект
           @end
 
@@ -19,7 +19,7 @@
             params: {idDefect: defect.id},
             className: 'btn-color_orange'
           })
-            <img src="{{ asset('assets/icons/magnifier.svg') }}" alt="Добавить проверку">
+            <img src="{{ asset('assets/images/icons/magnifier.svg') }}" alt="Добавить проверку">
             Добавить проверку
           @end
 
@@ -29,7 +29,7 @@
               params: {id: defect.id},
               className: 'btn-color_blue btn-color_blue-transparent'
             })
-              <img src="{{ asset('assets/icons/edit-2.svg') }}" alt="Редактировать дефект">
+              <img src="{{ asset('assets/images/icons/edit-2.svg') }}" alt="Редактировать дефект">
               Редактировать дефект
             @end
           @endcan
@@ -40,7 +40,7 @@
               params: {id: defect.id},
               className: 'btn-color_blue btn-color_blue-transparent'
             })
-              <img src="{{ asset('assets/icons/calendar-1.svg') }}" alt="Увеличить срок">
+              <img src="{{ asset('assets/images/icons/calendar-1.svg') }}" alt="Увеличить срок">
               Увеличить срок
             @end
           @endcan
@@ -87,6 +87,13 @@
           <h3 class="defect-info__title">Описание дефекта</h3>
         </div>
         <div class="defect-info__text">{{ defect.description_defect }}</div>
+        @if(defect.defect_img)
+          <div class="defect-info__imgs">
+            @each(defect_img in defect.defect_img)
+              <img src="{{ defect_img }}" alt="{{ defect_img }}" class="defect-info__img">
+            @endeach
+          </div>
+        @endif
       </div>
     </div>
     @if(defect.intermediate_checks.length)

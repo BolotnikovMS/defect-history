@@ -28,7 +28,7 @@
               })
               <a href="{{ route('distribution.show', {id: distributionGroup.id}) }}" class="active-link">
                 {{ distributionGroup.name }}
-                <img src="{{ asset('assets/icons/link.svg') }}">
+                <img src="{{ asset('assets/images/icons/link.svg') }}">
               </a>
             </div>
             @if(!await bouncer.denies('updateDistributionGroup') || !await bouncer.denies('deleteDistributionGroup'))
@@ -39,7 +39,7 @@
                   { name: 'Удалить', access: 'deleteDistributionGroup', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
               @end
             @endif
           </li>

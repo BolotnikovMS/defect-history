@@ -28,10 +28,10 @@
             @can('noAccess')
               <div class="list__control">
                 <a href="{{ route('staff.edit', {id: employee.id}) }}" class="edit">
-                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                  <img src="{{ asset('assets/images/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
                 </a>
                 <a href="{{ route('staff.destroy', {id: employee.id}) }}">
-                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
+                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" class="" title="Удалить">
                 </a>
               </div>
             @endcan

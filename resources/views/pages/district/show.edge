@@ -37,10 +37,10 @@
             @can('noAccess')
               <div class="list__control">
                 <a href="{{ route('substations.edit', {id: substation.id}) }}" class="edit">
-                  <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
+                  <img src="{{ asset('assets/images/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
                 </a>
                 <a href="{{ route('substations.destroy', {id: substation.id}) }}">
-                  <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
                 </a>
               </div>
             @endcan

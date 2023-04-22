@@ -1,5 +1,6 @@
 @set('elementСlass', className ? `class="${className}"` : '')
+@set('uploadFile', uploadFile ? 'enctype="multipart/form-data"' : '')
 
-<form method="POST" action="{{ action }}" {{{ elementСlass }}}>
+<form method="POST" action="{{ action }}" {{{ elementСlass }}} {{{ uploadFile }}}>
   {{{ await $slots.main() }}}
 </form>

@@ -18,9 +18,9 @@
           ...typesDefectsToSort
         ],
       })
-        <img src="{{ asset('assets/icons/sort.svg') }}" class="dropdown-icon dropdown-icon-size_15">
+        <img src="{{ asset('assets/images/icons/sort.svg') }}" class="dropdown-icon dropdown-icon-size_15">
         {{ typeDefect?.type_defect ? typeDefect.type_defect : 'Все' }}
-        <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
+        <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
       @end
 
       {{--  <ul>
@@ -123,7 +123,7 @@
                           { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
-                        <img src="{{ asset('assets/icons/menu.svg') }}">
+                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
                       @end
                     @endif
                   </div>

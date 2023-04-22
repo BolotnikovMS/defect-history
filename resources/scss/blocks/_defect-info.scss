@@ -25,6 +25,24 @@
     }
   }
 
+  &__imgs {
+    margin: 20px 0 20px;
+    padding: 20px 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+
+  &__img {
+    max-width: 200px;
+    cursor: pointer;
+    border: 1px solid white;
+    transition: all 0.3s ease-in;
+
+    &:hover {
+      border: 1px solid #39baff;
+    }
+  }
+
   &__group {
     & + & {
       margin-top: 10px;

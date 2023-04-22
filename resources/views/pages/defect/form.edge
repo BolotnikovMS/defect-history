@@ -4,7 +4,8 @@
 <h2 class="title">{{ title }}</h2>
 <div class="defect__content">
   @forms.post({
-    action: route(options.routePath.savePath, {id: options.idData})
+    action: route(options.routePath.savePath, {id: options.idData}),
+    uploadFile: true
   })
     <div class="form__content form__content-column">
       @!inputs.select({
@@ -62,6 +63,14 @@
         placeholderText: 'Введите описание дефекта...',
         required: true,
         value: defectSerialize ? defectSerialize.description_defect : ''
+      })
+
+      @!inputs.fileManager({
+        label: 'Прикрепить изображение',
+        labelPositionText: 'label__text_left',
+        name: 'defect_img[]',
+        multiple: true,
+        acceptData: '.png, .jpeg, .jpg',
       })
 
       @!inputs.checkbox({

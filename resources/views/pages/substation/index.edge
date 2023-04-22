@@ -32,7 +32,7 @@
                 {{ substation.name }}
               </a>
               @if(substation.importance === 'true')
-                <img src="{{ asset('assets/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+                <img src="{{ asset('assets/images/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
               @endif
             </div>
             @if(!await bouncer.denies('editSubstation') || !await bouncer.denies('deleteSubstation'))
@@ -43,7 +43,7 @@
                   { name: 'Удалить', access: 'deleteSubstation', data: substation, path: 'substations.destroy', params: { id: substation.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
               @end
             @endif
           </li>
