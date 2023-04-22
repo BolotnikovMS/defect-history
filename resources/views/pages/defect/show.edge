@@ -90,7 +90,7 @@
         @if(defect.defect_img)
           <div class="defect-info__imgs">
             @each(defect_img in defect.defect_img)
-              <img src="{{ asset('assets/images/uploads/defects/' + `${defect_img}`) }}" alt="{{ defect_img }}" class="defect-info__img">
+              <img src="{{ defect_img }}" alt="{{ defect_img }}" class="defect-info__img">
             @endeach
           </div>
         @endif
