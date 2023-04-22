@@ -1,4 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { DateTime } from 'luxon'
+import { addDays, randomStr } from 'App/Utils/utils'
+import { unlink } from 'node:fs/promises'
 import Defect from 'App/Models/Defect'
 import Substation from 'App/Models/Substation'
 import DefectValidator from 'App/Validators/DefectValidator'
@@ -8,9 +11,8 @@ import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
 import DefectType from 'App/Models/DefectType'
 import Event from '@ioc:Adonis/Core/Event'
-import { addDays, randomStr } from 'App/Utils/utils'
 import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
-import { unlink } from 'node:fs/promises'
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -468,11 +470,11 @@ export default class DefectsController {
     const defect = await Defect.find(params.idDefect)
 
     if (defect) {
-      const validateData = await request.validate(DefectResultValidator)
+      const validateData = await request.validate(CloseDefectValidator)
 
       defect.id_name_eliminated = +validateData.employee
       defect.result = validateData.description_results
-      defect.elimination_date = validateData.date
+      defect.elimination_date = DateTime.now()
 
       await defect.save()
 
