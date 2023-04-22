@@ -148,7 +148,7 @@
             @if(defect.result)
               <tr>
                 <td>{{ defect.name_eliminated.fullName }}</td>
-                <td>{{ dateFormat(defect.elimination_date) }}</td>
+                <td>{{ defect.elimination_date }}</td>
                 <td colspan="2">{{ defect.result }}</td>
               </tr>
             @else
