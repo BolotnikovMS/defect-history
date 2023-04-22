@@ -52,7 +52,9 @@ export default class Defect extends BaseModel {
   @column()
   public importance: string
 
-  @column.date()
+  @column.dateTime({
+    serialize: (value) => value?.toFormat('dd.MM.yyyy HH:mm'),
+  })
   public elimination_date: DateTime | null
 
   @column()

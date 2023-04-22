@@ -22,9 +22,9 @@ export default class extends BaseSchema {
       table.string('accession', 255).notNullable()
       table.text('description_defect').notNullable()
       table.text('defect_img').nullable()
-      table.dateTime('term_elimination').nullable().defaultTo(null)
+      table.dateTime('term_elimination').notNullable()
       table.string('importance').checkIn(['true', 'false']).defaultTo('false')
-      table.string('elimination_date', 15)
+      table.dateTime('elimination_date').nullable().defaultTo(null)
       table.text('result').nullable().defaultTo(null)
       table.integer('id_name_eliminated', 10).unsigned().index().references('staff.id')
 
