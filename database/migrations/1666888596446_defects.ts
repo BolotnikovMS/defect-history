@@ -21,6 +21,7 @@ export default class extends BaseSchema {
       table.integer('id_user', 10).notNullable().unsigned().index()
       table.string('accession', 255).notNullable()
       table.text('description_defect').notNullable()
+      table.text('defect_img').nullable()
       table.dateTime('term_elimination').nullable().defaultTo(null)
       table.string('importance').checkIn(['true', 'false']).defaultTo('false')
       table.string('elimination_date', 15)
