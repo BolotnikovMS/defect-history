@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="overlay"></div>
           <div class="modal">
             <img src="${imgPath}"/>
-            <div class="close-modal">
+            <div class="modal__close">
               <i>&times;</i>
             </div>
           </div>
@@ -141,11 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
       $('.overlay, .modal').fadeIn('fast')
     })
 
-    $('body').on('click', '.close-modal, .overlay', function (event) {
+    $('body').on('click', '.modal__close, .overlay', function (event) {
       event.preventDefault()
 
       $('.overlay, .modal').fadeOut('fast', function () {
-        $('.close-modal, .modal, .overlay').remove()
+        $('.modal__close, .modal, .overlay').remove()
       })
     })
   }
