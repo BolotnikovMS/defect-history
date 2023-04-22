@@ -31,14 +31,14 @@
           required: true,
         })
 
-        @!inputs.base({
-          label: 'Дата работ',
-          labelPositionText: 'label__text_left',
-          type: 'date',
-          name: 'date',
-        })
-
         @if(checkup)
+          @!inputs.base({
+            label: 'Дата работ',
+            labelPositionText: 'label__text_left',
+            type: 'date',
+            name: 'date',
+          })
+
           @!inputs.select({
             label: 'Передано для дальнейших действий',
             labelPositionText: 'label__text_left',
