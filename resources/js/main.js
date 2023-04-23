@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  closeAlert('.alert__btn-close', '.alert')
+  closeAlert('.notification__btn-close', '.notification')
 
   // Dropdown menu
 
