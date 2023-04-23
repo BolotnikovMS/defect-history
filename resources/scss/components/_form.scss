@@ -1,0 +1,139 @@
+.form {
+  &-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 15px;
+  }
+
+  &__content {
+    display: flex;
+    gap: 20px;
+
+    & + * {
+      margin-top: 30px;
+    }
+
+    &-column {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__group {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    column-gap: 7px;
+    font-size: 18px;
+
+    &-row {
+      flex-direction: row;
+    }
+
+    &-text_left {
+      align-items: flex-start;
+    }
+
+    .label__text {
+      display: flex;
+      align-items: center;
+      text-align: center;
+
+      &_left {
+        text-align: left;
+      }
+
+      &_right {
+        text-align: right;
+      }
+
+      &_nomargin {
+        & + * {
+          margin-top: unset !important;
+        }
+      }
+
+      & + * {
+        margin-top: 7px;
+      }
+
+      img {
+        margin-right: 5px;
+      }
+    }
+
+    &-file-input {
+      padding: 9px 40px;
+      max-width: 450px;
+      border: 2px dashed #150B22;
+      border-radius: 10px;
+      transition: all 0.3s ease-in;
+
+      &:hover {
+        color: #5cadf8;
+        border: 2px dashed #5cadf8;
+      }
+    }
+  }
+
+  &__input  {
+    width: 350px;
+    font-size: 18px;
+    padding: 8px 10px;
+    border: 1px solid #cfcfcf;
+    border-radius: 10px;
+
+    &-checkbox {
+      width: unset;
+    }
+
+    &-correctly {
+      border: 1px solid #009f00;
+    }
+
+    &-invalid {
+      border: 1px solid red;
+    }
+
+    &::placeholder {
+      font-size: 17px;
+    }
+
+    &:focus {
+      border: 1px solid #5cadf8;
+    }
+  }
+
+  &__file-input {
+    opacity: 0;
+    position: absolute;
+    z-index: -1;
+    overflow: hidden;
+    width: 0.4px;
+    height: 0.4px;
+  }
+
+  &__textarea {
+    resize: none;
+
+    &:focus {
+      border: 1px solid #5cadf8;
+    }
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+
+    &-row {
+      margin-top: 0;
+    }
+  }
+}
