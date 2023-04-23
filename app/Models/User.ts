@@ -92,7 +92,7 @@ export default class User extends BaseModel {
 
   @hasMany(() => Defect, {
     localKey: 'id',
-    foreignKey: 'id_user',
+    foreignKey: 'id_user_created',
   })
   public defects: HasMany<typeof Defect>
 }

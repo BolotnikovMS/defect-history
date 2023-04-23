@@ -110,7 +110,7 @@ export default class Defect extends BaseModel {
   public name_eliminated: BelongsTo<typeof Staff>
 
   @belongsTo(() => User, {
-    foreignKey: 'id_user',
+    foreignKey: 'id_user_created',
     localKey: 'id',
   })
   public user: BelongsTo<typeof User>
