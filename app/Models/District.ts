@@ -7,7 +7,7 @@ export default class District extends BaseModel {
   public id: number
 
   @column()
-  public id_user: number
+  public id_user_created: number
 
   @column()
   public name: string

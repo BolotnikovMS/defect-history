@@ -54,7 +54,7 @@ export default class SubstationsController {
     if (validateSubstation) {
       await Substation.create({
         id_district: validateSubstation.district,
-        id_user: auth.user?.id,
+        id_user_created: auth.user?.id,
         name: validateSubstation.name,
         importance: !!validateSubstation.importance + '',
       })

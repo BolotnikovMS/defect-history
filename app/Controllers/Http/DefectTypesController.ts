@@ -57,7 +57,7 @@ export default class DefectTypesController {
     const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
     await DefectType.create({
-      id_user: auth.user?.id,
+      id_user_created: auth.user?.id,
       id_distribution_group:
         validateTypeDefectData.group === 0 ? null : validateTypeDefectData.group,
       type_defect: validateTypeDefectData.type_defect,

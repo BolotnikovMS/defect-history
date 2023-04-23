@@ -49,7 +49,7 @@ export default class DepartmentsController {
 
     const validateData = await request.validate(DepartmentValidator)
 
-    await Department.create({ ...validateData, id_user_create: auth.user?.id })
+    await Department.create({ ...validateData, id_user_created: auth.user?.id })
 
     session.flash('successMessage', `Отдел "${validateData.name}" успешно добавлен!`)
 

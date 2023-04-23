@@ -114,7 +114,7 @@ export default class DefectsController {
       const defect = {
         id_substation: +validateDefectData.substation,
         id_type_defect: +validateDefectData.defect_type,
-        id_user: auth.user!.id,
+        id_user_created: auth.user!.id,
         ...validateDefectData,
         defect_img: imgPaths.length ? imgPaths : null,
         term_elimination: addDays(15),
@@ -371,7 +371,7 @@ export default class DefectsController {
       if (validateData) {
         const checkupDefect = {
           id_defect: +idDefect,
-          id_user: auth.user!.id,
+          id_user_created: auth.user!.id,
           id_inspector: +validateData.employee,
           check_date: validateData.date,
           description_results: validateData.description_results,

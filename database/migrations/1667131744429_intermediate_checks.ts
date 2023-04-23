@@ -14,7 +14,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('defects')
       table
-        .integer('id_user', 10)
+        .integer('id_user_created', 10)
         .notNullable()
         .unsigned()
         .index()

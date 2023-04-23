@@ -18,7 +18,7 @@ export default class extends BaseSchema {
         .unsigned()
         .index()
         .references('defect_types.id')
-      table.integer('id_user', 10).notNullable().unsigned().index()
+      table.integer('id_user_created', 10).notNullable().unsigned().index()
       table.string('accession', 255).notNullable()
       table.text('description_defect').notNullable()
       table.text('defect_img').nullable()

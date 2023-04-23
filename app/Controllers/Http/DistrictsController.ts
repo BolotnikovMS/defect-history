@@ -46,7 +46,7 @@ export default class DistrictsController {
 
     const validateData = await request.validate(DistrictValidator)
 
-    await District.create({ ...validateData, id_user: auth.user?.id })
+    await District.create({ ...validateData, id_user_created: auth.user?.id })
 
     session.flash('successMessage', `Район "${validateData.name}" успешно добавлен!`)
 

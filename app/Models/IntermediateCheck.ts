@@ -12,7 +12,7 @@ export default class IntermediateCheck extends BaseModel {
   public id_defect: number
 
   @column()
-  public id_user: number
+  public id_user_created: number
 
   @column({ serializeAs: null })
   public id_inspector: number

@@ -8,7 +8,7 @@ export default class DefectType extends BaseModel {
   public id: number
 
   @column()
-  public id_user: number
+  public id_user_created: number
 
   @column()
   public id_distribution_group: number | null

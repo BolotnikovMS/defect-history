@@ -29,7 +29,7 @@ export default class Defect extends BaseModel {
   public id_type_defect: number
 
   @column()
-  public id_user: number
+  public id_user_created: number
 
   @column()
   public accession: string
