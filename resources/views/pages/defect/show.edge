@@ -101,7 +101,7 @@
         <div class="defect-info__titles">
           <h3 class="defect-info__title">Промежуточные результаты</h3>
         </div>
-        <table class="table defect-table">
+        <table class="table defect-info__table">
           <thead>
             <th>Сотрудник</th>
             <th>Дата проверки</th>
@@ -138,26 +138,21 @@
         <h3 class="defect-info__title">Выполненные работы по устранению</h3>
       </div>
       @if(defect.result)
-        <table class="table defect-table">
-          <thead>
-            <th>Сотрудник</th>
-            <th>Дата устранения</th>
-            <th colspan="2">Результаты</th>
-          </thead>
-          <tbody>
-            @if(defect.result)
-              <tr>
-                <td>{{ defect.name_eliminated.fullName }}</td>
-                <td>{{ defect.elimination_date }}</td>
-                <td colspan="2">{{ defect.result }}</td>
-              </tr>
-            @else
-              <tr>
-                <td colspan="4">Дефект не устранен.</td>
-              </tr>
-            @endif
-          </tbody>
-        </table>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Дата устранения:
+            <span>{{ defect.elimination_date }}</span>
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Сотрудник:
+            <span>{{ defect.name_eliminated.fullName }}</span>
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Результаты:
+            <span>{{ defect.result }}</span>
+          </div>
+        </div>
       @else
         <div class="defect-info__group">
           <div class="defect-info__text defect-info__text-center defect-info__text-red">Дефект не устранен.</div>

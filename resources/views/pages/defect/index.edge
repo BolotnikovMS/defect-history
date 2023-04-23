@@ -10,7 +10,7 @@
         @end
       @endcan
     </div>
-    <div class="defect__tabs">
+    <div class="defect__filters">
       @dropdown.dropdown({
         classDropdownMenu: 'dropdown__menu-menu_bottom_right',
         dropdownData: [
@@ -22,26 +22,6 @@
         {{ typeDefect?.type_defect ? typeDefect.type_defect : 'Все' }}
         <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
       @end
-
-      {{--  <ul>
-        @buttons.base({
-          href: 'defects.index',
-          className: `btn-color_blue ${activeMenuLink ? '' : 'btn-color_blue-transparent'} `,
-        })
-          Все
-        @end
-        @each(typeDefect in typesDefects)
-          <li>
-            @buttons.base({
-              href: 'types-defects.show',
-              params: {id: typeDefect.id},
-              className: `btn-color_blue ${typeDefect?.id === activeTabLink ? '' : 'btn-color_blue-transparent'}`,
-            })
-              {{ typeDefect.type_defect }}
-            @end
-          </li>
-        @endeach
-      </ul>  --}}
     </div>
   </div>
   <div class="defect__content">
