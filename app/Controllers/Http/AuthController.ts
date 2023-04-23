@@ -30,7 +30,7 @@ export default class AuthController {
     })
   }
 
-  public async register({ request, response, session, bouncer }: HttpContextContract) {
+  public async register({ request, response, session, auth, bouncer }: HttpContextContract) {
     if (await bouncer.denies('createUser')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление нового пользователя!')
 
@@ -40,7 +40,12 @@ export default class AuthController {
     let data = await request.validate(AuthValidator)
 
     if (data) {
-      await User.create({ ...data, id_department: data.department, id_role: data.role })
+      await User.create({
+        ...data,
+        id_user_created: auth.user?.id,
+        id_department: data.department,
+        id_role: data.role,
+      })
 
       session.flash(
         'successMessage',
