@@ -20,16 +20,10 @@ export default class extends BaseSchema {
         .index()
         .references('id')
         .inTable('users')
-      table
-        .integer('id_inspector', 10)
-        .notNullable()
-        .unsigned()
-        .index()
-        .references('id')
-        .inTable('staff')
+      table.integer('id_inspector', 10).notNullable().unsigned().index()
       table.string('check_date', 15).notNullable()
       table.text('description_results').notNullable()
-      table.integer('transferred', 10)
+      table.integer('transferred', 10).nullable().unsigned().index()
 
       table.timestamps()
     })

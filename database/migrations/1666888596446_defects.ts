@@ -26,7 +26,7 @@ export default class extends BaseSchema {
       table.string('importance').checkIn(['true', 'false']).defaultTo('false')
       table.dateTime('elimination_date').nullable().defaultTo(null)
       table.text('result').nullable().defaultTo(null)
-      table.integer('id_name_eliminated', 10).unsigned().index().references('staff.id')
+      table.integer('id_name_eliminated', 10).unsigned().index()
 
       table.timestamps()
     })

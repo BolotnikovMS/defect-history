@@ -5,11 +5,11 @@ import { unlink } from 'node:fs/promises'
 import Defect from 'App/Models/Defect'
 import Substation from 'App/Models/Substation'
 import DefectValidator from 'App/Validators/DefectValidator'
-import Staff from '../../Models/Staff'
 import IntermediateCheck from '../../Models/IntermediateCheck'
 import DefectResultValidator from '../../Validators/DefectResultValidator'
 import Department from '../../Models/Department'
 import DefectType from 'App/Models/DefectType'
+import User from 'App/Models/User'
 import Event from '@ioc:Adonis/Core/Event'
 import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
 import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
@@ -325,7 +325,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const staff = await Staff.all()
+      const users = await User.all()
       const departments = await Department.all()
 
       return view.render('pages/defect/form_checkupandclose', {
@@ -338,7 +338,7 @@ export default class DefectsController {
             back: 'defects.show',
           },
         },
-        staff,
+        users,
         departments,
       })
     } else {
@@ -375,9 +375,8 @@ export default class DefectsController {
           id_inspector: +validateData.employee,
           check_date: validateData.date,
           description_results: validateData.description_results,
-          transferred: validateData.transferred,
+          transferred: validateData.transferred ? validateData.transferred : null,
         }
-
         // const test = ({ employee, ...rest }) => rest
 
         const newCheck = await IntermediateCheck.create(checkupDefect)
@@ -434,7 +433,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const staff = await Staff.all()
+      const users = await User.all()
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Закрытие дефекта',
@@ -445,7 +444,7 @@ export default class DefectsController {
             back: 'defects.show',
           },
         },
-        staff,
+        users,
       })
     } else {
       session.flash('dangerMessage', 'Вы не можете закрыть несуществующий дефект!')
