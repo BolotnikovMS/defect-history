@@ -28,7 +28,6 @@ Route.group(() => {
   require('./routes/types-defects')
   require('./routes/districts')
   require('./routes/substations')
-  require('./routes/staff')
   require('./routes/distribution')
 }).namespace('App/Controllers/Http')
 

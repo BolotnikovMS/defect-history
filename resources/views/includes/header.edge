@@ -38,12 +38,6 @@
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
-          @can('noAccess')
-            <li  class="nav-list__item">
-              <a href="{{ route('staff.index') }}"
-                class="{{ 'staff.index' == activeMenuLink ? 'active' : '' }}">Персонал</a>
-            </li>
-          @endcan
 
           @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers'))
             @dropdown.dropdown({
