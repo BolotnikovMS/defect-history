@@ -5,14 +5,14 @@ import { unlink } from 'node:fs/promises'
 import Defect from 'App/Models/Defect'
 import Substation from 'App/Models/Substation'
 import DefectValidator from 'App/Validators/DefectValidator'
-import IntermediateCheck from '../../Models/IntermediateCheck'
-import DefectResultValidator from '../../Validators/DefectResultValidator'
-import Department from '../../Models/Department'
+import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
+import Department from 'App/Models/Department'
 import DefectType from 'App/Models/DefectType'
 import User from 'App/Models/User'
 import Event from '@ioc:Adonis/Core/Event'
-import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
-import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -366,7 +366,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const validateData = await request.validate(DefectResultValidator)
+      const validateData = await request.validate(IntermediateCheckValidator)
 
       if (validateData) {
         const checkupDefect = {
