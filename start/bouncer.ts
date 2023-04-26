@@ -99,7 +99,7 @@ export const { actions } = Bouncer.before((user: User | null) => {
     } else {
       return (
         user.id_role === Roles.MODERATOR ||
-        (defect.id_user === user.id && defect.elimination_date === null)
+        (defect.id_user_created === user.id && defect.elimination_date === null)
       )
     }
   })
@@ -113,7 +113,7 @@ export const { actions } = Bouncer.before((user: User | null) => {
   .define('deleteDefect', (user: User, defect: Defect) => {
     return (
       user.id_role === Roles.MODERATOR ||
-      (defect.id_user === user.id && defect.elimination_date === null)
+      (defect.id_user_created === user.id && defect.elimination_date === null)
     )
   })
 
