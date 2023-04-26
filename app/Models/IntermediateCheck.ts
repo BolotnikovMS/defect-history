@@ -17,8 +17,8 @@ export default class IntermediateCheck extends BaseModel {
   @column({ serializeAs: null })
   public id_inspector: number
 
-  @column.date({
-    serialize: (value) => value.toFormat('dd.MM.yyyy'),
+  @column.dateTime({
+    serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
   })
   public check_date: DateTime
 

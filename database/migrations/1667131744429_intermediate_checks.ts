@@ -21,7 +21,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('users')
       table.integer('id_inspector', 10).notNullable().unsigned().index()
-      table.string('check_date', 15).notNullable()
+      table.dateTime('check_date').notNullable()
       table.text('description_results').notNullable()
       table.integer('transferred', 10).nullable().unsigned().index()
 

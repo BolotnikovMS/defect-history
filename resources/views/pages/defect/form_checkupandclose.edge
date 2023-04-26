@@ -33,10 +33,11 @@
 
         @if(checkup)
           @!inputs.base({
-            label: 'Дата работ',
+            label: 'Дата проведения работ',
             labelPositionText: 'label__text_left',
-            type: 'date',
+            type: 'datetime',
             name: 'date',
+            placeholderText: 'Формат даты dd.MM.yyyy HH:mm'
           })
 
           @!inputs.select({
