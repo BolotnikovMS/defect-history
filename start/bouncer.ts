@@ -46,157 +46,97 @@ export const { actions } = Bouncer.before((user: User | null) => {
   .define('viewTypesDefects', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('viewTypesDefects', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('viewTypesDefects', user.permissions)
+    )
   })
   .define('createTypeDefect', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('createTypeDefect', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('createTypeDefect', user.permissions)
+    )
   })
   .define('editTypeDefect', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('editTypeDefect', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('editTypeDefect', user.permissions)
+    )
   })
   .define('deleteTypeDefect', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('deleteTypeDefect', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('deleteTypeDefect', user.permissions)
+    )
   })
 
   // Substations action
   .define('viewSubstations', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('viewSubstations', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('viewSubstations', user.permissions)
+    )
   })
   .define('createSubstation', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('createSubstation', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('createSubstation', user.permissions)
+    )
   })
   .define('editSubstation', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('editSubstation', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('editSubstation', user.permissions)
+    )
   })
   .define('deleteSubstation', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('deleteSubstation', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('deleteSubstation', user.permissions)
+    )
   })
 
   // Users
   .define('viewUsers', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('viewUsers', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('viewUsers', user.permissions)
   })
   .define('createUser', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('createUser', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('createUser', user.permissions)
   })
   .define('editUser', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('editUser', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('editUser', user.permissions)
   })
   .define('viewingUserPermissions', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('viewingUserPermissions', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('viewingUserPermissions', user.permissions)
   })
   .define('addingPermissionToUser', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('addingPermissionToUser', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('addingPermissionToUser', user.permissions)
   })
   .define('removeUserPermissions', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('removeUserPermissions', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('removeUserPermissions', user.permissions)
   })
   .define('deleteUser', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('deleteUser', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('deleteUser', user.permissions)
   })
 
   // Defects action
@@ -251,169 +191,107 @@ export const { actions } = Bouncer.before((user: User | null) => {
   .define('viewDepartment', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('viewDepartment', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('viewDepartment', user.permissions)
   })
   .define('createDepartment', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('createDepartment', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('createDepartment', user.permissions)
   })
   .define('updateDepartment', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('updateDepartment', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('updateDepartment', user.permissions)
   })
   .define('deleteDepartment', async (user: User) => {
     await user.load('permissions')
 
-    if (userPermissionCheck('deleteDepartment', user.permissions)) {
-      return true
-    }
-
-    return false
+    return userPermissionCheck('deleteDepartment', user.permissions)
   })
 
   // Districts
   .define('viewDistrict', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('viewDistrict', user.permissions)) {
-      return true
-    }
-
-    return false
+    return user.id_role === Roles.MODERATOR || userPermissionCheck('viewDistrict', user.permissions)
   })
   .define('createDistrict', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('createDistrict', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('createDistrict', user.permissions)
+    )
   })
   .define('updateDistrict', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('updateDistrict', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('updateDistrict', user.permissions)
+    )
   })
   .define('deleteDistrict', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('deleteDistrict', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('deleteDistrict', user.permissions)
+    )
   })
 
   // Distribution groups
   .define('viewDistributionGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('viewDistributionGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('viewDistributionGroup', user.permissions)
+    )
   })
-
   .define('createDistributionGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('createDistributionGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('createDistributionGroup', user.permissions)
+    )
   })
-
   .define('showDistributionGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('showDistributionGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('showDistributionGroup', user.permissions)
+    )
   })
-
   .define('addUserInGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('addUserInGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('addUserInGroup', user.permissions)
+    )
   })
-
   .define('removeUserFromGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('removeUserFromGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('removeUserFromGroup', user.permissions)
+    )
   })
-
   .define('updateDistributionGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('updateDistributionGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('updateDistributionGroup', user.permissions)
+    )
   })
-
   .define('deleteDistributionGroup', async (user: User) => {
     await user.load('permissions')
 
-    if (user.id_role === Roles.MODERATOR) {
-      return true
-    } else if (userPermissionCheck('deleteDistributionGroup', user.permissions)) {
-      return true
-    }
-
-    return false
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('deleteDistributionGroup', user.permissions)
+    )
   })
 
 /*
