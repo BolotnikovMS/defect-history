@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+
 export const checkObjectProperty = (obj: object, prop: string): boolean => obj.hasOwnProperty(prop) && obj[prop] !== '' && obj[prop] !== null && obj[prop] !== undefined
 
 export const checkObjectEmpty = (obj: object): boolean => Object.entries(obj).length === 0 && obj.constructor === Object
@@ -17,3 +18,18 @@ export const replacementEscapeSymbols = (text: string) => {
 export const addDays = (days: number) => DateTime.now().plus({ day: days })
 
 export const randomStr = () => Math.random().toString(36).slice(2, 7)
+
+interface Permission {
+  access: string
+  id: number
+  name: string
+}
+
+export const userPermissionCheck = (
+  permission: string,
+  userPermissionsArray: object[]
+): boolean => {
+  if (!userPermissionsArray.length) return false
+
+  return userPermissionsArray.find((elem: Permission) => elem.access === permission) ? true : false
+}
