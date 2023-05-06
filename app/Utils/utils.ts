@@ -19,10 +19,18 @@ export const addDays = (days: number) => DateTime.now().plus({ day: days })
 
 export const randomStr = () => Math.random().toString(36).slice(2, 7)
 
+/**
+ *  userPermissionCheck - Возвращает true/false в зависимости от наличия доступа у пользователя.
+ *
+ * @param {string} permission Проверяемый доступ пользователя.
+ * @param {object[]} userPermissionsArray Массив доступов пользователя.
+ * @return {boolean} true/false
+ */
+
 interface Permission {
-  access: string
   id: number
-  name: string
+  access: string
+  description: string
 }
 
 export const userPermissionCheck = (
