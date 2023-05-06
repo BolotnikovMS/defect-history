@@ -1,0 +1,56 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  @can('addingPermissionToUser')
+    <div class="control">
+      @forms.post({
+        action: route('users.add.permission', {idUser}),
+        className: 'form form-row',
+      })
+        <div class="form__content">
+          @!inputs.select({
+            name: 'permissions[]',
+            optionClass: 'searchable-list',
+            multiple: true,
+            dataOptionsConfig: {
+              dataOptions: permissions,
+              dataNameOption: 'description'
+            },
+          })
+        </div>
+        <div class="form__btns form__btns-row">
+          @buttons.save({ type: 'submit'})
+            Добавить
+          @end
+        </div>
+      @end
+    </div>
+  @endcan
+  <div class="user__content">
+    <hr>
+    @if(userPermissions.length)
+      <ul class="list">
+        @each(permission in userPermissions)
+          <li class="list__item">
+            <div class="list__content">
+              {{ permission.description }}
+            </div>
+            @can('removeUserPermissions')
+              <div class="list__control">
+                <a href="{{ route('users.remove.permission', {idPermission: permission.id, idUser}) }}">
+                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                </a>
+              </div>
+            @endcan
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>У пользователя не добавлено дополнительных прав.</p>
+      </div>
+    @endif
+    <hr>
+  </div>
+@endsection
