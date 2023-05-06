@@ -85,7 +85,13 @@ export default class DistributionGroupsController {
     }
   }
 
-  public async addUserInGroup({ params, request, response, session, bouncer }: HttpContextContract) {
+  public async addUserInGroup({
+    params,
+    request,
+    response,
+    session,
+    bouncer,
+  }: HttpContextContract) {
     if (await bouncer.denies('addUserInGroup')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление пользователя в группу!')
 

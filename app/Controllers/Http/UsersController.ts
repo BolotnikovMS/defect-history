@@ -225,19 +225,19 @@ export default class UsersController {
     }
 
     const user = await User.find(params.id)
-    const _schema = schema.create({
-      username: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      surname: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      department: schema.number(),
-      role: schema.number(),
-      blocked: schema.string.optional(),
-    })
 
     if (user) {
-      const validateData = await request.validate({ schema: _schema })
+      const validationScheme = schema.create({
+        username: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        surname: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        department: schema.number(),
+        role: schema.number(),
+        blocked: schema.string.optional(),
+      })
+      const validateData = await request.validate({ schema: validationScheme })
 
       await user
         .merge({
@@ -250,17 +250,20 @@ export default class UsersController {
 
       session.flash('successMessage', `Данные пользователя "${user.fullName}" успешно обновлены.`)
       response.redirect().toRoute('users.index')
+    } else {
+      session.flash('dangerMessage', 'Пользователя нет в базе!')
+      response.redirect().back()
     }
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    const user = await User.find(params.id)
-
     if (await bouncer.denies('deleteUser')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление!')
 
       return response.redirect().toPath('/')
     }
+
+    const user = await User.find(params.id)
 
     if (user && user.id_role !== Roles.ADMIN) {
       await user.delete()
