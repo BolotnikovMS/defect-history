@@ -15,9 +15,21 @@ export const replacementEscapeSymbols = (text: string) => {
   return text
 }
 
+/**
+ * Description
+ * @param {number} days
+ * @returns {any}
+ */
+
 export const addDays = (days: number) => DateTime.now().plus({ day: days })
 
 export const randomStr = () => Math.random().toString(36).slice(2, 7)
+
+interface Permission {
+  id: number
+  access: string
+  description: string
+}
 
 /**
  *  userPermissionCheck - Возвращает true/false в зависимости от наличия доступа у пользователя.
@@ -26,12 +38,6 @@ export const randomStr = () => Math.random().toString(36).slice(2, 7)
  * @param {object[]} userPermissionsArray Массив доступов пользователя.
  * @return {boolean} true/false
  */
-
-interface Permission {
-  id: number
-  access: string
-  description: string
-}
 
 export const userPermissionCheck = (
   permission: string,
