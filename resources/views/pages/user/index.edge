@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('noAccess')
+  @can('createUser')
     <div class="control">
       @buttons.add({ href: 'auth.register.show' })
         Добавить
@@ -21,9 +21,11 @@
             <th>Ф.И.О.</th>
             <th>Username</th>
             <th>Email</th>
-            <th>
-              <img src="{{ asset('assets/images/icons/settings.svg') }}" alt="Действия">
-            </th>
+            @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
+              <th>
+                <img src="{{ asset('assets/images/icons/settings.svg') }}" alt="Действия">
+              </th>
+            @endif
           </tr>
         </thead>
         <tbody>
@@ -35,25 +37,21 @@
               <td>{{ user.fullName }}</td>
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
-              <td class="table__td-control">
-                @can('editUser')
-                  @buttons.base({
-                    href: 'users.edit',
-                    params: {id: user.id },
+              @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
+                <td class="table__td-control">
+                  {{--  Dropdown menu options  --}}
+                  @dropdown.dropdown({
+                    classBtnDropdown: 'btn-dropdown-icon',
+                    dropdownData: [
+                      { name: 'Права', access: 'viewingUserPermissions', data: user, path: 'users.show.permissions', params: { idUser: user.id }, icon: 'user-permission.svg'},
+                      { name: 'Редактировать', access: 'editUser', data: user, path: 'users.edit', params: { id: user.id }, icon: 'edit.svg' },
+                      { name: 'Удалить', access: 'deleteUser', data: user, path: 'users.destroy', params: { id: user.id }, icon: 'delete.svg' },
+                    ],
                   })
-                  <img src="{{ asset('assets/images/icons/edit.svg') }}" class="table__icon" alt="Подробнее">
+                    <img src="{{ asset('assets/images/icons/menu.svg') }}">
                   @end
-                @end
-
-                @can('deleteUser')
-                  @buttons.base({
-                    href: 'users.destroy',
-                    params: {id: user.id },
-                  })
-                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="table__icon" alt="Подробнее">
-                  @end
-                @end
-              </td>
+                </td>
+              @endif
             </tr>
           @endeach
         </tbody>

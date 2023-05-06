@@ -13,7 +13,6 @@ export default class extends BaseSeeder {
   public async run() {
     await this.runSeeder(await import('../Substation'))
     await this.runSeeder(await import('../DefectType'))
-    await this.runSeeder(await import('../Staff'))
     await this.runSeeder(await import('../Defect'))
     await this.runSeeder(await import('../IntermediateCheck'))
   }

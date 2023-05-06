@@ -2,12 +2,14 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  <div class="control">
-    {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
-    @buttons.add({ href: 'types-defects.create' })
-      Добавить
-    @end
-  </div>
+  @can('createTypeDefect')
+    <div class="control">
+      {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
+      @buttons.add({ href: 'types-defects.create' })
+        Добавить
+      @end
+    </div>
+  @endcan
   <div class="types-defects__content">
     {{-- <div class="dialog"></div> --}}
     <hr>

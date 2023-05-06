@@ -12,7 +12,7 @@
       })
         @slot('contenDropdownItem')
           @if(item.icon)
-            <img src="{{ asset(`assets/images/icons/${item.icon}`) }}">
+            <img src="{{ asset(`assets/images/icons/${item.icon}`) }}" class="icon">
           @endif
           {{ item.name }}
         @end
