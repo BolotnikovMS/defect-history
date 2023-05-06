@@ -23,7 +23,7 @@ export default class SubstationsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('createSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -43,7 +43,7 @@ export default class SubstationsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('createSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -94,7 +94,7 @@ export default class SubstationsController {
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('editSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -123,7 +123,7 @@ export default class SubstationsController {
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('editSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -151,7 +151,7 @@ export default class SubstationsController {
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('deleteSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

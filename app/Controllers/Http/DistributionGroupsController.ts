@@ -65,9 +65,8 @@ export default class DistributionGroupsController {
     const group = await DistributionGroup.find(params.id)
 
     if (group) {
-      const users = await User.all()
-
       await group.load('group_users')
+      const users = await User.all()
 
       const filteredArrayUsers = users.filter((user) => {
         return group.group_users.every((userInGroup) => {
@@ -86,7 +85,13 @@ export default class DistributionGroupsController {
     }
   }
 
-  public async addUserInGroup({ params, request, response, session, bouncer }: HttpContextContract) {
+  public async addUserInGroup({
+    params,
+    request,
+    response,
+    session,
+    bouncer,
+  }: HttpContextContract) {
     if (await bouncer.denies('addUserInGroup')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление пользователя в группу!')
 
@@ -94,16 +99,19 @@ export default class DistributionGroupsController {
     }
 
     const idGroup = await params.idGroup
-    const _schema = schema.create({
+    const validationScheme = schema.create({
       user: schema.array([rules.minLength(1), rules.maxLength(15)]).members(schema.number()),
     })
-    const _messages: CustomMessages = {
+    const customMessages: CustomMessages = {
       required: 'Поле является обязательным.',
     }
 
-    const validateDate = await request.validate({ schema: _schema, messages: _messages })
+    const validateData = await request.validate({
+      schema: validationScheme,
+      messages: customMessages,
+    })
 
-    validateDate.user.forEach(async (user) => {
+    validateData.user.forEach(async (user) => {
       await DistributionGroupsUser.create({
         id_user: user,
         id_distribution_group: idGroup,

@@ -25,10 +25,6 @@ View.global('menu', [
     name: 'Объекты',
   },
   {
-    url: 'staff.index',
-    name: 'Персонал',
-  },
-  {
     url: 'users.index',
     name: 'Пользователи',
   },
