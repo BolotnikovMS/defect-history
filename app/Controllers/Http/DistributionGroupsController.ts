@@ -66,7 +66,7 @@ export default class DistributionGroupsController {
 
     if (group) {
       await group.load('group_users')
-      const users = await User.all()
+      const users = await User.query().where('blocked', '=', 'false')
 
       const filteredArrayUsers = users.filter((user) => {
         return group.group_users.every((userInGroup) => {
