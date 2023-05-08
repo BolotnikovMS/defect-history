@@ -325,7 +325,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const users = await User.all()
+      const users = await User.query().where('blocked', '=', 'false')
       const departments = await Department.all()
 
       return view.render('pages/defect/form_checkupandclose', {
@@ -433,7 +433,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const users = await User.all()
+      const users = await User.query().where('blocked', '=', 'false')
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Закрытие дефекта',
