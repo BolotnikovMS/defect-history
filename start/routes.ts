@@ -29,6 +29,7 @@ Route.group(() => {
   require('./routes/districts')
   require('./routes/substations')
   require('./routes/distribution')
+  require('./routes/accession_substations')
 }).namespace('App/Controllers/Http')
 
 Route.group(() => {
