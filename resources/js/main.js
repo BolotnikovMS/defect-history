@@ -74,6 +74,25 @@ document.addEventListener('DOMContentLoaded', () => {
     language: 'ru',
   })
 
+  $('.input__substation').on('select2:select', function (event) {
+    const idSubstation = event.params.data.id
+
+    $.ajax({
+      url: `/substations/show-accession/${idSubstation}`,
+      method: 'GET',
+      dataType: 'json',
+      success: function (options) {
+        $('.input__accession').html('')
+        $('.input__accession').append(
+          '<option value="0" selected disabled>Выберите присоединение</option>'
+        )
+        options.forEach((option) => {
+          $('.input__accession').append(`<option value=${option.id}>${option.name}</option>`)
+        })
+      },
+    })
+  })
+
   // Print PDF
   $('.btn-save-pdf').on('click', () => {
     $('.defect-info').printThis()
