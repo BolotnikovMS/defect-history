@@ -25,8 +25,10 @@ export default class User extends BaseModel {
   @column()
   public id_user_created: number
 
-  @column()
-  public blocked: string
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  public blocked: boolean
 
   @column()
   public username: string
