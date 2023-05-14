@@ -102,6 +102,30 @@ export const { actions } = Bouncer.before((user: User | null) => {
     )
   })
 
+  // Accession substations
+  .define('creatingAttachment', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('creatingAttachment', user.permissions)
+    )
+  })
+  .define('editAttachment', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('editAttachment', user.permissions)
+    )
+  })
+  .define('deleteAttachment', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('deleteAttachment', user.permissions)
+    )
+  })
+
   // Users
   .define('viewUsers', async (user: User) => {
     await user.load('permissions')

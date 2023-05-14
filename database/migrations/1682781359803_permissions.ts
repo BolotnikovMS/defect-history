@@ -48,6 +48,19 @@ export default class extends BaseSchema {
           access: 'deleteSubstation',
           description: 'Удаление подстанции',
         },
+        // Actions accession substations
+        {
+          access: 'creatingAttachment',
+          description: 'Добавление нового присоединения',
+        },
+        {
+          access: 'editAttachment',
+          description: 'Редактирование присоединения',
+        },
+        {
+          access: 'deleteAttachment',
+          description: 'Удаление присоединения',
+        },
         // Actions with users
         {
           access: 'viewUsers',
