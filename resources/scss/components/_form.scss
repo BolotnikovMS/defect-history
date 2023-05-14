@@ -127,6 +127,16 @@
     }
   }
 
+  &__questions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & + * {
+      margin-top: 10px;
+    }
+  }
+
   &__btns {
     display: flex;
     justify-content: center;
