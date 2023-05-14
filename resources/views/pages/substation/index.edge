@@ -31,7 +31,7 @@
               <a href="{{ route('substations.show', {id: substation.id}) }}" class="active-link">
                 {{ substation.name }}
               </a>
-              @if(substation.importance === 'true')
+              @if(substation.importance === true)
                 <img src="{{ asset('assets/images/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
               @endif
             </div>

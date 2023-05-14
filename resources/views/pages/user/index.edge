@@ -32,7 +32,7 @@
           @each(user in users)
             <tr>
               <td>{{ user.role.name }}</td>
-              <td>{{ user.blocked === 'true' ? 'Да' : 'Нет' }}</td>
+              <td>{{ user.blocked ? 'Да' : 'Нет' }}</td>
               <td>{{ user.department.name }}</td>
               <td>{{ user.fullName }}</td>
               <td>{{ user.username }}</td>

@@ -32,7 +32,7 @@
       @if(defects.length)
         <div class="cards defect__cards">
           @each(defect in defects)
-            <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === 'true' ? 'card-danger' : '' }}">
+            <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : '' }}">
               <div class="card__header">
                 <div class="card__header-content">
                   <div class="card__object-info">
@@ -43,7 +43,7 @@
                           </a>
                         </span>
                       @endif
-                    <span class="card__text">{{ defect.accession }}</span>
+                    <span class="card__text">{{ defect.accession.name }}</span>
                     <span class="card__text">
                       Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
                     </span>

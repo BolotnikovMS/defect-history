@@ -21,23 +21,27 @@
         </option>
       @endif
 
-      @each(data in dataOptionsConfig.dataOptions)
-        <option value="{{ data.id }}"
-          {{
-            currentDataConfig?.currentData
-            ?
-              currentDataConfig.currentDataId == data.id
-                ?
-                  'selected'
-                :
-                  ''
-            :
-              flashMessages.get(name) == data.id ? 'selected' : ''
-          }}
-        >
-          {{ data[dataOptionsConfig.dataNameOption] }}
-        </option>
-      @endeach
+      @if(dataOptionsConfig?.dataOptions)
+        @each(data in dataOptionsConfig.dataOptions)
+          <option value="{{ data.id }}"
+            {{
+              currentDataConfig?.currentData
+              ?
+                currentDataConfig.currentDataId == data.id
+                  ?
+                    'selected'
+                  :
+                    ''
+              :
+                flashMessages.get(name) == data.id ? 'selected' : ''
+            }}
+          >
+            {{ data[dataOptionsConfig.dataNameOption] }}
+          </option>
+        @else
+          <option value="0" selected disabled>---</option>
+        @endeach
+      @endif
     </select>
   </label>
 
