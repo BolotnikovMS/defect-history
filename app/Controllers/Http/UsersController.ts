@@ -95,7 +95,7 @@ export default class UsersController {
     const idUser = await params.idUser
     const user = await User.find(idUser)
 
-    if (user && user.blocked === 'false') {
+    if (user && user.blocked === false) {
       await user.load('permissions')
       const permissions = await Permission.query().orderBy('id', 'asc')
       const filteredUserPermissions = permissions.filter((permission) => {
@@ -235,14 +235,14 @@ export default class UsersController {
         position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
         department: schema.number(),
         role: schema.number(),
-        blocked: schema.string.optional(),
+        blocked: schema.boolean.optional(),
       })
       const validateData = await request.validate({ schema: validationScheme })
 
       await user
         .merge({
           ...validateData,
-          blocked: !!validateData.blocked + '',
+          blocked: validateData.blocked ? true : false,
           id_department: validateData.department,
           id_role: validateData.role,
         })

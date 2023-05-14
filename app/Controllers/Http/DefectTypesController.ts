@@ -87,6 +87,7 @@ export default class DefectTypesController {
         query
           .orderBy('elimination_date', 'asc')
           .preload('substation')
+          .preload('accession')
           .preload('intermediate_checks')
       })
 

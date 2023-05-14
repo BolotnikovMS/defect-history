@@ -31,10 +31,14 @@ export default class DefectsController {
       .orderBy('elimination_date', 'asc')
       .preload('defect_type')
       .preload('substation')
+      .preload('accession')
       .preload('intermediate_checks')
       .paginate(page, limit)
 
     defects.baseUrl('/')
+
+    // const test = defects.map((defect) => defect.serialize())
+    // console.log('test: ', test)
 
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
@@ -112,13 +116,13 @@ export default class DefectsController {
       // }
 
       const defect = {
-        id_substation: +validateDefectData.substation,
-        id_type_defect: +validateDefectData.defect_type,
+        id_substation: validateDefectData.substation,
+        id_type_defect: validateDefectData.defect_type,
         id_user_created: auth.user!.id,
+        id_accession: validateDefectData.accession,
         ...validateDefectData,
         defect_img: imgPaths.length ? imgPaths : null,
         term_elimination: addDays(15),
-        importance: !!validateDefectData.importance + '',
       }
       // console.log('defect: ', defect)
       const newDefect = await Defect.create(defect)
@@ -157,6 +161,7 @@ export default class DefectsController {
 
     if (defect) {
       await defect.load('substation')
+      await defect.load('accession')
       await defect.load('defect_type')
       await defect.load('intermediate_checks', (query) => {
         query.preload('name_inspector')
@@ -187,6 +192,9 @@ export default class DefectsController {
       const defectSerialize = defect.serialize()
       const typeDefects = await DefectType.all()
       const substations = await Substation.all()
+      const accessionSubstations = await Substation.find(defectSerialize.id_substation)
+
+      await accessionSubstations?.load('accession')
 
       return view.render('pages/defect/form', {
         title: 'Редактирование',
@@ -200,6 +208,7 @@ export default class DefectsController {
         defectSerialize,
         typeDefects,
         substations,
+        accessionSubstations: accessionSubstations?.accession,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -221,9 +230,10 @@ export default class DefectsController {
 
       defect.id_type_defect = +validateDefectData.defect_type
       defect.id_substation = +validateDefectData.substation
-      defect.accession = validateDefectData.accession
+      defect.id_accession = validateDefectData.accession
       defect.description_defect = validateDefectData.description_defect
-      defect.importance = !!validateDefectData.importance + ''
+      // eslint-disable-next-line prettier/prettier
+      defect.importance = validateDefectData.importance ? true : false,
 
       await defect.save()
 
@@ -325,7 +335,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const users = await User.query().where('blocked', '=', 'false')
+      const users = await User.query().where('blocked', '=', false)
       const departments = await Department.all()
 
       return view.render('pages/defect/form_checkupandclose', {
@@ -433,7 +443,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const users = await User.query().where('blocked', '=', 'false')
+      const users = await User.query().where('blocked', '=', false)
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Закрытие дефекта',

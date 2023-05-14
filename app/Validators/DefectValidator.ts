@@ -25,14 +25,14 @@ export default class DefectValidator {
    */
 
   public schema = schema.create({
-    defect_type: schema.string(),
-    substation: schema.string(),
-    accession: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
+    defect_type: schema.number(),
+    substation: schema.number(),
+    accession: schema.number(),
     description_defect: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
     defect_img: schema.array
       .optional()
       .members(schema.file({ size: '1mb', extnames: ['jpg', 'png', 'jpeg'] })),
-    importance: schema.string.optional(),
+    importance: schema.boolean.optional(),
   })
 
   /**
