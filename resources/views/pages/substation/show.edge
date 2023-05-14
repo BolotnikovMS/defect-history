@@ -2,6 +2,15 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @buttons.base({
+      href: 'substations.show.attachments',
+      params: { idSubstation: substation.id },
+      className: 'btn-color_blue btn-color_blue-transparent',
+    })
+      Присоединения
+    @end
+  </div>
   <div class="substations__content">
     <hr>
     @if(substation.defects.length)
@@ -18,7 +27,7 @@
                         </a>
                       </span>
                     @endif
-                  <span class="card__text">{{ defect.accession }}</span>
+                  <span class="card__text">{{ defect.accession.name }}</span>
                   <span class="card__text">
                     Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
                   </span>
