@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Substation from '../../Models/Substation'
+import Substation from 'App/Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
 import District from 'App/Models/District'
 
@@ -56,7 +56,6 @@ export default class SubstationsController {
         id_district: validateSubstation.district,
         id_user_created: auth.user?.id,
         name: validateSubstation.name,
-        importance: !!validateSubstation.importance + '',
       })
 
       session.flash(
@@ -77,12 +76,35 @@ export default class SubstationsController {
       await substation.load('defects', (query) => {
         query
           .orderBy('elimination_date', 'asc')
+          .preload('accession')
           .preload('defect_type')
           .preload('intermediate_checks')
       })
 
       return view.render('pages/substation/show', {
         title: `Дефекты ${substation.name}`,
+        substation,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async showAttachments({ request, response, params, view, session }: HttpContextContract) {
+    const substation = await Substation.find(params.idSubstation)
+
+    if (request.ajax()) {
+      await substation?.load('accession')
+
+      return response.send(substation?.accession)
+    }
+
+    if (substation) {
+      await substation?.load('accession')
+
+      return view.render('pages/substation/show-accession', {
+        title: `Список присоединений ${substation.name}`,
         substation,
       })
     } else {
@@ -136,15 +158,15 @@ export default class SubstationsController {
         .merge({
           id_district: validateSubstation.district,
           name: validateSubstation.name,
-          importance: !!validateSubstation.importance + '',
+          importance: validateSubstation.importance ? true : false,
         })
         .save()
 
       session.flash('successmessage', `Данные "${validateSubstation.name}" успешно обновлены.`)
-      response.redirect().toRoute('SubstationsController.index')
+      return response.redirect().toRoute('SubstationsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
+      return response.redirect().back()
     }
   }
 
@@ -161,10 +183,10 @@ export default class SubstationsController {
       await substation.delete()
 
       session.flash('successMessage', `Объект успешно удален!`)
-      response.redirect().back()
+      return response.redirect().back()
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
+      return response.redirect().back()
     }
   }
 }
