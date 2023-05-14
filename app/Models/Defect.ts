@@ -16,6 +16,7 @@ import IntermediateCheck from 'App/Models/IntermediateCheck'
 import User from 'App/Models/User'
 import { computed } from '@ioc:Adonis/Lucid/Orm'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
+import AccessionSubstation from 'App/Models/AccessionSubstation'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
@@ -31,7 +32,7 @@ export default class Defect extends BaseModel {
   public id_user_created: number
 
   @column()
-  public accession: string
+  public id_accession: number
 
   @column({
     consume: (value: string) => replacementEscapeSymbols(value),
@@ -48,8 +49,10 @@ export default class Defect extends BaseModel {
   })
   public term_elimination: DateTime
 
-  @column()
-  public importance: string
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  public importance: boolean
 
   @column.dateTime({
     serialize: (value) => value?.toFormat('dd.MM.yyyy HH:mm'),
@@ -89,6 +92,12 @@ export default class Defect extends BaseModel {
     localKey: 'id_substation',
   })
   public substation: HasOne<typeof Substation>
+
+  @belongsTo(() => AccessionSubstation, {
+    foreignKey: 'id_accession',
+    localKey: 'id',
+  })
+  public accession: BelongsTo<typeof AccessionSubstation>
 
   @hasOne(() => DefectType, {
     foreignKey: 'id',
