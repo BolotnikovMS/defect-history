@@ -1,0 +1,52 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @buttons.base({
+      href: 'substations.show',
+      params: { id: substation.id },
+      className: 'btn-color_blue btn-color_blue-transparent',
+    })
+      Дефекты
+    @end
+    @can('creatingAttachment')
+      @buttons.add({ href: 'accession-substations.create', params: { idSubstation: substation.id } })
+        Добавить
+      @end
+    @end
+  </div>
+  <div class="substations__content">
+    <hr>
+    @if(substation.accession.length)
+      <ul class="list">
+        @each(accession in substation.accession)
+          <li class="list__item">
+            <div class="list__content">
+              {{ accession.name }}
+              @if(accession.importance)
+                <img src="{{ asset('assets/images/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+              @end
+            </div>
+            @if(!await bouncer.denies('editAttachment') || !await bouncer.denies('deleteAttachment'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'editAttachment', path: 'accession-substations.edit', params: { id: accession.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'deleteAttachment', path: 'accession-substations.destroy', params: { id: accession.id }, icon: 'delete.svg' },
+                ],
+              })
+                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+              @end
+            @endif
+          </li>
+        @endeach
+      </ul>
+    @else
+      <div class="no-content">
+        <p>Пока нет добавленых присоединений.</p>
+      </div>
+    @end
+    <hr>
+  </div>
+@endsection
