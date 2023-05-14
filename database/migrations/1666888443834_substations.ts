@@ -15,7 +15,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('districts')
       table.text('name').notNullable()
-      table.text('importance').checkIn(['true', 'false']).defaultTo('false')
+      table.boolean('importance').defaultTo(false)
 
       table.timestamps()
     })

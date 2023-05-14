@@ -9,7 +9,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
       table.integer('id_user_created').notNullable().defaultTo(1)
-      table.string('blocked').notNullable().defaultTo('false')
+      table.boolean('blocked').defaultTo(false)
       table.string('username', 50).notNullable().unique()
       table.string('surname', 30).notNullable()
       table.string('name', 30).notNullable()
