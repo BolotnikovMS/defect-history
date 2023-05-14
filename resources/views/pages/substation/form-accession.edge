@@ -1,0 +1,46 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="substations__content">
+    @forms.post({
+      action: route(options.routePath.saveData, options.idData)
+    })
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          label: 'Название присоединения',
+          labelPositionText: 'label__text_left',
+          name: 'name',
+          placeholderText: 'Введите название...',
+          required: true,
+          value: accession ? accession.name : ''
+        })
+
+        @!inputs.checkbox({
+          label: 'Важность присоединения',
+          classlabel: 'form__label-row',
+          classLabelText: 'label__text_nomargin',
+          name: 'importance',
+          checked: accession ? accession.importance : null
+        })
+      </div>
+      <div class="form__questions">
+        @!inputs.checkbox({
+          label: 'Добавить еще присоединение',
+          classlabel: 'form__label-row',
+          classLabelText: 'label__text_nomargin',
+          name: 'addNext',
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'substations.show.attachments', params: options.dataSubstation })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection
