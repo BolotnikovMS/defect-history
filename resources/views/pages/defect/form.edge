@@ -31,7 +31,7 @@
         label: 'Выберите объект',
         labelPositionText: 'label__text_left',
         name: 'substation',
-        optionClass: 'searchable-list',
+        optionClass: 'input__substation searchable-list',
         defaultOptionConfig: {
           defaultOption: true,
           defaultOptionText: 'Выберите объект'
@@ -46,13 +46,23 @@
         }
       })
 
-      @!inputs.base({
-        label: 'Присоединение',
+      @!inputs.select({
+        label: 'Выберите присоединение',
         labelPositionText: 'label__text_left',
         name: 'accession',
-        placeholderText: 'Введите присоединение...',
-        required: true,
-        value: defectSerialize ? defectSerialize.accession : ''
+        optionClass: 'input__accession searchable-list',
+        defaultOptionConfig: {
+          defaultOption: true,
+          defaultOptionText: 'Выберите присоединение'
+        },
+        dataOptionsConfig: {
+          dataOptions: accessionSubstations,
+          dataNameOption: 'name'
+        },
+        currentDataConfig: {
+          currentData: defectSerialize ? defectSerialize : '',
+          currentDataId: defectSerialize ? defectSerialize.id_accession : '',
+        }
       })
 
       @!inputs.textarea({
@@ -78,7 +88,7 @@
         classlabel: 'form__label-row',
         classLabelText: 'label__text_nomargin',
         name: 'importance',
-        checked: defectSerialize ? defectSerialize.importance : 'false'
+        checked: defectSerialize ? defectSerialize.importance : null
       })
     </div>
     <div class="form__btns">
