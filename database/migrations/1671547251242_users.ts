@@ -43,6 +43,7 @@ export default class extends BaseSchema {
         name: 'Admin',
         patronymic: 'Admin',
         position: 'Admin',
+        id_department: 1,
         id_role: Roles.ADMIN,
         email: 'test@mail.ru',
         password: await argon2.hash('12345678'),

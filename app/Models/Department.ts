@@ -7,7 +7,7 @@ export default class Department extends BaseModel {
   public id: number
 
   @column()
-  public id_user_created: number
+  public id_user_created: number | null
 
   @column()
   public name: string
