@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  closeAlert('.alert__btn-close', '.alert')
+  closeAlert('.notification__btn-close', '.notification')
 
   // Dropdown menu
 
@@ -70,12 +70,104 @@ document.addEventListener('DOMContentLoaded', () => {
   $('.searchable-list').select2({
     width: '350px',
     placeholder: 'Выберите вариант',
-    maximumSelectionLength: 2,
+    // maximumSelectionLength: 2,
     language: 'ru',
+  })
+
+  $('.input__substation').on('select2:select', function (event) {
+    const idSubstation = event.params.data.id
+
+    $.ajax({
+      url: `/substations/show-accession/${idSubstation}`,
+      method: 'GET',
+      dataType: 'json',
+      success: function (options) {
+        $('.input__accession').html('')
+        $('.input__accession').append(
+          '<option value="0" selected disabled>Выберите присоединение</option>'
+        )
+        options.forEach((option) => {
+          $('.input__accession').append(`<option value=${option.id}>${option.name}</option>`)
+        })
+      },
+    })
   })
 
   // Print PDF
   $('.btn-save-pdf').on('click', () => {
     $('.defect-info').printThis()
   })
+
+  // Upload file
+  const changeFile = (inputSelector, textSelector) => {
+    const inputFile = document.querySelector(inputSelector)
+    const fieldText = document.querySelector(textSelector)
+    let fileList
+
+    if (!inputFile || !fieldText) return
+
+    inputFile.addEventListener('change', () => {
+      fileList = []
+
+      for (let i = 0; i < inputFile.files.length; i++) {
+        fileList.push(inputFile.files[i])
+      }
+
+      uploadFile(fileList, fieldText)
+    })
+  }
+
+  const uploadFile = (file, field) => {
+    if (file && file.length > 1) {
+      if (file.length <= 4) {
+        field.textContent = `Выбрано ${file.length} файла`
+      }
+      if (file.length > 4) {
+        field.textContent = `Выбрано ${file.length} файлов`
+      }
+    } else {
+      field.textContent = file[0].name.substring(0, 20)
+    }
+  }
+
+  changeFile('.form__file-input', '.text-file-input')
+
+  // Image enlargement
+  const enlargeImage = (selectorImg) => {
+    if (!selectorImg) return
+
+    const img = document.querySelectorAll(selectorImg)
+
+    $(img).click(function () {
+      // console.log('click')
+      const imgPath = $(this).attr('src')
+
+      $('body').append(
+        `
+          <div class="overlay"></div>
+          <div class="modal">
+            <img src="${imgPath}"/>
+            <div class="modal__close">
+              <i>&times;</i>
+            </div>
+          </div>
+        `
+      )
+      $('.modal').css({
+        left: ($(document).width() - $('.modal').outerWidth()) / 2,
+        top: ($(window).height() - $('.modal').outerHeight()) / 2,
+      })
+      $('.overlay, .modal').fadeIn('fast')
+    })
+
+    $('body').on('click', '.modal__close, .overlay', function (event) {
+      event.preventDefault()
+
+      $('.overlay, .modal').fadeOut('fast', function () {
+        $('.modal__close, .modal, .overlay').remove()
+      })
+    })
+  }
+
+  enlargeImage('.defect-info__img')
 })

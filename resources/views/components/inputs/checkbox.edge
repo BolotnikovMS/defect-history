@@ -1,5 +1,5 @@
-@set('checkedValue', checked && checked === 'true' ? 'checked=checked' : '')
-
+@set('checkedValue', checked && checked ? 'checked=checked' : '')
+{{--  {{ inspect(checked) }}  --}}
 <div class="form__group">
   <label class="form__label {{ classlabel ?? '' }}">
     <span

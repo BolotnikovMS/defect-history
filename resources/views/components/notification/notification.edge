@@ -1,0 +1,22 @@
+<div class="notification-wrapper">
+  {{--  {{ inspect(flashMessages.all()) }}  --}}
+  @if(flashMessages.has('successMessage'))
+    <div class="notification notification-success active">
+      <div class="notification__text">
+        {{ flashMessages.get('successMessage') }}
+      </div>
+      <button class="notification__btn notification__btn-success notification__btn-close">
+        <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Close">
+      </button>
+    </div>
+  @elseif(flashMessages.has('dangerMessage'))
+    <div class="notification notification-danger active">
+      <div class="notification__text">
+        {{ flashMessages.get('dangerMessage') }}
+      </div>
+      <button class="notification__btn notification__btn-danger notification__btn-close">
+        <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Close">
+      </button>
+    </div>
+  @endif
+</div>

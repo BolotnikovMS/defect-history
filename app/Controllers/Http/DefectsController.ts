@@ -1,13 +1,19 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { DateTime } from 'luxon'
+import { addDays, randomStr } from 'App/Utils/utils'
+import { unlink } from 'node:fs/promises'
 import Defect from 'App/Models/Defect'
 import Substation from 'App/Models/Substation'
 import DefectValidator from 'App/Validators/DefectValidator'
-import Staff from '../../Models/Staff'
-import IntermediateCheck from '../../Models/IntermediateCheck'
-import DefectResultValidator from '../../Validators/DefectResultValidator'
-import Department from '../../Models/Department'
+import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
+import Department from 'App/Models/Department'
 import DefectType from 'App/Models/DefectType'
+import User from 'App/Models/User'
 import Event from '@ioc:Adonis/Core/Event'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -15,18 +21,30 @@ export default class DefectsController {
     const limit = 10
 
     const typesDefects = await DefectType.query()
+
+    const typesDefectsToSort = typesDefects.map((type) => ({
+      name: type.type_defect,
+      path: 'types-defects.show',
+      params: { id: type.id },
+    }))
+
     const defects = await Defect.query()
       .orderBy('elimination_date', 'asc')
       .preload('defect_type')
       .preload('substation')
+      .preload('accession')
       .preload('intermediate_checks')
       .paginate(page, limit)
 
     defects.baseUrl('/')
 
+    // const test = defects.map((defect) => defect.serialize())
+    // console.log('test: ', test)
+
     return view.render('pages/defect/index', {
       title: 'Все дефекты',
       typesDefects,
+      typesDefectsToSort,
       defects,
       activeMenuLink: 'defects.index',
     })
@@ -64,14 +82,50 @@ export default class DefectsController {
     const validateDefectData = await request.validate(DefectValidator)
 
     if (validateDefectData) {
-      const defect = {
-        id_substation: +validateDefectData.substation,
-        id_type_defect: +validateDefectData.defect_type,
-        id_user: auth.user!.id,
-        ...validateDefectData,
-        importance: !!validateDefectData.importance + '',
-      }
+      const imgPaths: string[] = []
 
+      validateDefectData?.defect_img?.forEach(async (img) => {
+        const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+
+        imgPaths.push(`/uploads/images/defects/${imgName}`)
+
+        await img.moveToDisk('images/defects/', { name: imgName })
+      })
+
+      // validateDefectData?.defect_img?.forEach(async (img) => {
+      //   const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+      //   imgNameArr.push(`${imgName}`)
+
+      //   await img.move(Application.resourcesPath('images/uploads/defects/'), {
+      //     name: imgName,
+      //   })
+      // })
+
+      // if (validateDefectData.defect_img) {
+      //  validateDefectData.defect_img.map(async (img) => {
+      //     // img.clientName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+      //     // img.move(Application.resourcesPath('images/uploads/defects/'))
+
+      //     // imgName.push(img.clientName)
+      //     await img.moveToDisk('images/defects/')
+      //     console.log(img.fileName)
+
+      //     imgNameArr.push(`${img.fileName}`)
+      //   })
+
+      //   console.log(test[0])
+      // }
+
+      const defect = {
+        id_substation: validateDefectData.substation,
+        id_type_defect: validateDefectData.defect_type,
+        id_user_created: auth.user!.id,
+        id_accession: validateDefectData.accession,
+        ...validateDefectData,
+        defect_img: imgPaths.length ? imgPaths : null,
+        term_elimination: addDays(15),
+      }
+      // console.log('defect: ', defect)
       const newDefect = await Defect.create(defect)
 
       await newDefect.load('defect_type', (queryGroup) => {
@@ -82,7 +136,11 @@ export default class DefectsController {
 
       const arrayUsers = newDefect.defect_type?.group.group_users
 
-      if (arrayUsers?.length) {
+      if (
+        arrayUsers?.length &&
+        Env.get('SMTP_HOST') !== 'localhost' &&
+        Env.get('SMTP_HOST') !== ''
+      ) {
         Event.emit('send:mail-new-entry', {
           users: arrayUsers,
           templateMail: 'emails/template_mail_defects',
@@ -92,7 +150,7 @@ export default class DefectsController {
           note: newDefect,
         })
       } else {
-        console.log('array users empty')
+        console.log('В списке рассылки нету пользователей или не указан SMPT host!')
       }
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
@@ -108,6 +166,7 @@ export default class DefectsController {
 
     if (defect) {
       await defect.load('substation')
+      await defect.load('accession')
       await defect.load('defect_type')
       await defect.load('intermediate_checks', (query) => {
         query.preload('name_inspector')
@@ -138,11 +197,15 @@ export default class DefectsController {
       const defectSerialize = defect.serialize()
       const typeDefects = await DefectType.all()
       const substations = await Substation.all()
+      const accessionSubstations = await Substation.find(defectSerialize.id_substation)
+
+      await accessionSubstations?.load('accession')
 
       return view.render('pages/defect/form', {
         title: 'Редактирование',
         options: {
           idData: defect.id,
+          edit: true,
           routePath: {
             savePath: 'defects.update',
           },
@@ -150,6 +213,7 @@ export default class DefectsController {
         defectSerialize,
         typeDefects,
         substations,
+        accessionSubstations: accessionSubstations?.accession,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -171,10 +235,10 @@ export default class DefectsController {
 
       defect.id_type_defect = +validateDefectData.defect_type
       defect.id_substation = +validateDefectData.substation
-      defect.accession = validateDefectData.accession
+      defect.id_accession = validateDefectData.accession
       defect.description_defect = validateDefectData.description_defect
-      defect.term_elimination = validateDefectData.term_elimination
-      defect.importance = !!validateDefectData.importance + ''
+      // eslint-disable-next-line prettier/prettier
+      defect.importance = validateDefectData.importance ? true : false,
 
       await defect.save()
 
@@ -197,10 +261,68 @@ export default class DefectsController {
       }
 
       await defect.related('intermediate_checks').query().delete()
+      defect?.defect_img?.forEach(async (imgPath) => {
+        try {
+          await unlink(`./tmp${imgPath}`)
+
+          console.log(`successfully deleted ${imgPath}`)
+        } catch (error) {
+          console.log(`there was an error: ${error.message}`)
+        }
+      })
+
       await defect.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
       response.redirect().back()
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async editDeadline({ response, params, view, session, bouncer }: HttpContextContract) {
+    const defect = await Defect.find(params.id)
+
+    if (defect) {
+      if (await bouncer.denies('editDefectDeadline', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+        return response.redirect().toPath('/')
+      }
+
+      return view.render('pages/defect/form_edit_deadline', {
+        title: 'Изменение даты устранения дефекта',
+        defect: defect.serialize(),
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async updateDeadline({
+    params,
+    request,
+    response,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const defect = await Defect.find(params.id)
+
+    if (defect) {
+      if (await bouncer.denies('editDefectDeadline', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+        return response.redirect().toPath('/')
+      }
+
+      const validateDefectData = await request.validate(DefectDeadlineValidator)
+
+      await defect.merge(validateDefectData).save()
+
+      session.flash('successMessage', `Сроки устранения дефекта успешно обновлены!!`)
+      response.redirect().toRoute('DefectsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().back()
@@ -218,7 +340,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const staff = await Staff.all()
+      const users = await User.query().where('blocked', '=', false)
       const departments = await Department.all()
 
       return view.render('pages/defect/form_checkupandclose', {
@@ -231,7 +353,7 @@ export default class DefectsController {
             back: 'defects.show',
           },
         },
-        staff,
+        users,
         departments,
       })
     } else {
@@ -259,18 +381,17 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const validateData = await request.validate(DefectResultValidator)
+      const validateData = await request.validate(IntermediateCheckValidator)
 
       if (validateData) {
         const checkupDefect = {
           id_defect: +idDefect,
-          id_user: auth.user!.id,
+          id_user_created: auth.user!.id,
           id_inspector: +validateData.employee,
           check_date: validateData.date,
           description_results: validateData.description_results,
-          transferred: validateData.transferred,
+          transferred: validateData.transferred ? validateData.transferred : null,
         }
-
         // const test = ({ employee, ...rest }) => rest
 
         const newCheck = await IntermediateCheck.create(checkupDefect)
@@ -283,7 +404,11 @@ export default class DefectsController {
 
         // console.log(newCheck?.responsible_department.serialize())
 
-        if (arrayUsers?.length) {
+        if (
+          arrayUsers?.length &&
+          Env.get('SMTP_HOST') !== 'localhost' &&
+          Env.get('SMTP_HOST') !== ''
+        ) {
           Event.emit('send:mail-new-entry', {
             users: arrayUsers,
             templateMail: 'emails/template_mail_defects',
@@ -294,7 +419,7 @@ export default class DefectsController {
             note: newCheck,
           })
         } else {
-          console.log('array users empty')
+          console.log('В списке рассылки нету пользователей или не указан SMPT host!')
         }
 
         session.flash('successMessage', `Проверка успешно добавлена!`)
@@ -327,7 +452,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const staff = await Staff.all()
+      const users = await User.query().where('blocked', '=', false)
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Закрытие дефекта',
@@ -338,7 +463,7 @@ export default class DefectsController {
             back: 'defects.show',
           },
         },
-        staff,
+        users,
       })
     } else {
       session.flash('dangerMessage', 'Вы не можете закрыть несуществующий дефект!')
@@ -363,11 +488,11 @@ export default class DefectsController {
     const defect = await Defect.find(params.idDefect)
 
     if (defect) {
-      const validateData = await request.validate(DefectResultValidator)
+      const validateData = await request.validate(CloseDefectValidator)
 
       defect.id_name_eliminated = +validateData.employee
       defect.result = validateData.description_results
-      defect.elimination_date = validateData.date
+      defect.elimination_date = DateTime.now()
 
       await defect.save()
 

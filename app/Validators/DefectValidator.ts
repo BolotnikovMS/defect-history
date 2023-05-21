@@ -25,12 +25,14 @@ export default class DefectValidator {
    */
 
   public schema = schema.create({
-    defect_type: schema.string(),
-    substation: schema.string(),
-    accession: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
+    defect_type: schema.number(),
+    substation: schema.number(),
+    accession: schema.number(),
     description_defect: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
-    term_elimination: schema.date(),
-    importance: schema.string.optional(),
+    defect_img: schema.array
+      .optional()
+      .members(schema.file({ size: '1mb', extnames: ['jpg', 'png', 'jpeg'] })),
+    importance: schema.boolean.optional(),
   })
 
   /**
@@ -45,7 +47,9 @@ export default class DefectValidator {
    *
    */
   public messages: CustomMessages = {
-    required: 'Поле является обязательным.',
-    minLength: 'Минимальная длина поля 2 символа.',
+    'required': 'Поле является обязательным.',
+    'minLength': 'Минимальная длина поля {{ options.minLength }} символа.',
+    'file.size': 'Размер файла должен быть меньше {{ options.size }}.',
+    'file.extname': 'Файл должен иметь одно из следующих расширений {{ options.extnames }}.',
   }
 }

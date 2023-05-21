@@ -10,37 +10,29 @@
         @end
       @endcan
     </div>
-    <div class="defect__tabs">
-      <ul>
-        @buttons.base({
-          href: 'defects.index',
-          className: `btn-color_blue ${activeMenuLink ? '' : 'btn-color_blue-transparent'} `,
-        })
-          Все
-        @end
-        @each(typeDefect in typesDefects)
-          <li>
-            @buttons.base({
-              href: 'types-defects.show',
-              params: {id: typeDefect.id},
-              className: `btn-color_blue ${typeDefect?.id === activeTabLink ? '' : 'btn-color_blue-transparent'}`,
-            })
-              {{ typeDefect.type_defect }}
-            @end
-          </li>
-        @endeach
-      </ul>
+    <div class="defect__filters">
+      @dropdown.dropdown({
+        classDropdownMenu: 'dropdown__menu-menu_bottom_right',
+        dropdownData: [
+          { name: 'Все', path: 'defects.index' },
+          ...typesDefectsToSort
+        ],
+      })
+        <img src="{{ asset('assets/images/icons/sort.svg') }}" class="dropdown-icon dropdown-icon-size_15">
+        {{ typeDefect?.type_defect ? typeDefect.type_defect : 'Все' }}
+        <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+      @end
     </div>
   </div>
   <div class="defect__content">
     {{--  {{inspect(defects[0]?.defect_type)}}  --}}
     {{--  {{inspect(defect.defect_type ?? 'false')}}  --}}
     <hr>
-
+    {{--  {{inspect(typesFilter)}}  --}}
       @if(defects.length)
         <div class="cards defect__cards">
           @each(defect in defects)
-            <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === 'true' ? 'card-danger' : '' }}">
+            <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : '' }}">
               <div class="card__header">
                 <div class="card__header-content">
                   <div class="card__object-info">
@@ -48,10 +40,11 @@
                         <span class="card__text">
                           <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
                             {{ defect.substation.name }}
+                            <img src="{{ asset('assets/images/icons/link.svg') }}">
                           </a>
                         </span>
                       @endif
-                    <span class="card__text">{{ defect.accession }}</span>
+                    <span class="card__text">{{ defect.accession.name }}</span>
                     <span class="card__text">
                       Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
                     </span>
@@ -73,6 +66,10 @@
                     <div class="card__text card__text-fs_17">
                       <span class="card__text card__text-bold">Дата добавления:</span>
                       {{ dateFormat(defect.created_at) }}
+                    </div>
+                    <div class="card__text card__text-fs_17">
+                      <span class="card__text card__text-bold">Срок устранения:</span>
+                      {{ dateFormat(defect.term_elimination) }}
                     </div>
                     <div class="card__text card__text-fs_17">
                       <span class="card__text card__text-bold">Дата устранения:</span>
@@ -102,11 +99,12 @@
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
+                          { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
                           { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' }
+                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
-                        <img src="{{ asset('assets/icons/menu.svg') }}">
+                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
                       @end
                     @endif
                   </div>
@@ -116,11 +114,8 @@
           @endeach
         </div>
       @else
-        <div class="no-content">
-          <p>Пока нет добавленых дефектов.</p>
-        </div>
+        @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов.' })
       @endif
-
     <hr>
   </div>
   @!component('components/pagination', {

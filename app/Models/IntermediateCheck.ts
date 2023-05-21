@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import Staff from 'App/Models/Staff'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
 import Department from 'App/Models/Department'
+import User from 'App/Models/User'
 
 export default class IntermediateCheck extends BaseModel {
   @column({ isPrimary: true })
@@ -12,13 +12,13 @@ export default class IntermediateCheck extends BaseModel {
   public id_defect: number
 
   @column()
-  public id_user: number
+  public id_user_created: number
 
   @column({ serializeAs: null })
   public id_inspector: number
 
-  @column.date({
-    serialize: (value) => value.toFormat('dd.MM.yyyy'),
+  @column.dateTime({
+    serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
   })
   public check_date: DateTime
 
@@ -28,7 +28,7 @@ export default class IntermediateCheck extends BaseModel {
   public description_results: string
 
   @column()
-  public transferred: number
+  public transferred: number | null
 
   @column.dateTime({
     autoCreate: true,
@@ -41,11 +41,11 @@ export default class IntermediateCheck extends BaseModel {
   })
   public updatedAt: DateTime
 
-  @belongsTo(() => Staff, {
+  @belongsTo(() => User, {
     foreignKey: 'id_inspector',
     localKey: 'id',
   })
-  public name_inspector: BelongsTo<typeof Staff>
+  public name_inspector: BelongsTo<typeof User>
 
   @belongsTo(() => Department, {
     foreignKey: 'transferred',

@@ -13,7 +13,7 @@
 <body>
   @include('includes/header')
 
-  @include('includes/alert')
+  @!notification.notification()
 
   <main>
     <section class="page-content">
@@ -23,12 +23,10 @@
     </section>
   </main>
 
-  @include('includes/footer')
-
-  <script src="/js/libs/jquery-3.6.0.min.js"></script>
-  <script src="/js/libs/select2/select2.min.js"></script>
-  <script src="/js/libs/select2/i18n/ru.js"></script>
-  <script src="/js/libs/printThis/printThis.js"></script>
+  <script defer src="/js/libs/jquery-3.6.0.min.js"></script>
+  <script defer src="/js/libs/select2/select2.min.js"></script>
+  <script defer src="/js/libs/select2/i18n/ru.js"></script>
+  <script defer src="/js/libs/printThis/printThis.js"></script>
 
   @entryPointScripts('app')
 </body>

@@ -1,14 +1,12 @@
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class DefectResultValidator {
+export default class CloseDefectValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     employee: schema.string(),
     description_results: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
-    date: schema.date(),
-    transferred: schema.number.optional(),
   })
 
   public messages: CustomMessages = {

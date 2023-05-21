@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Substation from '../../Models/Substation'
+import Substation from 'App/Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
 import District from 'App/Models/District'
 
@@ -16,14 +16,14 @@ export default class SubstationsController {
     )
 
     return view.render('pages/substation/index', {
-      title: 'Список объектов',
+      title: 'Список ПС',
       substations,
       activeMenuLink: 'substations.index',
     })
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('createSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -43,7 +43,7 @@ export default class SubstationsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('createSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -54,9 +54,8 @@ export default class SubstationsController {
     if (validateSubstation) {
       await Substation.create({
         id_district: validateSubstation.district,
-        id_user: auth.user?.id,
+        id_user_created: auth.user?.id,
         name: validateSubstation.name,
-        importance: !!validateSubstation.importance + '',
       })
 
       session.flash(
@@ -77,6 +76,7 @@ export default class SubstationsController {
       await substation.load('defects', (query) => {
         query
           .orderBy('elimination_date', 'asc')
+          .preload('accession')
           .preload('defect_type')
           .preload('intermediate_checks')
       })
@@ -91,10 +91,32 @@ export default class SubstationsController {
     }
   }
 
+  public async showAttachments({ request, response, params, view, session }: HttpContextContract) {
+    const substation = await Substation.find(params.idSubstation)
+
+    if (request.ajax()) {
+      await substation?.load('accession')
+
+      return response.send(substation?.accession)
+    }
+
+    if (substation) {
+      await substation?.load('accession')
+
+      return view.render('pages/substation/show-accession', {
+        title: `Список присоединений ${substation.name}`,
+        substation,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('editSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -123,7 +145,7 @@ export default class SubstationsController {
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('editSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -136,22 +158,22 @@ export default class SubstationsController {
         .merge({
           id_district: validateSubstation.district,
           name: validateSubstation.name,
-          importance: !!validateSubstation.importance + '',
+          importance: validateSubstation.importance ? true : false,
         })
         .save()
 
       session.flash('successmessage', `Данные "${validateSubstation.name}" успешно обновлены.`)
-      response.redirect().toRoute('SubstationsController.index')
+      return response.redirect().toRoute('SubstationsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
+      return response.redirect().back()
     }
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('noAccess')) {
+    if (await bouncer.denies('deleteSubstation')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')
@@ -161,10 +183,10 @@ export default class SubstationsController {
       await substation.delete()
 
       session.flash('successMessage', `Объект успешно удален!`)
-      response.redirect().back()
+      return response.redirect().back()
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
+      return response.redirect().back()
     }
   }
 }

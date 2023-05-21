@@ -2,9 +2,11 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import Roles from '../../Enums/Roles'
 import Role from 'App/Models/Role'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import Department from 'App/Models/Department'
 import ChangePasswordValidator from 'App/Validators/ChangePasswordValidator'
+import Permission from 'App/Models/Permission'
+import UsersPermission from 'App/Models/UsersPermission'
 
 export default class UsersController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -77,7 +79,113 @@ export default class UsersController {
     }
   }
 
-  public async show({}: HttpContextContract) {}
+  public async showPermissionUser({
+    view,
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    if (await bouncer.denies('viewingUserPermissions')) {
+      session.flash('dangerMessage', 'У вас нет доступа на просмотр прав пользователей!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const idUser = await params.idUser
+    const user = await User.find(idUser)
+
+    if (user && user.blocked === false) {
+      await user.load('permissions')
+      const permissions = await Permission.query().orderBy('id', 'asc')
+      const filteredUserPermissions = permissions.filter((permission) => {
+        return user.permissions.every((userPerm) => {
+          return userPerm.id !== permission.id
+        })
+      })
+
+      return view.render('pages/user/show_permissions', {
+        title: `Права пользователя: '${user.fullName}'`,
+        userPermissions: user.permissions,
+        idUser,
+        permissions: filteredUserPermissions,
+      })
+    } else {
+      session.flash('dangerMessage', 'Учетная запись пользователя не существует или заблокирована!')
+      response.redirect().back()
+    }
+  }
+
+  public async addPermissionToUser({
+    params,
+    request,
+    response,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    if (await bouncer.denies('addingPermissionToUser')) {
+      session.flash('dangerMessage', 'Вы не можете добавлять права пользователям!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const idUser: number = parseInt(await params.idUser)
+    const user = await User.find(idUser)
+
+    if (user) {
+      const validationScheme = schema.create({
+        permissions: schema.array([rules.minLength(1)]).members(schema.number()),
+      })
+      const customMessages: CustomMessages = {
+        required: 'Поле является обязательным.',
+      }
+      const validateData = await request.validate({
+        schema: validationScheme,
+        messages: customMessages,
+      })
+
+      validateData.permissions.forEach(async (permission) => {
+        await UsersPermission.create({
+          id_user: idUser,
+          id_permission: permission,
+        })
+      })
+
+      session.flash('successMessage', `Права успешно присвоены пользователю!`)
+      response.redirect().back()
+    } else {
+      session.flash(
+        'dangerMessage',
+        `Пользователю которому присваиваются права не существует в базе!`
+      )
+      response.redirect().back()
+    }
+  }
+
+  public async removeUserPermission({ response, params, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('removeUserPermissions')) {
+      session.flash('dangerMessage', 'У вас нет доступа на удаление прав пользователей!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const idUser = await params.idUser
+    const idPermission = await params.idPermission
+    const userPermissionObject = await UsersPermission.query().whereIn(
+      ['id_user', 'id_permission'],
+      [[idUser, idPermission]]
+    )
+
+    if (userPermissionObject.length) {
+      await userPermissionObject[0].delete()
+
+      session.flash('successMessage', `Доступ пользователя успешно удален!`)
+      response.redirect().back()
+    } else {
+      session.flash('dangerMessage', `Что-то пошло не так!`)
+      response.redirect().back()
+    }
+  }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.denies('editUser')) {
@@ -117,24 +225,24 @@ export default class UsersController {
     }
 
     const user = await User.find(params.id)
-    const _schema = schema.create({
-      username: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      surname: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-      department: schema.number(),
-      role: schema.number(),
-      blocked: schema.string.optional(),
-    })
 
     if (user) {
-      const validateData = await request.validate({ schema: _schema })
+      const validationScheme = schema.create({
+        username: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        surname: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+        department: schema.number(),
+        role: schema.number(),
+        blocked: schema.boolean.optional(),
+      })
+      const validateData = await request.validate({ schema: validationScheme })
 
       await user
         .merge({
           ...validateData,
-          blocked: !!validateData.blocked + '',
+          blocked: validateData.blocked ? true : false,
           id_department: validateData.department,
           id_role: validateData.role,
         })
@@ -142,17 +250,20 @@ export default class UsersController {
 
       session.flash('successMessage', `Данные пользователя "${user.fullName}" успешно обновлены.`)
       response.redirect().toRoute('users.index')
+    } else {
+      session.flash('dangerMessage', 'Пользователя нет в базе!')
+      response.redirect().back()
     }
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    const user = await User.find(params.id)
-
     if (await bouncer.denies('deleteUser')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление!')
 
       return response.redirect().toPath('/')
     }
+
+    const user = await User.find(params.id)
 
     if (user && user.id_role !== Roles.ADMIN) {
       await user.delete()

@@ -8,8 +8,8 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.integer('id_user_create').notNullable()
-      table.string('blocked').notNullable().defaultTo('false')
+      table.integer('id_user_created').nullable()
+      table.boolean('blocked').defaultTo(false)
       table.string('username', 50).notNullable().unique()
       table.string('surname', 30).notNullable()
       table.string('name', 30).notNullable()
@@ -43,8 +43,9 @@ export default class extends BaseSchema {
         name: 'Admin',
         patronymic: 'Admin',
         position: 'Admin',
+        id_department: 1,
         id_role: Roles.ADMIN,
-        email: 'test@mail.ru',
+        email: 'admin@defect.ru',
         password: await argon2.hash('12345678'),
       })
     })

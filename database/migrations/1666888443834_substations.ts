@@ -6,7 +6,7 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
-      table.integer('id_user', 10).notNullable()
+      table.integer('id_user_created', 10).notNullable()
       table
         .integer('id_district', 10)
         .notNullable()
@@ -15,7 +15,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('districts')
       table.text('name').notNullable()
-      table.text('importance').checkIn(['true', 'false']).defaultTo('false')
+      table.boolean('importance').defaultTo(false)
 
       table.timestamps()
     })

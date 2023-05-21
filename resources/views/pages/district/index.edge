@@ -13,13 +13,6 @@
     <hr>
     @if(districts)
       <ul class="list">
-        <li class="list__item">
-          <div class="list__content">
-            <span class="list__text list__text-header">
-              Название района
-            </span>
-          </div>
-        </li>
         @each(district in districts)
           <li class="list__item">
             <div class="list__content">
@@ -38,16 +31,14 @@
                   { name: 'Удалить', access: 'deleteDistrict', data: district, path: 'districts.destroy', params: { id: district.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
               @end
             @endif
           </li>
         @endeach
       </ul>
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых районов.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых районов.' })
     @endif
     <hr>
   </div>

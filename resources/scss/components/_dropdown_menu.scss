@@ -25,12 +25,21 @@
     background-color: rgba(201, 198, 198, 0.95);
     font-size: 16px;
     transition: all 0.2s ease-in;
+    z-index: 1;
 
     &-menu_bottom {
       bottom: unset;
       right: unset;
       top: 35px;
       left: 0;
+      padding: 10px 0 5px;
+    }
+
+    &-menu_bottom_right {
+      bottom: unset;
+      right: unset;
+      top: 35px;
+      right: 0;
       padding: 10px 0 5px;
     }
 
@@ -59,6 +68,11 @@
   &-icon {
     width: 20px;
     height: 20px;
+
+    &-size_15 {
+      width: 15px;
+      height: 15px;
+    }
   }
 
 }

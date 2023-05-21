@@ -13,13 +13,6 @@
     <hr>
     @if(distributionGroups.length)
       <ul class="list">
-        <li class="list__item">
-          <div class="list__content">
-            <span class="list__text list__text-header">
-              Название группы
-            </span>
-          </div>
-        </li>
         @each(distributionGroup in distributionGroups)
           <li class="list__item">
             <div class="list__content">
@@ -28,7 +21,7 @@
               })
               <a href="{{ route('distribution.show', {id: distributionGroup.id}) }}" class="active-link">
                 {{ distributionGroup.name }}
-                <img src="{{ asset('assets/icons/link.svg') }}">
+                <img src="{{ asset('assets/images/icons/link.svg') }}">
               </a>
             </div>
             @if(!await bouncer.denies('updateDistributionGroup') || !await bouncer.denies('deleteDistributionGroup'))
@@ -39,16 +32,14 @@
                   { name: 'Удалить', access: 'deleteDistributionGroup', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/icons/menu.svg') }}" class="icon">
+                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
               @end
             @endif
           </li>
         @endeach
       </ul>
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых групп для рассылок.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых групп для рассылок.' })
     @endif
     <hr>
   </div>

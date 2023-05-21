@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header-row">
       <div class="header__logo">
-        <img src="{{ asset('assets/icons/journal.svg') }}" alt="Журнал">
+        <img src="{{ asset('assets/images/icons/journal.svg') }}" alt="Журнал">
       </div>
       {{-- <nav class="header__nav">
         <ul>
@@ -30,20 +30,14 @@
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Районы', path: 'districts.index' },
-                { name: 'Объекты', path: 'substations.index' },
+                { name: 'Районы и ГП', path: 'districts.index' },
+                { name: 'Список ПС', path: 'substations.index' },
               ],
             })
-              Районы
-              <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
+              Районы и ГП
+              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
-          @can('noAccess')
-            <li  class="nav-list__item">
-              <a href="{{ route('staff.index') }}"
-                class="{{ 'staff.index' == activeMenuLink ? 'active' : '' }}">Персонал</a>
-            </li>
-          @endcan
 
           @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers'))
             @dropdown.dropdown({
@@ -54,7 +48,7 @@
               ],
             })
               Пользователи
-              <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
+              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
           @can('viewDistributionGroup')
@@ -75,15 +69,15 @@
             ],
             dropdownLogout: true,
           })
-          <img src="{{ asset('assets/icons/user-1.svg') }}" class="dropdown-icon">
+          <img src="{{ asset('assets/images/icons/user-1.svg') }}" class="dropdown-icon">
 
             {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
 
-            <img src="{{ asset('assets/icons/arrow-down.svg') }}" class="dropdown-icon">
+            <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
           @end
         @else
           @buttons.base({ href: 'auth.login.show', className: 'btn-small btn-color_blue btn-signup' })
-            <img src="{{ asset('assets/icons/login-3.svg') }}" alt="Войти">
+            <img src="{{ asset('assets/images/icons/login-3.svg') }}" alt="Войти">
             Войти
           @end
         @endif

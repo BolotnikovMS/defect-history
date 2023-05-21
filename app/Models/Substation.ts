@@ -1,14 +1,15 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, computed, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import Defect from './Defect'
+import Defect from 'App/Models/Defect'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
+import AccessionSubstation from 'App/Models/AccessionSubstation'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public id_user: number
+  public id_user_created: number
 
   @column()
   public id_district: number
@@ -18,8 +19,10 @@ export default class Substation extends BaseModel {
   })
   public name: string
 
-  @column()
-  public importance: string
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  public importance: boolean
 
   @column.dateTime({
     autoCreate: true,
@@ -42,4 +45,10 @@ export default class Substation extends BaseModel {
     foreignKey: 'id_substation',
   })
   public defects: HasMany<typeof Defect>
+
+  @hasMany(() => AccessionSubstation, {
+    localKey: 'id',
+    foreignKey: 'id_substation',
+  })
+  public accession: HasMany<typeof AccessionSubstation>
 }

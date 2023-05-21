@@ -12,20 +12,23 @@ import {
   hasMany,
   HasMany,
 } from '@ioc:Adonis/Lucid/Orm'
-import Role from './Role'
-import Department from './Department'
-import DistributionGroup from './DistributionGroup'
+import Role from 'App/Models/Role'
+import Department from 'App/Models/Department'
+import DistributionGroup from 'App/Models/DistributionGroup'
 import Defect from 'App/Models/Defect'
+import Permission from 'App/Models/Permission'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
   @column()
-  public id_user_create: number
+  public id_user_created: number | null
 
-  @column()
-  public blocked: string
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  public blocked: boolean
 
   @column()
   public username: string
@@ -92,7 +95,17 @@ export default class User extends BaseModel {
 
   @hasMany(() => Defect, {
     localKey: 'id',
-    foreignKey: 'id_user',
+    foreignKey: 'id_user_created',
   })
   public defects: HasMany<typeof Defect>
+
+  @manyToMany(() => Permission, {
+    localKey: 'id',
+    pivotForeignKey: 'id_user',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'id_permission',
+    pivotTable: 'users_permissions',
+    pivotColumns: ['id', 'id_user'],
+  })
+  public permissions: ManyToMany<typeof Permission>
 }

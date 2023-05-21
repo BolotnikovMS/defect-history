@@ -1,18 +1,14 @@
-.message {
+.notification-wrapper {
   position: relative;
   max-width: 700px;
   margin: 0 auto;
 }
 
-.alert {
+.notification {
   position: fixed;
   column-gap: 15px;
   bottom: 15px;
   right: 10px;
-  // top: 50%;
-  // left: 50%;
-  // transform: translate(-50%, -6%);
-  // min-width: 700px;
   max-width: 450px;
   opacity: 0;
   display: none;

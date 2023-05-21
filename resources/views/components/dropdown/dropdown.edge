@@ -12,7 +12,7 @@
       })
         @slot('contenDropdownItem')
           @if(item.icon)
-            <img src="{{ asset(`assets/icons/${item.icon}`) }}">
+            <img src="{{ asset(`assets/images/icons/${item.icon}`) }}" class="icon">
           @endif
           {{ item.name }}
         @end
@@ -22,7 +22,7 @@
       <div class="dropdown-logout">
         <hr class="dropdown-line">
         @buttons.base({ href: 'auth.logout', className: 'btn-small btn-color_blue btn-logout' })
-          <img src="{{ asset('assets/icons/logout.svg') }}" alt="Выйти" class="icon icon-size_20">
+          <img src="{{ asset('assets/images/icons/logout.svg') }}" alt="Выйти" class="icon icon-size_20">
           Выйти
         @end
       </div>

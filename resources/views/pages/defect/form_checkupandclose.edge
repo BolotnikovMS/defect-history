@@ -17,7 +17,7 @@
             defaultOptionText: 'Выберите сотрудника'
           },
           dataOptionsConfig: {
-            dataOptions: staff,
+            dataOptions: users,
             dataNameOption: 'fullName'
           }
         })
@@ -31,14 +31,15 @@
           required: true,
         })
 
-        @!inputs.base({
-          label: 'Дата работ',
-          labelPositionText: 'label__text_left',
-          type: 'date',
-          name: 'date',
-        })
-
         @if(checkup)
+          @!inputs.base({
+            label: 'Дата проведения работ',
+            labelPositionText: 'label__text_left',
+            type: 'datetime',
+            name: 'date',
+            placeholderText: 'Формат даты dd.MM.yyyy HH:mm'
+          })
+
           @!inputs.select({
             label: 'Передано для дальнейших действий',
             labelPositionText: 'label__text_left',

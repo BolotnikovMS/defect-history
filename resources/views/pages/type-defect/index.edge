@@ -2,12 +2,14 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  <div class="control">
-    {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
-    @buttons.add({ href: 'types-defects.create' })
-      Добавить
-    @end
-  </div>
+  @can('createTypeDefect')
+    <div class="control">
+      {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
+      @buttons.add({ href: 'types-defects.create' })
+        Добавить
+      @end
+    </div>
+  @endcan
   <div class="types-defects__content">
     {{-- <div class="dialog"></div> --}}
     <hr>
@@ -41,7 +43,7 @@
                         { name: 'Удалить', access: 'deleteTypeDefect', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
                       ],
                     })
-                      <img src="{{ asset('assets/icons/menu.svg') }}" class="icon icon-size_20">
+                      <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">
                     @end
                   @endif
                 </div>
@@ -51,49 +53,8 @@
         @endeach
       </div>
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых типов дефектов.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых типов дефектов.' })
     @endif
-
-    {{--  @if(typesDefects.length)
-      <ul class="list">
-        <li class="list__item">
-          <div class="list__content">
-            <span class="list__text list__text-header">
-              Название / Группа рассылки / Описание вида дефекта
-            </span>
-          </div>
-        </li>
-        @each((typeDefect, i) in typesDefects)
-          <li class="list__item">
-            <div class="list__content">
-              {{ typeDefect.type_defect }} |
-              @if(typeDefect.group)
-                {{ typeDefect.group.name }} |
-              @else
-                Группы нету |
-              @endif
-              <span class="list__text">
-                {{ typeDefect.defect_description }}
-              </span>
-            </div>
-            <div class="list__control">
-              <a href="{{ route('types-defects.edit', {id: typeDefect.id}) }}">
-                <img src="{{ asset('assets/icons/edit.svg') }}" class="list__img" alt="Редактировать" title="Редактировать">
-              </a>
-              <a href="{{ route('types-defects.destroy', {id: typeDefect.id}) }}">
-                <img src="{{ asset('assets/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
-              </a>
-            </div>
-          </li>
-        @endeach
-      </ul>
-    @else
-      <div class="no-content">
-        <p>Пока нет добавленых типов дефектов.</p>
-      </div>
-    @endif  --}}
     <hr>
   </div>
   @!component('components/pagination', {

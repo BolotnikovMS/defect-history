@@ -57,8 +57,9 @@ export default class DefectTypesController {
     const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
     await DefectType.create({
-      id_user: auth.user?.id,
-      id_distribution_group: validateTypeDefectData.group,
+      id_user_created: auth.user?.id,
+      id_distribution_group:
+        validateTypeDefectData.group === 0 ? null : validateTypeDefectData.group,
       type_defect: validateTypeDefectData.type_defect,
       defect_description: validateTypeDefectData.defect_description
         ? validateTypeDefectData.defect_description
@@ -69,17 +70,24 @@ export default class DefectTypesController {
       'successMessage',
       `Тип дефекта с названием "${validateTypeDefectData.type_defect}" успешно добавлен!`
     )
+    response.redirect().toRoute('types-defects.index')
   }
 
   public async show({ response, params, view, session }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
     const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
+    const typesDefectsToSort = typesDefects.map((type) => ({
+      name: type.type_defect,
+      path: 'types-defects.show',
+      params: { id: type.id },
+    }))
 
     if (typeDefect) {
       await typeDefect.load('defects', (query) => {
         query
           .orderBy('elimination_date', 'asc')
           .preload('substation')
+          .preload('accession')
           .preload('intermediate_checks')
       })
 
@@ -87,6 +95,7 @@ export default class DefectTypesController {
         title: `Дефекты '${typeDefect.type_defect}'`,
         typeDefect,
         typesDefects,
+        typesDefectsToSort,
         defects: typeDefect.defects,
         activeTabLink: typeDefect.id,
       })
