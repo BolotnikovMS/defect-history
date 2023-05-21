@@ -1,0 +1,16 @@
+<li class="list__item {{ classListItem }}">
+  <div class="list__content">
+    @if(await $slots.badge)
+      {{{ await $slots.badge() }}}
+    @end
+    <a href="{{ link ? route(linkOptions.nameRoute, linkOptions.params) : '#' }}" class="active-link {{ classLink }}">
+      {{ dataOptions?.propertyName ? data[dataOptions.propertyName] : data.name }}
+    </a>
+    @if(data.importance === true)
+      <img src="{{ asset('assets/images/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
+    @endif
+  </div>
+  @if(await $slots.menu)
+    {{{ await $slots.menu() }}}
+  @end
+</li>

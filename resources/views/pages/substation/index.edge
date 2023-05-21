@@ -12,47 +12,41 @@
   <div class="substations__content">
     <hr>
     @if(substations.length)
-      <ul class="list">
-        {{--  <li class="list__item">
-          <div class="list__content">
-            <span class="list__text list__text-header">
-              Название ПС
-            </span>
-          </div>
-        </li>  --}}
+      @list.list()
         @each(substation in substations)
-          <li class="list__item">
-            <div class="list__content">
-              {{--  substation.numberOpenDefects  --}}
+          @list.listItem({
+            data: substation,
+            link: true,
+            linkOptions: {
+              nameRoute: 'substations.show',
+              params: { id: substation.id }
+            },
+          })
+            @slot('badge')
               @!badge.badge({
                 optionClass: substation.numberOpenDefects > 0 ? 'badge__counter-red' : '',
                 data: substation.numberOpenDefects,
               })
-              <a href="{{ route('substations.show', {id: substation.id}) }}" class="active-link">
-                {{ substation.name }}
-              </a>
-              @if(substation.importance === true)
-                <img src="{{ asset('assets/images/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
-              @endif
-            </div>
-            @if(!await bouncer.denies('editSubstation') || !await bouncer.denies('deleteSubstation'))
-              @dropdown.dropdown({
-                classBtnDropdown: 'btn-dropdown-icon',
-                dropdownData: [
-                  { name: 'Редактировать', access: 'editSubstation', data: substation, path: 'substations.edit', params: { id: substation.id }, icon: 'edit.svg' },
-                  { name: 'Удалить', access: 'deleteSubstation', data: substation, path: 'substations.destroy', params: { id: substation.id }, icon: 'delete.svg' },
-                ],
-              })
-                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+            @end
+            @slot('menu')
+              @if(!await bouncer.denies('editSubstation') || !await bouncer.denies('deleteSubstation'))
+                  @dropdown.dropdown({
+                    classBtnDropdown: 'btn-dropdown-icon',
+                    dropdownData: [
+                      { name: 'Редактировать', access: 'editSubstation', data: substation, path: 'substations.edit', params: { id: substation.id }, icon: 'edit.svg' },
+                      { name: 'Удалить', access: 'deleteSubstation', data: substation, path: 'substations.destroy', params: { id: substation.id }, icon: 'delete.svg' },
+                    ],
+                  })
+                    <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                  @end
+                @endif
               @end
-            @endif
-          </li>
+            @endlist
+          @end
         @endeach
-      </ul>
+      @end
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых объектов.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых объектов.' })
     @endif
     <hr>
   </div>
