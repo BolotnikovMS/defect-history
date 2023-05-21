@@ -38,9 +38,7 @@
         @endeach
       </ul>
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых районов.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых районов.' })
     @endif
     <hr>
   </div>

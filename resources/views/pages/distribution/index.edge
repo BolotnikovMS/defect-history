@@ -39,9 +39,7 @@
         @endeach
       </ul>
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых групп для рассылок.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых групп для рассылок.' })
     @endif
     <hr>
   </div>

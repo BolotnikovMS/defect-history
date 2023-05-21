@@ -114,11 +114,8 @@
           @endeach
         </div>
       @else
-        <div class="no-content">
-          <p>Пока нет добавленых дефектов.</p>
-        </div>
+        @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов.' })
       @endif
-
     <hr>
   </div>
   @!component('components/pagination', {
