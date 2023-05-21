@@ -8,7 +8,7 @@ export default class extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id').primary()
-      table.integer('id_user_created').notNullable().defaultTo(1)
+      table.integer('id_user_created').nullable()
       table.boolean('blocked').defaultTo(false)
       table.string('username', 50).notNullable().unique()
       table.string('surname', 30).notNullable()
@@ -45,7 +45,7 @@ export default class extends BaseSchema {
         position: 'Admin',
         id_department: 1,
         id_role: Roles.ADMIN,
-        email: 'test@mail.ru',
+        email: 'admin@defect.ru',
         password: await argon2.hash('12345678'),
       })
     })
