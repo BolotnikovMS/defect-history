@@ -13,6 +13,7 @@ import Department from 'App/Models/Department'
 import DefectType from 'App/Models/DefectType'
 import User from 'App/Models/User'
 import Event from '@ioc:Adonis/Core/Event'
+import Env from '@ioc:Adonis/Core/Env'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -135,7 +136,11 @@ export default class DefectsController {
 
       const arrayUsers = newDefect.defect_type?.group.group_users
 
-      if (arrayUsers?.length) {
+      if (
+        arrayUsers?.length &&
+        Env.get('SMTP_HOST') !== 'localhost' &&
+        Env.get('SMTP_HOST') !== ''
+      ) {
         Event.emit('send:mail-new-entry', {
           users: arrayUsers,
           templateMail: 'emails/template_mail_defects',
@@ -145,7 +150,7 @@ export default class DefectsController {
           note: newDefect,
         })
       } else {
-        console.log('array users empty')
+        console.log('В списке рассылки нету пользователей или не указан SMPT host!')
       }
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
@@ -399,7 +404,11 @@ export default class DefectsController {
 
         // console.log(newCheck?.responsible_department.serialize())
 
-        if (arrayUsers?.length) {
+        if (
+          arrayUsers?.length &&
+          Env.get('SMTP_HOST') !== 'localhost' &&
+          Env.get('SMTP_HOST') !== ''
+        ) {
           Event.emit('send:mail-new-entry', {
             users: arrayUsers,
             templateMail: 'emails/template_mail_defects',
@@ -410,7 +419,7 @@ export default class DefectsController {
             note: newCheck,
           })
         } else {
-          console.log('array users empty')
+          console.log('В списке рассылки нету пользователей или не указан SMPT host!')
         }
 
         session.flash('successMessage', `Проверка успешно добавлена!`)
