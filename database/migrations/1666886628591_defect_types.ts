@@ -7,6 +7,7 @@ export default class extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('id_user_created', 10).notNullable()
+      table.integer('id_distribution_group', 10).nullable()
       table.string('type_defect', 255).notNullable()
       table.text('defect_description')
 
