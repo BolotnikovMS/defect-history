@@ -44,6 +44,8 @@
     "@adonisjs/mail"
   ],
   "metaFiles": [
+    ".env",
+    ".adonisrc.json",
     {
       "pattern": "public/**",
       "reloadServer": false
