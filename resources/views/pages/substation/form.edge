@@ -43,6 +43,16 @@
           checked: substation ? substation.importance : null
         })
       </div>
+      @if(options.routePath.saveData === 'substations.store')
+        <div class="form__questions">
+          @!inputs.checkbox({
+            label: 'Добавить еще объект',
+            classlabel: 'form__label-row',
+            classLabelText: 'label__text_nomargin',
+            name: 'addNext',
+          })
+        </div>
+      @end
       <div class="form__btns">
         @buttons.cancel({ href: 'substations.index' })
           Отмена

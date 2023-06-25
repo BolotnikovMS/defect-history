@@ -8,15 +8,24 @@
     })
       <div class="form__content form__content-column">
         @!inputs.base({
-          label: 'Название',
+          label: 'Название отдела',
           labelPositionText: 'label__text_left',
           name: 'name',
           placeholderText: 'Введите название...',
           required: true,
           value: department ? department.name : ''
         })
-
       </div>
+      @if(options.routePath.saveData === 'departments.store')
+        <div class="form__questions">
+          @!inputs.checkbox({
+            label: 'Добавить еще отдел',
+            classlabel: 'form__label-row',
+            classLabelText: 'label__text_nomargin',
+            name: 'addNext',
+          })
+        </div>
+      @end
       <div class="form__btns">
         @buttons.cancel({ href: 'departments.index' })
           Отмена

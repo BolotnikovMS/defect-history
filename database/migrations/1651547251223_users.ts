@@ -1,6 +1,7 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 import Roles from '../../app/Enums/Roles'
 import * as argon2 from 'phc-argon2'
+import { Departments } from 'App/Enums/Departments'
 
 export default class extends BaseSchema {
   protected tableName = 'users'
@@ -43,7 +44,7 @@ export default class extends BaseSchema {
         name: 'Admin',
         patronymic: 'Admin',
         position: 'Admin',
-        id_department: 1,
+        id_department: Departments.admins,
         id_role: Roles.ADMIN,
         email: 'admin@defect.ru',
         password: await argon2.hash('12345678'),

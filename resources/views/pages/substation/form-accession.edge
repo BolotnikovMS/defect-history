@@ -24,14 +24,16 @@
           checked: accession ? accession.importance : null
         })
       </div>
-      <div class="form__questions">
-        @!inputs.checkbox({
-          label: 'Добавить еще присоединение',
-          classlabel: 'form__label-row',
-          classLabelText: 'label__text_nomargin',
-          name: 'addNext',
-        })
-      </div>
+      @if(options.routePath.saveData === 'accession-substations.store')
+        <div class="form__questions">
+          @!inputs.checkbox({
+            label: 'Добавить еще присоединение',
+            classlabel: 'form__label-row',
+            classLabelText: 'label__text_nomargin',
+            name: 'addNext',
+          })
+        </div>
+      @end
       <div class="form__btns">
         @buttons.cancel({ href: 'substations.show.attachments', params: options.dataSubstation })
           Отмена

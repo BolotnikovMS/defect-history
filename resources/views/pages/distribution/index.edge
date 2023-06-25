@@ -17,7 +17,8 @@
           <li class="list__item">
             <div class="list__content">
               @!badge.badge({
-                data: distributionGroup.usersCount
+                data: distributionGroup.usersCount,
+                titleText: 'Количество_пользователей'
               })
               <a href="{{ route('distribution.show', {id: distributionGroup.id}) }}" class="active-link">
                 {{ distributionGroup.name }}

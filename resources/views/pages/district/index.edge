@@ -11,13 +11,14 @@
   </div>
   <div class="districts__content">
     <hr>
-    @if(districts)
+    @if(districts.length)
       <ul class="list">
         @each(district in districts)
           <li class="list__item">
             <div class="list__content">
               @!badge.badge({
                 data: district.substationsCount,
+                titleText: 'Количество_ПС'
               })
               <a href="{{ route('districts.show', {id: district.id}) }}" class="active-link">
                 {{ district.name }}
@@ -38,7 +39,7 @@
         @endeach
       </ul>
     @else
-      @!notification.nocontent({ messageNoData: 'Пока нет добавленых районов.' })
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых районов или ГП.' })
     @endif
     <hr>
   </div>

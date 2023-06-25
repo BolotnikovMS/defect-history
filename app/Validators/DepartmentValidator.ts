@@ -11,6 +11,7 @@ export default class DepartmentValidator {
       rules.minLength(2),
       rules.maxLength(100),
     ]),
+    addNext: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {

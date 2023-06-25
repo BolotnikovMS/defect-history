@@ -32,6 +32,7 @@ export default class SubstationValidator {
       rules.maxLength(70),
     ]),
     importance: schema.string.optional(),
+    addNext: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {

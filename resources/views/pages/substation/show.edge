@@ -2,15 +2,18 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  <div class="control">
-    @buttons.base({
-      href: 'substations.show.attachments',
-      params: { idSubstation: substation.id },
-      className: 'btn-color_blue btn-color_blue-transparent',
-    })
+  @can('viewAttachment')
+    <div class="control">
+      @buttons.base({
+        href: 'substations.show.attachments',
+        params: { idSubstation: substation.id },
+        className: 'btn-color_blue btn-color_blue-transparent',
+      })
       Присоединения
-    @end
-  </div>
+      ({{substation.numberOfConnections}})
+      @end
+    </div>
+  @end
   <div class="substations__content">
     <hr>
     @if(substation.defects.length)

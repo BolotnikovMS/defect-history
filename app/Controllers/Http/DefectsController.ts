@@ -14,6 +14,7 @@ import DefectType from 'App/Models/DefectType'
 import User from 'App/Models/User'
 import Event from '@ioc:Adonis/Core/Event'
 import Env from '@ioc:Adonis/Core/Env'
+import { Departments } from 'App/Enums/Departments'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -123,9 +124,9 @@ export default class DefectsController {
         id_accession: validateDefectData.accession,
         ...validateDefectData,
         defect_img: imgPaths.length ? imgPaths : null,
-        term_elimination: addDays(15),
+        term_elimination: addDays(20),
       }
-      // console.log('defect: ', defect)
+
       const newDefect = await Defect.create(defect)
 
       await newDefect.load('defect_type', (queryGroup) => {
@@ -232,6 +233,14 @@ export default class DefectsController {
       }
 
       const validateDefectData = await request.validate(DefectValidator)
+
+      validateDefectData?.defect_img?.forEach(async (img) => {
+        const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+
+        defect?.defect_img?.push(`/uploads/images/defects/${imgName}`)
+
+        await img.moveToDisk('images/defects/', { name: imgName })
+      })
 
       defect.id_type_defect = +validateDefectData.defect_type
       defect.id_substation = +validateDefectData.substation
@@ -341,7 +350,10 @@ export default class DefectsController {
 
     if (defect) {
       const users = await User.query().where('blocked', '=', false)
-      const departments = await Department.all()
+      const departments = await Department.query().where((query) => {
+        query.where('id', '!=', Departments.admins)
+        query.where('id', '!=', Departments.withoutDepartment)
+      })
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Добавление проверки',

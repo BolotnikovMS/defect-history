@@ -11,6 +11,7 @@ export default class DistrictValidator {
       rules.minLength(2),
       rules.maxLength(110),
     ]),
+    addNext: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {
