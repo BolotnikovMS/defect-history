@@ -103,6 +103,13 @@ export const { actions } = Bouncer.before((user: User | null) => {
   })
 
   // Accession substations
+  .define('viewAttachment', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('viewAttachment', user.permissions)
+    )
+  })
   .define('creatingAttachment', async (user: User) => {
     await user.load('permissions')
 
@@ -165,8 +172,11 @@ export const { actions } = Bouncer.before((user: User | null) => {
 
   // Defects action
   // .define('viewDefects', (user: User) => {})
-  .define('createDefect', (user: User) => {
-    return [Roles.USER, Roles.MODERATOR].includes(user.id_role)
+  // await user.load('permissions')
+  .define('createDefect', async (user: User) => {
+    await user.load('permissions')
+
+    return user.id_role === Roles.MODERATOR || userPermissionCheck('createDefect', user.permissions)
   })
   .define('editDefect', async (user: User, defect: Defect) => {
     await user.load('permissions')
