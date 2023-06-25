@@ -40,6 +40,11 @@ export default class Substation extends BaseModel {
     return this.defects?.filter((item) => item.elimination_date === null).length
   }
 
+  @computed()
+  public get numberOfConnections() {
+    return this.accession?.length
+  }
+
   @hasMany(() => Defect, {
     localKey: 'id',
     foreignKey: 'id_substation',
