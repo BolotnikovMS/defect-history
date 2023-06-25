@@ -234,6 +234,14 @@ export default class DefectsController {
 
       const validateDefectData = await request.validate(DefectValidator)
 
+      validateDefectData?.defect_img?.forEach(async (img) => {
+        const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+
+        defect?.defect_img?.push(`/uploads/images/defects/${imgName}`)
+
+        await img.moveToDisk('images/defects/', { name: imgName })
+      })
+
       defect.id_type_defect = +validateDefectData.defect_type
       defect.id_substation = +validateDefectData.substation
       defect.id_accession = validateDefectData.accession
