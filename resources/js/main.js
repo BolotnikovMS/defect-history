@@ -90,6 +90,17 @@ document.addEventListener('DOMContentLoaded', () => {
           $('.input__accession').append(`<option value=${option.id}>${option.name}</option>`)
         })
       },
+      error: function (jqXHR) {
+        if (jqXHR.status === 0) {
+          console.log('Not connect. Verify Network.')
+        } else if (jqXHR.status === 404) {
+          console.log('Requested page not found (404).')
+          $('.input__accession').html('')
+          $('.input__accession').append(
+            '<option value="0" selected disabled>Произошла ошибка при получении данных с сервера</option>'
+          )
+        }
+      },
     })
   })
 
