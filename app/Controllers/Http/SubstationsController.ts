@@ -4,7 +4,13 @@ import SubstationValidator from '../../Validators/SubstationValidator'
 import District from 'App/Models/District'
 
 export default class SubstationsController {
-  public async index({ request, view }: HttpContextContract) {
+  public async index({ request, response, view, bouncer, session }: HttpContextContract) {
+    if (await bouncer.denies('viewSubstations')) {
+      session.flash('dangerMessage', 'У вас нет прав для просмотра!')
+
+      return response.redirect().toPath('/')
+    }
+
     const page = request.input('page', 1)
     const limit = 15
     const substations = await Substation.query().preload('defects').paginate(page, limit)
@@ -62,6 +68,11 @@ export default class SubstationsController {
         'successMessage',
         `Объект с названием "${validateSubstation.name}" успешно добавлен!`
       )
+
+      if (validateSubstation.addNext) {
+        return response.redirect().back()
+      }
+
       response.redirect().toRoute('substations.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -80,6 +91,7 @@ export default class SubstationsController {
           .preload('defect_type')
           .preload('intermediate_checks')
       })
+      await substation.load('accession')
 
       return view.render('pages/substation/show', {
         title: `Дефекты ${substation.name}`,
@@ -91,7 +103,14 @@ export default class SubstationsController {
     }
   }
 
-  public async showAttachments({ request, response, params, view, session }: HttpContextContract) {
+  public async showAttachments({
+    request,
+    response,
+    params,
+    view,
+    session,
+    bouncer,
+  }: HttpContextContract) {
     const substation = await Substation.find(params.idSubstation)
 
     if (request.ajax()) {
@@ -101,6 +120,12 @@ export default class SubstationsController {
     }
 
     if (substation) {
+      if (await bouncer.denies('viewAttachment')) {
+        session.flash('dangerMessage', 'У вас нет прав для просмотра!')
+
+        return response.redirect().toPath('/')
+      }
+
       await substation?.load('accession')
 
       return view.render('pages/substation/show-accession', {
