@@ -26,12 +26,12 @@
                 class="{{ 'types-defects.index' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
             </li>
           @endcan
-          @if(auth.user)
+          @if(!await bouncer.denies('viewDistrict') || !await bouncer.denies('viewSubstations'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Районы и ГП', path: 'districts.index' },
-                { name: 'Список ПС', path: 'substations.index' },
+                { name: 'Районы и ГП', access: 'viewDistrict', path: 'districts.index' },
+                { name: 'Список ПС', access: 'viewSubstations', path: 'substations.index' },
               ],
             })
               Районы и ГП
