@@ -45,6 +45,15 @@ a {
   text-align: center;
 }
 
+.message {
+  padding: 10px 0;
+  font-size: 20px;
+
+  &-text_red {
+    color: red
+  }
+}
+
 .title {
   @extend %title;
 }

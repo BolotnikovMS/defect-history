@@ -83,6 +83,11 @@
         acceptData: '.png, .jpeg, .jpg',
       })
 
+      @!notification.message({
+        messageText: 'Расширения для изображения(jpg, png, jpeg), размер не больше 1мб.',
+        optionClass: 'message-text_red'
+      })
+
       @!inputs.checkbox({
         label: 'Важность устранения дефекта',
         classlabel: 'form__label-row',
