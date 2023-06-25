@@ -50,6 +50,10 @@ export default class extends BaseSchema {
         },
         // Actions accession substations
         {
+          access: 'viewAttachment',
+          description: 'Просмотр присоединений',
+        },
+        {
           access: 'creatingAttachment',
           description: 'Добавление нового присоединения',
         },

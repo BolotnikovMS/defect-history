@@ -1,4 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
+import { Departments } from 'App/Enums/Departments'
 
 export default class extends BaseSchema {
   protected tableName = 'departments'
@@ -14,9 +15,16 @@ export default class extends BaseSchema {
     })
 
     this.defer(async (db) => {
-      await db.table(this.tableName).insert({
-        name: 'Admins',
-      })
+      await db.table(this.tableName).multiInsert([
+        {
+          id: Departments.admins,
+          name: 'Admins',
+        },
+        {
+          id: Departments.withoutDepartment,
+          name: 'Без отдела',
+        },
+      ])
     })
   }
 
