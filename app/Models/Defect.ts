@@ -41,6 +41,7 @@ export default class Defect extends BaseModel {
 
   @column({
     consume: (value: string) => value && value.split(','),
+    prepare: (value: string[]) => value && value.join(','),
   })
   public defect_img: string[] | null
 
