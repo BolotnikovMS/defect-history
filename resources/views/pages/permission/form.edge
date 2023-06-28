@@ -1,0 +1,38 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="permissions__content">
+    @forms.post({ action: route(options.routePath.saveData) })
+      <div class="form__content form__content-column">
+        @!inputs.textarea({
+          label: 'Описание доступа',
+          labelPositionText: 'label__text_left',
+          name: 'description',
+          rows: 3,
+          placeholderText: 'Введите описание...',
+          required: true,
+          value: ''
+        })
+
+        @!inputs.base({
+          label: 'Access',
+          labelPositionText: 'label__text_left',
+          name: 'access',
+          placeholderText: 'Введите название...',
+          required: true,
+          value: ''
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'permissions.index' })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection
