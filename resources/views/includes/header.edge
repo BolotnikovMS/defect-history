@@ -39,12 +39,13 @@
             @end
           @endif
 
-          @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers'))
+          @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers') || !await bouncer.denies('viewPermissions'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
                 { name: 'Отделы', access: 'viewDepartment', path: 'departments.index' },
                 { name: 'Пользователи', access: 'viewUsers', path: 'users.index' },
+                { name: 'Права', access: 'viewPermissions', path: 'permissions.index' },
               ],
             })
               Пользователи

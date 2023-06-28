@@ -1,5 +1,5 @@
 @if(access)
-  @can(access, data ?? '')
+  @can(access, data ?? null)
     <li>
       <a
         href="{{ route(href, params ?? '') }}"

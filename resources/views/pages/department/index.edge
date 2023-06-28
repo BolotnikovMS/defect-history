@@ -19,30 +19,28 @@
               Название отдела
             </span>
           </div>
-          @each(department in departments)
-            <li class="list__item">
-              <div class="list__content">
-                {{ department.name }}
-              </div>
-              @if(!await bouncer.denies('updateDepartment') || !await bouncer.denies('deleteDepartment'))
-                @dropdown.dropdown({
-                  classBtnDropdown: 'btn-dropdown-icon',
-                  dropdownData: [
-                    { name: 'Редактировать', access: 'updateDepartment', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit.svg' },
-                    { name: 'Удалить', access: 'deleteDepartment', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
-                  ],
-                })
-                  <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
-                @end
-              @endif
-            </li>
-          @endeach
         </li>
+        @each(department in departments)
+          <li class="list__item">
+            <div class="list__content">
+              {{ department.name }}
+            </div>
+            @if(!await bouncer.denies('updateDepartment') || !await bouncer.denies('deleteDepartment'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'updateDepartment', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'deleteDepartment', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
+                ],
+              })
+                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+              @end
+            @endif
+          </li>
+        @endeach
       </ul>
     @else
-      <div class="no-content">
-        <p>Пока нет добавленых отделов.</p>
-      </div>
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых отделов.' })
     @endif
     <hr>
   </div>
