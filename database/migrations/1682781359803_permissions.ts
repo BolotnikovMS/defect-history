@@ -94,6 +94,14 @@ export default class extends BaseSchema {
           access: 'deleteUser',
           description: 'Удаление пользователя',
         },
+        {
+          access: 'viewPermissions',
+          description: 'Просмотр всех прав',
+        },
+        {
+          access: 'createPermissions',
+          description: 'Добавление нового права',
+        },
         // Actions with defects
         {
           access: 'createDefect',
@@ -115,6 +123,10 @@ export default class extends BaseSchema {
         {
           access: 'createCheckup',
           description: 'Добавление промежуточной проверки',
+        },
+        {
+          access: 'deleteCheckup',
+          description: 'Удаление промежуточной проверки',
         },
         {
           access: 'createCloseDefect',
