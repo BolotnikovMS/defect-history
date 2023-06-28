@@ -5,23 +5,26 @@
     @if(auth.isLoggedIn)
       <div class="control">
         @if(!defect.result && !defect.elimination_date)
-          @buttons.base({
-            href: 'defects.close.create',
-            params: {idDefect: defect.id},
-            className: 'btn-color_green'
-          })
-            <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Добавить">
-            Закрыть дефект
-          @end
-
-          @buttons.base({
-            href: 'defects.checkup-create',
-            params: {idDefect: defect.id},
-            className: 'btn-color_orange'
-          })
-            <img src="{{ asset('assets/images/icons/magnifier.svg') }}" alt="Добавить проверку">
-            Добавить проверку
-          @end
+          @can('createCloseDefect')
+            @buttons.base({
+              href: 'defects.close.create',
+              params: {idDefect: defect.id},
+              className: 'btn-color_green'
+            })
+              <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Добавить">
+              Закрыть дефект
+            @end
+          @endcan
+          @can('createCheckup')
+            @buttons.base({
+              href: 'defects.checkup-create',
+              params: {idDefect: defect.id},
+              className: 'btn-color_orange'
+            })
+              <img src="{{ asset('assets/images/icons/magnifier.svg') }}" alt="Добавить проверку">
+              Добавить проверку
+            @end
+          @endcan
 
           @can('editDefect', defect)
             @buttons.base({
@@ -107,6 +110,9 @@
             <th>Дата проверки</th>
             <th colspan="2">Результаты проверки</th>
             <th>Кому передано</th>
+            @if(defect.result === null)
+              <th style="width: 50px"></th>
+            @end
           </thead>
           <tbody>
             @each(inter in defect.intermediate_checks)
@@ -122,6 +128,18 @@
                       '-'
                   }}
                 </td>
+                @if(!await bouncer.denies('deleteCheckup', inter) && defect.result === null)
+                  <td>
+                    @dropdown.dropdown({
+                      classBtnDropdown: 'btn-dropdown-icon',
+                      dropdownData: [
+                        { name: 'Удалить', access: 'deleteCheckup', data: inter, path: 'defects.checkup.destroy', params: { idInterCheck: inter.id }, icon: 'delete.svg'},
+                      ],
+                    })
+                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                    @end
+                  </td>
+                @endif
               </tr>
             @else
               <tr>
