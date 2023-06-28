@@ -349,10 +349,14 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const users = await User.query().where('blocked', '=', false)
-      const departments = await Department.query().where((query) => {
-        query.where('id', '!=', Departments.admins)
-        query.where('id', '!=', Departments.withoutDepartment)
+      const users = await User.query().where((queryUser) => {
+        queryUser.where('blocked', '!=', true)
+        queryUser.where('id', '!=', 1)
+        queryUser.where('id_department', '!=', Departments.withoutDepartment)
+      })
+      const departments = await Department.query().where((queryDepartment) => {
+        queryDepartment.where('id', '!=', Departments.admins)
+        queryDepartment.where('id', '!=', Departments.withoutDepartment)
       })
 
       return view.render('pages/defect/form_checkupandclose', {
@@ -447,6 +451,25 @@ export default class DefectsController {
     }
   }
 
+  public async checkupDestroy({ response, params, session, bouncer }: HttpContextContract) {
+    const intermediateCheck = await IntermediateCheck.find(params.idInterCheck)
+
+    if (intermediateCheck) {
+      if (await bouncer.denies('deleteCheckup', intermediateCheck)) {
+        session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+        return response.redirect().toPath('/')
+      }
+      await intermediateCheck.delete()
+
+      session.flash('successMessage', `Промежуточная проверка удалена!`)
+      response.redirect().back()
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
   public async closeDefectCreate({
     response,
     params,
@@ -464,7 +487,11 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      const users = await User.query().where('blocked', '=', false)
+      const users = await User.query().where((queryUser) => {
+        queryUser.where('blocked', '!=', true)
+        queryUser.where('id', '!=', 1)
+        queryUser.where('id_department', '!=', Departments.withoutDepartment)
+      })
 
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Закрытие дефекта',
