@@ -29,7 +29,7 @@ export default class SubstationValidator {
       rules.trim(),
       rules.escape(),
       rules.minLength(2),
-      rules.maxLength(70),
+      rules.maxLength(80),
     ]),
     importance: schema.string.optional(),
     addNext: schema.boolean.optional(),
@@ -37,7 +37,7 @@ export default class SubstationValidator {
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
-    minLength: 'Минимальная длина поля 2 символа.',
-    maxLength: 'Максимальная длина поля 70 символов.',
+    minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
+    maxLength: 'Максимальная длинна поля {{ options.maxLength }} символов',
   }
 }

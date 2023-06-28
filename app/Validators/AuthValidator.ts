@@ -7,13 +7,24 @@ export default class AuthValidator {
   public schema = schema.create({
     username: schema.string({ trim: true }, [
       rules.minLength(2),
+      rules.maxLength(20),
       rules.unique({ table: 'users', column: 'username', caseInsensitive: true }),
       rules.escape(),
     ]),
-    surname: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-    name: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-    patronymic: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
-    position: schema.string([rules.minLength(2), rules.trim(), rules.escape()]),
+    surname: schema.string([rules.minLength(2), rules.maxLength(20), rules.trim(), rules.escape()]),
+    name: schema.string([rules.minLength(2), rules.maxLength(20), rules.trim(), rules.escape()]),
+    patronymic: schema.string([
+      rules.minLength(2),
+      rules.maxLength(20),
+      rules.trim(),
+      rules.escape(),
+    ]),
+    position: schema.string([
+      rules.minLength(2),
+      rules.maxLength(40),
+      rules.trim(),
+      rules.escape(),
+    ]),
     department: schema.number(),
     role: schema.number(),
     email: schema.string({ trim: true }, [
@@ -25,9 +36,9 @@ export default class AuthValidator {
   })
 
   public messages: CustomMessages = {
-    'required': 'Поле является обязательным.',
-    'minLength': 'Минимальная длина поля 2 символа.',
-    'password.minLength': 'Минимальная длина пароля 8 символов!',
-    'unique': 'Введенное значение должно быть уникальным!',
+    required: 'Поле является обязательным.',
+    minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
+    maxLength: 'Максимальная длинна поля {{ options.maxLength }} символов',
+    unique: 'Введенное значение должно быть уникальным!',
   }
 }

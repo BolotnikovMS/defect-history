@@ -6,11 +6,17 @@ export default class CloseDefectValidator {
 
   public schema = schema.create({
     employee: schema.string(),
-    description_results: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2)]),
+    description_results: schema.string({}, [
+      rules.trim(),
+      rules.escape(),
+      rules.minLength(2),
+      rules.maxLength(700),
+    ]),
   })
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
-    minLength: 'Минимальная длина поля 2 символа.',
+    minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
+    maxLength: 'Максимальная длинна поля {{ options.maxLength }} символов',
   }
 }

@@ -16,7 +16,7 @@ export default class DistrictValidator {
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
-    minLength: 'Минимальная длина поля 2 символа.',
-    maxLength: 'Максимальная длина поля 110 символов.',
+    minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
+    maxLength: 'Максимальная длинна поля {{ options.maxLength }} символов',
   }
 }

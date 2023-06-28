@@ -15,8 +15,7 @@ export default class DistributionGroupValidator {
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
-    minLength: 'Минимальная длина поля 2 символа.',
-    'name.maxLength': 'Максимальная длина поля 250 символов.',
-    'description.maxLength': 'Максимальная длина поля 350 символов.',
+    minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
+    maxLength: 'Максимальная длинна поля {{ options.maxLength }} символов',
   }
 }
