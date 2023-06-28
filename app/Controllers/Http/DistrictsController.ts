@@ -11,7 +11,7 @@ export default class DistrictsController {
     }
 
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = 15
     const districts = await District.query()
       .orderBy('created_at', 'asc')
       .preload('substations')

@@ -11,7 +11,7 @@ export default class DepartmentsController {
     }
 
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = 15
     const departments = await Department.query().paginate(page, limit)
 
     departments.baseUrl('/departments')
