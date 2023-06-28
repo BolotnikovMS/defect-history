@@ -3,6 +3,7 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import Roles from 'App/Enums/Roles'
 import Defect from 'App/Models/Defect'
 import User from 'App/Models/User'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
 import { userPermissionCheck } from 'App/Utils/utils'
 
 /*
@@ -169,6 +170,17 @@ export const { actions } = Bouncer.before((user: User | null) => {
 
     return userPermissionCheck('deleteUser', user.permissions)
   })
+  // Permission actions
+  .define('viewPermissions', async (user: User) => {
+    await user.load('permissions')
+
+    return userPermissionCheck('viewPermissions', user.permissions)
+  })
+  .define('createPermissions', async (user: User) => {
+    await user.load('permissions')
+
+    return userPermissionCheck('createPermissions', user.permissions)
+  })
 
   // Defects action
   // .define('viewDefects', (user: User) => {})
@@ -185,8 +197,9 @@ export const { actions } = Bouncer.before((user: User | null) => {
       return false
     } else {
       return (
+        // eslint-disable-next-line eqeqeq
+        (defect.id_user_created === user.id && defect.elimination_date == null) ||
         user.id_role === Roles.MODERATOR ||
-        (defect.id_user_created === user.id && defect.elimination_date === null) ||
         userPermissionCheck('editDefect', user.permissions)
       )
     }
@@ -214,11 +227,28 @@ export const { actions } = Bouncer.before((user: User | null) => {
   })
 
   // Checkup
-  .define('createCheckup', (user: User) => {
-    return [Roles.USER, Roles.MODERATOR].includes(user.id_role)
+  .define('createCheckup', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('createCheckup', user.permissions)
+    )
   })
-  .define('createCloseDefect', (user: User) => {
-    return [Roles.USER, Roles.MODERATOR].includes(user.id_role)
+  .define('deleteCheckup', async (user: User, intermediateCheck: IntermediateCheck) => {
+    await user.load('permissions')
+
+    return (
+      intermediateCheck?.id_user_created === user.id ||
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('deleteCheckup', user.permissions)
+    )
+  })
+  .define('createCloseDefect', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('createCloseDefect', user.permissions)
+    )
   })
 
   // Department
