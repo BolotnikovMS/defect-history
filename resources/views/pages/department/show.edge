@@ -1,0 +1,22 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="departments__content">
+    <hr>
+      @if(department.department_users.length)
+        <ul class="list">
+          @each(user in department.department_users)
+            <li class="list__item">
+              <div class="list__content">
+                {{user.fullName}}
+              </div>
+            </li>
+          @endeach
+        </ul>
+      @else
+        @!notification.nocontent({ messageNoData: 'Пока нет добавленых пользователей.' })
+      @endif
+    <hr>
+  </div>
+@endsection
