@@ -1,5 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Department from '../../Models/Department'
+import Department from 'App/Models/Department'
 import DepartmentValidator from 'App/Validators/DepartmentValidator'
 
 export default class DepartmentsController {
@@ -12,7 +12,7 @@ export default class DepartmentsController {
 
     const page = request.input('page', 1)
     const limit = 15
-    const departments = await Department.query().paginate(page, limit)
+    const departments = await Department.query().preload('department_users').paginate(page, limit)
 
     departments.baseUrl('/departments')
 
@@ -60,7 +60,27 @@ export default class DepartmentsController {
     response.redirect().toRoute('departments.index')
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ response, params, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewingUsersForDepartment')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const department = await Department.find(params.id)
+
+    if (department) {
+      await department.load('department_users')
+
+      return view.render('pages/department/show', {
+        title: `Пользователи отдела ${department.name}`,
+        department,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.denies('updateDepartment')) {
