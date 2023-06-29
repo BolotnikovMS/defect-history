@@ -262,6 +262,11 @@ export const { actions } = Bouncer.before((user: User | null) => {
 
     return userPermissionCheck('createDepartment', user.permissions)
   })
+  .define('viewingUsersForDepartment', async (user: User) => {
+    await user.load('permissions')
+
+    return userPermissionCheck('viewingUsersForDepartment', user.permissions)
+  })
   .define('updateDepartment', async (user: User) => {
     await user.load('permissions')
 

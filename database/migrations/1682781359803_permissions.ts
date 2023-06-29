@@ -142,6 +142,10 @@ export default class extends BaseSchema {
           description: 'Добавление нового отдела',
         },
         {
+          access: 'viewingUsersForDepartment',
+          description: 'Просмотр пользователей отдела',
+        },
+        {
           access: 'updateDepartment',
           description: 'Редактирование отдела',
         },
