@@ -23,7 +23,13 @@
         @each(department in departments)
           <li class="list__item">
             <div class="list__content">
-              {{ department.name }}
+              @!badge.badge({
+                data: department.usersCount,
+                titleText: 'Количество_пользователей'
+              })
+              <a href="{{ route('departments.show', {id: department.id}) }}" class="active-link">
+                {{ department.name }}
+              </a>
             </div>
             @if(!await bouncer.denies('updateDepartment') || !await bouncer.denies('deleteDepartment'))
               @dropdown.dropdown({
