@@ -233,11 +233,11 @@ export default class DefectsController {
       }
 
       const validateDefectData = await request.validate(DefectValidator)
+      const imgPaths: string | string[] = []
 
       validateDefectData?.defect_img?.forEach(async (img) => {
         const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
-
-        defect?.defect_img?.push(`/uploads/images/defects/${imgName}`)
+        imgPaths.push(`/uploads/images/defects/${imgName}`)
 
         await img.moveToDisk('images/defects/', { name: imgName })
       })
@@ -246,8 +246,14 @@ export default class DefectsController {
       defect.id_substation = +validateDefectData.substation
       defect.id_accession = validateDefectData.accession
       defect.description_defect = validateDefectData.description_defect
+      defect.defect_img =
+        defect.defect_img === null
+          ? imgPaths.length
+            ? imgPaths
+            : null
+          : defect.defect_img?.concat(imgPaths)
       // eslint-disable-next-line prettier/prettier
-      defect.importance = validateDefectData.importance ? true : false,
+      defect.importance = validateDefectData.importance ? true : false
 
       await defect.save()
 
@@ -286,6 +292,33 @@ export default class DefectsController {
       response.redirect().back()
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async deleteImg({ request, response, params, session, bouncer }: HttpContextContract) {
+    const defect = await Defect.find(params.id)
+
+    if (defect) {
+      if (await bouncer.denies('editDefect', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на удаление!')
+
+        return response.redirect().toPath('/')
+      }
+
+      const qParams = request.qs()
+      const newArrImg = defect.defect_img?.filter((img) => img !== qParams.imgName)
+
+      defect.merge({ defect_img: newArrImg?.length ? newArrImg : null }).save()
+      try {
+        await unlink(`./tmp${qParams.imgName}`)
+
+        console.log(`successfully deleted ${qParams.imgName}`)
+      } catch (error) {
+        console.log(`there was an error: ${error.message}`)
+      }
+
+      session.flash('successMessage', `Изображение успешно удаленно!`)
       response.redirect().back()
     }
   }
