@@ -15,8 +15,10 @@
 
 import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
+  // protected disableStatusPagesInDevelopment = false
   protected statusPages = {
     '403': 'errors/unauthorized',
     '404': 'errors/not-found',
@@ -25,5 +27,14 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   constructor() {
     super(Logger)
+  }
+
+  public async handle(_error: any, ctx: HttpContextContract) {
+    if (_error.code === 'E_ROUTE_NOT_FOUND') {
+      ctx.session.flash('dangerMessage', 'Страницы не существует!')
+      return ctx.response.redirect().toRoute('defects.index')
+    }
+
+    return super.handle(_error, ctx)
   }
 }
