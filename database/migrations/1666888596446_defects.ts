@@ -27,6 +27,7 @@ export default class extends BaseSchema {
         .index()
         .references('id')
         .inTable('users')
+      table.integer('id_user_updater', 10).nullable()
       table
         .integer('id_accession', 10)
         .notNullable()
@@ -35,7 +36,6 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('accession_substations')
       table.text('description_defect').notNullable()
-      table.text('defect_img').nullable()
       table.dateTime('term_elimination').notNullable()
       table.boolean('importance').defaultTo(false)
       table.dateTime('elimination_date').nullable().defaultTo(null)
