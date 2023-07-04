@@ -1,22 +1,23 @@
-import { DateTime } from 'luxon'
 import { string } from '@ioc:Adonis/Core/Helpers'
 import {
   BaseModel,
   BelongsTo,
   belongsTo,
   column,
+  computed,
   HasMany,
   hasMany,
   HasOne,
   hasOne,
 } from '@ioc:Adonis/Lucid/Orm'
-import Substation from 'App/Models/Substation'
+import AccessionSubstation from 'App/Models/AccessionSubstation'
+import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
+import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
-import { computed } from '@ioc:Adonis/Lucid/Orm'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
-import AccessionSubstation from 'App/Models/AccessionSubstation'
+import { DateTime } from 'luxon'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
@@ -32,18 +33,15 @@ export default class Defect extends BaseModel {
   public id_user_created: number
 
   @column()
+  public id_user_updater: number | null
+
+  @column()
   public id_accession: number
 
   @column({
     consume: (value: string) => replacementEscapeSymbols(value),
   })
   public description_defect: string
-
-  @column({
-    consume: (value: string) => value && value.split(','),
-    prepare: (value: string[]) => value && value.join(','),
-  })
-  public defect_img: string[] | null
 
   @column.dateTime({
     serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
@@ -123,4 +121,10 @@ export default class Defect extends BaseModel {
     localKey: 'id',
   })
   public user: BelongsTo<typeof User>
+
+  @hasMany(() => DefectImg, {
+    foreignKey: 'id_defect',
+    localKey: 'id',
+  })
+  public defect_imgs: HasMany<typeof DefectImg>
 }
