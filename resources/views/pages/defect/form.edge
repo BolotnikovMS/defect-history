@@ -83,16 +83,16 @@
         acceptData: '.png, .jpeg, .jpg',
       })
 
-      @if(options.edit && defectSerialize.defect_img)
+      @if(options.edit && defectSerialize.defect_imgs.length)
         <div class="defect-info__imgs">
-          @each(defect_img in defectSerialize.defect_img)
+          @each(defect_img in defectSerialize.defect_imgs)
             <div class="defect-info__img-wrapper">
               @can('editDefect', defectSerialize)
-                <a href="{{ route('defects.delete.img', {id: defectSerialize.id}, {qs: {imgName: defect_img}}) }}" class="defect-info__delete-img">
+                <a href="{{ route('defects.delete.img', {id: defectSerialize.id, idImg: defect_img.id}, {qs: {imgName: defect_img.path_img}}) }}" class="defect-info__delete-img">
                   <img src="{{ asset('assets/images/icons/delete.svg') }}" alt="Delete img">
                 </a>
               @end
-              <img src="{{ defect_img }}" alt="{{ defect_img }}" class="defect-info__img defect-info__img-small">
+              <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img defect-info__img-small">
             </div>
           @endeach
         </div>

@@ -90,10 +90,10 @@
           <h3 class="defect-info__title">Описание дефекта</h3>
         </div>
         <div class="defect-info__text">{{ defect.description_defect }}</div>
-        @if(defect.defect_img)
+        @if(defect.defect_imgs.length)
           <div class="defect-info__imgs">
-            @each(defect_img in defect.defect_img)
-              <img src="{{ defect_img }}" alt="{{ defect_img }}" class="defect-info__img">
+            @each(defect_img in defect.defect_imgs)
+              <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
             @endeach
           </div>
         @endif
