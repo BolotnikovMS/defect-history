@@ -1,20 +1,21 @@
+import Env from '@ioc:Adonis/Core/Env'
+import Event from '@ioc:Adonis/Core/Event'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { DateTime } from 'luxon'
-import { addDays, randomStr } from 'App/Utils/utils'
-import { unlink } from 'node:fs/promises'
+import { Departments } from 'App/Enums/Departments'
 import Defect from 'App/Models/Defect'
+import DefectImg from 'App/Models/DefectImg'
+import DefectType from 'App/Models/DefectType'
+import Department from 'App/Models/Department'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Substation from 'App/Models/Substation'
+import User from 'App/Models/User'
+import { addDays, randomStr } from 'App/Utils/utils'
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
 import DefectValidator from 'App/Validators/DefectValidator'
 import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
-import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
-import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
-import IntermediateCheck from 'App/Models/IntermediateCheck'
-import Department from 'App/Models/Department'
-import DefectType from 'App/Models/DefectType'
-import User from 'App/Models/User'
-import Event from '@ioc:Adonis/Core/Event'
-import Env from '@ioc:Adonis/Core/Env'
-import { Departments } from 'App/Enums/Departments'
+import { DateTime } from 'luxon'
+import { unlink } from 'node:fs/promises'
 
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
@@ -83,51 +84,27 @@ export default class DefectsController {
     const validateDefectData = await request.validate(DefectValidator)
 
     if (validateDefectData) {
-      const imgPaths: string[] = []
-
-      validateDefectData?.defect_img?.forEach(async (img) => {
-        const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
-
-        imgPaths.push(`/uploads/images/defects/${imgName}`)
-
-        await img.moveToDisk('images/defects/', { name: imgName })
-      })
-
-      // validateDefectData?.defect_img?.forEach(async (img) => {
-      //   const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
-      //   imgNameArr.push(`${imgName}`)
-
-      //   await img.move(Application.resourcesPath('images/uploads/defects/'), {
-      //     name: imgName,
-      //   })
-      // })
-
-      // if (validateDefectData.defect_img) {
-      //  validateDefectData.defect_img.map(async (img) => {
-      //     // img.clientName = `${new Date().getTime()}${randomStr()}.${img.extname}`
-      //     // img.move(Application.resourcesPath('images/uploads/defects/'))
-
-      //     // imgName.push(img.clientName)
-      //     await img.moveToDisk('images/defects/')
-      //     console.log(img.fileName)
-
-      //     imgNameArr.push(`${img.fileName}`)
-      //   })
-
-      //   console.log(test[0])
-      // }
-
       const defect = {
         id_substation: validateDefectData.substation,
         id_type_defect: validateDefectData.defect_type,
         id_user_created: auth.user!.id,
         id_accession: validateDefectData.accession,
-        ...validateDefectData,
-        defect_img: imgPaths.length ? imgPaths : null,
+        description_defect: validateDefectData.description_defect,
         term_elimination: addDays(20),
+        importance: validateDefectData.importance,
       }
 
       const newDefect = await Defect.create(defect)
+
+      validateDefectData?.defect_img?.forEach(async (img) => {
+        const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+
+        await DefectImg.create({
+          id_defect: newDefect.id,
+          path_img: `/uploads/images/defects/${imgName}`,
+        })
+        await img.moveToDisk('images/defects/', { name: imgName })
+      })
 
       await newDefect.load('defect_type', (queryGroup) => {
         queryGroup.whereNotNull('id_distribution_group').preload('group', (queryGroupUsers) => {
@@ -174,6 +151,7 @@ export default class DefectsController {
         query.preload('responsible_department')
       })
       await defect.load('name_eliminated')
+      await defect.load('defect_imgs')
 
       return view.render('pages/defect/show', {
         title: 'Подробный просмотр',
@@ -194,6 +172,8 @@ export default class DefectsController {
 
         return response.redirect().toPath('/')
       }
+
+      await defect.load('defect_imgs')
 
       const defectSerialize = defect.serialize()
       const typeDefects = await DefectType.all()
@@ -222,7 +202,7 @@ export default class DefectsController {
     }
   }
 
-  public async update({ params, request, response, session, bouncer }: HttpContextContract) {
+  public async update({ params, request, response, auth, session, bouncer }: HttpContextContract) {
     const defect = await Defect.find(params.id)
 
     if (defect) {
@@ -233,29 +213,26 @@ export default class DefectsController {
       }
 
       const validateDefectData = await request.validate(DefectValidator)
-      const imgPaths: string | string[] = []
+      const editedDefect = {
+        id_user_updater: auth.user!.id,
+        id_type_defect: +validateDefectData.defect_type,
+        id_substation: +validateDefectData.substation,
+        id_accession: validateDefectData.accession,
+        description_defect: validateDefectData.description_defect,
+        importance: validateDefectData.importance ? true : false,
+      }
 
-      validateDefectData?.defect_img?.forEach(async (img) => {
+      const updDefect = await defect.merge(editedDefect).save()
+
+      validateDefectData.defect_img?.forEach(async (img) => {
         const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
-        imgPaths.push(`/uploads/images/defects/${imgName}`)
 
+        await DefectImg.create({
+          id_defect: updDefect.id,
+          path_img: `/uploads/images/defects/${imgName}`,
+        })
         await img.moveToDisk('images/defects/', { name: imgName })
       })
-
-      defect.id_type_defect = +validateDefectData.defect_type
-      defect.id_substation = +validateDefectData.substation
-      defect.id_accession = validateDefectData.accession
-      defect.description_defect = validateDefectData.description_defect
-      defect.defect_img =
-        defect.defect_img === null
-          ? imgPaths.length
-            ? imgPaths
-            : null
-          : defect.defect_img?.concat(imgPaths)
-      // eslint-disable-next-line prettier/prettier
-      defect.importance = validateDefectData.importance ? true : false
-
-      await defect.save()
 
       session.flash('successMessage', `Данные дефекта успешно обновлены.`)
       response.redirect().toRoute('DefectsController.index')
@@ -275,17 +252,16 @@ export default class DefectsController {
         return response.redirect().toPath('/')
       }
 
+      await defect.load('defect_imgs')
       await defect.related('intermediate_checks').query().delete()
-      defect?.defect_img?.forEach(async (imgPath) => {
+      defect.defect_imgs?.forEach(async (img) => {
         try {
-          await unlink(`./tmp${imgPath}`)
-
-          console.log(`successfully deleted ${imgPath}`)
+          await unlink(`./tmp${img.path_img}`)
         } catch (error) {
           console.log(`there was an error: ${error.message}`)
         }
       })
-
+      await defect.related('defect_imgs').query().delete()
       await defect.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
@@ -296,27 +272,24 @@ export default class DefectsController {
     }
   }
 
-  public async deleteImg({ request, response, params, session, bouncer }: HttpContextContract) {
+  public async deleteImg({ response, params, session, bouncer }: HttpContextContract) {
+    const defectImg = await DefectImg.find(params.idImg)
     const defect = await Defect.find(params.id)
 
-    if (defect) {
+    if (defect && defectImg) {
       if (await bouncer.denies('editDefect', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление!')
 
         return response.redirect().toPath('/')
       }
 
-      const qParams = request.qs()
-      const newArrImg = defect.defect_img?.filter((img) => img !== qParams.imgName)
-
-      defect.merge({ defect_img: newArrImg?.length ? newArrImg : null }).save()
       try {
-        await unlink(`./tmp${qParams.imgName}`)
-
-        console.log(`successfully deleted ${qParams.imgName}`)
+        await unlink(`./tmp${defectImg.path_img}`)
       } catch (error) {
         console.log(`there was an error: ${error.message}`)
+        session.flash('dangerMessage', `${error.message}`)
       }
+      await defectImg.delete()
 
       session.flash('successMessage', `Изображение успешно удаленно!`)
       response.redirect().back()
