@@ -51,7 +51,13 @@
         @buttons.base({
           className: 'btn-color_green btn-save-pdf'
         })
-            PDF
+          <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
+          PDF
+        @end
+        @buttons.base({
+          className: 'btn-color_green btn-hide-img'
+        })
+          Скрыть изображения
         @end
       </div>
     @endif
