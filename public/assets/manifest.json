@@ -32,5 +32,8 @@
   "assets/images/icons/login-3.svg": "http://localhost:8080/assets/images/icons/login-3.9640ecb4.svg",
   "assets/images/icons/logout.svg": "http://localhost:8080/assets/images/icons/logout.97e50219.svg",
   "assets/images/icons/arrow-up.svg": "http://localhost:8080/assets/images/icons/arrow-up.684e3746.svg",
-  "assets/images/icons/arrow-down.svg": "http://localhost:8080/assets/images/icons/arrow-down.99ebc4d4.svg"
+  "assets/images/icons/arrow-down.svg": "http://localhost:8080/assets/images/icons/arrow-down.99ebc4d4.svg",
+  "assets/images/icons/pdf.svg": "http://localhost:8080/assets/images/icons/pdf.a3f31f27.svg",
+  "assets/images/icons/eye_slash_visible.svg": "http://localhost:8080/assets/images/icons/eye_slash_visible.7b503cca.svg",
+  "assets/images/icons/eye_visible.svg": "http://localhost:8080/assets/images/icons/eye_visible.4f189ec0.svg"
 }
