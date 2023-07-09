@@ -199,6 +199,11 @@ export default class extends BaseSchema {
           access: 'deleteDistributionGroup',
           description: 'Удаление группы рассылки',
         },
+        // Reports
+        {
+          access: 'viewReportSubstationDefects',
+          description: 'Формирование отчета "Дефекты ПС"',
+        },
       ])
     })
   }
