@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Substation from 'App/Models/Substation'
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
+import District from 'App/Models/District'
 
 export default class ReportsController {
   public async showSubstationDefects({ response, view, session, bouncer }: HttpContextContract) {
@@ -116,6 +117,18 @@ export default class ReportsController {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().toRoute('reports.show.substation.defects')
     }
+  }
+
+  public async showDistrictDefects({ response, view, session, bouncer }: HttpContextContract) {
+    const districts = await District.query()
+
+    return view.render('pages/reports/districts_defect/index', {
+      title: 'Список дефектов по Району или ГП',
+      messages: {
+        noContent: 'Отчет не сформирован.',
+      },
+      districts,
+    })
   }
 
   public async index({}: HttpContextContract) {}
