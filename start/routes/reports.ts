@@ -10,6 +10,7 @@ Route.group(() => {
   Route.get('/district-defects', 'ReportsController.showDistrictDefects').as(
     'show.district.defects'
   )
+  Route.post('/district-defects', 'ReportsController.getDistrictDefects').as('get.district.defects')
 })
   .prefix('/reports')
   .as('reports')
