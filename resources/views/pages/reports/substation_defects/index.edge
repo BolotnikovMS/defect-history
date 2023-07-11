@@ -31,16 +31,16 @@
           labelPositionText: 'label__text_left',
           optionClass: 'searchable-list',
           dataOptionsConfig: {
-            dataOptions: [{ id: 'allDefects', name: 'Все дефекты' }, { id: 'openDefects', name: 'Открытые дефекты' }, { id: 'closeDefects', name: 'Закрытые дефекты' }],
+            dataOptions: [{ id: 'allDefects', name: 'Все дефекты' }, { id: 'openDefects', name: 'Открытые дефекты' }, { id: 'openDefectsWithResults', name: 'Открытые дефекты с результатами' }, { id: 'closeDefects', name: 'Закрытые дефекты' }],
             dataNameOption: 'name'
           },
         })
-        @!inputs.checkbox({
+        {{--  @!inputs.checkbox({
           label: 'С промежуточными результатами',
           classlabel: 'form__label-row',
           classLabelText: 'label__text_nomargin',
           name: 'intermediate_checks',
-        })
+        })  --}}
       </div>
       <div class="form__btns form__btns-row">
         @buttons.base({
@@ -52,8 +52,18 @@
         @end
       </div>
     @end
+    @if(substation?.defects.length)
+      <div class="controll__btn">
+        @buttons.base({
+          className: 'btn-color_green btn-small btn-save-pdf'
+        })
+          <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
+          PDF
+        @end
+      </div>
+    @endif
   </div>
-  <div class="reports">
+  <div class="reports save-info-pdf">
     <h2 class="title">{{ title }}</h2>
     <hr>
     <div class="reports__content">
@@ -64,18 +74,26 @@
               <th>Тип дефекта</th>
               <th>Присоединение</th>
               <th>Описание дефекта</th>
-              <th>Дата добавления</th>
+              <th>Промежуточные результаты</th>
               <th>Срок устранения</th>
+              <th>Дата фактического устранения</th>
             </tr>
           </thead>
           <tbody>
             @each(defect in substation.defects)
-              <tr>
+              <tr {{ defect.elimination_date ? 'class=table__tr-color_green' : '' }}>
                 <td>{{ defect.defect_type.type_defect }}</td>
                 <td>{{ defect.accession.name }}</td>
                 <td>{{ defect.description_defect }}</td>
-                <td>{{ dateFormat(defect.created_at) }}</td>
+                <td>{{ defect.countIntermediateChecks }}</td>
                 <td>{{ dateFormat(defect.term_elimination) }}</td>
+                <td>
+                  @if(defect.elimination_date === null)
+                    Не устранен
+                  @else
+                    {{ dateFormat(defect.elimination_date) }}
+                  @endif
+                </td>
               </tr>
             @end
           </tbody>

@@ -55,7 +55,7 @@ export default class ReportsController {
       switch (validateData.filter) {
         case 'allDefects':
           await substation.load('defects', async (query) => {
-            await query.preload('defect_type').preload('accession')
+            await query.preload('defect_type').preload('accession').preload('intermediate_checks')
           })
           titleText = 'всех дефектов'
           noContent = substation.defects.length ? null : 'По ПС нету дефектов.'
@@ -66,24 +66,35 @@ export default class ReportsController {
               .whereNull('result')
               .preload('defect_type')
               .preload('accession')
-              .if(validateData?.intermediate_checks, (queryDefect) => {
-                queryDefect.preload('intermediate_checks')
-              })
+              .preload('intermediate_checks')
           })
-
-          const interChecks = substation.defects.filter(
-            (defect) => defect.countIntermediateChecks !== 0
-          )
-
-          substation.defects = interChecks
-          console.log(interChecks)
 
           titleText = 'открытых дефектов'
           noContent = substation.defects.length ? null : 'По ПС нету открытых дефектов.'
           break
+        case 'openDefectsWithResults':
+          await substation.load('defects', async (query) => {
+            query
+              .whereNull('result')
+              .preload('defect_type')
+              .preload('accession')
+              .preload('intermediate_checks')
+          })
+          const checks = substation.defects.filter((defect) => defect.countIntermediateChecks > 0)
+          // console.log('checks: ', checks)
+          // console.log(substation.serialize())
+          substation.defects = checks
+
+          titleText = 'открытых дефектов с промежуточными результатами'
+          noContent = substation.defects.length ? null : 'По ПС нету открытых дефектов.'
+          break
         case 'closeDefects':
           await substation.load('defects', (query) => {
-            query.whereNotNull('result').preload('defect_type').preload('accession')
+            query
+              .whereNotNull('result')
+              .preload('defect_type')
+              .preload('accession')
+              .preload('intermediate_checks')
           })
           titleText = 'закрытых дефектов'
           noContent = substation.defects.length ? null : 'По ПС нету закрытых дефектов.'

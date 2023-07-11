@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Print PDF
   $('.btn-save-pdf').on('click', () => {
-    $('.defect-info').printThis()
+    $('.save-info-pdf').printThis()
   })
   $('.btn-hide-img').click('click', () => {
     $('.defect-info__imgs').slideToggle(200, function () {
