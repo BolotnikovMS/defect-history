@@ -1,6 +1,12 @@
 .table {
   @extend %table;
 
+  &__td-text_bold {
+    font-size: 18px !important;
+    font-weight: bold;
+    text-align: center;
+  }
+
   &__td-control {
     display: flex;
     align-items: center;
