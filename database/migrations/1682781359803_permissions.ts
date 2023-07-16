@@ -204,6 +204,10 @@ export default class extends BaseSchema {
           access: 'viewReportSubstationDefects',
           description: 'Формирование отчета "Дефекты ПС"',
         },
+        {
+          access: 'viewReportDistrictDefects',
+          description: 'Формирование отчета "Дефекты по районам или ГП"',
+        },
       ])
     })
   }

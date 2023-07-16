@@ -371,6 +371,14 @@ export const { actions } = Bouncer.before((user: User | null) => {
       userPermissionCheck('viewReportSubstationDefects', user.permissions)
     )
   })
+  .define('viewReportDistrictDefects', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('viewReportDistrictDefects', user.permissions)
+    )
+  })
 
 /*
 |--------------------------------------------------------------------------
