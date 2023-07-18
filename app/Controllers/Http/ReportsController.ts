@@ -53,57 +53,31 @@ export default class ReportsController {
     let titleText: string = ''
 
     if (substation) {
-      switch (validateData.filter) {
-        case 'allDefects':
-          await substation.load('defects', async (query) => {
-            await query.preload('defect_type').preload('accession').preload('intermediate_checks')
-          })
-          titleText = 'всех дефектов'
-          noContent = substation.defects.length ? null : 'По ПС нету дефектов.'
-          break
-        case 'openDefects':
-          await substation.load('defects', (query) => {
-            query
-              .whereNull('result')
-              .preload('defect_type')
-              .preload('accession')
-              .preload('intermediate_checks')
-          })
-
-          titleText = 'открытых дефектов'
-          noContent = substation.defects.length ? null : 'По ПС нету открытых дефектов.'
-          break
-        case 'openDefectsWithResults':
-          await substation.load('defects', async (query) => {
-            query
-              .whereNull('result')
-              .preload('defect_type')
-              .preload('accession')
-              .preload('intermediate_checks')
-          })
-          const checks = substation.defects.filter((defect) => defect.countIntermediateChecks > 0)
-          // console.log('checks: ', checks)
-          // console.log(substation.serialize())
-          substation.defects = checks
-
-          titleText = 'открытых дефектов с промежуточными результатами'
-          noContent = substation.defects.length ? null : 'По ПС нету открытых дефектов.'
-          break
-        case 'closeDefects':
-          await substation.load('defects', (query) => {
-            query
-              .whereNotNull('result')
-              .preload('defect_type')
-              .preload('accession')
-              .preload('intermediate_checks')
-          })
-          titleText = 'закрытых дефектов'
-          noContent = substation.defects.length ? null : 'По ПС нету закрытых дефектов.'
-          break
-        default:
-          console.log('Error...')
-          break
-      }
+      await substation.load((loader) => {
+        loader.load('defects', (defectQuery) => {
+          defectQuery
+            .preload('defect_type')
+            .preload('accession')
+            .preload('intermediate_checks')
+            .if(validateData.filter === 'openDefects', (query) => {
+              titleText = 'открытых дефектов'
+              noContent = substation?.defects?.length ? null : 'По ПС нету открытых дефектов.'
+              query.whereNull('result')
+            })
+            .if(validateData.filter === 'openDefectsWithResults', (query) => {
+              titleText = 'открытых дефектов с промежуточными результатами'
+              noContent = substation?.defects?.length
+                ? null
+                : 'По ПС нету открытых дефектов с промежуточными результатами.'
+              query.has('intermediate_checks')
+            })
+            .if(validateData.filter === 'closeDefects', (query) => {
+              titleText = 'закрытых дефектов'
+              noContent = substation?.defects?.length ? null : 'По ПС нету закрытых дефектов.'
+              query.whereNotNull('result')
+            })
+        })
+      })
 
       return view.render('pages/reports/substation_defects/index', {
         title: `Список ${titleText} по ПС '${substation.name}'`,
