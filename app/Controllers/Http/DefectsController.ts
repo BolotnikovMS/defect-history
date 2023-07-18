@@ -44,7 +44,7 @@ export default class DefectsController {
     // console.log('test: ', test)
 
     return view.render('pages/defect/index', {
-      title: 'Все дефекты',
+      title: 'Дефекты по ТМ',
       typesDefects,
       typesDefectsToSort,
       defects,
