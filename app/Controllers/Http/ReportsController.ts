@@ -55,6 +55,7 @@ export default class ReportsController {
     if (substation) {
       await substation.load((loader) => {
         loader.load('defects', (defectQuery) => {
+          titleText = 'всех'
           defectQuery
             .preload('defect_type')
             .preload('accession')
@@ -137,6 +138,7 @@ export default class ReportsController {
       messages: customMessages,
     })
     const district = await District.find(validateData.district)
+    let noContentDefect: string | null = null
     let titleText: string = ''
 
     if (district) {
@@ -144,13 +146,16 @@ export default class ReportsController {
         loader.load('substations', (substationsQuery) => {
           substationsQuery.preload('defects', (defectsQuery) => {
             titleText = 'всех'
+            noContentDefect = 'По ПС нету дефектов'
             defectsQuery
               .if(validateData.filter === 'openDefects', (query) => {
                 titleText = 'открытых'
+                noContentDefect = 'По ПС нету открытых дефектов'
                 query.whereNull('result')
               })
               .if(validateData.filter === 'closeDefects', (query) => {
                 titleText = 'закрытых'
+                noContentDefect = 'По ПС нету закрытых дефектов'
                 query.whereNotNull('result')
               })
               .orderBy('term_elimination', 'asc')
@@ -164,6 +169,7 @@ export default class ReportsController {
         title: `Список ${titleText} дефектов по "${district?.name}"`,
         messages: {
           noContent: 'В районе или ГП нету ПС.',
+          noContentDefect: noContentDefect,
         },
         district,
         districts,
