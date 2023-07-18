@@ -410,7 +410,7 @@ export default class DefectsController {
           id_defect: +idDefect,
           id_user_created: auth.user!.id,
           id_inspector: +validateData.employee,
-          check_date: validateData.date,
+          check_date: DateTime.now(),
           description_results: validateData.description_results,
           transferred: validateData.transferred ? validateData.transferred : null,
         }
