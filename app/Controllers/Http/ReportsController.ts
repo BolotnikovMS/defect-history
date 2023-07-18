@@ -189,7 +189,7 @@ export default class ReportsController {
       return view.render('pages/reports/districts_defect/index', {
         title: `Список ${titleText} дефектов по "${district?.name}"`,
         messages: {
-          noContent: 'Отчет не сформирован.',
+          noContent: 'В районе или ГП нету ПС.',
         },
         district,
         districts,
