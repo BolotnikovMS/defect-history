@@ -46,8 +46,18 @@
         @end
       </div>
     @end
+    @if(district?.substations.length)
+      <div class="controll__btn">
+        @buttons.base({
+          className: 'btn-color_green btn-small btn-save-pdf'
+        })
+          <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
+          PDF
+        @end
+      </div>
+    @endif
   </div>
-  <div class="report">
+  <div class="report save-info-pdf">
     <h2 class="title">{{ title }}</h2>
     <hr>
     <div class="report__content">
