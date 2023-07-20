@@ -20,7 +20,7 @@ import { unlink } from 'node:fs/promises'
 export default class DefectsController {
   public async index({ request, view }: HttpContextContract) {
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = 15
 
     const typesDefects = await DefectType.query()
 
@@ -36,6 +36,7 @@ export default class DefectsController {
       .preload('substation')
       .preload('accession')
       .preload('intermediate_checks')
+      .preload('user')
       .paginate(page, limit)
 
     defects.baseUrl('/')
@@ -146,6 +147,7 @@ export default class DefectsController {
       await defect.load('substation')
       await defect.load('accession')
       await defect.load('defect_type')
+      await defect.load('user')
       await defect.load('intermediate_checks', (query) => {
         query.preload('name_inspector')
         query.preload('responsible_department')
