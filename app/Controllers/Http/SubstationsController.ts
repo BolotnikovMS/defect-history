@@ -90,6 +90,7 @@ export default class SubstationsController {
           .preload('accession')
           .preload('defect_type')
           .preload('intermediate_checks')
+          .preload('user')
       })
       await substation.load('accession')
 
