@@ -65,6 +65,11 @@ export default class User extends BaseModel {
     return `${this.surname} ${this.name} ${this.patronymic}`
   }
 
+  @computed()
+  public get shortUserName() {
+    return `${this.surname} ${this.name.at(0)}.${this.patronymic.at(0)}.`
+  }
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
