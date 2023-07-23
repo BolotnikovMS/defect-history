@@ -14,7 +14,7 @@ export default class DistrictsController {
     const limit = 15
     const districts = await District.query()
       .orderBy('created_at', 'asc')
-      .preload('substations')
+      .preload('district_defects')
       .paginate(page, limit)
 
     districts.baseUrl('/districts')
