@@ -1,6 +1,15 @@
 import { DateTime } from 'luxon'
-import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
-import Substation from './Substation'
+import {
+  BaseModel,
+  HasMany,
+  HasManyThrough,
+  column,
+  computed,
+  hasMany,
+  hasManyThrough,
+} from '@ioc:Adonis/Lucid/Orm'
+import Substation from 'App/Models/Substation'
+import Defect from 'App/Models/Defect'
 
 export default class District extends BaseModel {
   @column({ isPrimary: true })
@@ -23,9 +32,22 @@ export default class District extends BaseModel {
     return this.substations?.length
   }
 
+  @computed()
+  public get numberOpenDefectsDistrict() {
+    return this.district_defects?.filter((defect) => defect.elimination_date === null).length
+  }
+
   @hasMany(() => Substation, {
     localKey: 'id',
     foreignKey: 'id_district',
   })
   public substations: HasMany<typeof Substation>
+
+  @hasManyThrough([() => Defect, () => Substation], {
+    localKey: 'id',
+    foreignKey: 'id_district',
+    throughLocalKey: 'id',
+    throughForeignKey: 'id_substation',
+  })
+  public district_defects: HasManyThrough<typeof Defect>
 }
