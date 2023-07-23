@@ -89,6 +89,7 @@ export default class DefectTypesController {
           .preload('substation')
           .preload('accession')
           .preload('intermediate_checks')
+          .preload('user')
       })
 
       return view.render('pages/defect/index', {

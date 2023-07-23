@@ -17,8 +17,9 @@
           <li class="list__item">
             <div class="list__content">
               @!badge.badge({
-                data: district.substationsCount,
-                titleText: 'Количество_ПС'
+                optionClass: district.numberOpenDefectsDistrict > 0 ? 'badge__counter-red' : '',
+                data: district.numberOpenDefectsDistrict,
+                titleText: 'Количество_дефектов'
               })
               <a href="{{ route('districts.show', {id: district.id}) }}" class="active-link">
                 {{ district.name }}

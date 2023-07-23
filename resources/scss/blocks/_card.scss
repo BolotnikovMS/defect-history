@@ -1,5 +1,5 @@
 .card {
-  padding: 10px 15px;
+  padding: 8px 15px;
   border: 1px solid black;
   border-radius: 10px;
   transition: all 0.3s ease-in;
@@ -30,6 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 15px;
   }
 
   &__badge {
@@ -67,6 +68,7 @@
 
   &__object-info {
     display: flex;
+    align-items: center;
     column-gap: 20px;
   }
 
@@ -80,20 +82,22 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 12px 0;
+    padding: 8px 0;
   }
 
   &__data-info {
-    margin-top: 20px;
+    margin-top: 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 15px;
   }
 
   &__footer-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 20px;
   }
 
   &__btns {

@@ -106,7 +106,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Print PDF
   $('.btn-save-pdf').on('click', () => {
-    $('.defect-info').printThis()
+    $('.save-info-pdf').printThis()
+  })
+  $('.btn-hide-img').click('click', () => {
+    $('.defect-info__imgs').slideToggle(200, function () {
+      if ($(this).is(':hidden')) {
+        $('.btn-hide-img').html('Показать изображения')
+      } else {
+        $('.btn-hide-img').html('Скрыть изображения')
+      }
+    })
+    return false
   })
 
   // Upload file

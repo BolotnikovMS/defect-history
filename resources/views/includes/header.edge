@@ -58,6 +58,18 @@
                 class="{{ 'distribution.index' == activeMenuLink ? 'active' : '' }}">Группы рассылок</a>
             </li>
           @end
+          @if(!await bouncer.denies('viewReportSubstationDefects'))
+            @dropdown.dropdown({
+              classDropdownMenu: 'dropdown__menu-menu_bottom',
+              dropdownData: [
+                { name: 'Список дефектов ПС', access: 'viewReportSubstationDefects', path: 'reports.show.substation.defects' },
+                { name: 'Список дефектов Района или ГП', access: 'viewReportDistrictDefects', path: 'reports.show.district.defects' },
+              ],
+            })
+              Отчеты
+              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+            @end
+          @endif
         </ul>
       </nav>
       <div class="header__login">
@@ -71,9 +83,7 @@
             dropdownLogout: true,
           })
           <img src="{{ asset('assets/images/icons/user-1.svg') }}" class="dropdown-icon">
-
             {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
-
             <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
           @end
         @else

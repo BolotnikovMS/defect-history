@@ -29,93 +29,96 @@
     {{--  {{inspect(defect.defect_type ?? 'false')}}  --}}
     <hr>
     {{--  {{inspect(typesFilter)}}  --}}
-      @if(defects.length)
-        <div class="cards defect__cards">
-          @each(defect in defects)
-            <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : '' }}">
-              <div class="card__header">
-                <div class="card__header-content">
-                  <div class="card__object-info">
-                    @if(defect?.substation)
-                        <span class="card__text">
-                          <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
-                            {{ defect.substation.name }}
-                            <img src="{{ asset('assets/images/icons/link.svg') }}">
-                          </a>
-                        </span>
-                      @endif
-                    <span class="card__text">{{ defect.accession.name }}</span>
-                    <span class="card__text">
-                      Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
-                    </span>
-                  </div>
+    @if(defects.length)
+      <div class="cards defect__cards">
+        @each(defect in defects)
+          <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : '' }}">
+            <div class="card__header">
+              <div class="card__header-content">
+                <div class="card__object-info">
                   @if(defect?.defect_type)
                     <div class="card__badge">
                       <span class="card__text">{{ defect.defect_type.type_defect }}</span>
                     </div>
                   @endif
+                  @if(defect?.substation)
+                      <span class="card__text">
+                        <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
+                          {{ defect.substation.name }}
+                          <img src="{{ asset('assets/images/icons/link.svg') }}">
+                        </a>
+                      </span>
+                    @endif
+                  <span class="card__text">{{ defect.accession.name }}</span>
+                  <span class="card__text">
+                    Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
+                  </span>
+                </div>
+                <div class="card__author">
+                  <div class="carf__text">{{ defect.user.shortUserName }}</div>
                 </div>
               </div>
-              <hr class="card__hr">
-              <div class="card__body">
-                <div class="card__body-content">
-                  <div class="card__text card__text-body">
-                    {{ defect.excerptText }}
-                  </div>
-                  <div class="card__data-info">
-                    <div class="card__text card__text-fs_17">
-                      <span class="card__text card__text-bold">Дата добавления:</span>
-                      {{ dateFormat(defect.created_at) }}
-                    </div>
-                    <div class="card__text card__text-fs_17">
-                      <span class="card__text card__text-bold">Срок устранения:</span>
-                      {{ dateFormat(defect.term_elimination) }}
-                    </div>
-                    <div class="card__text card__text-fs_17">
-                      <span class="card__text card__text-bold">Дата устранения:</span>
-                      @if(defect.elimination_date === null)
-                        <span class="card__text card__text-red">Не устранен</span>
-                      @else
-                        {{ dateFormat(defect.elimination_date) }}
-                      @endif
-                    </div>
-                  </div>
+            </div>
+            <hr class="card__hr">
+            <div class="card__body">
+              <div class="card__body-content">
+                <div class="card__text card__text-body">
+                  {{ defect.excerptText }}
                 </div>
-              </div>
-              <hr class="card__hr">
-              <div class="card__footer">
-                <div class="card__footer-content">
-                  <div class="card__btns">
-                    @buttons.base({
-                      href: 'defects.show',
-                      params: {id: defect.id},
-                      className: 'btn-small btn-color_blue ',
-                    })
-                      Подробнее...
-                    @end
+                <div class="card__data-info">
+                  <div class="card__text card__text-fs_17">
+                    <span class="card__text card__text-bold">Дата добавления:</span>
+                    {{ dateFormat(defect.created_at) }}
                   </div>
-                  <div class="card__menu">
-                    @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect))
-                      @dropdown.dropdown({
-                        classBtnDropdown: 'btn-dropdown-icon',
-                        dropdownData: [
-                          { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
-                          { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
-                        ],
-                      })
-                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
-                      @end
+                  <div class="card__text card__text-fs_17">
+                    <span class="card__text card__text-bold">Срок устранения:</span>
+                    {{ dateFormat(defect.term_elimination) }}
+                  </div>
+                  <div class="card__text card__text-fs_17">
+                    <span class="card__text card__text-bold">Дата устранения:</span>
+                    @if(defect.elimination_date === null)
+                      <span class="card__text card__text-red">Не устранен</span>
+                    @else
+                      {{ dateFormat(defect.elimination_date) }}
                     @endif
                   </div>
                 </div>
               </div>
             </div>
-          @endeach
-        </div>
-      @else
-        @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов.' })
-      @endif
+            <hr class="card__hr">
+            <div class="card__footer">
+              <div class="card__footer-content">
+                <div class="card__btns">
+                  @buttons.base({
+                    href: 'defects.show',
+                    params: {id: defect.id},
+                    className: 'btn-small btn-color_blue ',
+                  })
+                    Подробнее...
+                  @end
+                </div>
+                <div class="card__menu">
+                  @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect))
+                    @dropdown.dropdown({
+                      classBtnDropdown: 'btn-dropdown-icon',
+                      dropdownData: [
+                        { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
+                        { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
+                        { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                      ],
+                    })
+                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                    @end
+                  @endif
+                </div>
+              </div>
+            </div>
+          </div>
+        @endeach
+      </div>
+    @else
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов.' })
+    @endif
     <hr>
   </div>
   @!component('components/pagination', {

@@ -23,23 +23,26 @@
             <div class="card__header">
               <div class="card__header-content">
                 <div class="card__object-info">
+                  @if(defect?.defect_type)
+                    <div class="card__badge">
+                      <span class="card__text">{{ defect.defect_type.type_defect }}</span>
+                    </div>
+                  @endif
                   @if(defect?.substation)
-                      <span class="card__text">
-                        <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
-                          {{ defect.substation.name }}
-                        </a>
-                      </span>
-                    @endif
+                    <span class="card__text">
+                      <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
+                        {{ defect.substation.name }}
+                      </a>
+                    </span>
+                  @endif
                   <span class="card__text">{{ defect.accession.name }}</span>
                   <span class="card__text">
                     Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
                   </span>
                 </div>
-                @if(defect?.defect_type)
-                  <div class="card__badge">
-                    <span class="card__text">{{ defect.defect_type.type_defect }}</span>
-                  </div>
-                @endif
+                <div class="card__author">
+                  <div class="card__text">{{ defect.user.shortUserName }}</div>
+                </div>
               </div>
             </div>
             <hr class="card__hr">

@@ -196,12 +196,7 @@ export const { actions } = Bouncer.before((user: User | null) => {
     if (defect.elimination_date !== null && defect.result !== null) {
       return false
     } else {
-      return (
-        // eslint-disable-next-line eqeqeq
-        (defect.id_user_created === user.id && defect.elimination_date == null) ||
-        user.id_role === Roles.MODERATOR ||
-        userPermissionCheck('editDefect', user.permissions)
-      )
+      return user.id_role === Roles.MODERATOR || userPermissionCheck('editDefect', user.permissions)
     }
   })
   .define('editDefectDeadline', async (user: User, defect: Defect) => {
@@ -219,11 +214,13 @@ export const { actions } = Bouncer.before((user: User | null) => {
   .define('deleteDefect', async (user: User, defect: Defect) => {
     await user.load('permissions')
 
-    return (
-      (defect.id_user_created === user.id && defect.elimination_date === null) ||
-      user.id_role === Roles.MODERATOR ||
-      userPermissionCheck('deleteDefect', user.permissions)
-    )
+    if (defect.elimination_date !== null && defect.result !== null) {
+      return false
+    } else {
+      return (
+        user.id_role === Roles.MODERATOR || userPermissionCheck('deleteDefect', user.permissions)
+      )
+    }
   })
 
   // Checkup
@@ -360,6 +357,23 @@ export const { actions } = Bouncer.before((user: User | null) => {
     return (
       user.id_role === Roles.MODERATOR ||
       userPermissionCheck('deleteDistributionGroup', user.permissions)
+    )
+  })
+  // Reports
+  .define('viewReportSubstationDefects', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('viewReportSubstationDefects', user.permissions)
+    )
+  })
+  .define('viewReportDistrictDefects', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('viewReportDistrictDefects', user.permissions)
     )
   })
 
