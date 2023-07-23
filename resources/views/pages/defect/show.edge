@@ -54,11 +54,13 @@
           <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
           PDF
         @end
-        @buttons.base({
-          className: 'btn-color_green btn-hide-img'
-        })
-          Скрыть изображения
-        @end
+        @if(defect.defect_imgs.length)
+          @buttons.base({
+            className: 'btn-color_green btn-hide-img'
+          })
+            Скрыть изображения
+          @end
+        @endif
       </div>
     @endif
   </div>
