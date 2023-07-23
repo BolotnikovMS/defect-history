@@ -18,7 +18,7 @@ import DistributionGroup from 'App/Models/DistributionGroup'
 import Defect from 'App/Models/Defect'
 import Permission from 'App/Models/Permission'
 
-export default class User extends BaseModel {
+class User extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -114,3 +114,14 @@ export default class User extends BaseModel {
   })
   public permissions: ManyToMany<typeof Permission>
 }
+
+User['findForAuth'] = function (uids: string[], uidValue: string) {
+  const query = this.query()
+
+  // Для sqlite 'LIKE'
+  uids.map((uid) => query.orWhere(uid, 'LIKE', uidValue))
+
+  return query.first()
+}
+
+export default User
