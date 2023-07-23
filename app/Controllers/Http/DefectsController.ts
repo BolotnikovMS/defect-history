@@ -31,7 +31,16 @@ export default class DefectsController {
     }))
 
     const defects = await Defect.query()
-      .orderBy('elimination_date', 'asc')
+      .orderBy([
+        {
+          column: 'elimination_date',
+          order: 'asc',
+        },
+        {
+          column: 'created_at',
+          order: 'desc',
+        },
+      ])
       .preload('defect_type')
       .preload('substation')
       .preload('accession')
