@@ -56,6 +56,7 @@ export default class ReportsController {
       await substation.load((loader) => {
         loader.load('defects', (defectQuery) => {
           titleText = 'всех'
+          noContent = 'По ПС нету открытых дефектов'
           defectQuery
             .preload('defect_type')
             .preload('accession')
@@ -81,7 +82,7 @@ export default class ReportsController {
       })
 
       return view.render('pages/reports/substation_defects/index', {
-        title: `Список ${titleText} по ПС '${substation.name}'`,
+        title: `Список ${titleText} дефектов по ПС '${substation.name}'`,
         messages: {
           noContent: noContent,
         },
