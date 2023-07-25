@@ -4,6 +4,7 @@ import DistributionGroupsUser from 'App/Models/DistributionGroupsUser'
 import User from 'App/Models/User'
 import DistributionGroupValidator from 'App/Validators/DistributionGroupValidator'
 import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
+import { Departments } from 'App/Enums/Departments'
 
 export default class DistributionGroupsController {
   public async index({ response, view, session, bouncer }: HttpContextContract) {
@@ -66,7 +67,11 @@ export default class DistributionGroupsController {
 
     if (group) {
       await group.load('group_users')
-      const users = await User.query().where('blocked', '=', false)
+      const users = await User.query().where((queryUser) => {
+        queryUser.where('blocked', '=', false)
+        queryUser.where('id', '!=', 1)
+        queryUser.where('id_department', '!=', Departments.withoutDepartment)
+      })
 
       const filteredArrayUsers = users.filter((user) => {
         return group.group_users.every((userInGroup) => {
