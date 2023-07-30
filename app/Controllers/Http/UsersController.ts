@@ -17,7 +17,7 @@ export default class UsersController {
     }
 
     const page = request.input('page', 1)
-    const limit = 10
+    const limit = 20
 
     const users = await User.query().preload('role').preload('department').paginate(page, limit)
 
