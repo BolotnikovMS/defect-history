@@ -61,6 +61,12 @@ a {
 .control {
   @extend %control-group;
 
+  &__btns {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
+
   &-column {
     flex-direction: column;
   }

@@ -7,11 +7,15 @@
     text-align: center;
   }
 
+  &__th-control {
+    width: 50px;
+  }
+
   &__td-control {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 90px;
+    min-width: 50px;
   }
 
   &__tr-color_green {
