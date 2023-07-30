@@ -39,7 +39,6 @@ export default class ReportsController {
     const validationSchema = schema.create({
       substation: schema.number(),
       filter: schema.string(),
-      intermediate_checks: schema.boolean.optional(),
     })
     const customMessages: CustomMessages = {
       required: 'Поле является обязательным.',
@@ -179,6 +178,77 @@ export default class ReportsController {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().toRoute('reports.show.district.defects')
     }
+  }
+
+  public async showAllDefects({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewReportAllDefects')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
+
+      return response.redirect().toPath('/')
+    }
+
+    return view.render('pages/reports/all_defects/index', {
+      title: 'Список дефектов',
+      messages: {
+        noContent: 'Отчет не сформирован.',
+      },
+    })
+  }
+
+  public async getAllDefects({ request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewReportAllDefects')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const validationSchema = schema.create({
+      filter: schema.string(),
+    })
+    const customMessages: CustomMessages = {
+      required: 'Поле является обязательным.',
+    }
+    const validateData = await request.validate({
+      schema: validationSchema,
+      messages: customMessages,
+    })
+    let noContentDefect: string | null = null
+    let titleText: string = 'всех'
+
+    const districts = await District.query()
+      .preload('district_defects')
+      .preload('substations', (substationQuery) => {
+        substationQuery.preload('defects', (defectQuery) => {
+          titleText = 'всех'
+          noContentDefect = 'Дефектов нету'
+          defectQuery
+            .if(validateData.filter === 'openDefects', (query) => {
+              titleText = 'открытых'
+              noContentDefect = 'По ПС нету открытых дефектов'
+              query.whereNull('result')
+            })
+            .if(validateData.filter === 'closeDefects', (query) => {
+              titleText = 'закрытых'
+              noContentDefect = 'По ПС нету закрытых дефектов'
+              query.whereNotNull('result')
+            })
+            .orderBy('term_elimination', 'asc')
+            .preload('defect_type')
+            .preload('accession')
+        })
+      })
+
+    // const test = districts.map((district) => district.serialize())
+    // console.log(test[0])
+
+    return view.render('pages/reports/all_defects/index', {
+      title: `Список ${titleText} дефектов`,
+      messages: {
+        noContent: 'Нету дефектов',
+        noContentDefect: noContentDefect,
+      },
+      districts,
+    })
   }
 
   public async index({}: HttpContextContract) {}
