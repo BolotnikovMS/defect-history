@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Hide void rows
   $('.btn_hide_void_rows').click('click', () => {
-    $('.no_data').slideToggle(200, function () {
+    $('.no_data_rows').slideToggle(200, function () {
       if ($(this).is(':hidden')) {
         $('.btn_hide_void_rows').html('Показать пустые строки')
       } else {
