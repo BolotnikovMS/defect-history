@@ -41,17 +41,17 @@
           type: 'submit',
           className: 'btn-color_green btn-small'
         })
-          <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon" alt="Checkmark">
+          <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
           Применить
         @end
       </div>
     @end
     @if(district?.substations.length)
-      <div class="controll__btn">
+      <div class="control__btns">
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-pdf'
         })
-          <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
+          <img src="{{ asset('assets/images/icons/pdf.svg') }}" class="icon icon-size_20" alt="PDF">
           PDF
         @end
       </div>
