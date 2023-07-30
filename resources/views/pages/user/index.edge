@@ -22,7 +22,7 @@
             <th>Username</th>
             <th>Email</th>
             @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
-              <th>
+              <th class="table__th-control">
                 <img src="{{ asset('assets/images/icons/settings.svg') }}" alt="Действия">
               </th>
             @endif
