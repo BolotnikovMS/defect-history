@@ -58,12 +58,13 @@
                 class="{{ 'distribution.index' == activeMenuLink ? 'active' : '' }}">Группы рассылок</a>
             </li>
           @end
-          @if(!await bouncer.denies('viewReportSubstationDefects'))
+          @if(!await bouncer.denies('viewReportSubstationDefects') || !await bouncer.denies('viewReportDistrictDefects') || !await bouncer.denies('viewReportAllDefects'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
                 { name: 'Список дефектов ПС', access: 'viewReportSubstationDefects', path: 'reports.show.substation.defects' },
                 { name: 'Список дефектов Района или ГП', access: 'viewReportDistrictDefects', path: 'reports.show.district.defects' },
+                { name: 'Список дефектов по всем ПС', access: 'viewReportAllDefects', path: 'reports.show.all.defects' },
               ],
             })
               Отчеты
