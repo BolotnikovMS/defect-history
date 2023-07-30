@@ -75,7 +75,7 @@
           </thead>
           <tbody>
             @each(defect in substation.defects)
-              <tr {{ defect.elimination_date ? 'class=table__tr-color_green' : '' }}>
+              <tr>
                 <td>{{ defect.defect_type.type_defect }}</td>
                 <td>{{ defect.accession.name }}</td>
                 <td>{{ defect.description_defect }}</td>
