@@ -2,6 +2,7 @@
 @set('value', flashMessages.get(name) || defaultValue)
 @set('errors', flashMessages.get(`errors.${name}`) ?? errors)
 @set('classError', errors ? 'form__input-invalid' : '')
+@set('optionClass', optionClass ? optionClass : '')
 
 <div class="form__group">
   <label class="form__label">
@@ -16,7 +17,7 @@
     <input
       type="{{ type ?? 'text' }}"
       name="{{ name }}"
-      class="form__input {{ classError }}"
+      class="form__input {{ optionClass }} {{ classError }}"
       {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
       {{{ value ? 'value="' +  value + '"' : '' }}}
       {{{ required ? 'required' : '' }}}
