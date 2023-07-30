@@ -68,18 +68,24 @@
                 <div class="card__data-info">
                   <div class="card__text card__text-fs_17">
                     <span class="card__text card__text-bold">Дата добавления:</span>
-                    {{ dateFormat(defect.created_at) }}
+                    <span class="card__text">
+                      {{ dateFormat(defect.created_at) }}
+                    </span>
                   </div>
                   <div class="card__text card__text-fs_17">
                     <span class="card__text card__text-bold">Срок устранения:</span>
-                    {{ dateFormat(defect.term_elimination) }}
+                    <span class="card__text">
+                      {{ dateFormat(defect.term_elimination) }}
+                    </span>
                   </div>
                   <div class="card__text card__text-fs_17">
                     <span class="card__text card__text-bold">Дата устранения:</span>
                     @if(defect.elimination_date === null)
                       <span class="card__text card__text-red">Не устранен</span>
                     @else
-                      {{ dateFormat(defect.elimination_date) }}
+                      <span class="card__text">
+                        {{ dateFormat(defect.elimination_date) }}
+                      </span>
                     @endif
                   </div>
                 </div>
