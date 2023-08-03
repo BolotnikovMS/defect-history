@@ -26,6 +26,16 @@
     background-color: rgba(250, 145, 145, 0.8) !important;
   }
 
+  &__group {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+
+    &-cg_15 {
+      column-gap: 15px;
+    }
+  }
+
   &__header-content {
     display: flex;
     align-items: center;
@@ -44,6 +54,10 @@
     font-size: 19px;
 
     &-body {
+      font-size: 20px;
+    }
+
+    &-fs_20 {
       font-size: 20px;
     }
 
@@ -66,7 +80,7 @@
     }
   }
 
-  &__object-info {
+  &__header-info {
     display: flex;
     align-items: center;
     column-gap: 20px;
@@ -98,9 +112,5 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 20px;
-  }
-
-  &__btns {
-    display: flex;
   }
 }
