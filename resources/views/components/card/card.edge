@@ -1,0 +1,21 @@
+@set('optionalClasses', optionalClasses ?? '')
+
+<div class="card {{ optionalClasses }}">
+  @if($slots.cardHeader)
+    <div class="card__header">
+      {{{ await $slots.cardHeader() }}}
+    </div>
+    <hr class="card__hr">
+  @endif
+  @if($slots.cardBody)
+    <div class="card__body">
+      {{{ await $slots.cardBody() }}}
+    </div>
+  @endif
+  @if($slots.cardFooter)
+    <hr class="card__hr">
+    <div class="card__footer">
+      {{{ await $slots.cardFooter() }}}
+    </div>
+  @endif
+</div>
