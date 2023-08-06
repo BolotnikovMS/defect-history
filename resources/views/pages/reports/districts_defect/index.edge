@@ -54,6 +54,12 @@
           <img src="{{ asset('assets/images/icons/pdf.svg') }}" class="icon icon-size_20" alt="PDF">
           PDF
         @end
+        @buttons.base({
+          type: 'button',
+          className: 'btn-color_green btn-small btn_hide_void_rows'
+        })
+          Скрыть пустые строки
+        @end
       </div>
     @endif
   </div>
@@ -74,7 +80,7 @@
           </thead>
           <tbody>
             @each(substation in district.substations)
-              <tr>
+              <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
                 <td colspan="5" class="table__td-text_bold">
                   {{ substation.name }}
                 </td>
@@ -94,7 +100,7 @@
                   </td>
                 </tr>
               @else
-                <tr>
+                <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
                   <td colspan="5">
                     {{ messages.noContentDefect }}
                   </td>
