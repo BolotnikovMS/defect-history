@@ -33,7 +33,13 @@
       <div class="cards defect__cards">
         @each(defect in defects)
           @card.card({
-            optionalClasses: defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : ''
+            optionalClasses: defect.elimination_date !== null ?
+              'card-completed' :
+              new Date(defect.term_elimination) < new Date() ?
+              'card-danger' :
+              defect.importance === true ?
+              'card-danger' :
+              ''
           })
             @slot('cardHeader')
               <div class="card__header-content">
