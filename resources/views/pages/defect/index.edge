@@ -5,7 +5,8 @@
   <div class="control control-items_sb">
     <div class="control__btns">
       @can('createDefect')
-        @buttons.add({ href: 'defects.create' })
+        @buttons.base({ href: 'defects.create', className: 'btn-color_green' })
+          @!icons.add({ optionalClasses: 'icon-size_15' })
           Добавить
         @end
       @endcan
