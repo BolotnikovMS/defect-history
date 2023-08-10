@@ -1,9 +1,10 @@
 import Bouncer from '@ioc:Adonis/Addons/Bouncer'
+import Defect from 'App/Models/Defect'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Roles from 'App/Enums/Roles'
-import Defect from 'App/Models/Defect'
 import User from 'App/Models/User'
-import IntermediateCheck from 'App/Models/IntermediateCheck'
+import WorkPlanning from 'App/Models/WorkPlanning'
 import { userPermissionCheck } from 'App/Utils/utils'
 
 /*
@@ -382,6 +383,32 @@ export const { actions } = Bouncer.before((user: User | null) => {
     return (
       user.id_role === Roles.MODERATOR ||
       userPermissionCheck('viewReportAllDefects', user.permissions)
+    )
+  })
+  // Work planning
+  .define('addingWorkPlanningEntry', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('addingWorkPlanningEntry', user.permissions)
+    )
+  })
+  .define('deletingPlannedWorkEntry', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('deletingPlannedWorkEntry', user.permissions)
+    )
+  })
+  .define('editingPlannedWorkEntry', async (user: User, plannedWork: WorkPlanning) => {
+    await user.load('permissions')
+
+    return (
+      plannedWork.id_user_created === user.id ||
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('editingPlannedWorkEntry', user.permissions)
     )
   })
 
