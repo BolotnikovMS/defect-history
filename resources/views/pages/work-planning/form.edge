@@ -1,0 +1,31 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="defect__content">
+    @forms.post({
+      action: route(options.routePath.savePath, {idDefect: options.idDefect, id: options.idData}),
+    })
+      <div class="form__content form__content-column">
+        @!inputs.textarea({
+          label: 'Комментарий',
+          labelPositionText: 'label__text_left',
+          name: 'comment',
+          rows: 8,
+          placeholderText: 'Введите описание комментария...',
+          required: true,
+          value: plannedWork ? plannedWork.comment : ''
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'defects.show', params: {id: options.idDefect} })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection
