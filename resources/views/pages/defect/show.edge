@@ -47,13 +47,26 @@
               Увеличить срок
             @end
           @endcan
+
+          @can('addingWorkPlanningEntry')
+            @buttons.base({
+              href: 'work-planning.create',
+              params: {idDefect: defect.id},
+              className: 'btn-color_blue btn-color_blue-transparent'
+            })
+              <img src="{{ asset('assets/images/icons/calendar-2.svg') }}" alt="Планирование работ">
+              Планироване работ
+            @end
+          @endcan
         @endif
+
         @buttons.base({
           className: 'btn-color_green btn-save-pdf'
         })
           <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
           PDF
         @end
+
         @if(defect.defect_imgs.length)
           @buttons.base({
             className: 'btn-color_green btn-hide-img'
@@ -112,6 +125,43 @@
         @endif
       </div>
     </div>
+    @if(defect.work_planning.length)
+      <div class="defect-info__block">
+        <div class="defect-info__titles">
+          <h3 class="defect-info__title">Подготовительные работы</h3>
+        </div>
+        <table class="table defect-info__table">
+          <thead>
+            <th>Сотрудник</th>
+            <th>Дата добавления</th>
+            <th colspan="3">Комментарий</th>
+            <th style="width: 50px"></th>
+          </thead>
+          <tbody>
+            @each(work in defect.work_planning)
+              <tr>
+                <td>{{ work.user_created.fullName }}</td>
+                <td>{{ work.created_at }}</td>
+                <td colspan="3">{{ work.comment }}</td>
+                <td>
+                  @if(!await bouncer.denies('editingPlannedWorkEntry', work) || !await bouncer.denies('deletingPlannedWorkEntry'))
+                    @dropdown.dropdown({
+                      classBtnDropdown: 'btn-dropdown-icon',
+                      dropdownData: [
+                        { name: 'Редактировать', access: 'editingPlannedWorkEntry', data: work, path: 'work-planning.edit', params: { idDefect: defect.id, id: work.id }, icon: 'edit.svg'},
+                        { name: 'Удалить', access: 'deletingPlannedWorkEntry', data: work, path: 'work-planning.destroy', params: { id: work.id }, icon: 'delete.svg' },
+                      ],
+                    })
+                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                    @end
+                  @endif
+                </td>
+              </tr>
+            @end
+          </tbody>
+        </table>
+      </div>
+    @endif
     @if(defect.intermediate_checks.length)
       <div class="defect-info__checks">
         <div class="defect-info__titles">
