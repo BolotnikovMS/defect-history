@@ -60,7 +60,9 @@ export default class Defect extends BaseModel {
   })
   public elimination_date: DateTime | null
 
-  @column()
+  @column({
+    consume: (value: string) => replacementEscapeSymbols(value),
+  })
   public result: string | null
 
   @column({ serializeAs: null })
