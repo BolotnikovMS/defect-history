@@ -1,20 +1,21 @@
+import { addDays, randomStr } from 'App/Utils/utils'
+
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
+import { DateTime } from 'luxon'
+import Defect from 'App/Models/Defect'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
+import DefectImg from 'App/Models/DefectImg'
+import DefectType from 'App/Models/DefectType'
+import DefectValidator from 'App/Validators/DefectValidator'
+import Department from 'App/Models/Department'
+import { Departments } from 'App/Enums/Departments'
 import Env from '@ioc:Adonis/Core/Env'
 import Event from '@ioc:Adonis/Core/Event'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Departments } from 'App/Enums/Departments'
-import Defect from 'App/Models/Defect'
-import DefectImg from 'App/Models/DefectImg'
-import DefectType from 'App/Models/DefectType'
-import Department from 'App/Models/Department'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
+import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
 import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
-import { addDays, randomStr } from 'App/Utils/utils'
-import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
-import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
-import DefectValidator from 'App/Validators/DefectValidator'
-import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
-import { DateTime } from 'luxon'
 import { unlink } from 'node:fs/promises'
 
 export default class DefectsController {
@@ -163,6 +164,9 @@ export default class DefectsController {
       })
       await defect.load('name_eliminated')
       await defect.load('defect_imgs')
+      await defect.load('work_planning', (query) => {
+        query.preload('user_created')
+      })
 
       return view.render('pages/defect/show', {
         title: 'Подробный просмотр',
