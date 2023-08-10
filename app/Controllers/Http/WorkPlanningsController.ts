@@ -1,5 +1,3 @@
-import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
-
 import Defect from 'App/Models/Defect'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import WorkPlanning from 'App/Models/WorkPlanning'
