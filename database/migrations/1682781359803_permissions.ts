@@ -212,6 +212,18 @@ export default class extends BaseSchema {
           access: 'viewReportAllDefects',
           description: 'Формирование отчета "Дефекты по всем ПС"',
         },
+        {
+          access: 'addingWorkPlanningEntry',
+          description: 'Добавление записи планирования работ',
+        },
+        {
+          access: 'editingPlannedWorkEntry',
+          description: 'Редактирование записей запланированных работ',
+        },
+        {
+          access: 'deletingPlannedWorkEntry',
+          description: 'Удаление записи запланированных работ',
+        },
       ])
     })
   }
