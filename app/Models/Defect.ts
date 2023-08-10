@@ -1,23 +1,25 @@
-import { string } from '@ioc:Adonis/Core/Helpers'
 import {
   BaseModel,
   BelongsTo,
+  HasMany,
+  HasOne,
   belongsTo,
   column,
   computed,
-  HasMany,
   hasMany,
-  HasOne,
   hasOne,
 } from '@ioc:Adonis/Lucid/Orm'
+
 import AccessionSubstation from 'App/Models/AccessionSubstation'
+import { DateTime } from 'luxon'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
+import WorkPlanning from 'App/Models/WorkPlanning'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
-import { DateTime } from 'luxon'
+import { string } from '@ioc:Adonis/Core/Helpers'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })
@@ -127,4 +129,10 @@ export default class Defect extends BaseModel {
     localKey: 'id',
   })
   public defect_imgs: HasMany<typeof DefectImg>
+
+  @hasMany(() => WorkPlanning, {
+    foreignKey: 'id_defect',
+    localKey: 'id',
+  })
+  public work_planning: HasMany<typeof WorkPlanning>
 }
