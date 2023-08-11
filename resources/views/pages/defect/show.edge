@@ -144,7 +144,7 @@
                 <td>{{ work.created_at }}</td>
                 <td colspan="3">{{ work.comment }}</td>
                 <td>
-                  @if(!await bouncer.denies('editingPlannedWorkEntry', work) || !await bouncer.denies('deletingPlannedWorkEntry'))
+                  @if((!await bouncer.denies('editingPlannedWorkEntry', work) || !await bouncer.denies('deletingPlannedWorkEntry')) && defect.result === null)
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
