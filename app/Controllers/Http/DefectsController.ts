@@ -45,6 +45,7 @@ export default class DefectsController {
       .preload('defect_type')
       .preload('substation')
       .preload('accession')
+      .preload('work_planning')
       .preload('intermediate_checks')
       .preload('user')
       .paginate(page, limit)
