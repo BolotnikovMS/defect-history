@@ -5,7 +5,7 @@
     @if(auth.isLoggedIn)
       <div class="control">
         @if(!defect.result && !defect.elimination_date)
-          @can('createCloseDefect')
+          @can('createCloseDefect', defect)
             @buttons.base({
               href: 'defects.close.create',
               params: {idDefect: defect.id},
@@ -15,7 +15,7 @@
               Закрыть дефект
             @end
           @endcan
-          @can('createCheckup')
+          @can('createCheckup', defect)
             @buttons.base({
               href: 'defects.checkup-create',
               params: {idDefect: defect.id},
@@ -48,7 +48,7 @@
             @end
           @endcan
 
-          @can('addingWorkPlanningEntry')
+          @can('addingWorkPlanningEntry', defect)
             @buttons.base({
               href: 'work-planning.create',
               params: {idDefect: defect.id},
@@ -144,12 +144,12 @@
                 <td>{{ work.created_at }}</td>
                 <td colspan="3">{{ work.comment }}</td>
                 <td>
-                  @if((!await bouncer.denies('editingPlannedWorkEntry', work) || !await bouncer.denies('deletingPlannedWorkEntry')) && defect.result === null)
+                  @if((!await bouncer.denies('editingPlannedWorkEntry', work, defect) || !await bouncer.denies('deletingPlannedWorkEntry', defect)))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Редактировать', access: 'editingPlannedWorkEntry', data: work, path: 'work-planning.edit', params: { idDefect: defect.id, id: work.id }, icon: 'edit.svg'},
-                        { name: 'Удалить', access: 'deletingPlannedWorkEntry', data: work, path: 'work-planning.destroy', params: { id: work.id }, icon: 'delete.svg' },
+                        { name: 'Редактировать', access: 'editingPlannedWorkEntry', data: work, extraData: defect, path: 'work-planning.edit', params: { idDefect: defect.id, id: work.id }, icon: 'edit.svg'},
+                        { name: 'Удалить', access: 'deletingPlannedWorkEntry', data: defect, path: 'work-planning.destroy', params: { id: work.id }, icon: 'delete.svg' },
                       ],
                     })
                       <img src="{{ asset('assets/images/icons/menu.svg') }}">
@@ -173,9 +173,7 @@
             <th>Дата проверки</th>
             <th colspan="2">Результаты проверки</th>
             <th>Кому передано</th>
-            @if(defect.result === null)
-              <th style="width: 50px"></th>
-            @end
+            <th style="width: 50px"></th>
           </thead>
           <tbody>
             @each(inter in defect.intermediate_checks)
@@ -191,18 +189,18 @@
                       '-'
                   }}
                 </td>
-                @if(!await bouncer.denies('deleteCheckup', inter) && defect.result === null)
-                  <td>
+                <td>
+                  @if(!await bouncer.denies('deleteCheckup', inter, defect))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Удалить', access: 'deleteCheckup', data: inter, path: 'defects.checkup.destroy', params: { idInterCheck: inter.id }, icon: 'delete.svg'},
+                        { name: 'Удалить', access: 'deleteCheckup', data: inter, extraData: defect, path: 'defects.checkup.destroy', params: { idInterCheck: inter.id }, icon: 'delete.svg'},
                       ],
                     })
                       <img src="{{ asset('assets/images/icons/menu.svg') }}">
                     @end
-                  </td>
-                @endif
+                  @endif
+                </td>
               </tr>
             @else
               <tr>
