@@ -225,24 +225,33 @@ export const { actions } = Bouncer.before((user: User | null) => {
   })
 
   // Checkup
-  .define('createCheckup', async (user: User) => {
+  .define('createCheckup', async (user: User, defect: Defect) => {
     await user.load('permissions')
+
+    if (defect.result !== null) return false
 
     return (
       user.id_role === Roles.MODERATOR || userPermissionCheck('createCheckup', user.permissions)
     )
   })
-  .define('deleteCheckup', async (user: User, intermediateCheck: IntermediateCheck) => {
+  .define(
+    'deleteCheckup',
+    async (user: User, intermediateCheck: IntermediateCheck, defect: Defect) => {
+      await user.load('permissions')
+
+      if (defect.result !== null) return false
+
+      return (
+        intermediateCheck?.id_user_created === user.id ||
+        user.id_role === Roles.MODERATOR ||
+        userPermissionCheck('deleteCheckup', user.permissions)
+      )
+    }
+  )
+  .define('createCloseDefect', async (user: User, defect: Defect) => {
     await user.load('permissions')
 
-    return (
-      intermediateCheck?.id_user_created === user.id ||
-      user.id_role === Roles.MODERATOR ||
-      userPermissionCheck('deleteCheckup', user.permissions)
-    )
-  })
-  .define('createCloseDefect', async (user: User) => {
-    await user.load('permissions')
+    if (defect.result !== null) return false
 
     return (
       user.id_role === Roles.MODERATOR || userPermissionCheck('createCloseDefect', user.permissions)
@@ -386,31 +395,40 @@ export const { actions } = Bouncer.before((user: User | null) => {
     )
   })
   // Work planning
-  .define('addingWorkPlanningEntry', async (user: User) => {
+  .define('addingWorkPlanningEntry', async (user: User, defect: Defect) => {
     await user.load('permissions')
+
+    if (defect.result !== null) return false
 
     return (
       user.id_role === Roles.MODERATOR ||
       userPermissionCheck('addingWorkPlanningEntry', user.permissions)
     )
   })
-  .define('deletingPlannedWorkEntry', async (user: User) => {
+  .define('deletingPlannedWorkEntry', async (user: User, defect: Defect) => {
     await user.load('permissions')
+
+    if (defect.result !== null) return false
 
     return (
       user.id_role === Roles.MODERATOR ||
       userPermissionCheck('deletingPlannedWorkEntry', user.permissions)
     )
   })
-  .define('editingPlannedWorkEntry', async (user: User, plannedWork: WorkPlanning) => {
-    await user.load('permissions')
+  .define(
+    'editingPlannedWorkEntry',
+    async (user: User, plannedWork: WorkPlanning, defect: Defect) => {
+      await user.load('permissions')
 
-    return (
-      plannedWork.id_user_created === user.id ||
-      user.id_role === Roles.MODERATOR ||
-      userPermissionCheck('editingPlannedWorkEntry', user.permissions)
-    )
-  })
+      if (defect.result !== null) return false
+
+      return (
+        plannedWork.id_user_created === user.id ||
+        user.id_role === Roles.MODERATOR ||
+        userPermissionCheck('editingPlannedWorkEntry', user.permissions)
+      )
+    }
+  )
 
 /*
 |--------------------------------------------------------------------------

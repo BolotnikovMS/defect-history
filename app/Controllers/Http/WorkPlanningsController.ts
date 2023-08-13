@@ -7,36 +7,47 @@ export default class WorkPlanningsController {
   public async index({}: HttpContextContract) {}
 
   public async create({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('addingWorkPlanningEntry')) {
-      session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
-
-      return response.redirect().toPath('/')
-    }
-
-    const idDefect = await params.idDefect
-
-    return view.render('pages/work-planning/form', {
-      title: 'Планирование работ',
-      options: {
-        idDefect,
-        routePath: {
-          savePath: 'work-planning.store',
-        },
-      },
-    })
-  }
-
-  public async store({ request, response, params, auth, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('addingWorkPlanningEntry')) {
-      session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
-
-      return response.redirect().toPath('/')
-    }
-
-    const idDefect = await params.idDefect
+    const idDefect: number = parseInt(await params.idDefect)
     const defect = await Defect.find(idDefect)
 
     if (defect) {
+      if (await bouncer.denies('addingWorkPlanningEntry', defect)) {
+        session.flash(
+          'dangerMessage',
+          'У вас нет прав на добавление новой записи или дефект уже закрыт!'
+        )
+
+        return response.redirect().toPath('/')
+      }
+
+      console.log('idDefect: ', idDefect)
+
+      return view.render('pages/work-planning/form', {
+        title: 'Планирование работ',
+        options: {
+          idDefect,
+          routePath: {
+            savePath: 'work-planning.store',
+          },
+        },
+      })
+    }
+  }
+
+  public async store({ request, response, params, auth, session, bouncer }: HttpContextContract) {
+    const idDefect: number = parseInt(await params.idDefect)
+    const defect = await Defect.find(idDefect)
+
+    if (defect) {
+      if (await bouncer.denies('addingWorkPlanningEntry', defect)) {
+        session.flash(
+          'dangerMessage',
+          'У вас нет прав на добавление новой записи или дефект уже закрыт!'
+        )
+
+        return response.redirect().toPath('/')
+      }
+
       const validateData = await request.validate(WorkPlanningValidator)
 
       await WorkPlanning.create({
@@ -61,11 +72,12 @@ export default class WorkPlanningsController {
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const plannedWork = await WorkPlanning.find(params.id)
-    const idDefect = await params.idDefect
+    const idDefect: number = parseInt(await params.idDefect)
+    const defect = await Defect.find(idDefect)
 
-    if (plannedWork && idDefect) {
-      if (await bouncer.denies('editingPlannedWorkEntry', plannedWork)) {
-        session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
+    if (plannedWork && idDefect && defect) {
+      if (await bouncer.denies('editingPlannedWorkEntry', plannedWork, defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на внесение изменений или дефект закрыт!')
 
         return response.redirect().toPath('/')
       }
@@ -89,11 +101,12 @@ export default class WorkPlanningsController {
 
   public async update({ request, response, params, session, bouncer }: HttpContextContract) {
     const plannedWork = await WorkPlanning.find(params.id)
-    const idDefect = await params.idDefect
+    const idDefect = parseInt(await params.idDefect)
+    const defect = await Defect.find(idDefect)
 
-    if (plannedWork && idDefect) {
-      if (await bouncer.denies('editingPlannedWorkEntry', plannedWork)) {
-        session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
+    if (plannedWork && idDefect && defect) {
+      if (await bouncer.denies('editingPlannedWorkEntry', plannedWork, defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на внесение изменений или дефект закрыт!')
 
         return response.redirect().toPath('/')
       }
@@ -112,10 +125,11 @@ export default class WorkPlanningsController {
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const plannedWork = await WorkPlanning.find(params.id)
+    const defect = await Defect.find(plannedWork?.id_defect)
 
-    if (plannedWork) {
-      if (await bouncer.denies('deletingPlannedWorkEntry')) {
-        session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+    if (plannedWork && defect) {
+      if (await bouncer.denies('deletingPlannedWorkEntry', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на удаление записи или дефект закрыт!')
 
         return response.redirect().toPath('/')
       }
