@@ -25,9 +25,16 @@
             @slot('cardHeader')
               <div class="card__header-content">
                 @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
-                  <div class="card__badge">
-                    <span class="card__text">{{ defect.defect_type.type_defect }}</span>
-                  </div>
+                  @!badge.badge({
+                    badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lb',
+                    data: defect.defect_type.type_defect
+                  })
+                  @if(defect?.work_planning.length && defect.result === null)
+                    @!badge.badge({
+                      badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_org',
+                      data: 'В работе'
+                    })
+                  @endif
                   @!card.cardSpan({ text: defect.accession.name, optionalClasses: 'card__text' })
                   @!card.cardSpan({ text: `Проверок: ${defect.countIntermediateChecks ?? defect.intermediate_checks.length}`, optionalClasses: 'card__text' })
                 @end

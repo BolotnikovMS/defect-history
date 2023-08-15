@@ -10,9 +10,8 @@
       <div class="form__content">
         @!inputs.select({
           name: 'filter',
-          label: 'Фильтр',
           labelPositionText: 'label__text_left',
-          optionClass: 'searchable-list',
+          optionClass: 'form__input-width_300 searchable-list',
           dataOptionsConfig: {
             dataOptions: [
               { id: 'allDefects', name: 'Все дефекты' },
@@ -56,6 +55,7 @@
         <table class="table">
           <thead>
             <tr>
+              <th>Дата добавления</th>
               <th>Тип дефекта</th>
               <th>Присоединение</th>
               <th>Описание дефекта</th>
@@ -66,18 +66,19 @@
           <tbody>
             @each(district in districts)
               <tr class="{{ district.numberOpenDefectsDistrict > 0 ? '' : 'no_data_rows'}}">
-                <td colspan="5" class="table__td-text_bold">
+                <td colspan="6" class="table__td-text_bold">
                   {{ district.name }}
                 </td>
               </tr>
               @each(substation in district.substations)
                 <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
-                  <td colspan="5" class="table__td-text_bold">
+                  <td colspan="6" class="table__td-text_bold">
                     {{ substation.name }}
                   </td>
                 </tr>
                 @each(defect in substation.defects)
                   <tr>
+                    <td>{{ dateFormat(defect.created_at) }}</td>
                     <td>{{ defect.defect_type.type_defect }}</td>
                     <td>{{ defect.accession.name }}</td>
                     <td>{{ defect.description_defect }}</td>
@@ -92,12 +93,12 @@
                   </tr>
                 @else
                   <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
-                    <td colspan="5">{{ messages.noContentDefect }}</td>
+                    <td colspan="6">{{ messages.noContentDefect }}</td>
                   </tr>
                 @endeach
               @else
                 <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
-                  <td colspan="5">{{ messages.noContentDefect }}</td>
+                  <td colspan="6">{{ messages.noContentDefect }}</td>
                 </tr>
               @endeach
             @endeach
