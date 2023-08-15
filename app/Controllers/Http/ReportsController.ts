@@ -1,7 +1,8 @@
+import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
+
+import District from 'App/Models/District'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Substation from 'App/Models/Substation'
-import District from 'App/Models/District'
-import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 
 export default class ReportsController {
   public async showSubstationDefects({ response, view, session, bouncer }: HttpContextContract) {
@@ -104,7 +105,7 @@ export default class ReportsController {
     const districts = await District.query()
 
     return view.render('pages/reports/districts_defect/index', {
-      title: 'Список дефектов по Району или ГП',
+      title: 'Список дефектов по РЭС или ГП',
       messages: {
         noContent: 'Отчет не сформирован.',
       },

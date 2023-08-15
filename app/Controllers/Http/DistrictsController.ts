@@ -1,6 +1,6 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import District from 'App/Models/District'
 import DistrictValidator from 'App/Validators/DistrictValidator'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DistrictsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -20,7 +20,7 @@ export default class DistrictsController {
     districts.baseUrl('/districts')
 
     return view.render('pages/district/index', {
-      title: 'Список районов и ГП',
+      title: 'Список РЭС и ГП',
       districts,
       activeMenuLink: 'districts.index',
     })
