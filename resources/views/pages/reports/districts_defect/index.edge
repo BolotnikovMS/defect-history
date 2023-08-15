@@ -9,12 +9,11 @@
       <div class="form__content">
         @!inputs.select({
           name: 'district',
-          label: 'Выберите район',
           labelPositionText: 'label__text_left',
-          optionClass: 'searchable-list',
+          optionClass: 'form__input-width_300 searchable-list',
           defaultOptionConfig: {
             defaultOption: true,
-            defaultOptionText: 'Выберите район'
+            defaultOptionText: 'Выберите РЭС или ГП'
           },
           dataOptionsConfig: {
             dataOptions: districts,
@@ -27,9 +26,8 @@
         })
         @!inputs.select({
           name: 'filter',
-          label: 'Фильтр',
           labelPositionText: 'label__text_left',
-          optionClass: 'searchable-list',
+          optionClass: 'form__input-width_300 searchable-list',
           dataOptionsConfig: {
             dataOptions: [{ id: 'allDefects', name: 'Все дефекты' }, { id: 'openDefects', name: 'Открытые дефекты' }, { id: 'closeDefects', name: 'Закрытые дефекты' }],
             dataNameOption: 'name'
@@ -71,6 +69,7 @@
         <table class="table">
           <thead>
             <tr>
+              <th>Дата добавления</th>
               <th>Тип дефекта</th>
               <th>Присоединение</th>
               <th>Описание дефекта</th>
@@ -81,12 +80,13 @@
           <tbody>
             @each(substation in district.substations)
               <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
-                <td colspan="5" class="table__td-text_bold">
+                <td colspan="6" class="table__td-text_bold">
                   {{ substation.name }}
                 </td>
               </tr>
               @each(defect in substation.defects)
                 <tr>
+                  <td>{{ dateFormat(defect.created_at) }}</td>
                   <td>{{ defect.defect_type.type_defect }}</td>
                   <td>{{ defect.accession.name }}</td>
                   <td>{{ defect.description_defect }}</td>
@@ -101,7 +101,7 @@
                 </tr>
               @else
                 <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
-                  <td colspan="5">
+                  <td colspan="6">
                     {{ messages.noContentDefect }}
                   </td>
                 </tr>
