@@ -1,20 +1,21 @@
+import { addDays, randomStr } from 'App/Utils/utils'
+
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
+import { DateTime } from 'luxon'
+import Defect from 'App/Models/Defect'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
+import DefectImg from 'App/Models/DefectImg'
+import DefectType from 'App/Models/DefectType'
+import DefectValidator from 'App/Validators/DefectValidator'
+import Department from 'App/Models/Department'
+import { Departments } from 'App/Enums/Departments'
 import Env from '@ioc:Adonis/Core/Env'
 import Event from '@ioc:Adonis/Core/Event'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Departments } from 'App/Enums/Departments'
-import Defect from 'App/Models/Defect'
-import DefectImg from 'App/Models/DefectImg'
-import DefectType from 'App/Models/DefectType'
-import Department from 'App/Models/Department'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
+import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
 import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
-import { addDays, randomStr } from 'App/Utils/utils'
-import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
-import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
-import DefectValidator from 'App/Validators/DefectValidator'
-import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
-import { DateTime } from 'luxon'
 import { unlink } from 'node:fs/promises'
 
 export default class DefectsController {
@@ -44,6 +45,7 @@ export default class DefectsController {
       .preload('defect_type')
       .preload('substation')
       .preload('accession')
+      .preload('work_planning')
       .preload('intermediate_checks')
       .preload('user')
       .paginate(page, limit)
@@ -163,6 +165,9 @@ export default class DefectsController {
       })
       await defect.load('name_eliminated')
       await defect.load('defect_imgs')
+      await defect.load('work_planning', (query) => {
+        query.preload('user_created')
+      })
 
       return view.render('pages/defect/show', {
         title: 'Подробный просмотр',
@@ -356,16 +361,19 @@ export default class DefectsController {
   }
 
   public async checkupCreate({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createCheckup')) {
-      session.flash('dangerMessage', 'У вас нет прав на добавление проверки!')
-
-      return response.redirect().toPath('/')
-    }
-
     const idDefect = await params.idDefect
     const defect = await Defect.find(idDefect)
 
     if (defect) {
+      if (await bouncer.denies('createCheckup', defect)) {
+        session.flash(
+          'dangerMessage',
+          'У вас нет прав на добавление проверки или дефект уже закрыт!'
+        )
+
+        return response.redirect().toPath('/')
+      }
+
       const users = await User.query().where((queryUser) => {
         queryUser.where('blocked', '!=', true)
         queryUser.where('id', '!=', 1)
@@ -404,16 +412,19 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('createCheckup')) {
-      session.flash('dangerMessage', 'У вас нет прав на добавление проверки!')
-
-      return response.redirect().toPath('/')
-    }
-
     const idDefect = await params.idDefect
     const defect = await Defect.find(idDefect)
 
     if (defect) {
+      if (await bouncer.denies('createCheckup', defect)) {
+        session.flash(
+          'dangerMessage',
+          'У вас нет прав на добавление проверки или дефект уже закрыт!'
+        )
+
+        return response.redirect().toPath('/')
+      }
+
       const validateData = await request.validate(IntermediateCheckValidator)
 
       if (validateData) {
@@ -470,9 +481,10 @@ export default class DefectsController {
 
   public async checkupDestroy({ response, params, session, bouncer }: HttpContextContract) {
     const intermediateCheck = await IntermediateCheck.find(params.idInterCheck)
+    const defect = await Defect.find(intermediateCheck?.id_defect)
 
-    if (intermediateCheck) {
-      if (await bouncer.denies('deleteCheckup', intermediateCheck)) {
+    if (intermediateCheck && defect) {
+      if (await bouncer.denies('deleteCheckup', intermediateCheck, defect)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
         return response.redirect().toPath('/')
@@ -494,16 +506,16 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('createCloseDefect')) {
-      session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта!')
-
-      return response.redirect().toPath('/')
-    }
-
     const idDefect = await params.idDefect
     const defect = await Defect.find(idDefect)
 
     if (defect) {
+      if (await bouncer.denies('createCloseDefect', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта или дефект уже закрыт')
+
+        return response.redirect().toPath('/')
+      }
+
       const users = await User.query().where((queryUser) => {
         queryUser.where('blocked', '!=', true)
         queryUser.where('id', '!=', 1)
@@ -535,15 +547,14 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('createCloseDefect')) {
-      session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта!')
-
-      return response.redirect().toPath('/')
-    }
-
     const defect = await Defect.find(params.idDefect)
 
     if (defect) {
+      if (await bouncer.denies('createCloseDefect', defect)) {
+        session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта или дефект уже закрыт!')
+
+        return response.redirect().toPath('/')
+      }
       const validateData = await request.validate(CloseDefectValidator)
 
       defect.id_name_eliminated = +validateData.employee

@@ -1,6 +1,16 @@
 .icon {
   width: 25px;
   height: 25px;
+  transition: all 0.3s ease-in;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &-size_15 {
+    width: 15px;
+    height: 15px;
+  }
 
   &-size_20 {
     width: 20px;

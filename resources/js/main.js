@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Searchable list
   $('.searchable-list').select2({
-    width: '350px',
+    // width: '300px',
     placeholder: 'Выберите вариант',
     // maximumSelectionLength: 2,
     language: 'ru',
@@ -191,4 +191,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   enlargeImage('.defect-info__img')
+
+  // Hide void rows
+  $('.btn_hide_void_rows').click('click', () => {
+    $('.no_data_rows').slideToggle(200, function () {
+      if ($(this).is(':hidden')) {
+        $('.btn_hide_void_rows').html('Показать пустые строки')
+      } else {
+        $('.btn_hide_void_rows').html('Скрыть пустые строки')
+      }
+    })
+  })
 })

@@ -16,25 +16,21 @@
     @if(typesDefects.length)
       <div class="cards">
         @each((typeDefect, i) in typesDefects)
-          <div class="card">
-            <div class="card__body">
-              <div class="card__text card__text-body">
+          @card.card()
+            @slot('cardBody')
+              <p class="card__text card__text-fs_20">
                 {{ typeDefect.type_defect }} - {{ typeDefect.defect_description }}
-              </div>
-            </div>
-            <hr class="card__hr">
-            <div class="card__footer">
+              </p>
+            @end
+            @slot('cardFooter')
               <div class="card__footer-content">
-                <div class="card__text card__text-fs_17">
-                  @if(typeDefect.group)
-                    Группа рассылки: {{ typeDefect.group.name }}
-                  @else
-                    <span class="card__text card__text-fs_17 card__text-red">
-                      Группа рассылки не указана.
-                    </span>
-                  @endif
-                </div>
-                <div class="card__menu">
+                @card.cardGroup()
+                  @!card.cardSpan({
+                    text: typeDefect.group ? `Группа рассылки: ${typeDefect.group.name}` : 'Группа рассылки не указана.',
+                    optionalClasses: typeDefect.group ? 'card__text card__text-fs_17' :  'card__text card__text-fs_17 card__text-red'
+                  })
+                @end
+                @card.cardGroup()
                   @if(!await bouncer.denies('editTypeDefect') || !await bouncer.denies('deleteTypeDefect'))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
@@ -46,10 +42,10 @@
                       <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">
                     @end
                   @endif
-                </div>
+                @end
               </div>
-            </div>
-          </div>
+            @end
+          @end
         @endeach
       </div>
     @else

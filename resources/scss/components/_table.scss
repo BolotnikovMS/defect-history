@@ -7,25 +7,14 @@
     text-align: center;
   }
 
+  &__th-control {
+    width: 50px;
+  }
+
   &__td-control {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 90px;
-  }
-
-  &__tr-color_green {
-    background-color: #caf8bf;
-  }
-
-  &__icon {
-    padding: 3px;
-    transition: all 0.2s ease-in;
-
-    &:hover {
-      background-color: #aba8a8;
-      border-radius: 100%;
-      transform: scale(1.2);
-    }
+    min-width: 50px;
   }
 }

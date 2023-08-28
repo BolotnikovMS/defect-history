@@ -9,6 +9,12 @@
     }
   }
 
+  &__block {
+    & + * {
+      margin-top: 16px;
+    }
+  }
+
   &__text {
     line-height: 30px;
 

@@ -5,7 +5,8 @@
   <div class="control control-items_sb">
     <div class="control__btns">
       @can('createDefect')
-        @buttons.add({ href: 'defects.create' })
+        @buttons.base({ href: 'defects.create', className: 'btn-color_green' })
+          @!icons.add({ optionalClasses: 'icon-size_15' })
           Добавить
         @end
       @endcan
@@ -32,63 +33,71 @@
     @if(defects.length)
       <div class="cards defect__cards">
         @each(defect in defects)
-          <div class="card defect__card {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : '' }}">
-            <div class="card__header">
+          @card.card({
+            optionalClasses: defect.elimination_date !== null ?
+              'card-completed' :
+              new Date(defect.term_elimination) < new Date() ?
+              'card-danger' :
+              defect.importance === true ?
+              'card-danger' :
+              ''
+          })
+            @slot('cardHeader')
               <div class="card__header-content">
-                <div class="card__object-info">
+                @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
                   @if(defect?.defect_type)
-                    <div class="card__badge">
-                      <span class="card__text">{{ defect.defect_type.type_defect }}</span>
-                    </div>
+                    @!badge.badge({
+                      badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lb',
+                      data: defect.defect_type.type_defect
+                    })
+                  @endif
+                  @if(defect?.work_planning?.length && defect.result === null)
+                    @!badge.badge({
+                      badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_org',
+                      data: 'В работе'
+                    })
                   @endif
                   @if(defect?.substation)
-                      <span class="card__text">
-                        <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
-                          {{ defect.substation.name }}
-                          <img src="{{ asset('assets/images/icons/link.svg') }}">
-                        </a>
-                      </span>
-                    @endif
-                  <span class="card__text">{{ defect.accession.name }}</span>
-                  <span class="card__text">
-                    Проверок: {{ defect.countIntermediateChecks ?? defect.intermediate_checks.length }}
-                  </span>
-                </div>
-                <div class="card__author">
-                  <div class="carf__text">{{ defect.user.shortUserName }}</div>
-                </div>
+                    <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
+                      {{ defect.substation.name }}
+                      <img src="{{ asset('assets/images/icons/link.svg') }}">
+                    </a>
+                  @endif
+                  @!card.cardSpan({ text: defect.accession.name, optionalClasses: 'card__text' })
+                  @!card.cardSpan({ text: `Проверок: ${defect.countIntermediateChecks ?? defect.intermediate_checks.length}`, optionalClasses: 'card__text' })
+                @end
+                @card.cardGroup()
+                  @!card.cardSpan({ text: defect.user.shortUserName, optionalClasses: 'card__text' })
+                @end
               </div>
-            </div>
-            <hr class="card__hr">
-            <div class="card__body">
+            @end
+            @slot('cardBody')
               <div class="card__body-content">
-                <div class="card__text card__text-body">
+                <p class="card__text card__text-fs_20">
                   {{ defect.excerptText }}
-                </div>
+                </p>
                 <div class="card__data-info">
-                  <div class="card__text card__text-fs_17">
-                    <span class="card__text card__text-bold">Дата добавления:</span>
-                    {{ dateFormat(defect.created_at) }}
-                  </div>
-                  <div class="card__text card__text-fs_17">
-                    <span class="card__text card__text-bold">Срок устранения:</span>
-                    {{ dateFormat(defect.term_elimination) }}
-                  </div>
-                  <div class="card__text card__text-fs_17">
-                    <span class="card__text card__text-bold">Дата устранения:</span>
-                    @if(defect.elimination_date === null)
-                      <span class="card__text card__text-red">Не устранен</span>
-                    @else
-                      {{ dateFormat(defect.elimination_date) }}
-                    @endif
-                  </div>
+                  @card.cardGroup()
+                    @!card.cardSpan({ text: 'Дата добавления:', optionalClasses: 'card__text card__text-bold' })
+                    @!card.cardSpan({ text: dateFormat(defect.created_at), optionalClasses: 'card__text' })
+                  @end
+                  @card.cardGroup()
+                    @!card.cardSpan({ text: 'Срок устранения:', optionalClasses: 'card__text card__text-bold' })
+                    @!card.cardSpan({ text: dateFormat(defect.term_elimination), optionalClasses: 'card__text' })
+                  @end
+                  @card.cardGroup()
+                    @!card.cardSpan({ text: 'Дата устранения:', optionalClasses: 'card__text card__text-bold' })
+                    @!card.cardSpan({
+                      text: defect.elimination_date === null ? 'Не устранен' : dateFormat(defect.elimination_date),
+                      optionalClasses: defect.elimination_date === null ? 'card__text card__text-red' :  'card__text'
+                    })
+                  @end
                 </div>
               </div>
-            </div>
-            <hr class="card__hr">
-            <div class="card__footer">
+            @end
+            @slot('cardFooter')
               <div class="card__footer-content">
-                <div class="card__btns">
+                @card.cardGroup()
                   @buttons.base({
                     href: 'defects.show',
                     params: {id: defect.id},
@@ -96,9 +105,9 @@
                   })
                     Подробнее...
                   @end
-                </div>
-                <div class="card__menu">
-                  @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect))
+                @end
+                @card.cardGroup()
+                  @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect) || !await bouncer.denies('editDefectDeadline', defect))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
@@ -110,10 +119,10 @@
                       <img src="{{ asset('assets/images/icons/menu.svg') }}">
                     @end
                   @endif
-                </div>
+                @end
               </div>
-            </div>
-          </div>
+            @end
+          @end
         @endeach
       </div>
     @else

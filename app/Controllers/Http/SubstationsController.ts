@@ -1,7 +1,7 @@
+import District from 'App/Models/District'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Substation from 'App/Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
-import District from 'App/Models/District'
 
 export default class SubstationsController {
   public async index({ request, response, view, bouncer, session }: HttpContextContract) {
@@ -12,14 +12,17 @@ export default class SubstationsController {
     }
 
     const page = request.input('page', 1)
-    const limit = 15
-    const substations = await Substation.query().preload('defects').paginate(page, limit)
+    const limit = 20
+    const substations = await Substation.query()
+      .orderBy('name', 'asc')
+      .preload('defects')
+      .paginate(page, limit)
 
     substations.baseUrl('/substations')
 
-    substations.sort(
-      (prevItem, nextItem) => nextItem.numberOpenDefects - prevItem.numberOpenDefects
-    )
+    // substations.sort(
+    //   (prevItem, nextItem) => nextItem.numberOpenDefects - prevItem.numberOpenDefects
+    // )
 
     return view.render('pages/substation/index', {
       title: 'Список ПС',
@@ -89,6 +92,7 @@ export default class SubstationsController {
           .orderBy('elimination_date', 'asc')
           .preload('accession')
           .preload('defect_type')
+          .preload('work_planning')
           .preload('intermediate_checks')
           .preload('user')
       })

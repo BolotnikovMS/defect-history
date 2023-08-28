@@ -23,7 +23,17 @@
   }
 
   &-danger {
-    background-color: rgba(250, 145, 145, 0.8) !important;
+    background-color: rgba(251, 173, 173, 0.8) !important;
+  }
+
+  &__group {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+
+    &-cg_15 {
+      column-gap: 15px;
+    }
   }
 
   &__header-content {
@@ -33,17 +43,28 @@
     column-gap: 15px;
   }
 
-  &__badge {
-    padding: 4px 8px;
-    color: #fff;
-    background-color: #3b8de2;
-    border-radius: 10px;
-  }
+  // &__badge {
+  //   padding: 4px 8px;
+  //   color: #fff;
+  //   border-radius: 10px;
+
+  //   &-bgc_lb {
+  //     background-color: #3b8de2;
+  //   }
+
+  //   &-bgc_org {
+  //     background-color: #f9a82e;
+  //   }
+  // }
 
   &__text {
     font-size: 19px;
 
     &-body {
+      font-size: 20px;
+    }
+
+    &-fs_20 {
       font-size: 20px;
     }
 
@@ -66,7 +87,7 @@
     }
   }
 
-  &__object-info {
+  &__header-info {
     display: flex;
     align-items: center;
     column-gap: 20px;
@@ -98,9 +119,5 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 20px;
-  }
-
-  &__btns {
-    display: flex;
   }
 }

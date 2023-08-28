@@ -5,7 +5,7 @@
     @if(auth.isLoggedIn)
       <div class="control">
         @if(!defect.result && !defect.elimination_date)
-          @can('createCloseDefect')
+          @can('createCloseDefect', defect)
             @buttons.base({
               href: 'defects.close.create',
               params: {idDefect: defect.id},
@@ -15,7 +15,7 @@
               Закрыть дефект
             @end
           @endcan
-          @can('createCheckup')
+          @can('createCheckup', defect)
             @buttons.base({
               href: 'defects.checkup-create',
               params: {idDefect: defect.id},
@@ -23,6 +23,17 @@
             })
               <img src="{{ asset('assets/images/icons/magnifier.svg') }}" alt="Добавить проверку">
               Добавить проверку
+            @end
+          @endcan
+
+          @can('addingWorkPlanningEntry', defect)
+            @buttons.base({
+              href: 'work-planning.create',
+              params: {idDefect: defect.id},
+              className: 'btn-color_blue btn-color_blue-transparent'
+            })
+              @!icons.calendarTwo()
+              Планироване работ
             @end
           @endcan
 
@@ -43,17 +54,19 @@
               params: {id: defect.id},
               className: 'btn-color_blue btn-color_blue-transparent'
             })
-              <img src="{{ asset('assets/images/icons/calendar-1.svg') }}" alt="Увеличить срок">
+              @!icons.calendarOne()
               Увеличить срок
             @end
           @endcan
         @endif
+
         @buttons.base({
           className: 'btn-color_green btn-save-pdf'
         })
           <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
           PDF
         @end
+
         @if(defect.defect_imgs.length)
           @buttons.base({
             className: 'btn-color_green btn-hide-img'
@@ -112,6 +125,43 @@
         @endif
       </div>
     </div>
+    @if(defect.work_planning.length)
+      <div class="defect-info__block">
+        <div class="defect-info__titles">
+          <h3 class="defect-info__title">Подготовительные работы</h3>
+        </div>
+        <table class="table defect-info__table">
+          <thead>
+            <th>Сотрудник</th>
+            <th>Дата добавления</th>
+            <th colspan="3">Комментарий</th>
+            <th style="width: 50px"></th>
+          </thead>
+          <tbody>
+            @each(work in defect.work_planning)
+              <tr>
+                <td>{{ work.user_created.fullName }}</td>
+                <td>{{ work.created_at }}</td>
+                <td colspan="3">{{ work.comment }}</td>
+                <td>
+                  @if((!await bouncer.denies('editingPlannedWorkEntry', work, defect) || !await bouncer.denies('deletingPlannedWorkEntry', defect)))
+                    @dropdown.dropdown({
+                      classBtnDropdown: 'btn-dropdown-icon',
+                      dropdownData: [
+                        { name: 'Редактировать', access: 'editingPlannedWorkEntry', data: work, extraData: defect, path: 'work-planning.edit', params: { idDefect: defect.id, id: work.id }, icon: 'edit.svg'},
+                        { name: 'Удалить', access: 'deletingPlannedWorkEntry', data: defect, path: 'work-planning.destroy', params: { id: work.id }, icon: 'delete.svg' },
+                      ],
+                    })
+                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                    @end
+                  @endif
+                </td>
+              </tr>
+            @end
+          </tbody>
+        </table>
+      </div>
+    @endif
     @if(defect.intermediate_checks.length)
       <div class="defect-info__checks">
         <div class="defect-info__titles">
@@ -123,9 +173,7 @@
             <th>Дата проверки</th>
             <th colspan="2">Результаты проверки</th>
             <th>Кому передано</th>
-            @if(defect.result === null)
-              <th style="width: 50px"></th>
-            @end
+            <th style="width: 50px"></th>
           </thead>
           <tbody>
             @each(inter in defect.intermediate_checks)
@@ -141,18 +189,18 @@
                       '-'
                   }}
                 </td>
-                @if(!await bouncer.denies('deleteCheckup', inter) && defect.result === null)
-                  <td>
+                <td>
+                  @if(!await bouncer.denies('deleteCheckup', inter, defect))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Удалить', access: 'deleteCheckup', data: inter, path: 'defects.checkup.destroy', params: { idInterCheck: inter.id }, icon: 'delete.svg'},
+                        { name: 'Удалить', access: 'deleteCheckup', data: inter, extraData: defect, path: 'defects.checkup.destroy', params: { idInterCheck: inter.id }, icon: 'delete.svg'},
                       ],
                     })
                       <img src="{{ asset('assets/images/icons/menu.svg') }}">
                     @end
-                  </td>
-                @endif
+                  @endif
+                </td>
               </tr>
             @else
               <tr>

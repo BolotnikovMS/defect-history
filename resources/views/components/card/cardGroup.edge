@@ -1,0 +1,5 @@
+@set('optionalClasses', optionalClasses ?? '')
+
+<div class="card__group {{ optionalClasses }}">
+  {{{ await $slots.main() }}}
+</div>

@@ -30,11 +30,11 @@
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Районы и ГП', access: 'viewDistrict', path: 'districts.index' },
+                { name: 'РЭС и ГП', access: 'viewDistrict', path: 'districts.index' },
                 { name: 'Список ПС', access: 'viewSubstations', path: 'substations.index' },
               ],
             })
-              Районы и ГП
+              РЭС и ГП
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
@@ -58,12 +58,13 @@
                 class="{{ 'distribution.index' == activeMenuLink ? 'active' : '' }}">Группы рассылок</a>
             </li>
           @end
-          @if(!await bouncer.denies('viewReportSubstationDefects'))
+          @if(!await bouncer.denies('viewReportSubstationDefects') || !await bouncer.denies('viewReportDistrictDefects') || !await bouncer.denies('viewReportAllDefects'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
                 { name: 'Список дефектов ПС', access: 'viewReportSubstationDefects', path: 'reports.show.substation.defects' },
-                { name: 'Список дефектов Района или ГП', access: 'viewReportDistrictDefects', path: 'reports.show.district.defects' },
+                { name: 'Список дефектов РЭС или ГП', access: 'viewReportDistrictDefects', path: 'reports.show.district.defects' },
+                { name: 'Список дефектов по всем ПС', access: 'viewReportAllDefects', path: 'reports.show.all.defects' },
               ],
             })
               Отчеты
@@ -82,7 +83,7 @@
             ],
             dropdownLogout: true,
           })
-          <img src="{{ asset('assets/images/icons/user-1.svg') }}" class="dropdown-icon">
+            @!icons.user({ optionalClasses: 'icon-size_20' })
             {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
             <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
           @end

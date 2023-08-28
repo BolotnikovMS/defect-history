@@ -32,6 +32,7 @@ Route.group(() => {
   require('./routes/permissions')
   require('./routes/accession_substations')
   require('./routes/reports')
+  require('./routes/work_planning')
 }).namespace('App/Controllers/Http')
 
 Route.group(() => {

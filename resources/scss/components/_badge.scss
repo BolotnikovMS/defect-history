@@ -1,20 +1,39 @@
 .badge {
   display: inline-block;
-  position: relative;
-
-&__counter {
-  position: absolute;
-  bottom: -5px;
-  right: 0;
-  padding: 2px 6px;
-  font-size: 16px;
-  text-align: center;
   color: #fff;
-  background-color: #3b8de2;
-  border-radius: 10px;
 
-  &-red {
-    background-color: #dd0000;
+  &-pos {
+    position: relative;
   }
-}
+
+  &__content {
+    border-radius: 10px;
+    text-align: center;
+
+    &-pos {
+      position: absolute;
+      bottom: -8px;
+      right: 0;
+    }
+
+    &-pad_48 {
+      padding: 4px 8px;
+    }
+
+    &-pad_26 {
+      padding: 2px 6px;
+    }
+
+    &-bgc_lb {
+      background-color: #3b8de2;
+    }
+
+    &-bgc_red {
+      background-color: #dd0000;
+    }
+
+    &-bgc_org {
+      background-color: #f9a82e;
+    }
+  }
 }
