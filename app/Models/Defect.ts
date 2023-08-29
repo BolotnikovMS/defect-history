@@ -82,7 +82,7 @@ export default class Defect extends BaseModel {
 
   @computed()
   public get excerptText() {
-    return string.truncate(this.description_defect, 50)
+    return string.truncate(this.description_defect, 90)
   }
 
   @computed()
