@@ -1,7 +1,7 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DefectType from '../../Models/DefectType'
-import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 import DistributionGroup from 'App/Models/DistributionGroup'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 
 export default class DefectTypesController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -90,6 +90,7 @@ export default class DefectTypesController {
           .preload('accession')
           .preload('intermediate_checks')
           .preload('user')
+          .preload('work_planning')
       })
 
       return view.render('pages/defect/index', {

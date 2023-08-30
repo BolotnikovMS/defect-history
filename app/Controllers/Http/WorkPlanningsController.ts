@@ -20,8 +20,6 @@ export default class WorkPlanningsController {
         return response.redirect().toPath('/')
       }
 
-      console.log('idDefect: ', idDefect)
-
       return view.render('pages/work-planning/form', {
         title: 'Планирование работ',
         options: {
