@@ -24,7 +24,8 @@
           <li class="list__item">
             <div class="list__content">
               @!badge.badge({
-                optionClass: substation.numberOpenDefects > 0 ? 'badge__counter-red' : '',
+                badgeOptionalClasses: 'badge-pos',
+                badgeContentOptionalClasses:`badge__content-pos badge__content-pad_26 ${substation.numberOpenDefects > 0 ? 'badge__content-bgc_red' : 'badge__content-bgc_lb' }`,
                 data: substation.numberOpenDefects,
                 titleText: 'Количество_дефектов'
               })
