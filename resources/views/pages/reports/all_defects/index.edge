@@ -66,13 +66,13 @@
           <tbody>
             @each(district in districts)
               <tr class="{{ district.numberOpenDefectsDistrict > 0 ? '' : 'no_data_rows'}}">
-                <td colspan="6" class="table__td-text_bold">
+                <td colspan="6" class="table__td-text_bold table__td-color_antiquewhite">
                   {{ district.name }}
                 </td>
               </tr>
               @each(substation in district.substations)
                 <tr class="{{ substation?.defects?.length ? '' : 'no_data_rows' }}">
-                  <td colspan="6" class="table__td-text_bold">
+                  <td colspan="6" class="table__td-text_bold table__td-color_linen">
                     {{ substation.name }}
                   </td>
                 </tr>
