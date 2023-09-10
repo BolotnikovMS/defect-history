@@ -248,8 +248,8 @@ export default class ReportsController {
         })
       })
 
-    const test = districts.map((district) => district.serialize())
-    console.log(test[0])
+    // const test = districts.map((district) => district.serialize())
+    // console.log(test[0])
 
     return view.render('pages/reports/all_defects/index', {
       title: `Список ${titleText} дефектов`,
