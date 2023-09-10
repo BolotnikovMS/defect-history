@@ -1,5 +1,6 @@
 import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 
+import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Substation from 'App/Models/Substation'
@@ -188,11 +189,14 @@ export default class ReportsController {
       return response.redirect().toPath('/')
     }
 
+    const typesDefects = await DefectType.query()
+
     return view.render('pages/reports/all_defects/index', {
       title: 'Список дефектов',
       messages: {
         noContent: 'Отчет не сформирован.',
       },
+      typesDefects,
     })
   }
 
@@ -205,6 +209,7 @@ export default class ReportsController {
 
     const validationSchema = schema.create({
       filter: schema.string(),
+      type: schema.number(),
     })
     const customMessages: CustomMessages = {
       required: 'Поле является обязательным.',
@@ -215,6 +220,7 @@ export default class ReportsController {
     })
     let noContentDefect: string | null = null
     let titleText: string = 'всех'
+    const typesDefects = await DefectType.query()
 
     const districts = await District.query()
       .preload('district_defects')
@@ -223,6 +229,9 @@ export default class ReportsController {
           titleText = 'всех'
           noContentDefect = 'Дефектов нету'
           defectQuery
+            .if(validateData?.type !== undefined && validateData?.type, (query) => {
+              query.where('id_type_defect', '=', validateData.type)
+            })
             .if(validateData.filter === 'openDefects', (query) => {
               titleText = 'открытых'
               noContentDefect = 'По ПС нету открытых дефектов'
@@ -249,6 +258,8 @@ export default class ReportsController {
         noContentDefect: noContentDefect,
       },
       districts,
+      typesDefects,
+      currentTypeDefect: validateData.type,
     })
   }
 
