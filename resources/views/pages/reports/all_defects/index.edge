@@ -21,6 +21,19 @@
             dataNameOption: 'name'
           },
         })
+        @!inputs.select({
+          name: 'type',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input-width_300 searchable-list',
+          dataOptionsConfig: {
+            dataOptions: typesDefects,
+            dataNameOption: 'type_defect'
+          },
+          currentDataConfig: {
+            currentData: currentTypeDefect ? currentTypeDefect : '',
+            currentDataId: currentTypeDefect ? currentTypeDefect: '',
+          }
+        })
       </div>
       <div class="form__btns form__btns-row">
         @buttons.base({
@@ -65,7 +78,7 @@
           </thead>
           <tbody>
             @each(district in districts)
-              <tr class="{{ district.numberOpenDefectsDistrict > 0 ? '' : 'no_data_rows'}}">
+              <tr class="{{ district.numberDefects > 0 ? '' : 'no_data_rows'}}">
                 <td colspan="6" class="table__td-text_bold table__td-color_antiquewhite">
                   {{ district.name }}
                 </td>
