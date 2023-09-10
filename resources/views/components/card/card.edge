@@ -1,6 +1,8 @@
 @set('optionalClasses', optionalClasses ?? '')
+@set('path', path ?? '#')
 
 <div class="card {{ optionalClasses }}">
+  <a href="{{ path }}" class="card__link-body"></a>
   @if($slots.cardHeader)
     <div class="card__header">
       {{{ await $slots.cardHeader() }}}

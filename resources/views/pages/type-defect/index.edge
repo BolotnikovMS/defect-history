@@ -21,6 +21,21 @@
               <p class="card__text card__text-fs_20">
                 {{ typeDefect.type_defect }} - {{ typeDefect.defect_description }}
               </p>
+              @card.cardGroup({
+                optionalClasses: 'card__group-posit_a'
+              })
+                @if(!await bouncer.denies('editTypeDefect') || !await bouncer.denies('deleteTypeDefect'))
+                  @dropdown.dropdown({
+                    classBtnDropdown: 'btn-dropdown-icon',
+                    dropdownData: [
+                      { name: 'Редактировать', access: 'editTypeDefect', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit.svg' },
+                      { name: 'Удалить', access: 'deleteTypeDefect', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
+                    ],
+                  })
+                    <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">
+                  @end
+                @endif
+              @end
             @end
             @slot('cardFooter')
               <div class="card__footer-content">
@@ -29,19 +44,6 @@
                     text: typeDefect.group ? `Группа рассылки: ${typeDefect.group.name}` : 'Группа рассылки не указана.',
                     optionalClasses: typeDefect.group ? 'card__text card__text-fs_17' :  'card__text card__text-fs_17 card__text-red'
                   })
-                @end
-                @card.cardGroup()
-                  @if(!await bouncer.denies('editTypeDefect') || !await bouncer.denies('deleteTypeDefect'))
-                    @dropdown.dropdown({
-                      classBtnDropdown: 'btn-dropdown-icon',
-                      dropdownData: [
-                        { name: 'Редактировать', access: 'editTypeDefect', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'deleteTypeDefect', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
-                      ],
-                    })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">
-                    @end
-                  @endif
                 @end
               </div>
             @end

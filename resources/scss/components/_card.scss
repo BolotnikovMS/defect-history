@@ -1,5 +1,6 @@
 .card {
-  padding: 8px 15px;
+  position: relative;
+  padding: 8px 40px 8px 15px;
   border: 1px solid black;
   border-radius: 10px;
   transition: all 0.3s ease-in;
@@ -33,6 +34,12 @@
 
     &-cg_15 {
       column-gap: 15px;
+    }
+
+    &-posit_a {
+      position: absolute;
+      top: 7px;
+      right: 5px;
     }
   }
 
@@ -119,5 +126,17 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 20px;
+  }
+
+  &__link {
+    z-index: 1;
+  }
+
+  &__link-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
   }
 }
