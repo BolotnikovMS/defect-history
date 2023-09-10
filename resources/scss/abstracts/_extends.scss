@@ -53,10 +53,6 @@
   tr {
     transition: all 0.3s ease-in;
 
-    &:nth-child(even) {
-      background: #F8F8F8;
-    }
-
     &:hover {
       background-color: rgba(51, 51, 153, .1) !important;
     }
