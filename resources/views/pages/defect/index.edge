@@ -60,8 +60,8 @@
                   @endif
                   @if(defect?.substation)
                     <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="card__link active-link">
+                      <img src="{{ asset('assets/images/icons/link.svg') }}" class="icon icon-size_15">
                       {{ defect.substation.name }}
-                      <img src="{{ asset('assets/images/icons/link.svg') }}">
                     </a>
                   @endif
                   @!card.cardSpan({ text: defect.accession.name, optionalClasses: 'card__text' })
