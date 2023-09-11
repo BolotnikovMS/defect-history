@@ -20,7 +20,8 @@
       <div class="cards defect__cards">
         @each(defect in substation.defects)
           @card.card({
-            optionalClasses: defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : ''
+            optionalClasses: defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : '',
+            path: route('defects.show', {id: defect.id})
           })
             @slot('cardHeader')
               <div class="card__header-content">
@@ -39,46 +40,12 @@
                   @!card.cardSpan({ text: `Проверок: ${defect.countIntermediateChecks ?? defect.intermediate_checks.length}`, optionalClasses: 'card__text' })
                 @end
                 @card.cardGroup()
-                  @!card.cardSpan({ text: defect.user.shortUserName, optionalClasses: 'card__text' })
+                  @!card.cardSpan({ text: 'Срок устранения:', optionalClasses: 'card__text card__text-bold' })
+                  @!card.cardSpan({ text: dateFormat(defect.term_elimination), optionalClasses: 'card__text' })
                 @end
-              </div>
-            @end
-            @slot('cardBody')
-              <div class="card__body-content">
-                <p class="card__text card__text-fs_20">
-                  {{ defect.excerptText }}
-                </p>
-                <div class="card__data-info">
-                  @card.cardGroup()
-                    @!card.cardSpan({ text: 'Дата добавления:', optionalClasses: 'card__text card__text-bold' })
-                    @!card.cardSpan({ text: dateFormat(defect.created_at), optionalClasses: 'card__text' })
-                  @end
-                  @card.cardGroup()
-                    @!card.cardSpan({ text: 'Срок устранения:', optionalClasses: 'card__text card__text-bold' })
-                    @!card.cardSpan({ text: dateFormat(defect.term_elimination), optionalClasses: 'card__text' })
-                  @end
-                  @card.cardGroup()
-                    @!card.cardSpan({ text: 'Дата устранения:', optionalClasses: 'card__text card__text-bold' })
-                    @!card.cardSpan({
-                      text: defect.elimination_date === null ? 'Не устранен' : dateFormat(defect.elimination_date),
-                      optionalClasses: defect.elimination_date === null ? 'card__text card__text-red' :  'card__text'
-                    })
-                  @end
-                </div>
-              </div>
-            @end
-            @slot('cardFooter')
-              <div class="card__footer-content">
-                @card.cardGroup()
-                  @buttons.base({
-                    href: 'defects.show',
-                    params: {id: defect.id},
-                    className: 'btn-small btn-color_blue ',
-                  })
-                    Подробнее...
-                  @end
-                @end
-                @card.cardGroup()
+                @card.cardGroup({
+                  optionalClasses: 'card__group-posit_a'
+                })
                   @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect) || !await bouncer.denies('editDefectDeadline', defect))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
@@ -92,6 +59,13 @@
                     @end
                   @endif
                 @end
+              </div>
+            @end
+            @slot('cardBody')
+              <div class="card__body-content">
+                <p class="card__text card__text-fs_20">
+                  {{ defect.excerptText }}
+                </p>
               </div>
             @end
           @end
