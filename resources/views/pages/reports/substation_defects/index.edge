@@ -1,6 +1,7 @@
 @layout('layout/master')
 
 @section('content')
+  <h2 class="title">{{ title }}</h2>
   <div class="control">
     @forms.post({
       action: route('reports.get.substation.defects'),
@@ -55,9 +56,8 @@
       </div>
     @endif
   </div>
+  <hr>
   <div class="report save-info-pdf">
-    <h2 class="title">{{ title }}</h2>
-    <hr>
     <div class="reports__content">
       @if(substation?.defects.length)
         <table class="table">
@@ -96,6 +96,6 @@
         @!notification.nocontent({ messageNoData: messages.noContent })
       @end
     </div>
-    <hr>
   </div>
+  <hr>
 @endsection

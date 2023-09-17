@@ -1,6 +1,7 @@
 @layout('layout/master')
 
 @section('content')
+  <h2 class="title">{{ title }}</h2>
   <div class="control">
     @forms.post({
       action: route('reports.get.district.defects'),
@@ -59,11 +60,10 @@
           Скрыть пустые строки
         @end
       </div>
-    @endif
-  </div>
+      @endif
+    </div>
+  <hr>
   <div class="report save-info-pdf">
-    <h2 class="title">{{ title }}</h2>
-    <hr>
     <div class="report__content">
       @if(district?.substations.length)
         <table class="table">
@@ -113,6 +113,6 @@
         @!notification.nocontent({ messageNoData: messages.noContent })
       @endif
     </div>
-    <hr>
   </div>
+  <hr>
 @endsection
