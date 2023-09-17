@@ -224,6 +224,10 @@ export default class extends BaseSchema {
           access: 'deletingPlannedWorkEntry',
           description: 'Удаление записи запланированных работ',
         },
+        {
+          access: 'resetPassword',
+          description: 'Сброс пароля пользователя',
+        },
       ])
     })
   }

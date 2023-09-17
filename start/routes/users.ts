@@ -5,6 +5,10 @@ Route.group(() => {
   Route.get('/profile/:idUser', 'UsersController.profile').as('profile')
   Route.get('/change-password', 'UsersController.changePassword').as('change.password')
   Route.post('/change-password/save', 'UsersController.saveChangesPassword').as('save.password')
+  Route.get('/reset-password/:idUser', 'UsersController.resetPassword').as('reset.password')
+  Route.post('/reset-password/:idUser', 'UsersController.saveResetPassword').as(
+    'reset.save.password'
+  )
   Route.get('/show-permissions/:idUser', 'UsersController.showPermissionUser').as(
     'show.permissions'
   )
