@@ -21,7 +21,7 @@
             <th>Ф.И.О.</th>
             <th>Username</th>
             <th>Email</th>
-            @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
+            @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('resetPassword') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
               <th class="table__th-control">
                 <img src="{{ asset('assets/images/icons/settings.svg') }}" alt="Действия">
               </th>
@@ -37,13 +37,14 @@
               <td>{{ user.fullName }}</td>
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
-              @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
+              @if(!await bouncer.denies('viewingUserPermissions') || !await bouncer.denies('resetPassword') || !await bouncer.denies('editUser') || !await bouncer.denies('deleteUser'))
                 <td class="table__td-control">
                   {{--  Dropdown menu options  --}}
                   @dropdown.dropdown({
                     classBtnDropdown: 'btn-dropdown-icon',
                     dropdownData: [
                       { name: 'Права', access: 'viewingUserPermissions', data: user, path: 'users.show.permissions', params: { idUser: user.id }, icon: 'user-permission.svg'},
+                      { name: 'Сброс пароля', access: 'resetPassword', path: 'users.reset.password', params: { idUser: user.id }, icon: 'key-reset.svg'},
                       { name: 'Редактировать', access: 'editUser', data: user, path: 'users.edit', params: { id: user.id }, icon: 'edit.svg' },
                       { name: 'Удалить', access: 'deleteUser', data: user, path: 'users.destroy', params: { id: user.id }, icon: 'delete.svg' },
                     ],

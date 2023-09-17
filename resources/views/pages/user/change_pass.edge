@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="content">
     @forms.post({
-      action: route(options.routePath.savePath),
+      action: route(options.routePath.savePath, {idUser: options.idData}),
     })
       <div class="form__content form__content-column">
         @!inputs.base({

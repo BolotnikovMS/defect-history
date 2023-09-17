@@ -1,11 +1,12 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from 'App/Models/User'
-import Roles from '../../Enums/Roles'
-import Role from 'App/Models/Role'
-import { schema, rules, CustomMessages } from '@ioc:Adonis/Core/Validator'
-import Department from 'App/Models/Department'
+import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
+
 import ChangePasswordValidator from 'App/Validators/ChangePasswordValidator'
+import Department from 'App/Models/Department'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Permission from 'App/Models/Permission'
+import Role from 'App/Models/Role'
+import Roles from '../../Enums/Roles'
+import User from 'App/Models/User'
 import UsersPermission from 'App/Models/UsersPermission'
 
 export default class UsersController {
@@ -76,6 +77,52 @@ export default class UsersController {
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().toRoute('defects.index')
+    }
+  }
+
+  public async resetPassword({ view, response, params, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('resetPassword')) {
+      session.flash('dangerMessage', 'У вас нет прав на сброс пароля пользователя!')
+
+      return response.redirect().toPath('/')
+    }
+
+    return view.render('pages/user/change_pass', {
+      title: 'Сбросить пароль',
+      options: {
+        idData: params.idUser,
+        routePath: {
+          savePath: 'users.reset.save.password',
+        },
+      },
+    })
+  }
+
+  public async saveResetPassword({
+    request,
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    if (await bouncer.denies('resetPassword')) {
+      session.flash('dangerMessage', 'У вас нет прав на сброс пароля пользователя!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const user = await User.find(params.idUser)
+
+    if (user) {
+      const validateData = await request.validate(ChangePasswordValidator)
+
+      await user.merge(validateData).save()
+
+      session.flash('successMessage', 'Пароль успешно сброшен!')
+      return response.redirect().toRoute('users.index')
+    } else {
+      session.flash('dangerMessage', 'Пользователь не найден!')
+      return response.redirect().toRoute('users.index')
     }
   }
 

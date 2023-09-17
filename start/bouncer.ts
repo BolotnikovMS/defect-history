@@ -171,6 +171,11 @@ export const { actions } = Bouncer.before((user: User | null) => {
 
     return userPermissionCheck('deleteUser', user.permissions)
   })
+  .define('resetPassword', async (user: User) => {
+    await user.load('permissions')
+
+    return userPermissionCheck('resetPassword', user.permissions)
+  })
   // Permission actions
   .define('viewPermissions', async (user: User) => {
     await user.load('permissions')
