@@ -18,7 +18,7 @@
         @each((typeDefect, i) in typesDefects)
           @card.card()
             @slot('cardBody')
-              <p class="card__text card__text-fs_20">
+              <p class="card__text">
                 {{ typeDefect.type_defect }} - {{ typeDefect.defect_description }}
               </p>
             @end
@@ -27,7 +27,7 @@
                 @card.cardGroup()
                   @!card.cardSpan({
                     text: typeDefect.group ? `Группа рассылки: ${typeDefect.group.name}` : 'Группа рассылки не указана.',
-                    optionalClasses: typeDefect.group ? 'card__text card__text-fs_17' :  'card__text card__text-fs_17 card__text-red'
+                    optionalClasses: typeDefect.group ? 'card__text' :  'card__text card__text-red'
                   })
                 @end
                 @card.cardGroup()
