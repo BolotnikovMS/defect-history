@@ -1,5 +1,5 @@
 %title {
-  font-size: 25px;
+  font-size: clamp(18px, 2.7vw, 25px);
   font-weight: bold;
 
   & + * {
@@ -10,7 +10,8 @@
 %control-group {
   display: flex;
   align-items: center;
-  column-gap: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 %table {
@@ -37,7 +38,7 @@
 
   td {
     border: 1px solid #e7e6e6;
-    font-size: 15px;
+    font-size: clamp(13px, 1.9vw, 15px);
   }
 
   thead th, th {

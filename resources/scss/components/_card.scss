@@ -29,7 +29,7 @@
   &__group {
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    gap: 5px;
 
     &-cg_15 {
       column-gap: 15px;
@@ -43,34 +43,8 @@
     column-gap: 15px;
   }
 
-  // &__badge {
-  //   padding: 4px 8px;
-  //   color: #fff;
-  //   border-radius: 10px;
-
-  //   &-bgc_lb {
-  //     background-color: #3b8de2;
-  //   }
-
-  //   &-bgc_org {
-  //     background-color: #f9a82e;
-  //   }
-  // }
-
   &__text {
-    font-size: 19px;
-
-    &-body {
-      font-size: 20px;
-    }
-
-    &-fs_20 {
-      font-size: 20px;
-    }
-
-    &-fs_17 {
-      font-size: 17px;
-    }
+    font-size: clamp(15px, 2.3vw, 20px);
 
     &-bold {
       font-weight: bold;
@@ -90,7 +64,7 @@
   &__header-info {
     display: flex;
     align-items: center;
-    column-gap: 20px;
+    gap: 20px;
   }
 
   &__hr {
@@ -111,7 +85,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    column-gap: 15px;
+    gap: 15px;
   }
 
   &__footer-content {
@@ -119,5 +93,15 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 20px;
+  }
+
+  @media (max-width: 1141px) {
+    &__body  &__group {
+      flex-direction: column;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 6px 9px;
   }
 }

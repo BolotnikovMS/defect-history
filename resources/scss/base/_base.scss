@@ -1,6 +1,6 @@
 body {
   font-family: $font-family, sans-serif;
-  font-size: 20px;
+  font-size: clamp(15px, 2.4vw, 20px);
   font-weight: 400;
 }
 
@@ -29,7 +29,7 @@ a {
 
 .container {
   max-width: 1400px;
-  padding: 0 30px;
+  padding: 0 50px;
   margin: 0 auto;
   // box-shadow: 2px 32px 47px -37px #000000;
 }
@@ -46,7 +46,7 @@ a {
 
 .message {
   padding: 10px 0;
-  font-size: 20px;
+  font-size: clamp(17px, 2.2vw, 20px);
 
   &-text_red {
     color: red

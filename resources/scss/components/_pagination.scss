@@ -39,7 +39,7 @@
     flex-wrap: wrap;
     gap: 5px;
     padding: 3px 5px;
-    font-size: 17px;
+    font-size: clamp(14px, 2.5vw, 17px);
     background-color: #e4e4e4;
     border-radius: 20px;
   }

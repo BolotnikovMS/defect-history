@@ -1,6 +1,7 @@
 .badge {
   display: inline-block;
   color: #fff;
+  font-size: clamp(15px, 2.3vw, 20px);
 
   &-pos {
     position: relative;
