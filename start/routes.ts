@@ -20,6 +20,11 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
   Route.get('/', 'DefectsController.index').as('defects.index')
+  Route.group(() => {
+    Route.get('/', 'DefectOsController.index').as('index')
+  })
+    .prefix('/defects-os')
+    .as('defects-os')
 
   require('./routes/auth')
   require('./routes/users')
