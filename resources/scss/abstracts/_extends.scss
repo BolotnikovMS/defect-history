@@ -10,7 +10,8 @@
 %control-group {
   display: flex;
   align-items: center;
-  column-gap: 15px;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 %table {
