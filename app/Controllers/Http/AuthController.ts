@@ -1,9 +1,9 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import AuthValidator from '../../Validators/AuthValidator'
-import User from 'App/Models/User'
-import Role from 'App/Models/Role'
-import { schema } from '@ioc:Adonis/Core/Validator'
 import Department from '../../Models/Department'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Role from 'App/Models/Role'
+import User from 'App/Models/User'
+import { schema } from '@ioc:Adonis/Core/Validator'
 
 export default class AuthController {
   public async registerShow({ response, view, session, bouncer }: HttpContextContract) {
