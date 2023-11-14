@@ -1,0 +1,27 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control control-items_sb">
+    <div class="control__btns">
+      @can('createDefect')
+        @buttons.base({ href: 'defects.create', className: 'btn-color_green' })
+          @!icons.add({ optionalClasses: 'icon-size_15' })
+          Добавить
+        @end
+      @endcan
+    </div>
+  </div>
+  <div class="defect__content">
+    <hr>
+    @if(defectsOs.length)
+    <div class="cards defect__cards"></div>
+    @else
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов по основным сетям.' })
+    @end
+    <hr>
+  </div>
+  @!component('components/pagination', {
+    pagination: defectsOs,
+  })
+@endsection
