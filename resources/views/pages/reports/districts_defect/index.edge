@@ -48,16 +48,22 @@
     @if(district?.substations.length)
       <div class="control__btns">
         @buttons.base({
+          type: 'button',
+          className: 'btn-color_green btn-small btn_hide_void_rows'
+        })
+          Скрыть пустые строки
+        @end
+        @buttons.base({
           className: 'btn-color_green btn-small btn-save-pdf'
         })
           <img src="{{ asset('assets/images/icons/pdf.svg') }}" class="icon icon-size_20" alt="PDF">
           PDF
         @end
         @buttons.base({
-          type: 'button',
-          className: 'btn-color_green btn-small btn_hide_void_rows'
+          className: 'btn-color_green btn-small btn-save-excel'
         })
-          Скрыть пустые строки
+          <img src="{{ asset('assets/images/icons/excel-file.svg') }}" class="icon icon-size_20" alt="excel">
+          Excel
         @end
       </div>
       @endif
