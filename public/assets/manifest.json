@@ -8,6 +8,7 @@
   "assets/images/icons/settings.svg": "http://localhost:8080/assets/images/icons/settings.01b5c95d.svg",
   "assets/images/icons/login.svg": "http://localhost:8080/assets/images/icons/login.092e7316.svg",
   "assets/images/icons/save.svg": "http://localhost:8080/assets/images/icons/save.fb98e609.svg",
+  "assets/images/icons/excel-file.svg": "http://localhost:8080/assets/images/icons/excel-file.11ff2269.svg",
   "assets/images/icons/magnifier.svg": "http://localhost:8080/assets/images/icons/magnifier.595a9558.svg",
   "assets/images/icons/edit-2.svg": "http://localhost:8080/assets/images/icons/edit-2.523435ec.svg",
   "assets/images/icons/morecircular.svg": "http://localhost:8080/assets/images/icons/morecircular.d2783b4c.svg",
@@ -33,6 +34,5 @@
   "assets/images/icons/login-3.svg": "http://localhost:8080/assets/images/icons/login-3.9640ecb4.svg",
   "assets/images/icons/logout.svg": "http://localhost:8080/assets/images/icons/logout.97e50219.svg",
   "assets/images/icons/arrow-up.svg": "http://localhost:8080/assets/images/icons/arrow-up.684e3746.svg",
-  "assets/images/icons/arrow-down.svg": "http://localhost:8080/assets/images/icons/arrow-down.99ebc4d4.svg",
-  "assets/images/icons/excel-file.svg": "http://localhost:8080/assets/images/icons/excel-file.11ff2269.svg"
+  "assets/images/icons/arrow-down.svg": "http://localhost:8080/assets/images/icons/arrow-down.99ebc4d4.svg"
 }
