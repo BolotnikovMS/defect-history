@@ -20,6 +20,10 @@
             <a href="{{ route('defects.index') }}"
               class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты</a>
           </li>
+          <li class="nav-list__item">
+            <a href="{{ route('defects-os.index') }}"
+              class="{{ 'defects-os.index' == activeMenuLink ? 'active' : '' }}">Дефекты ОС</a>
+          </li>
           @can('viewTypesDefects')
             <li  class="nav-list__item">
               <a href="{{ route('types-defects.index') }}"
