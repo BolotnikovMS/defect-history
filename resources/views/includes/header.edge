@@ -16,6 +16,7 @@
       </nav> --}}
       <nav class="header__nav">
         <ul class="nav-list">
+          @if(!await bouncer.denies('viewDefectOS'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
@@ -26,6 +27,12 @@
               Дефекты
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
+          @else
+            <li  class="nav-list__item">
+              <a href="{{ route('defects.index') }}"
+                class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты ТМ</a>
+            </li>
+          @end
           @can('viewTypesDefects')
             <li  class="nav-list__item">
               <a href="{{ route('types-defects.index') }}"
