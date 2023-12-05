@@ -85,7 +85,11 @@
 
     &-line {
       display: flex;
-      column-gap: 15px;
+      gap: 15px;
+    }
+
+    &-mt {
+      margin-top: 15px;
     }
   }
 
