@@ -1,0 +1,90 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="defect__content">
+    @forms.post({
+      action: route(options.routePath.savePath, {id: options.idData}),
+    })
+      <div class="form__content form__content-column">
+        @!inputs.select({
+          label: 'Выберите отвенный отдел(ы)',
+          name: 'departments[]',
+          optionClass: 'searchable-list',
+          multiple: true,
+          dataOptionsConfig: {
+            dataOptions: departments,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: defectOs ? defectOs.departments : '',
+          }
+        })
+
+        @!inputs.select({
+          label: 'Выберите объект',
+          labelPositionText: 'label__text_left',
+          name: 'substation',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите объект'
+          },
+          dataOptionsConfig: {
+            dataOptions: substations,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: defectOs ? defectOs : '',
+            currentDataId: defectOs ? defectOs.id_substation : '',
+          }
+        })
+
+        @!inputs.base({
+          label: 'Присоединение',
+          labelPositionText: 'label__text_left',
+          name: 'accession',
+          placeholderText: 'Введите присоединение...',
+          required: true,
+          value: defectOs ? defectOs.accession_substations : ''
+        })
+
+        @!inputs.textarea({
+          label: 'Описание дефекта',
+          labelPositionText: 'label__text_left',
+          name: 'description_defect',
+          rows: 8,
+          placeholderText: 'Введите описание дефекта...',
+          required: true,
+          value: defectOs ? defectOs.description_defect : ''
+        })
+
+        @!inputs.checkbox({
+          label: 'Важность устранения дефекта',
+          classlabel: 'form__label-row',
+          classLabelText: 'label__text_nomargin',
+          name: 'importance',
+          checked: defectOs ? defectOs.importance : null
+        })
+
+        @!inputs.textarea({
+          label: 'Примечание',
+          labelPositionText: 'label__text_left',
+          name: 'comment',
+          rows: 3,
+          placeholderText: 'Введите описание дефекта...',
+          value: defectOs ? defectOs.comment : ''
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'defects-os.index' })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection

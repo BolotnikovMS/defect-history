@@ -16,10 +16,23 @@
       </nav> --}}
       <nav class="header__nav">
         <ul class="nav-list">
-          <li class="nav-list__item">
-            <a href="{{ route('defects.index') }}"
-              class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты</a>
-          </li>
+          @if(!await bouncer.denies('viewDefectOS'))
+            @dropdown.dropdown({
+              classDropdownMenu: 'dropdown__menu-menu_bottom',
+              dropdownData: [
+                { name: 'Дефекты ТМ', path: 'defects.index' },
+                { name: 'Дефекты ОС', access: 'viewDefectOS', path: 'defects-os.index' },
+              ],
+            })
+              Дефекты
+              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+            @end
+          @else
+            <li  class="nav-list__item">
+              <a href="{{ route('defects.index') }}"
+                class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты ТМ</a>
+            </li>
+          @end
           @can('viewTypesDefects')
             <li  class="nav-list__item">
               <a href="{{ route('types-defects.index') }}"
@@ -39,25 +52,20 @@
             @end
           @endif
 
-          @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers') || !await bouncer.denies('viewPermissions'))
+          @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers') || !await bouncer.denies('viewPermissions') || !await bouncer.denies('viewDistributionGroup'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
                 { name: 'Отделы', access: 'viewDepartment', path: 'departments.index' },
                 { name: 'Пользователи', access: 'viewUsers', path: 'users.index' },
                 { name: 'Права', access: 'viewPermissions', path: 'permissions.index' },
+                { name: 'Группы рассылок', access: 'viewDistributionGroup', path: 'distribution.index' },
               ],
             })
               Пользователи
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
-          @can('viewDistributionGroup')
-            <li class="nav-list__item">
-              <a href="{{ route('distribution.index') }}"
-                class="{{ 'distribution.index' == activeMenuLink ? 'active' : '' }}">Группы рассылок</a>
-            </li>
-          @end
           @if(!await bouncer.denies('viewReportSubstationDefects') || !await bouncer.denies('viewReportDistrictDefects') || !await bouncer.denies('viewReportAllDefects'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',

@@ -1,0 +1,118 @@
+@layout('layout/master')
+
+@section('content')
+  <div class="defect__content">
+    @if(auth.isLoggedIn)
+      <div class="control">
+        @if(!defectOs.result && !defectOs.elimination_date)
+          @can('closeDefectOS', defectOs)
+            @buttons.base({
+              href: 'defects-os.close.create',
+              params: {id: defectOs.id},
+              className: 'btn-color_green'
+            })
+              <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Добавить">
+              Закрыть дефект
+            @end
+          @endcan
+        @endif
+        @can('editDefectOS', defectOs)
+          @buttons.base({
+            href: 'defects-os.edit',
+            params: {id: defectOs.id},
+            className: 'btn-color_blue btn-color_blue-transparent'
+          })
+            <img src="{{ asset('assets/images/icons/edit-2.svg') }}" alt="Редактировать дефект">
+            Редактировать дефект
+          @end
+        @endcan
+        @buttons.base({
+          className: 'btn-color_green btn-save-pdf'
+        })
+          <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
+          PDF
+        @end
+      </div>
+    @endif
+    <hr>
+    <div class="defect-info save-info-pdf">
+      <div class="defect-info__titles">
+        <h3 class="defect-info__title">Общая информация по дефекту</h3>
+      </div>
+      <div class="defect-info__info">
+        <div class="defect-info__group">
+          <div class="defect-info__text">Дата дефекта:
+            <span>{{ defectOs.created_at }}</span>
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Ответственный за устранение:
+            @each(department in defectOs.departments)
+              <span>{{ department.name }}</span>
+            @end
+          </div>
+        </div>
+        <div class="defect-info__group defect-info__group-line">
+          <div class="defect-info__text">Объект:
+            <span>{{ defectOs.substation.name }}</span>
+          </div>
+          <div class="defect-info__text">Присоединение:
+            <span>{{ defectOs.accession_substations }}</span>
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Срок устранения:
+            <span>{{ defectOs.term_elimination }}</span>
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Автор дефекта:
+            <span>{{ defectOs.user.shortUserName }}</span>
+          </div>
+        </div>
+        <div class="defect-info__description">
+          <div class="defect-info__titles">
+            <h3 class="defect-info__title">Описание дефекта</h3>
+          </div>
+          <div class="defect-info__text">{{ defectOs.description_defect }}</div>
+          @if(defectOs.comment)
+            <div class="defect-info__group defect-info__group-mt">
+              <div class="defect-info__text">
+                <span>Примечание:</span>
+                {{ defectOs.comment }}
+              </div>
+            </div>
+          @end
+        </div>
+      </div>
+
+      <div class="defect-info__close">
+        <div class="defect-info__titles">
+          <h3 class="defect-info__title">Выполненные работы по устранению</h3>
+        </div>
+        @if(defectOs.result)
+          <div class="defect-info__group">
+            <div class="defect-info__text">Дата устранения:
+              <span>{{ defectOs.elimination_date }}</span>
+            </div>
+          </div>
+          <div class="defect-info__group">
+            <div class="defect-info__text">Сотрудник:
+              <span>{{ defectOs.name_eliminated.fullName }}</span>
+            </div>
+          </div>
+          <div class="defect-info__group">
+            <div class="defect-info__text">Результаты:
+              <span>{{ defectOs.result }}</span>
+            </div>
+          </div>
+        @else
+          <div class="defect-info__group">
+            <div class="defect-info__text defect-info__text-center defect-info__text-red">Дефект не устранен.</div>
+          </div>
+        @endif
+      </div>
+    </div>
+    <hr>
+  </div>
+@endsection

@@ -202,4 +202,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   })
+
+  // Save table excel
+  const exportExcel = (btnSelector, tableSelector, filename = 'excel-file') => {
+    const btnSave = document.querySelector(btnSelector)
+    const table = document.querySelector(tableSelector)
+
+    if (btnSave === null || table === null) return null
+
+    btnSave.addEventListener('click', () => {
+      /* Create worksheet from HTML DOM TABLE */
+      const wb = XLSX.utils.table_to_book(table, { sheet: 'sheet-1' })
+
+      /* Export to file (start a download) */
+      XLSX.writeFile(wb, `${filename}.xls`)
+    })
+  }
+
+  exportExcel('.btn-save-excel', '.table', 'Report')
 })

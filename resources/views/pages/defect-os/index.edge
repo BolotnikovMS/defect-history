@@ -1,0 +1,153 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control control-items_sb">
+    <div class="control__btns">
+      @can('createDefect')
+        @buttons.base({ href: 'defects-os.create', className: 'btn-color_green' })
+          @!icons.add({ optionalClasses: 'icon-size_15' })
+          Добавить
+        @end
+      @endcan
+    </div>
+    <div class="defect__filters">
+      <form action="{{route('defects-os.index')}}" method="GET" class="form form-row">
+        <div class="form__content">
+          @!inputs.select({
+            name: 'status',
+            labelPositionText: 'label__text_left',
+            optionClass: 'form__input-width_300 searchable-list',
+            dataOptionsConfig: {
+              dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
+              dataNameOption: 'name'
+            },
+            currentDataConfig: {
+              currentData: { id: 'all', name: 'Все дефекты' },
+              currentDataId: filters ? filters.status : '',
+            }
+          })
+          {{--  @!inputs.select({
+            name: 'department',
+            labelPositionText: 'label__text_left',
+            optionClass: 'form__input-width_300 searchable-list',
+            dataOptionsConfig: {
+              dataOptions: [{name: 'Все', id: 0}, ...departments],
+              dataNameOption: 'name'
+            },
+          })  --}}
+        </div>
+        <div class="form__btns form__btns-row">
+          @buttons.base({
+            type: 'submit',
+            className: 'btn-color_green btn-small'
+          })
+            <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+          @end
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="defect__content">
+    <hr>
+    @if(defectsOs.length)
+      <div class="cards defect__cards">
+        @each(defectOs in defectsOs)
+          @card.card({
+            optionalClasses: defectOs.elimination_date !== null ?
+              'card-completed' :
+              new Date(defectOs.term_elimination) < new Date() ?
+              'card-danger' :
+              defectOs.importance === true ?
+              'card-danger' :
+              ''
+          })
+            @slot('cardHeader')
+              <div class="card__header-content">
+                @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
+                  @if(defectOs?.substation)
+                    <a href="{{ route('substations.show', {id: defectOs.substation.id}) }}" class="active-link">
+                      {{ defectOs.substation.name }}
+                      <img src="{{ asset('assets/images/icons/link.svg') }}">
+                    </a>
+                  @endif
+                  @!card.cardSpan({ text: defectOs.accession_substations, optionalClasses: 'card__text' })
+                  @if(defectOs?.departments?.length)
+                    <span class="card__text">
+                      Ответственный:
+                      @each(department in defectOs.departments)
+                        @!badge.badge({
+                          badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lightorg',
+                          data: department.name
+                        })
+                      @end
+                    </span>
+                  @end
+                @end
+                @card.cardGroup()
+                  @!card.cardSpan({ text: defectOs.user.shortUserName, optionalClasses: 'card__text' })
+                @end
+              </div>
+            @end
+            @slot('cardBody')
+              <div class="card__body-content">
+                <p class="card__text card__text-fs_20">
+                  {{ defectOs.excerptText }}
+                </p>
+                <div class="card__data-info">
+                  @card.cardGroup()
+                    @!card.cardSpan({ text: 'Дата добавления:', optionalClasses: 'card__text card__text-bold' })
+                    @!card.cardSpan({ text: dateFormat(defectOs.created_at), optionalClasses: 'card__text' })
+                  @end
+                  @card.cardGroup()
+                    @!card.cardSpan({ text: 'Срок устранения:', optionalClasses: 'card__text card__text-bold' })
+                    @!card.cardSpan({ text: dateFormat(defectOs.term_elimination), optionalClasses: 'card__text' })
+                  @end
+                  @card.cardGroup()
+                    @!card.cardSpan({ text: 'Дата устранения:', optionalClasses: 'card__text card__text-bold' })
+                    @!card.cardSpan({
+                      text: defectOs.elimination_date === null ? 'Не устранен' : dateFormat(defectOs.elimination_date),
+                      optionalClasses: defectOs.elimination_date === null ? 'card__text card__text-red' :  'card__text'
+                    })
+                  @end
+                </div>
+              </div>
+            @end
+            @slot('cardFooter')
+              <div class="card__footer-content">
+                @card.cardGroup()
+                  @buttons.base({
+                    href: 'defects-os.show',
+                    params: {id: defectOs.id},
+                    className: 'btn-small btn-color_blue ',
+                  })
+                    Подробнее...
+                  @end
+                @end
+                @card.cardGroup()
+                  @if(!await bouncer.denies('editDefectOS', defectOs) || !await bouncer.denies('deleteDefectOS', defectOs))
+                    @dropdown.dropdown({
+                      classBtnDropdown: 'btn-dropdown-icon',
+                      dropdownData: [
+                        { name: 'Редактировать', access: 'editDefectOS', data: defectOs, path: 'defects-os.edit', params: { id: defectOs.id }, icon: 'edit.svg' },
+                        { name: 'Удалить', access: 'deleteDefectOS', data: defectOs, path: 'defects-os.destroy', params: { id: defectOs.id }, icon: 'delete.svg' },
+                      ],
+                    })
+                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                    @end
+                  @endif
+                @end
+              </div>
+            @end
+          @end
+        @endeach
+      </div>
+    @else
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов по основным сетям.' })
+    @end
+    <hr>
+  </div>
+  @!component('components/pagination', {
+    pagination: defectsOs,
+  })
+@endsection

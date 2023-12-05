@@ -25,6 +25,7 @@ Route.group(() => {
   require('./routes/users')
   require('./routes/departments')
   require('./routes/defects')
+  require('./routes/defectOs')
   require('./routes/types-defects')
   require('./routes/districts')
   require('./routes/substations')

@@ -1,5 +1,6 @@
 import Bouncer from '@ioc:Adonis/Addons/Bouncer'
 import Defect from 'App/Models/Defect'
+import DefectOs from 'App/Models/DefectOs'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Logger from '@ioc:Adonis/Core/Logger'
 import Roles from 'App/Enums/Roles'
@@ -434,6 +435,43 @@ export const { actions } = Bouncer.before((user: User | null) => {
       )
     }
   )
+  // Action Defect OS
+  .define('viewDefectOS', async (user: User) => {
+    await user.load('permissions')
+
+    return user.id_role === Roles.MODERATOR || userPermissionCheck('viewDefectOS', user.permissions)
+  })
+  .define('closeDefectOS', async (user: User, defectOs: DefectOs) => {
+    await user.load('permissions')
+
+    if (defectOs.result !== null) return false
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('closeDefectOS', user.permissions)
+    )
+  })
+  .define('deleteDefectOS', async (user: User, defectOs: DefectOs) => {
+    await user.load('permissions')
+
+    if (defectOs.elimination_date !== null && defectOs.result !== null) {
+      return false
+    } else {
+      return (
+        user.id_role === Roles.MODERATOR || userPermissionCheck('deleteDefectOS', user.permissions)
+      )
+    }
+  })
+  .define('editDefectOS', async (user: User, defectOs: DefectOs) => {
+    await user.load('permissions')
+
+    if (defectOs.elimination_date !== null && defectOs.result !== null) {
+      return false
+    } else {
+      return (
+        user.id_role === Roles.MODERATOR || userPermissionCheck('editDefectOS', user.permissions)
+      )
+    }
+  })
 
 /*
 |--------------------------------------------------------------------------

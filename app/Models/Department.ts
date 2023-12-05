@@ -1,5 +1,7 @@
-import { DateTime } from 'luxon'
 import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
+
+import { DateTime } from 'luxon'
+import DefectOs from './DefectOs'
 import User from 'App/Models/User'
 
 export default class Department extends BaseModel {
@@ -28,4 +30,10 @@ export default class Department extends BaseModel {
     foreignKey: 'id_department',
   })
   public department_users: HasMany<typeof User>
+
+  @hasMany(() => DefectOs, {
+    localKey: 'id',
+    foreignKey: 'id_department',
+  })
+  public defect_os: HasMany<typeof DefectOs>
 }

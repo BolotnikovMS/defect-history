@@ -1,6 +1,6 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Department from 'App/Models/Department'
 import DepartmentValidator from 'App/Validators/DepartmentValidator'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DepartmentsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {

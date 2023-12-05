@@ -16,6 +16,7 @@ export default class SubstationsController {
     const substations = await Substation.query()
       .orderBy('name', 'asc')
       .preload('defects')
+      .preload('defectOs')
       .paginate(page, limit)
 
     substations.baseUrl('/substations')
