@@ -1,4 +1,5 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
+import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
+
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CloseDefectValidator {
@@ -8,15 +9,15 @@ export default class CloseDefectValidator {
     employee: schema.string(),
     description_results: schema.string({}, [
       rules.trim(),
-      rules.escape(),
       rules.minLength(2),
       rules.maxLength(700),
+      rules.escape(),
     ]),
   })
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
     minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
-    maxLength: 'Максимальная длинна поля {{ options.maxLength }} символов',
+    maxLength: 'Максимальная длина поля {{ options.maxLength }} символов',
   }
 }
