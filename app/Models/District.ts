@@ -10,6 +10,7 @@ import {
 
 import { DateTime } from 'luxon'
 import Defect from 'App/Models/Defect'
+import DefectOs from 'App/Models/DefectOs'
 import Substation from 'App/Models/Substation'
 
 export default class District extends BaseModel {
@@ -35,7 +36,14 @@ export default class District extends BaseModel {
 
   @computed()
   public get numberOpenDefectsDistrict() {
-    return this.district_defects?.filter((defect) => defect.elimination_date === null).length
+    const numberDistrictDefectTm = this.district_defects?.filter(
+      (defectTm) => defectTm.elimination_date === null
+    ).length
+    const numberDistrictDefectOs = this.district_defects_os?.filter(
+      (defectOs) => defectOs.elimination_date === null
+    ).length
+
+    return numberDistrictDefectTm + numberDistrictDefectOs
   }
 
   @computed()
@@ -58,4 +66,12 @@ export default class District extends BaseModel {
     throughForeignKey: 'id_substation',
   })
   public district_defects: HasManyThrough<typeof Defect>
+
+  @hasManyThrough([() => DefectOs, () => Substation], {
+    localKey: 'id',
+    foreignKey: 'id_district',
+    throughLocalKey: 'id',
+    throughForeignKey: 'id_substation',
+  })
+  public district_defects_os: HasManyThrough<typeof DefectOs>
 }

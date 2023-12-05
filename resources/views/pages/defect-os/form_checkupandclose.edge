@@ -1,0 +1,33 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="defect__content">
+    @forms.post({
+      action: route(options.routes.saveData, {id: options.defectOs})
+    })
+      <div class="form__content form__content-column">
+        @!inputs.textarea({
+          label: 'Описание результатов работы',
+          labelPositionText: 'label__text_left',
+          name: 'result',
+          rows: 6,
+          placeholderText: 'Введите описание результатов...',
+          required: true,
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({
+          href: options.routes.back,
+          params: {id: options.defectOs}
+        })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection

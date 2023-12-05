@@ -15,6 +15,7 @@ export default class DistrictsController {
     const districts = await District.query()
       .orderBy('created_at', 'asc')
       .preload('district_defects')
+      .preload('district_defects_os')
       .paginate(page, limit)
 
     districts.baseUrl('/districts')
@@ -75,6 +76,7 @@ export default class DistrictsController {
     if (district) {
       await district.load('substations', (query) => {
         query.preload('defects')
+        query.preload('defectOs')
       })
 
       district.substations.sort(

@@ -24,17 +24,26 @@
       @if(dataOptionsConfig?.dataOptions)
         @each(data in dataOptionsConfig.dataOptions)
           <option value="{{ data.id }}"
-            {{
-              currentDataConfig?.currentData
-              ?
-                currentDataConfig.currentDataId == data.id
-                  ?
+            @if (Array.isArray(currentDataConfig?.currentData))
+              @each(currentElement in currentDataConfig?.currentData)
+                {{
+                  currentElement.id == data.id ?
                     'selected'
                   :
                     ''
-              :
-                flashMessages.get(name) == data.id ? 'selected' : ''
-            }}
+                }}
+              @end
+            @else
+              {{
+                currentDataConfig?.currentData ?
+                  currentDataConfig.currentDataId == data.id ?
+                    'selected'
+                  :
+                    ''
+                :
+                  flashMessages.get(name) == data.id ? 'selected' : ''
+              }}
+            @end
           >
             {{ data[dataOptionsConfig.dataNameOption] }}
           </option>

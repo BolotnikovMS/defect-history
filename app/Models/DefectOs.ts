@@ -2,13 +2,16 @@ import {
   BaseModel,
   BelongsTo,
   HasOne,
+  ManyToMany,
   belongsTo,
   column,
   computed,
   hasOne,
+  manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 
 import { DateTime } from 'luxon'
+import Department from 'App/Models/Department'
 import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
@@ -19,16 +22,16 @@ export default class DefectOs extends BaseModel {
   public id: number
 
   @column()
-  public id_type_defect: number
-
-  @column()
   public id_user_created: number
 
   @column()
-  public id_department: number
+  public id_user_updater: number | null
 
   @column()
   public id_substation: number
+
+  @column()
+  public id_name_eliminated: number
 
   @column()
   public accession_substations: string
@@ -37,6 +40,11 @@ export default class DefectOs extends BaseModel {
     consume: (value: string) => replacementEscapeSymbols(value),
   })
   public description_defect: string
+
+  @column({
+    consume: (value: string) => replacementEscapeSymbols(value),
+  })
+  public comment: string | null
 
   @column.dateTime({
     serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
@@ -92,4 +100,13 @@ export default class DefectOs extends BaseModel {
     localKey: 'id',
   })
   public user: BelongsTo<typeof User>
+
+  @manyToMany(() => Department, {
+    localKey: 'id',
+    pivotForeignKey: 'id_defect',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'id_department',
+    pivotTable: 'defect_os_departments',
+  })
+  public departments: ManyToMany<typeof Department>
 }

@@ -15,13 +15,6 @@ export default class extends BaseSchema {
         .inTable('users')
       table.integer('id_user_updater', 10).nullable()
       table
-        .integer('id_department', 10)
-        .notNullable()
-        .unsigned()
-        .index()
-        .references('id')
-        .inTable('departments')
-      table
         .integer('id_substation', 10)
         .notNullable()
         .unsigned()
@@ -30,6 +23,7 @@ export default class extends BaseSchema {
         .inTable('substations')
       table.string('accession_substations', 250).notNullable()
       table.text('description_defect').notNullable()
+      table.text('comment').nullable()
       // Срок устранения
       table.dateTime('term_elimination').notNullable()
       table.boolean('importance').defaultTo(false)

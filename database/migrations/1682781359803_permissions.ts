@@ -228,6 +228,23 @@ export default class extends BaseSchema {
           access: 'resetPassword',
           description: 'Сброс пароля пользователя',
         },
+        // Defect OS
+        {
+          access: 'viewDefectOS',
+          description: 'Просмотр дефектов по ОС',
+        },
+        {
+          access: 'closeDefectOS',
+          description: 'Закрытие дефекта по ОС',
+        },
+        {
+          access: 'deleteDefectOS',
+          description: 'Удаление дефекта по ОС',
+        },
+        {
+          access: 'editDefectOS',
+          description: 'Редактирование дефекта по ОС',
+        },
       ])
     })
   }

@@ -1,8 +1,10 @@
-import { DateTime } from 'luxon'
-import { BaseModel, column, computed, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import Defect from 'App/Models/Defect'
-import { replacementEscapeSymbols } from 'App/Utils/utils'
+import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
+
 import AccessionSubstation from 'App/Models/AccessionSubstation'
+import { DateTime } from 'luxon'
+import Defect from 'App/Models/Defect'
+import DefectOs from 'App/Models/DefectOs'
+import { replacementEscapeSymbols } from 'App/Utils/utils'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
@@ -37,7 +39,14 @@ export default class Substation extends BaseModel {
 
   @computed()
   public get numberOpenDefects() {
-    return this.defects?.filter((item) => item.elimination_date === null).length
+    const numberOpenDefectsTm = this.defects?.filter(
+      (item) => item.elimination_date === null
+    ).length
+    const numberOpenDefectsOs = this.defectOs?.filter(
+      (item) => item.elimination_date === null
+    ).length
+
+    return numberOpenDefectsTm + numberOpenDefectsOs
   }
 
   @computed()
@@ -50,6 +59,12 @@ export default class Substation extends BaseModel {
     foreignKey: 'id_substation',
   })
   public defects: HasMany<typeof Defect>
+
+  @hasMany(() => DefectOs, {
+    localKey: 'id',
+    foreignKey: 'id_substation',
+  })
+  public defectOs: HasMany<typeof DefectOs>
 
   @hasMany(() => AccessionSubstation, {
     localKey: 'id',
