@@ -1,4 +1,5 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
+import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
+
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DefectValidator {
@@ -54,7 +55,7 @@ export default class DefectValidator {
   public messages: CustomMessages = {
     'required': 'Поле является обязательным.',
     'minLength': 'Минимальная длина поля {{ options.minLength }} символа.',
-    'maxLength': 'Максимальная длинна поля {{ options.maxLength }} символов',
+    'maxLength': 'Максимальная длина поля {{ options.maxLength }} символов',
     'file.size': 'Размер файла должен быть меньше {{ options.size }}.',
     'file.extname': 'Файл должен иметь одно из следующих расширений {{ options.extnames }}.',
   }
