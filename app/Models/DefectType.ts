@@ -1,5 +1,14 @@
+import {
+  BaseModel,
+  BelongsTo,
+  HasMany,
+  belongsTo,
+  column,
+  computed,
+  hasMany,
+} from '@ioc:Adonis/Lucid/Orm'
+
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, HasMany, hasMany, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
 import Defect from 'App/Models/Defect'
 import DistributionGroup from 'App/Models/DistributionGroup'
 
@@ -29,6 +38,11 @@ export default class DefectType extends BaseModel {
     autoUpdate: true,
   })
   public updatedAt: DateTime
+
+  @computed()
+  public get numberDefects() {
+    return this.defects.length
+  }
 
   // Relations
   @hasMany(() => Defect, {
