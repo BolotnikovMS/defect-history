@@ -16,7 +16,14 @@
       </nav> --}}
       <nav class="header__nav">
         <ul class="nav-list">
+<<<<<<< HEAD
           @if(!await bouncer.denies('viewDefectOS'))
+=======
+          <li  class="nav-list__item">
+            <a href="{{ route('dashboard.index') }}"
+              class="{{ 'dashboard.index' == activeMenuLink ? 'active' : '' }}">Статистика</a>
+          </li>
+>>>>>>> feat/dashboard
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [

@@ -1,6 +1,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.group(() => {
+  Route.get('/', 'DefectsController.index').as('index')
   Route.get('/new', 'DefectsController.create').as('create').middleware(['auth'])
   Route.post('/new', 'DefectsController.store').as('store').middleware(['auth'])
   Route.get('/show/:id', 'DefectsController.show').as('show')

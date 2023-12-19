@@ -29,10 +29,10 @@
   &__group {
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    gap: 5px;
 
     &-cg_15 {
-      column-gap: 15px;
+      gap: 15px;
     }
   }
 
@@ -41,6 +41,10 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 15px;
+
+    &-center {
+      justify-content: center;
+    }
   }
 
   // &__badge {
@@ -78,6 +82,12 @@
 
     &-red {
       color: red;
+    }
+
+    &-mt_8 {
+      & + * {
+        margin-top: 8px;
+      }
     }
 
     &-mt_20 {
@@ -119,5 +129,37 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 20px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+
+    &-center {
+      align-items: center;
+    }
+  }
+
+  &__colum {
+    display: grid;
+    grid-template-columns: minmax(200px, 400px) minmax(200px, 400px) minmax(200px, 400px);
+    grid-area: 'colum-1 colum-2 colum-3';
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+
+    colum-1 {
+      grid-area: colum-1;
+    }
+
+    colum-2 {
+      grid-area: colum-2;
+    }
+
+    colum-3 {
+      grid-area: colum-3;
+    }
   }
 }
