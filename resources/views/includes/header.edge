@@ -16,29 +16,31 @@
       </nav> --}}
       <nav class="header__nav">
         <ul class="nav-list">
-<<<<<<< HEAD
-          @if(!await bouncer.denies('viewDefectOS'))
-=======
           <li  class="nav-list__item">
             <a href="{{ route('dashboard.index') }}"
               class="{{ 'dashboard.index' == activeMenuLink ? 'active' : '' }}">Статистика</a>
           </li>
->>>>>>> feat/dashboard
+          @if(!await bouncer.denies('viewDefectsOS') && !await bouncer.denies('viewDefectsTM'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Дефекты ТМ', path: 'defects.index' },
-                { name: 'Дефекты ОС', access: 'viewDefectOS', path: 'defects-os.index' },
+                { name: 'Дефекты ТМ', access: 'viewDefectsTM', path: 'defects.index' },
+                { name: 'Дефекты ОС', access: 'viewDefectsOS', path: 'defects-os.index' },
               ],
             })
               Дефекты
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
-          @else
+          @elseif(!await bouncer.denies('viewDefectsTM'))
             <li  class="nav-list__item">
               <a href="{{ route('defects.index') }}"
                 class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты ТМ</a>
             </li>
+          @elseif(!await bouncer.denies('viewDefectsOS'))
+            <li  class="nav-list__item">
+              <a href="{{ route('defects-os.index') }}"
+                class="{{ 'defects-os.index' == activeMenuLink ? 'active' : '' }}">Дефекты ОС</a>
+          </li>
           @end
           @can('viewTypesDefects')
             <li  class="nav-list__item">

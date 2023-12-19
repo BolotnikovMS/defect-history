@@ -19,7 +19,13 @@ import User from 'App/Models/User'
 import { unlink } from 'node:fs/promises'
 
 export default class DefectsController {
-  public async index({ request, view }: HttpContextContract) {
+  public async index({ request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewDefectsTM')) {
+      session.flash('dangerMessage', 'У вас нет прав на просмотр дефектов ТМ!')
+
+      return response.redirect().toPath('/')
+    }
+
     const page = request.input('page', 1)
     const limit = 15
 
@@ -151,7 +157,13 @@ export default class DefectsController {
     }
   }
 
-  public async show({ response, params, view, session }: HttpContextContract) {
+  public async show({ response, params, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.denies('viewDefectsTM')) {
+      session.flash('dangerMessage', 'У вас нет прав на просмотр дефектов ТМ!')
+
+      return response.redirect().toPath('/')
+    }
+
     const defect = await Defect.find(params.id)
 
     if (defect) {

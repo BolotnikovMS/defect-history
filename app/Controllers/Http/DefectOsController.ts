@@ -12,7 +12,7 @@ import { addDays } from 'App/Utils/utils'
 
 export default class DefectOsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDefectOS')) {
+    if (await bouncer.denies('viewDefectsOS')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр дефектов ОС!')
 
       return response.redirect().toPath('/')
@@ -128,7 +128,7 @@ export default class DefectOsController {
   }
 
   public async show({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDefectOS')) {
+    if (await bouncer.denies('viewDefectsOS')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр дефекта ОС!')
 
       return response.redirect().toRoute('DefectOsController.index')

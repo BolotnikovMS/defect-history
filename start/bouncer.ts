@@ -190,8 +190,13 @@ export const { actions } = Bouncer.before((user: User | null) => {
   })
 
   // Defects action
-  // .define('viewDefects', (user: User) => {})
-  // await user.load('permissions')
+  .define('viewDefectsTM', async (user: User) => {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('viewDefectsTM', user.permissions)
+    )
+  })
   .define('createDefect', async (user: User) => {
     await user.load('permissions')
 
@@ -436,10 +441,12 @@ export const { actions } = Bouncer.before((user: User | null) => {
     }
   )
   // Action Defect OS
-  .define('viewDefectOS', async (user: User) => {
+  .define('viewDefectsOS', async (user: User) => {
     await user.load('permissions')
 
-    return user.id_role === Roles.MODERATOR || userPermissionCheck('viewDefectOS', user.permissions)
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('viewDefectsOS', user.permissions)
+    )
   })
   .define('closeDefectOS', async (user: User, defectOs: DefectOs) => {
     await user.load('permissions')
