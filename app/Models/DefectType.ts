@@ -41,7 +41,7 @@ export default class DefectType extends BaseModel {
 
   @computed()
   public get numberDefects() {
-    return this.defects.length
+    return this.defects?.length
   }
 
   // Relations
