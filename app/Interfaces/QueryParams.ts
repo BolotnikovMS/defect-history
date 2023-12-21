@@ -2,4 +2,6 @@
 export interface IQueryParams {
   status?: string
   department?: number
+  substation: number
+  district: number
 }

@@ -37,10 +37,9 @@ export default class ReportsController {
       return response.redirect().toPath('/')
     }
 
-    const substations = await Substation.query()
     const validationSchema = schema.create({
       substation: schema.number(),
-      filter: schema.string(),
+      status: schema.string(),
     })
     const customMessages: CustomMessages = {
       required: 'Поле является обязательным.',
@@ -49,12 +48,13 @@ export default class ReportsController {
       schema: validationSchema,
       messages: customMessages,
     })
-    const substation = await Substation.find(validateData.substation)
+    const substations = await Substation.query()
+    const substationData = await Substation.find(validateData.substation)
     let noContent: string | null = null
     let titleText: string = ''
 
-    if (substation) {
-      await substation.load((loader) => {
+    if (substationData) {
+      await substationData.load((loader) => {
         loader.load('defects', (defectQuery) => {
           titleText = 'всех'
           noContent = 'По ПС нету открытых дефектов'
@@ -62,33 +62,36 @@ export default class ReportsController {
             .preload('defect_type')
             .preload('accession')
             .preload('intermediate_checks')
-            .if(validateData.filter === 'openDefects', (query) => {
+            .if(validateData.status === 'openDefects', (query) => {
               titleText = 'открытых дефектов'
-              noContent = substation?.defects?.length ? null : 'По ПС нету открытых дефектов.'
+              noContent = substationData?.defects?.length ? null : 'По ПС нету открытых дефектов.'
               query.whereNull('result')
             })
-            .if(validateData.filter === 'openDefectsWithResults', (query) => {
+            .if(validateData.status === 'openDefectsWithResults', (query) => {
               titleText = 'открытых дефектов с промежуточными результатами'
-              noContent = substation?.defects?.length
+              noContent = substationData?.defects?.length
                 ? null
                 : 'По ПС нету открытых дефектов с промежуточными результатами.'
               query.has('intermediate_checks')
             })
-            .if(validateData.filter === 'closeDefects', (query) => {
+            .if(validateData.status === 'closeDefects', (query) => {
               titleText = 'закрытых дефектов'
-              noContent = substation?.defects?.length ? null : 'По ПС нету закрытых дефектов.'
+              noContent = substationData?.defects?.length ? null : 'По ПС нету закрытых дефектов.'
               query.whereNotNull('result')
             })
         })
       })
 
       return view.render('pages/reports/substation_defects/index', {
-        title: `Список ${titleText} дефектов по ПС '${substation.name}'`,
+        title: `Список ${titleText} дефектов по ПС '${substationData.name}'`,
         messages: {
           noContent: noContent,
         },
-        substation,
         substations,
+        substation: substationData,
+        filters: {
+          status: validateData.status,
+        },
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -130,7 +133,7 @@ export default class ReportsController {
     const districts = await District.query()
     const validationSchema = schema.create({
       district: schema.number(),
-      filter: schema.string(),
+      status: schema.string(),
     })
     const customMessages: CustomMessages = {
       required: 'Поле является обязательным.',
@@ -139,23 +142,23 @@ export default class ReportsController {
       schema: validationSchema,
       messages: customMessages,
     })
-    const district = await District.find(validateData.district)
+    const districtData = await District.find(validateData.district)
     let noContentDefect: string | null = null
     let titleText: string = ''
 
-    if (district) {
-      await district.load((loader) => {
+    if (districtData) {
+      await districtData.load((loader) => {
         loader.load('substations', (substationsQuery) => {
           substationsQuery.preload('defects', (defectsQuery) => {
             titleText = 'всех'
             noContentDefect = 'По ПС нету дефектов'
             defectsQuery
-              .if(validateData.filter === 'openDefects', (query) => {
+              .if(validateData.status === 'openDefects', (query) => {
                 titleText = 'открытых'
                 noContentDefect = 'По ПС нету открытых дефектов'
                 query.whereNull('result')
               })
-              .if(validateData.filter === 'closeDefects', (query) => {
+              .if(validateData.status === 'closeDefects', (query) => {
                 titleText = 'закрытых'
                 noContentDefect = 'По ПС нету закрытых дефектов'
                 query.whereNotNull('result')
@@ -168,13 +171,16 @@ export default class ReportsController {
       })
 
       return view.render('pages/reports/districts_defect/index', {
-        title: `Список ${titleText} дефектов по "${district?.name}"`,
+        title: `Список ${titleText} дефектов по "${districtData?.name}"`,
         messages: {
           noContent: 'В районе или ГП нету ПС.',
           noContentDefect: noContentDefect,
         },
-        district,
+        district: districtData,
         districts,
+        filters: {
+          status: validateData.status,
+        },
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -208,7 +214,7 @@ export default class ReportsController {
     }
 
     const validationSchema = schema.create({
-      filter: schema.string(),
+      status: schema.string(),
       type: schema.number(),
     })
     const customMessages: CustomMessages = {
@@ -221,7 +227,6 @@ export default class ReportsController {
     let noContentDefect: string | null = null
     let titleText: string = 'всех'
     const typesDefects = await DefectType.query()
-
     const districts = await District.query()
       .preload('district_defects')
       .preload('substations', (substationQuery) => {
@@ -232,12 +237,12 @@ export default class ReportsController {
             .if(validateData?.type !== undefined && validateData?.type, (query) => {
               query.where('id_type_defect', '=', validateData.type)
             })
-            .if(validateData.filter === 'openDefects', (query) => {
+            .if(validateData.status === 'openDefects', (query) => {
               titleText = 'открытых'
               noContentDefect = 'По ПС нету открытых дефектов'
               query.whereNull('result')
             })
-            .if(validateData.filter === 'closeDefects', (query) => {
+            .if(validateData.status === 'closeDefects', (query) => {
               titleText = 'закрытых'
               noContentDefect = 'По ПС нету закрытых дефектов'
               query.whereNotNull('result')
@@ -260,6 +265,9 @@ export default class ReportsController {
       districts,
       typesDefects,
       currentTypeDefect: validateData.type,
+      filters: {
+        status: validateData.status,
+      },
     })
   }
 
