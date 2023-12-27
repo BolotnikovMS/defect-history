@@ -1,14 +1,14 @@
-import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
-import { DateTime } from 'luxon'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { Departments } from 'App/Enums/Departments'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
-import DefectOsValidator from 'App/Validators/DefectOValidator'
 import Department from 'App/Models/Department'
-import { Departments } from 'App/Enums/Departments'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Substation from 'App/Models/Substation'
 import { addDays } from 'App/Utils/utils'
+import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
+import DefectOsValidator from 'App/Validators/DefectOValidator'
+import { DateTime } from 'luxon'
 
 export default class DefectOsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
