@@ -40,13 +40,13 @@ View.global('pageDottedRange', (pagination, delta: number = 2) => {
   // if (pagination.length === 0 || pagination.length === 1) {
   //   return []
   // }
-
   let current = parseInt(pagination.currentPage, 10)
   const last = pagination.lastPage
   let left = current - delta
   let right = current + delta + 1
   const range: number[] = []
-  const pages: string[] | number[] = []
+  const pages: string[] = []
+  const dots: string = '...'
   let l
 
   for (let i: number = 1; i <= last; i++) {
@@ -58,7 +58,7 @@ View.global('pageDottedRange', (pagination, delta: number = 2) => {
   range.forEach(function (i) {
     if (l) {
       if (i - l > 1) {
-        pages.push('...')
+        pages.push(dots)
       }
     }
 
