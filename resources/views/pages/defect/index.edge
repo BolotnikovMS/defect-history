@@ -11,8 +11,8 @@
         @end
       @endcan
     </div>
-    <div class="defect__filters">
-      @dropdown.dropdown({
+    <div class="filters filters-row">
+      {{--  @dropdown.dropdown({
         classDropdownMenu: 'dropdown__menu-menu_bottom_right',
         dropdownData: [
           { name: 'Все', path: 'defects.index' },
@@ -22,7 +22,41 @@
         <img src="{{ asset('assets/images/icons/sort.svg') }}" class="dropdown-icon dropdown-icon-size_15">
         {{ typeDefect?.type_defect ? typeDefect.type_defect : 'Все' }}
         <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
-      @end
+      @end  --}}
+      <form action="{{route('defects.index')}}" method="GET" class="form form-row">
+        <div class="form__content">
+          @!inputs.select({
+            name: 'typeDefect',
+            labelPositionText: 'label__text_left',
+            optionClass: 'form__input-width_300 searchable-list',
+            dataOptionsConfig: {
+              dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
+              dataNameOption: 'type_defect'
+            },
+          })
+          @!inputs.select({
+            name: 'status',
+            labelPositionText: 'label__text_left',
+            optionClass: 'form__input-width_300 searchable-list',
+            dataOptionsConfig: {
+              dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
+              dataNameOption: 'name'
+            },
+            currentDataConfig: {
+              currentData: { id: 'all', name: 'Все дефекты' },
+              currentDataId: filters ? filters.status : '',
+            }
+          })
+        </div>
+        <div class="form__btns form__btns-row">
+          @buttons.base({
+            type: 'submit',
+            className: 'btn-color_green btn-small'
+          })
+            <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+          @end
+        </div>
+      </form>
     </div>
   </div>
   <div class="defect__content">

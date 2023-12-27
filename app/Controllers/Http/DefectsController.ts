@@ -1,21 +1,22 @@
 import { addDays, randomStr } from 'App/Utils/utils'
 
-import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
-import { DateTime } from 'luxon'
-import Defect from 'App/Models/Defect'
-import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
-import DefectImg from 'App/Models/DefectImg'
-import DefectType from 'App/Models/DefectType'
-import DefectValidator from 'App/Validators/DefectValidator'
-import Department from 'App/Models/Department'
-import { Departments } from 'App/Enums/Departments'
 import Env from '@ioc:Adonis/Core/Env'
 import Event from '@ioc:Adonis/Core/Event'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { Departments } from 'App/Enums/Departments'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
+import Defect from 'App/Models/Defect'
+import DefectImg from 'App/Models/DefectImg'
+import DefectType from 'App/Models/DefectType'
+import Department from 'App/Models/Department'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
-import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
 import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
+import CloseDefectValidator from 'App/Validators/CloseDefectValidator'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
+import DefectValidator from 'App/Validators/DefectValidator'
+import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
+import { DateTime } from 'luxon'
 import { unlink } from 'node:fs/promises'
 
 export default class DefectsController {
@@ -28,16 +29,19 @@ export default class DefectsController {
 
     const page = request.input('page', 1)
     const limit = 15
-
+    const { status, typeDefect } = request.qs() as IQueryParams
     const typesDefects = await DefectType.query()
-
     const typesDefectsToSort = typesDefects.map((type) => ({
       name: type.type_defect,
       path: 'types-defects.show',
       params: { id: type.id },
     }))
-
     const defects = await Defect.query()
+      .if(status === 'open', (query) => query.whereNull('result'))
+      .if(status === 'close', (query) => query.whereNotNull('result'))
+      .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
+        query.where('id_type_defect', '=', typeDefect!)
+      )
       .orderBy([
         {
           column: 'elimination_date',
@@ -56,7 +60,8 @@ export default class DefectsController {
       .preload('user')
       .paginate(page, limit)
 
-    defects.baseUrl('/')
+    defects.baseUrl('/defects')
+    defects.queryString({ status })
 
     // const test = defects.map((defect) => defect.serialize())
     // console.log('test: ', test)
@@ -66,6 +71,9 @@ export default class DefectsController {
       typesDefects,
       typesDefectsToSort,
       defects,
+      filters: {
+        status,
+      },
       activeMenuLink: 'defects.index',
     })
   }
