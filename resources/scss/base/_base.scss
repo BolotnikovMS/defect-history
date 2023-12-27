@@ -112,3 +112,11 @@ hr {
     opacity: 1;
   }
 }
+
+.filters {
+  &-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+}
