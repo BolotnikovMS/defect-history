@@ -19,6 +19,10 @@
       flex-direction: column;
       align-items: flex-start;
     }
+
+    &-filters {
+      gap: 20px;
+    }
   }
 
   &__group {
@@ -84,15 +88,21 @@
     }
   }
 
-  &__input  {
+  &__input {
     width: 350px;
     font-size: 18px;
     padding: 8px 10px;
     border: 1px solid #cfcfcf;
     border-radius: 10px;
+    transition: all 0.3s ease-in;
 
     &-width_300 {
       max-width: 300px;
+    }
+
+    &-filter {
+      max-width: 200px;
+      padding: 4px 10px;
     }
 
     &-checkbox {
@@ -112,6 +122,10 @@
     }
 
     &:focus {
+      border: 1px solid #5cadf8;
+    }
+
+    &:hover {
       border: 1px solid #5cadf8;
     }
   }
