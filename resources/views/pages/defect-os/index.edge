@@ -13,11 +13,11 @@
     </div>
     <div class="defect__filters">
       <form action="{{route('defects-os.index')}}" method="GET" class="form form-row">
-        <div class="form__content">
+        <div class="form__content form__content-filters">
           @!inputs.select({
             name: 'status',
             labelPositionText: 'label__text_left',
-            optionClass: 'form__input-width_300 searchable-list',
+            optionClass: 'form__input form__input-filter',
             dataOptionsConfig: {
               dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
               dataNameOption: 'name'

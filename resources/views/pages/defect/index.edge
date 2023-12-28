@@ -24,11 +24,11 @@
         <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
       @end  --}}
       <form action="{{route('defects.index')}}" method="GET" class="form form-row">
-        <div class="form__content">
+        <div class="form__content form__content-filters">
           @!inputs.select({
             name: 'typeDefect',
             labelPositionText: 'label__text_left',
-            optionClass: 'form__input-width_300 searchable-list',
+            optionClass: 'form__input form__input-filter',
             dataOptionsConfig: {
               dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
               dataNameOption: 'type_defect'
@@ -37,7 +37,7 @@
           @!inputs.select({
             name: 'status',
             labelPositionText: 'label__text_left',
-            optionClass: 'form__input-width_300 searchable-list',
+            optionClass: 'form__input form__input-filter',
             dataOptionsConfig: {
               dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
               dataNameOption: 'name'
