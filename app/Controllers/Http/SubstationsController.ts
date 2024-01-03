@@ -1,5 +1,6 @@
-import District from 'App/Models/District'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
+import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
 
@@ -16,7 +17,7 @@ export default class SubstationsController {
     const substations = await Substation.query()
       .orderBy('name', 'asc')
       .preload('defects')
-      .preload('defectOs')
+      .preload('defectsOs')
       .paginate(page, limit)
 
     substations.baseUrl('/substations')
@@ -84,24 +85,41 @@ export default class SubstationsController {
     }
   }
 
-  public async show({ response, params, view, session }: HttpContextContract) {
+  public async show({ request, response, params, view, session }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
     if (substation) {
-      await substation.load('defects', (query) => {
-        query
-          .orderBy('elimination_date', 'asc')
-          .preload('accession')
-          .preload('defect_type')
-          .preload('work_planning')
-          .preload('intermediate_checks')
-          .preload('user')
-      })
-      await substation.load('accession')
+      const { status, defectsClass = 'defects' } = request.qs() as IQueryParams
+
+      if (defectsClass === 'defects') {
+        await substation.load('defects', (query) => {
+          query
+            .orderBy('elimination_date', 'asc')
+            .if(status === 'open', (query) => query.whereNull('result'))
+            .if(status === 'close', (query) => query.whereNotNull('result'))
+            .preload('accession')
+            .preload('defect_type')
+            .preload('work_planning')
+            .preload('intermediate_checks')
+            .preload('user')
+        })
+      } else {
+        await substation.load('defectsOs', (query) => {
+          query
+            .orderBy('elimination_date', 'asc')
+            .if(status === 'open', (query) => query.whereNull('result'))
+            .if(status === 'close', (query) => query.whereNotNull('result'))
+            .preload('user')
+        })
+      }
 
       return view.render('pages/substation/show', {
         title: `Дефекты ${substation.name}`,
         substation,
+        filters: {
+          status,
+          defectsClass,
+        },
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
