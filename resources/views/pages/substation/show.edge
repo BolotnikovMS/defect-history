@@ -2,41 +2,90 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('viewAttachment')
-    <div class="control">
-      @buttons.base({
-        href: 'substations.show.attachments',
-        params: { idSubstation: substation.id },
-        className: 'btn-color_blue btn-color_blue-transparent',
-      })
-      Присоединения
-      ({{substation.numberOfConnections}})
+    <div class="control control-items_sb">
+      @can('viewAttachment')
+        <div class="control__btns">
+          @buttons.base({
+            href: 'substations.show.attachments',
+            params: { idSubstation: substation.id },
+            className: 'btn-color_blue btn-color_blue-transparent',
+          })
+            Присоединения
+          @end
+        </div>
       @end
+      <div class="substation__filters">
+        <form action="{{route('substations.show', {id: substation.id})}}" method="GET" class="form form-row">
+          <div class="form__content form__content-filters">
+            @!inputs.select({
+              name: 'defectsClass',
+              labelPositionText: 'label__text_left',
+              optionClass: 'form__input form__input-filter',
+              dataOptionsConfig: {
+                dataOptions: [{ id: 'defects', name: 'Дефекты ТМ' }, { id: 'defectsOs', name: 'Дефекты ОС' }],
+                dataNameOption: 'name'
+              },
+              currentDataConfig: {
+                currentData: { id: 'defects', name: 'Дефекты ТМ' },
+                currentDataId: filters.defectsClass ? filters.defectsClass : '',
+              }
+            })
+            @!inputs.select({
+              name: 'status',
+              labelPositionText: 'label__text_left',
+              optionClass: 'form__input form__input-filter',
+              dataOptionsConfig: {
+                dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
+                dataNameOption: 'name'
+              },
+              currentDataConfig: {
+                currentData: { id: 'all', name: 'Все дефекты' },
+                currentDataId: filters.status ? filters.status : '',
+              }
+            })
+          </div>
+          <div class="form__btns form__btns-row">
+            @buttons.base({
+              type: 'submit',
+              className: 'btn-color_green btn-small'
+            })
+              <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+            @end
+          </div>
+        </form>
+      </div>
     </div>
-  @end
   <div class="substations__content">
     <hr>
-    @if(substation.defects.length)
+    @if(substation[filters.defectsClass].length)
       <div class="cards defect__cards">
-        @each(defect in substation.defects)
+        @each(defect in substation[filters.defectsClass])
           @card.card({
-            optionalClasses: defect.elimination_date !== null ? 'card-completed' : defect.importance === true ? 'card-danger' : ''
+            optionalClasses: defect.elimination_date !== null ? 'card-completed' : new Date(defect.term_elimination) < new Date() ?
+            'card-danger' :
+            defect.importance === true ?
+            'card-danger' :
+            ''
           })
             @slot('cardHeader')
               <div class="card__header-content">
                 @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
-                  @!badge.badge({
-                    badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lb',
-                    data: defect.defect_type.type_defect
-                  })
-                  @if(defect?.work_planning.length && defect.result === null)
+                  @if(defect.defect_type)
+                    @!badge.badge({
+                      badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lb',
+                      data: defect.defect_type.type_defect
+                    })
+                  @end
+                  @if(defect.work_planning?.length && defect.result === null)
                     @!badge.badge({
                       badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_org',
                       data: 'В работе'
                     })
                   @endif
-                  @!card.cardSpan({ text: defect.accession.name, optionalClasses: 'card__text' })
-                  @!card.cardSpan({ text: `Проверок: ${defect.countIntermediateChecks ?? defect.intermediate_checks.length}`, optionalClasses: 'card__text' })
+                  @!card.cardSpan({ text: defect.accession?.name || defect.accession_substations, optionalClasses: 'card__text' })
+                  @if(defect.countIntermediateChecks)
+                    @!card.cardSpan({ text: `Проверок: ${defect.countIntermediateChecks ?? defect.intermediate_checks?.length}`, optionalClasses: 'card__text' })
+                  @endif
                 @end
                 @card.cardGroup()
                   @!card.cardSpan({ text: defect.user.shortUserName, optionalClasses: 'card__text' })
@@ -69,29 +118,54 @@
             @end
             @slot('cardFooter')
               <div class="card__footer-content">
-                @card.cardGroup()
-                  @buttons.base({
-                    href: 'defects.show',
-                    params: {id: defect.id},
-                    className: 'btn-small btn-color_blue ',
-                  })
-                    Подробнее...
-                  @end
-                @end
-                @card.cardGroup()
-                  @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect) || !await bouncer.denies('editDefectDeadline', defect))
-                    @dropdown.dropdown({
-                      classBtnDropdown: 'btn-dropdown-icon',
-                      dropdownData: [
-                        { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
-                        { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
-                      ],
+                @if(filters.defectsClass === 'defects')
+                  @card.cardGroup()
+                    @buttons.base({
+                      href: 'defects.show',
+                      params: {id: defect.id},
+                      className: 'btn-small btn-color_blue ',
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      Подробнее...
                     @end
-                  @endif
-                @end
+                  @end
+                  @card.cardGroup()
+                    @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect) || !await bouncer.denies('editDefectDeadline', defect))
+                      @dropdown.dropdown({
+                        classBtnDropdown: 'btn-dropdown-icon',
+                        dropdownData: [
+                          { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
+                          { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
+                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                        ],
+                      })
+                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @end
+                    @endif
+                  @end
+                @else
+                  @card.cardGroup()
+                    @buttons.base({
+                      href: 'defects-os.show',
+                      params: {id: defect.id},
+                      className: 'btn-small btn-color_blue ',
+                    })
+                      Подробнее...
+                    @end
+                  @end
+                  @card.cardGroup()
+                    @if(!await bouncer.denies('editDefectOS', defect) || !await bouncer.denies('deleteDefectOS', defect))
+                      @dropdown.dropdown({
+                        classBtnDropdown: 'btn-dropdown-icon',
+                        dropdownData: [
+                          { name: 'Редактировать', access: 'editDefectOS', data: defect, path: 'defects-os.edit', params: { id: defect.id }, icon: 'edit.svg' },
+                          { name: 'Удалить', access: 'deleteDefectOS', data: defect, path: 'defects-os.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                        ],
+                      })
+                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @end
+                    @endif
+                  @end
+                @endif
               </div>
             @end
           @end
