@@ -1,10 +1,10 @@
 import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
 
 import AccessionSubstation from 'App/Models/AccessionSubstation'
-import { DateTime } from 'luxon'
 import Defect from 'App/Models/Defect'
 import DefectOs from 'App/Models/DefectOs'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
+import { DateTime } from 'luxon'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
@@ -42,7 +42,7 @@ export default class Substation extends BaseModel {
     const numberOpenDefectsTm = this.defects?.filter(
       (item) => item.elimination_date === null
     ).length
-    const numberOpenDefectsOs = this.defectOs?.filter(
+    const numberOpenDefectsOs = this.defectsOs?.filter(
       (item) => item.elimination_date === null
     ).length
 
@@ -64,7 +64,7 @@ export default class Substation extends BaseModel {
     localKey: 'id',
     foreignKey: 'id_substation',
   })
-  public defectOs: HasMany<typeof DefectOs>
+  public defectsOs: HasMany<typeof DefectOs>
 
   @hasMany(() => AccessionSubstation, {
     localKey: 'id',
