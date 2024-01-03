@@ -33,6 +33,10 @@
               dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
               dataNameOption: 'type_defect'
             },
+            currentDataConfig: {
+              currentData: filters.typeDefect ? filters.typeDefect : '',
+              currentDataId: filters.typeDefect ? filters.typeDefect : '',
+            }
           })
           @!inputs.select({
             name: 'status',
