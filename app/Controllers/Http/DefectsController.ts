@@ -73,6 +73,7 @@ export default class DefectsController {
       defects,
       filters: {
         status,
+        typeDefect,
       },
       activeMenuLink: 'defects.index',
     })
