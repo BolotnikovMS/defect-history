@@ -1,6 +1,6 @@
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import District from 'App/Models/District'
 import DistrictValidator from 'App/Validators/DistrictValidator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DistrictsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
@@ -76,7 +76,7 @@ export default class DistrictsController {
     if (district) {
       await district.load('substations', (query) => {
         query.preload('defects')
-        query.preload('defectOs')
+        query.preload('defectsOs')
       })
 
       district.substations.sort(
