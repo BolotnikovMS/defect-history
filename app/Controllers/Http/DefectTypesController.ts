@@ -1,6 +1,6 @@
-import DefectType from '../../Models/DefectType'
-import DistributionGroup from 'App/Models/DistributionGroup'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import DistributionGroup from 'App/Models/DistributionGroup'
+import DefectType from '../../Models/DefectType'
 import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 
 export default class DefectTypesController {
@@ -73,38 +73,44 @@ export default class DefectTypesController {
     response.redirect().toRoute('types-defects.index')
   }
 
-  public async show({ response, params, view, session }: HttpContextContract) {
+  public async show({ params, response, session }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
-    const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
-    const typesDefectsToSort = typesDefects.map((type) => ({
-      name: type.type_defect,
-      path: 'types-defects.show',
-      params: { id: type.id },
-    }))
 
     if (typeDefect) {
-      await typeDefect.load('defects', (query) => {
-        query
-          .orderBy('elimination_date', 'asc')
-          .preload('substation')
-          .preload('accession')
-          .preload('intermediate_checks')
-          .preload('user')
-          .preload('work_planning')
-      })
-
-      return view.render('pages/defect/index', {
-        title: `Дефекты '${typeDefect.type_defect}'`,
-        typeDefect,
-        typesDefects,
-        typesDefectsToSort,
-        defects: typeDefect.defects,
-        activeTabLink: typeDefect.id,
-      })
+      return response.redirect().toRoute('defects.index', {}, { qs: { typeDefect: typeDefect.id } })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().back()
     }
+
+    // const typeDefect = await DefectType.find(params.id)
+    // const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
+
+    // if (typeDefect) {
+    //   await typeDefect.load('defects', (query) => {
+    //     query
+    //       .orderBy('elimination_date', 'asc')
+    //       .preload('substation')
+    //       .preload('accession')
+    //       .preload('intermediate_checks')
+    //       .preload('user')
+    //       .preload('work_planning')
+    //   })
+
+    //   console.log(typeDefect)
+
+    //   return view.render('pages/defect/index', {
+    //     title: `Дефекты '${typeDefect.type_defect}'`,
+    //     typesDefects,
+    //     defects: typeDefect.defects,
+    //     filters: {
+    //       typeDefect,
+    //     },
+    //   })
+    // } else {
+    //   session.flash('dangerMessage', 'Что-то пошло не так!')
+    //   response.redirect().back()
+    // }
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
