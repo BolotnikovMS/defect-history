@@ -21,7 +21,7 @@ import { unlink } from 'node:fs/promises'
 
 export default class DefectsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDefectsTM')) {
+    if (await bouncer.with('DefectTMPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр дефектов ТМ!')
 
       return response.redirect().toPath('/')
@@ -80,7 +80,7 @@ export default class DefectsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDefect')) {
+    if (await bouncer.with('DefectTMPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -102,7 +102,7 @@ export default class DefectsController {
   }
 
   public async store({ request, response, auth, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDefect')) {
+    if (await bouncer.with('DefectTMPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -167,7 +167,7 @@ export default class DefectsController {
   }
 
   public async show({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDefectsTM')) {
+    if (await bouncer.with('DefectTMPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр дефектов ТМ!')
 
       return response.redirect().toPath('/')
@@ -204,7 +204,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.id)
 
     if (defect) {
-      if (await bouncer.denies('editDefect', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('update', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
         return response.redirect().toPath('/')
@@ -243,7 +243,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.id)
 
     if (defect) {
-      if (await bouncer.denies('editDefect', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('update', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
         return response.redirect().toPath('/')
@@ -283,7 +283,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.id)
 
     if (defect) {
-      if (await bouncer.denies('deleteDefect', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('delete', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
         return response.redirect().toPath('/')
@@ -314,7 +314,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.id)
 
     if (defect && defectImg) {
-      if (await bouncer.denies('editDefect', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('update', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление!')
 
         return response.redirect().toPath('/')
@@ -337,7 +337,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.id)
 
     if (defect) {
-      if (await bouncer.denies('editDefectDeadline', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
 
         return response.redirect().toPath('/')
@@ -363,7 +363,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.id)
 
     if (defect) {
-      if (await bouncer.denies('editDefectDeadline', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
 
         return response.redirect().toPath('/')
@@ -386,7 +386,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      if (await bouncer.denies('createCheckup', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('createCheckup', defect)) {
         session.flash(
           'dangerMessage',
           'У вас нет прав на добавление проверки или дефект уже закрыт!'
@@ -437,7 +437,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      if (await bouncer.denies('createCheckup', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('createCheckup', defect)) {
         session.flash(
           'dangerMessage',
           'У вас нет прав на добавление проверки или дефект уже закрыт!'
@@ -505,7 +505,7 @@ export default class DefectsController {
     const defect = await Defect.find(intermediateCheck?.id_defect)
 
     if (intermediateCheck && defect) {
-      if (await bouncer.denies('deleteCheckup', intermediateCheck, defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('deleteCheckup', intermediateCheck, defect)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
         return response.redirect().toPath('/')
@@ -531,7 +531,7 @@ export default class DefectsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      if (await bouncer.denies('createCloseDefect', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('close', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта или дефект уже закрыт')
 
         return response.redirect().toPath('/')
@@ -571,7 +571,7 @@ export default class DefectsController {
     const defect = await Defect.find(params.idDefect)
 
     if (defect) {
-      if (await bouncer.denies('createCloseDefect', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('close', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта или дефект уже закрыт!')
 
         return response.redirect().toPath('/')

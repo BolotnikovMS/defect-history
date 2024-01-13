@@ -1,17 +1,17 @@
 import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
 
-import ChangePasswordValidator from 'App/Validators/ChangePasswordValidator'
-import Department from 'App/Models/Department'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Department from 'App/Models/Department'
 import Permission from 'App/Models/Permission'
 import Role from 'App/Models/Role'
-import Roles from '../../Enums/Roles'
 import User from 'App/Models/User'
 import UsersPermission from 'App/Models/UsersPermission'
+import ChangePasswordValidator from 'App/Validators/ChangePasswordValidator'
+import Roles from '../../Enums/Roles'
 
 export default class UsersController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewUsers')) {
+    if (await bouncer.with('UserPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
@@ -81,7 +81,7 @@ export default class UsersController {
   }
 
   public async resetPassword({ view, response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('resetPassword')) {
+    if (await bouncer.with('UserPolicy').denies('resetPassword')) {
       session.flash('dangerMessage', 'У вас нет прав на сброс пароля пользователя!')
 
       return response.redirect().toPath('/')
@@ -105,7 +105,7 @@ export default class UsersController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('resetPassword')) {
+    if (await bouncer.with('UserPolicy').denies('resetPassword')) {
       session.flash('dangerMessage', 'У вас нет прав на сброс пароля пользователя!')
 
       return response.redirect().toPath('/')
@@ -133,7 +133,7 @@ export default class UsersController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('viewingUserPermissions')) {
+    if (await bouncer.with('PermissionPolicy').denies('viewPermissions')) {
       session.flash('dangerMessage', 'У вас нет доступа на просмотр прав пользователей!')
 
       return response.redirect().toPath('/')
@@ -170,7 +170,7 @@ export default class UsersController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('addingPermissionToUser')) {
+    if (await bouncer.with('PermissionPolicy').denies('addPermissionToUser')) {
       session.flash('dangerMessage', 'Вы не можете добавлять права пользователям!')
 
       return response.redirect().toPath('/')
@@ -210,7 +210,7 @@ export default class UsersController {
   }
 
   public async removeUserPermission({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('removeUserPermissions')) {
+    if (await bouncer.with('PermissionPolicy').denies('removeUserPermissions')) {
       session.flash('dangerMessage', 'У вас нет доступа на удаление прав пользователей!')
 
       return response.redirect().toPath('/')
@@ -235,7 +235,7 @@ export default class UsersController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('editUser')) {
+    if (await bouncer.with('UserPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нету прав на редактирование!')
 
       return response.redirect().toPath('/')
@@ -265,7 +265,7 @@ export default class UsersController {
   }
 
   public async update({ request, response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('editUser')) {
+    if (await bouncer.with('UserPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нету прав на редактирование!')
 
       return response.redirect().toPath('/')
@@ -304,7 +304,7 @@ export default class UsersController {
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('deleteUser')) {
+    if (await bouncer.with('UserPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление!')
 
       return response.redirect().toPath('/')

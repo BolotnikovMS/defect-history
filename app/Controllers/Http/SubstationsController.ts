@@ -6,7 +6,7 @@ import SubstationValidator from '../../Validators/SubstationValidator'
 
 export default class SubstationsController {
   public async index({ request, response, view, bouncer, session }: HttpContextContract) {
-    if (await bouncer.denies('viewSubstations')) {
+    if (await bouncer.with('SubstationPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав для просмотра!')
 
       return response.redirect().toPath('/')
@@ -34,7 +34,7 @@ export default class SubstationsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -54,7 +54,7 @@ export default class SubstationsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -144,7 +144,7 @@ export default class SubstationsController {
     }
 
     if (substation) {
-      if (await bouncer.denies('viewAttachment')) {
+      if (await bouncer.with('SubstationPolicy').denies('viewAttachment')) {
         session.flash('dangerMessage', 'У вас нет прав для просмотра!')
 
         return response.redirect().toPath('/')
@@ -165,7 +165,7 @@ export default class SubstationsController {
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('editSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -194,7 +194,7 @@ export default class SubstationsController {
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('editSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -222,7 +222,7 @@ export default class SubstationsController {
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('deleteSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

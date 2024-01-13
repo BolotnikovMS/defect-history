@@ -4,7 +4,7 @@ import DistrictValidator from 'App/Validators/DistrictValidator'
 
 export default class DistrictsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDistrict')) {
+    if (await bouncer.with('DistrictPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на для просмотра!')
 
       return response.redirect().toPath('/')
@@ -28,7 +28,7 @@ export default class DistrictsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDistrict')) {
+    if (await bouncer.with('DistrictPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -45,7 +45,7 @@ export default class DistrictsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDistrict')) {
+    if (await bouncer.with('DistrictPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -65,7 +65,7 @@ export default class DistrictsController {
   }
 
   public async show({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewSubstations')) {
+    if (await bouncer.with('SubstationPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав для просмотра!')
 
       return response.redirect().toPath('/')
@@ -94,7 +94,7 @@ export default class DistrictsController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('updateDistrict')) {
+    if (await bouncer.with('DistrictPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -120,7 +120,7 @@ export default class DistrictsController {
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('updateDistrict')) {
+    if (await bouncer.with('DistrictPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -142,7 +142,7 @@ export default class DistrictsController {
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('deleteDistrict')) {
+    if (await bouncer.with('DistrictPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

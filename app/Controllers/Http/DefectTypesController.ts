@@ -5,7 +5,7 @@ import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 
 export default class DefectTypesController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewTypesDefects')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
@@ -28,7 +28,7 @@ export default class DefectTypesController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -48,7 +48,7 @@ export default class DefectTypesController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -114,7 +114,7 @@ export default class DefectTypesController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('editTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
 
       return response.redirect().toPath('/')
@@ -145,7 +145,7 @@ export default class DefectTypesController {
   public async update({ request, response, params, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
 
-    if (await bouncer.denies('editTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
 
       return response.redirect().toPath('/')
@@ -179,7 +179,7 @@ export default class DefectTypesController {
   public async destroy({ params, response, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
 
-    if (await bouncer.denies('deleteTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().back()

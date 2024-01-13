@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="control control-items_sb">
     <div class="control__btns">
-      @can('createDefect')
+      @can('DefectTMPolicy.create')
         @buttons.base({ href: 'defects.create', className: 'btn-color_green' })
           @!icons.add({ optionalClasses: 'icon-size_15' })
           Добавить
@@ -12,17 +12,6 @@
       @endcan
     </div>
     <div class="filters filters-row">
-      {{--  @dropdown.dropdown({
-        classDropdownMenu: 'dropdown__menu-menu_bottom_right',
-        dropdownData: [
-          { name: 'Все', path: 'defects.index' },
-          ...typesDefectsToSort
-        ],
-      })
-        <img src="{{ asset('assets/images/icons/sort.svg') }}" class="dropdown-icon dropdown-icon-size_15">
-        {{ typeDefect?.type_defect ? typeDefect.type_defect : 'Все' }}
-        <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
-      @end  --}}
       <form action="{{route('defects.index')}}" method="GET" class="form form-row">
         <div class="form__content form__content-filters">
           @!inputs.select({
@@ -145,13 +134,13 @@
                   @end
                 @end
                 @card.cardGroup()
-                  @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect) || !await bouncer.denies('editDefectDeadline', defect))
+                  @if(!await bouncer.with('DefectTMPolicy').denies('update', defect) || !await bouncer.with('DefectTMPolicy').denies('delete', defect) || !await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
-                        { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                        { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
+                        { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
+                        { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                       ],
                     })
                       <img src="{{ asset('assets/images/icons/menu.svg') }}">

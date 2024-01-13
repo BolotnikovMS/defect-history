@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('createPermissions')
+  @can('PermissionPolicy.create')
     <div class="control">
       @buttons.add({ href: 'permissions.create' })
           Добавить

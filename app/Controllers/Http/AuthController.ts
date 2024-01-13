@@ -1,13 +1,13 @@
-import AuthValidator from '../../Validators/AuthValidator'
-import Department from '../../Models/Department'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema } from '@ioc:Adonis/Core/Validator'
 import Role from 'App/Models/Role'
 import User from 'App/Models/User'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import Department from '../../Models/Department'
+import AuthValidator from '../../Validators/AuthValidator'
 
 export default class AuthController {
   public async registerShow({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createUser')) {
+    if (await bouncer.with('UserPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
@@ -31,7 +31,7 @@ export default class AuthController {
   }
 
   public async register({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createUser')) {
+    if (await bouncer.with('UserPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление нового пользователя!')
 
       return response.redirect().toPath('/')

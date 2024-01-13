@@ -5,7 +5,7 @@
     @if(auth.isLoggedIn)
       <div class="control">
         @if(!defectOs.result && !defectOs.elimination_date)
-          @can('closeDefectOS', defectOs)
+          @can('DefectOSPolicy.close', defectOs)
             @buttons.base({
               href: 'defects-os.close.create',
               params: {id: defectOs.id},
@@ -16,7 +16,7 @@
             @end
           @endcan
         @endif
-        @can('editDefectOS', defectOs)
+        @can('DefectOSPolicy.update', defectOs)
           @buttons.base({
             href: 'defects-os.edit',
             params: {id: defectOs.id},

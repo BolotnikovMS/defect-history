@@ -10,7 +10,7 @@
     })
       Дефекты
     @end
-    @can('creatingAttachment')
+    @can('SubstationPolicy.creatingAttachment')
       @buttons.add({ href: 'accession-substations.create', params: { idSubstation: substation.id } })
         Добавить
       @end
@@ -28,12 +28,12 @@
                 <img src="{{ asset('assets/images/icons/star.svg') }}" alt="Важный объект" title="Важный объект">
               @end
             </div>
-            @if(!await bouncer.denies('editAttachment') || !await bouncer.denies('deleteAttachment'))
+            @if(!await bouncer.with('SubstationPolicy').denies('editAttachment') || !await bouncer.with('SubstationPolicy').denies('deleteAttachment'))
               @dropdown.dropdown({
                 classBtnDropdown: 'btn-dropdown-icon',
                 dropdownData: [
-                  { name: 'Редактировать', access: 'editAttachment', path: 'accession-substations.edit', params: { id: accession.id }, icon: 'edit.svg' },
-                  { name: 'Удалить', access: 'deleteAttachment', path: 'accession-substations.destroy', params: { id: accession.id }, icon: 'delete.svg' },
+                  { name: 'Редактировать', access: 'SubstationPolicy.editAttachment', path: 'accession-substations.edit', params: { id: accession.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'SubstationPolicy.deleteAttachment', path: 'accession-substations.destroy', params: { id: accession.id }, icon: 'delete.svg' },
                 ],
               })
                 <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">

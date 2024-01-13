@@ -4,7 +4,7 @@ import PermissionValidator from 'App/Validators/PermissionValidator'
 
 export default class PermissionsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewPermissions')) {
+    if (await bouncer.with('PermissionPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр страницы!')
 
       return response.redirect().toPath('/')
@@ -23,7 +23,7 @@ export default class PermissionsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createPermissions')) {
+    if (await bouncer.with('PermissionPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -40,7 +40,7 @@ export default class PermissionsController {
   }
 
   public async store({ request, response, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createPermissions')) {
+    if (await bouncer.with('PermissionPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')

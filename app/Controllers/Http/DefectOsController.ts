@@ -12,7 +12,7 @@ import { DateTime } from 'luxon'
 
 export default class DefectOsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDefectsOS')) {
+    if (await bouncer.with('DefectOSPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр дефектов ОС!')
 
       return response.redirect().toPath('/')
@@ -65,7 +65,7 @@ export default class DefectOsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDefect')) {
+    if (await bouncer.with('DefectTMPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toRoute('DefectOsController.index')
@@ -90,7 +90,7 @@ export default class DefectOsController {
   }
 
   public async store({ request, response, auth, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDefect')) {
+    if (await bouncer.with('DefectTMPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toRoute('DefectOsController.index')
@@ -128,7 +128,7 @@ export default class DefectOsController {
   }
 
   public async show({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDefectsOS')) {
+    if (await bouncer.with('DefectOSPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр дефекта ОС!')
 
       return response.redirect().toRoute('DefectOsController.index')
@@ -156,7 +156,7 @@ export default class DefectOsController {
     const defectOs = await DefectOs.find(params.id)
 
     if (defectOs) {
-      if (await bouncer.denies('editDefectOS', defectOs)) {
+      if (await bouncer.with('DefectOSPolicy').denies('update', defectOs)) {
         session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
         return response.redirect().toRoute('DefectOsController.index')
@@ -192,7 +192,7 @@ export default class DefectOsController {
     const defectOs = await DefectOs.find(params.id)
 
     if (defectOs) {
-      if (await bouncer.denies('editDefectOS', defectOs)) {
+      if (await bouncer.with('DefectOSPolicy').denies('update', defectOs)) {
         session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
         return response.redirect().toRoute('DefectOsController.index')
@@ -236,7 +236,7 @@ export default class DefectOsController {
     const defectOs = await DefectOs.find(params.id)
 
     if (defectOs) {
-      if (await bouncer.denies('deleteDefectOS', defectOs)) {
+      if (await bouncer.with('DefectOSPolicy').denies('delete', defectOs)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
         return response.redirect().toRoute('DefectOsController.index')
@@ -264,7 +264,7 @@ export default class DefectOsController {
     const defectOs = await DefectOs.find(id)
 
     if (defectOs) {
-      if (await bouncer.denies('closeDefectOS', defectOs)) {
+      if (await bouncer.with('DefectOSPolicy').denies('close', defectOs)) {
         session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта или дефект уже закрыт')
 
         return response.redirect().toRoute('DefectOsController.index')
@@ -299,7 +299,7 @@ export default class DefectOsController {
     const defectOs = await DefectOs.find(id)
 
     if (defectOs) {
-      if (await bouncer.denies('closeDefectOS', defectOs)) {
+      if (await bouncer.with('DefectOSPolicy').denies('close', defectOs)) {
         session.flash('dangerMessage', 'У вас нет прав на закрытие дефекта или дефект уже закрыт!')
 
         return response.redirect().toRoute('DefectOsController.index')

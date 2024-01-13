@@ -2,9 +2,8 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('createTypeDefect')
+  @can('TypeDefectPolicy.create')
     <div class="control">
-      {{-- <button class="types-defects__btn types-defects__btn-open btn-open">Добавить</button> --}}
       @buttons.add({ href: 'types-defects.create' })
         Добавить
       @end
@@ -31,12 +30,12 @@
                   })
                 @end
                 @card.cardGroup()
-                  @if(!await bouncer.denies('editTypeDefect') || !await bouncer.denies('deleteTypeDefect'))
+                  @if(!await bouncer.with('TypeDefectPolicy').denies('update') || !await bouncer.with('TypeDefectPolicy').denies('delete'))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Редактировать', access: 'editTypeDefect', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'deleteTypeDefect', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
+                        { name: 'Редактировать', access: 'TypeDefectPolicy.update', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit.svg' },
+                        { name: 'Удалить', access: 'TypeDefectPolicy.delete', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
                       ],
                     })
                       <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">

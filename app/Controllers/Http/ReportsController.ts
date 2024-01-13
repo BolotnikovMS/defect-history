@@ -1,13 +1,13 @@
 import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Substation from 'App/Models/Substation'
 
 export default class ReportsController {
   public async showSubstationDefects({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewReportSubstationDefects')) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
       return response.redirect().toPath('/')
@@ -31,7 +31,7 @@ export default class ReportsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('viewReportSubstationDefects')) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
       return response.redirect().toPath('/')
@@ -100,7 +100,7 @@ export default class ReportsController {
   }
 
   public async showDistrictDefects({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewReportDistrictDefects')) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
       return response.redirect().toPath('/')
@@ -124,7 +124,7 @@ export default class ReportsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('viewReportDistrictDefects')) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
       return response.redirect().toPath('/')
@@ -189,7 +189,7 @@ export default class ReportsController {
   }
 
   public async showAllDefects({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewReportAllDefects')) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
       return response.redirect().toPath('/')
@@ -207,7 +207,7 @@ export default class ReportsController {
   }
 
   public async getAllDefects({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewReportAllDefects')) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
       return response.redirect().toPath('/')

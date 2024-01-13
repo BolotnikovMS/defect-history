@@ -3,7 +3,7 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
     <div class="control control-items_sb">
-      @can('viewAttachment')
+      @can('SubstationPolicy.viewAttachment')
         <div class="control__btns">
           @buttons.base({
             href: 'substations.show.attachments',
@@ -129,13 +129,13 @@
                     @end
                   @end
                   @card.cardGroup()
-                    @if(!await bouncer.denies('editDefect', defect) || !await bouncer.denies('deleteDefect', defect) || !await bouncer.denies('editDefectDeadline', defect))
+                    @if(!await bouncer.with('DefectTMPolicy').denies('update', defect) || !await bouncer.with('DefectTMPolicy').denies('delete', defect) || !await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect))
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
-                          { name: 'Увеличить срок', access: 'editDefectDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
-                          { name: 'Редактировать', access: 'editDefect', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'deleteDefect', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                          { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
+                          { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
+                          { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
                         <img src="{{ asset('assets/images/icons/menu.svg') }}">
@@ -153,12 +153,12 @@
                     @end
                   @end
                   @card.cardGroup()
-                    @if(!await bouncer.denies('editDefectOS', defect) || !await bouncer.denies('deleteDefectOS', defect))
+                    @if(!await bouncer.with('DefectOSPolicy').denies('update', defect) || !await bouncer.with('DefectOSPolicy').denies('delete', defect))
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
-                          { name: 'Редактировать', access: 'editDefectOS', data: defect, path: 'defects-os.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'deleteDefectOS', data: defect, path: 'defects-os.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                          { name: 'Редактировать', access: 'DefectOSPolicy.update', data: defect, path: 'defects-os.edit', params: { id: defect.id }, icon: 'edit.svg' },
+                          { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defect, path: 'defects-os.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
                         <img src="{{ asset('assets/images/icons/menu.svg') }}">

@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('createDistributionGroup')
+  @can('DistributionGroupPolicy.create')
     <div class="control">
       @buttons.add({ href: 'distribution.create' })
         Добавить
@@ -27,12 +27,12 @@
                 <img src="{{ asset('assets/images/icons/link.svg') }}">
               </a>
             </div>
-            @if(!await bouncer.denies('updateDistributionGroup') || !await bouncer.denies('deleteDistributionGroup'))
+            @if(!await bouncer.with('DistributionGroupPolicy').denies('update') || !await bouncer.with('DistributionGroupPolicy').denies('delete'))
               @dropdown.dropdown({
                 classBtnDropdown: 'btn-dropdown-icon',
                 dropdownData: [
-                  { name: 'Редактировать', access: 'updateDistributionGroup', data: distributionGroup, path: 'distribution.edit', params: { id: distributionGroup.id }, icon: 'edit.svg' },
-                  { name: 'Удалить', access: 'deleteDistributionGroup', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
+                  { name: 'Редактировать', access: 'DistributionGroupPolicy.update', data: distributionGroup, path: 'distribution.edit', params: { id: distributionGroup.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'DistributionGroupPolicy.delete', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
                 ],
               })
                 <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">

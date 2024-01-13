@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('addUserInGroup')
+  @can('DistributionGroupPolicy.addUserInGroup')
     <div class="control">
       @forms.post({
         action: route('distribution.add-user', {idGroup: group.id}),
@@ -43,7 +43,7 @@
             <div class="list__content">
               {{ user.fullName }}
             </div>
-            @can('removeUserFromGroup')
+            @can('DistributionGroupPolicy.removeUserFromGroup')
               <div class="list__control">
                 <a href="{{ route('distribution.remove-user', {idGroup: group.id, idUser: user.id}) }}">
                   <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
