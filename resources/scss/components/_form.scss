@@ -29,13 +29,13 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    gap: 2px;
     text-align: center;
   }
 
   &__label {
     display: flex;
     flex-direction: column;
-    column-gap: 7px;
     font-size: 18px;
 
     &-row {
