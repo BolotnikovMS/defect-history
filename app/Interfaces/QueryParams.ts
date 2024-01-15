@@ -6,4 +6,5 @@ export interface IQueryParams {
   defectsClass: string
   substation: number
   district: number
+  sort: string
 }

@@ -89,12 +89,35 @@ export default class SubstationsController {
     const substation = await Substation.find(params.id)
 
     if (substation) {
-      const { status, defectsClass = 'defects' } = request.qs() as IQueryParams
+      const { status, defectsClass = 'defects', sort = 'default' } = request.qs() as IQueryParams
 
       if (defectsClass === 'defects') {
         await substation.load('defects', (query) => {
           query
-            .orderBy('elimination_date', 'asc')
+            .if(sort === 'elimination_date_desc', (query) =>
+              query.orderBy('elimination_date', 'desc')
+            )
+            .if(sort === 'elimination_date_asc', (query) =>
+              query.orderBy('elimination_date', 'asc')
+            )
+            .if(sort === 'term_elimination_desc', (query) =>
+              query.orderBy('term_elimination', 'desc')
+            )
+            .if(sort === 'term_elimination_asc', (query) =>
+              query.orderBy('term_elimination', 'asc')
+            )
+            .if(sort === 'default', (query) =>
+              query.orderBy([
+                {
+                  column: 'elimination_date',
+                  order: 'asc',
+                },
+                {
+                  column: 'created_at',
+                  order: 'desc',
+                },
+              ])
+            )
             .if(status === 'open', (query) => query.whereNull('result'))
             .if(status === 'close', (query) => query.whereNotNull('result'))
             .preload('accession')
@@ -119,6 +142,7 @@ export default class SubstationsController {
         filters: {
           status,
           defectsClass,
+          sort,
         },
       })
     } else {

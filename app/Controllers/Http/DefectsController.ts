@@ -29,7 +29,7 @@ export default class DefectsController {
 
     const page = request.input('page', 1)
     const limit = 15
-    const { status, typeDefect } = request.qs() as IQueryParams
+    const { status, typeDefect, sort = 'default' } = request.qs() as IQueryParams
     const typesDefects = await DefectType.query()
     const typesDefectsToSort = typesDefects.map((type) => ({
       name: type.type_defect,
@@ -42,16 +42,22 @@ export default class DefectsController {
       .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
         query.where('id_type_defect', '=', typeDefect!)
       )
-      .orderBy([
-        {
-          column: 'elimination_date',
-          order: 'asc',
-        },
-        {
-          column: 'created_at',
-          order: 'desc',
-        },
-      ])
+      .if(sort === 'elimination_date_desc', (query) => query.orderBy('elimination_date', 'desc'))
+      .if(sort === 'elimination_date_asc', (query) => query.orderBy('elimination_date', 'asc'))
+      .if(sort === 'term_elimination_desc', (query) => query.orderBy('term_elimination', 'desc'))
+      .if(sort === 'term_elimination_asc', (query) => query.orderBy('term_elimination', 'asc'))
+      .if(sort === 'default', (query) =>
+        query.orderBy([
+          {
+            column: 'elimination_date',
+            order: 'asc',
+          },
+          {
+            column: 'created_at',
+            order: 'desc',
+          },
+        ])
+      )
       .preload('defect_type')
       .preload('substation')
       .preload('accession')
@@ -74,6 +80,7 @@ export default class DefectsController {
       filters: {
         status,
         typeDefect,
+        sort,
       },
       activeMenuLink: 'defects.index',
     })
