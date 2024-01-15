@@ -32,7 +32,7 @@
     gap: 5px;
 
     &-cg_15 {
-      column-gap: 15px;
+      gap: 15px;
     }
   }
 
@@ -41,7 +41,25 @@
     align-items: center;
     justify-content: space-between;
     column-gap: 15px;
+
+    &-center {
+      justify-content: center;
+    }
   }
+
+  // &__badge {
+  //   padding: 4px 8px;
+  //   color: #fff;
+  //   border-radius: 10px;
+
+  //   &-bgc_lb {
+  //     background-color: #3b8de2;
+  //   }
+
+  //   &-bgc_org {
+  //     background-color: #f9a82e;
+  //   }
+  // }
 
   &__text {
     font-size: clamp(15px, 2.3vw, 20px);
@@ -52,6 +70,12 @@
 
     &-red {
       color: red;
+    }
+
+    &-mt_8 {
+      & + * {
+        margin-top: 8px;
+      }
     }
 
     &-mt_20 {
@@ -95,13 +119,35 @@
     column-gap: 20px;
   }
 
-  @media (max-width: 1141px) {
-    &__body  &__group {
-      flex-direction: column;
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+
+    &-center {
+      align-items: center;
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 6px 9px;
+  &__colum {
+    display: grid;
+    grid-template-columns: minmax(200px, 400px) minmax(200px, 400px) minmax(200px, 400px);
+    grid-area: 'colum-1 colum-2 colum-3';
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+
+    colum-1 {
+      grid-area: colum-1;
+    }
+
+    colum-2 {
+      grid-area: colum-2;
+    }
+
+    colum-3 {
+      grid-area: colum-3;
+    }
   }
 }

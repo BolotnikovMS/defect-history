@@ -16,35 +16,44 @@
       </nav> --}}
       <nav class="header__nav">
         <ul class="nav-list">
-          @if(!await bouncer.denies('viewDefectOS'))
+          <li  class="nav-list__item">
+            <a href="{{ route('dashboard.index') }}"
+              class="{{ 'dashboard.index' == activeMenuLink ? 'active' : '' }}">Статистика</a>
+          </li>
+          @if(!await bouncer.with('DefectOSPolicy').denies('view') && !await bouncer.with('DefectTMPolicy').denies('view'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Дефекты ТМ', path: 'defects.index' },
-                { name: 'Дефекты ОС', access: 'viewDefectOS', path: 'defects-os.index' },
+                { name: 'Дефекты ТМ', access: 'DefectTMPolicy.view', path: 'defects.index' },
+                { name: 'Дефекты ОС', access: 'DefectOSPolicy.view', path: 'defects-os.index' },
               ],
             })
               Дефекты
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
-          @else
+          @elseif(!await bouncer.with('DefectTMPolicy').denies('view'))
             <li  class="nav-list__item">
               <a href="{{ route('defects.index') }}"
                 class="{{ 'defects.index' == activeMenuLink ? 'active' : '' }}">Дефекты ТМ</a>
             </li>
+          @elseif(!await bouncer.with('DefectOSPolicy').denies('view'))
+            <li  class="nav-list__item">
+              <a href="{{ route('defects-os.index') }}"
+                class="{{ 'defects-os.index' == activeMenuLink ? 'active' : '' }}">Дефекты ОС</a>
+          </li>
           @end
-          @can('viewTypesDefects')
+          @can('TypeDefectPolicy.view')
             <li  class="nav-list__item">
               <a href="{{ route('types-defects.index') }}"
                 class="{{ 'types-defects.index' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
             </li>
           @endcan
-          @if(!await bouncer.denies('viewDistrict') || !await bouncer.denies('viewSubstations'))
+          @if(!await bouncer.with('DistrictPolicy').denies('view') || !await bouncer.with('SubstationPolicy').denies('view'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'РЭС и ГП', access: 'viewDistrict', path: 'districts.index' },
-                { name: 'Список ПС', access: 'viewSubstations', path: 'substations.index' },
+                { name: 'РЭС и ГП', access: 'DistrictPolicy.view', path: 'districts.index' },
+                { name: 'Список ПС', access: 'SubstationPolicy.view', path: 'substations.index' },
               ],
             })
               РЭС и ГП
@@ -52,27 +61,27 @@
             @end
           @endif
 
-          @if(!await bouncer.denies('viewDepartment') || !await bouncer.denies('viewUsers') || !await bouncer.denies('viewPermissions') || !await bouncer.denies('viewDistributionGroup'))
+          @if(!await bouncer.with('DepartmentPolicy').denies('view') || !await bouncer.with('UserPolicy').denies('view') || !await bouncer.with('PermissionPolicy').denies('view') || !await bouncer.with('DistributionGroupPolicy').denies('view'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Отделы', access: 'viewDepartment', path: 'departments.index' },
-                { name: 'Пользователи', access: 'viewUsers', path: 'users.index' },
-                { name: 'Права', access: 'viewPermissions', path: 'permissions.index' },
-                { name: 'Группы рассылок', access: 'viewDistributionGroup', path: 'distribution.index' },
+                { name: 'Отделы', access: 'DepartmentPolicy.view', path: 'departments.index' },
+                { name: 'Пользователи', access: 'UserPolicy.view', path: 'users.index' },
+                { name: 'Права', access: 'PermissionPolicy.view', path: 'permissions.index' },
+                { name: 'Группы рассылок', access: 'DistributionGroupPolicy.view', path: 'distribution.index' },
               ],
             })
               Пользователи
               <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
             @end
           @endif
-          @if(!await bouncer.denies('viewReportSubstationDefects') || !await bouncer.denies('viewReportDistrictDefects') || !await bouncer.denies('viewReportAllDefects'))
+          @if(!await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects') || !await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects') || !await bouncer.with('ReportPolicy').denies('viewReportAllDefects'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Список дефектов ПС', access: 'viewReportSubstationDefects', path: 'reports.show.substation.defects' },
-                { name: 'Список дефектов РЭС или ГП', access: 'viewReportDistrictDefects', path: 'reports.show.district.defects' },
-                { name: 'Список дефектов по всем ПС', access: 'viewReportAllDefects', path: 'reports.show.all.defects' },
+                { name: 'Список дефектов ТМ ПС', access: 'ReportPolicy.viewReportSubstationDefects', path: 'reports.show.substation.defects' },
+                { name: 'Список дефектов ТМ РЭС или ГП', access: 'ReportPolicy.viewReportDistrictDefects', path: 'reports.show.district.defects' },
+                { name: 'Список дефектов ТМ по всем ПС', access: 'ReportPolicy.viewReportAllDefects', path: 'reports.show.all.defects' },
               ],
             })
               Отчеты
@@ -92,7 +101,7 @@
             dropdownLogout: true,
           })
             @!icons.user({ optionalClasses: 'icon-size_20' })
-            {{ auth.user.surname }} {{ auth.user.name[0] }}. {{ auth.user.patronymic[0] }}.
+            {{ auth.user.shortUserName }}
             <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
           @end
         @else

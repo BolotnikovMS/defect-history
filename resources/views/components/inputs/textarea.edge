@@ -4,22 +4,22 @@
 @set('classError', errors ? 'form__input-invalid' : '')
 
 <div class="form__group">
-  <label class="form__label">
-    @if(label)
+  @if(label)
+    <label class="form__label" for="{{ name }}">
       <span class="label__text {{ labelPositionText ?? '' }}">
         {{ label }}
       </span>
-    @endif
-
-    <textarea
-      name="{{ name }}"
-      class="form__input form__textarea {{ classError }}"
-      cols="{{ cols ?? 70 }}"
-      rows="{{ rows ?? 4 }}"
-      {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
-      {{ required ? 'required' : '' }}
-      >{{ value }}</textarea>
-  </label>
+    </label>
+  @endif
+  <textarea
+    name="{{ name }}"
+    id="{{ name }}"
+    class="form__input form__textarea {{ classError }}"
+    cols="{{ cols ?? 70 }}"
+    rows="{{ rows ?? 4 }}"
+    {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
+    {{ required ? 'required' : '' }}
+  >{{ value }}</textarea>
 
   @if(Array.isArray(errors) && errors.length)
     <span class="error-text  form__error">

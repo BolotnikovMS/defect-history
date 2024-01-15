@@ -1,11 +1,12 @@
-import District from 'App/Models/District'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
+import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
 
 export default class SubstationsController {
   public async index({ request, response, view, bouncer, session }: HttpContextContract) {
-    if (await bouncer.denies('viewSubstations')) {
+    if (await bouncer.with('SubstationPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав для просмотра!')
 
       return response.redirect().toPath('/')
@@ -16,7 +17,7 @@ export default class SubstationsController {
     const substations = await Substation.query()
       .orderBy('name', 'asc')
       .preload('defects')
-      .preload('defectOs')
+      .preload('defectsOs')
       .paginate(page, limit)
 
     substations.baseUrl('/substations')
@@ -33,7 +34,7 @@ export default class SubstationsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -53,7 +54,7 @@ export default class SubstationsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -84,24 +85,65 @@ export default class SubstationsController {
     }
   }
 
-  public async show({ response, params, view, session }: HttpContextContract) {
+  public async show({ request, response, params, view, session }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
     if (substation) {
-      await substation.load('defects', (query) => {
-        query
-          .orderBy('elimination_date', 'asc')
-          .preload('accession')
-          .preload('defect_type')
-          .preload('work_planning')
-          .preload('intermediate_checks')
-          .preload('user')
-      })
-      await substation.load('accession')
+      const { status, defectsClass = 'defects', sort = 'default' } = request.qs() as IQueryParams
+
+      if (defectsClass === 'defects') {
+        await substation.load('defects', (query) => {
+          query
+            .if(sort === 'elimination_date_desc', (query) =>
+              query.orderBy('elimination_date', 'desc')
+            )
+            .if(sort === 'elimination_date_asc', (query) =>
+              query.orderBy('elimination_date', 'asc')
+            )
+            .if(sort === 'term_elimination_desc', (query) =>
+              query.orderBy('term_elimination', 'desc')
+            )
+            .if(sort === 'term_elimination_asc', (query) =>
+              query.orderBy('term_elimination', 'asc')
+            )
+            .if(sort === 'default', (query) =>
+              query.orderBy([
+                {
+                  column: 'elimination_date',
+                  order: 'asc',
+                },
+                {
+                  column: 'created_at',
+                  order: 'desc',
+                },
+              ])
+            )
+            .if(status === 'open', (query) => query.whereNull('result'))
+            .if(status === 'close', (query) => query.whereNotNull('result'))
+            .preload('accession')
+            .preload('defect_type')
+            .preload('work_planning')
+            .preload('intermediate_checks')
+            .preload('user')
+        })
+      } else {
+        await substation.load('defectsOs', (query) => {
+          query
+            .orderBy('elimination_date', 'asc')
+            .if(status === 'open', (query) => query.whereNull('result'))
+            .if(status === 'close', (query) => query.whereNotNull('result'))
+            .preload('user')
+        })
+      }
 
       return view.render('pages/substation/show', {
         title: `Дефекты ${substation.name}`,
         substation,
+        filters: {
+          status,
+          defectsClass,
+          sort,
+        },
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -126,7 +168,7 @@ export default class SubstationsController {
     }
 
     if (substation) {
-      if (await bouncer.denies('viewAttachment')) {
+      if (await bouncer.with('SubstationPolicy').denies('viewAttachment')) {
         session.flash('dangerMessage', 'У вас нет прав для просмотра!')
 
         return response.redirect().toPath('/')
@@ -147,7 +189,7 @@ export default class SubstationsController {
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('editSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -176,7 +218,7 @@ export default class SubstationsController {
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('editSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -204,7 +246,7 @@ export default class SubstationsController {
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
     const substation = await Substation.find(params.id)
 
-    if (await bouncer.denies('deleteSubstation')) {
+    if (await bouncer.with('SubstationPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

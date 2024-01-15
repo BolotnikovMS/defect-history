@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('createSubstation')
+  @can('SubstationPolicy.create')
     <div class="control">
       @buttons.add({ href: 'substations.create' })
         Добавить
@@ -31,12 +31,12 @@
               })
             @end
             @slot('menu')
-              @if(!await bouncer.denies('editSubstation') || !await bouncer.denies('deleteSubstation'))
+              @if(!await bouncer.with('SubstationPolicy').denies('update') || !await bouncer.with('SubstationPolicy').denies('delete'))
                   @dropdown.dropdown({
                     classBtnDropdown: 'btn-dropdown-icon',
                     dropdownData: [
-                      { name: 'Редактировать', access: 'editSubstation', data: substation, path: 'substations.edit', params: { id: substation.id }, icon: 'edit.svg' },
-                      { name: 'Удалить', access: 'deleteSubstation', data: substation, path: 'substations.destroy', params: { id: substation.id }, icon: 'delete.svg' },
+                      { name: 'Редактировать', access: 'SubstationPolicy.update', data: substation, path: 'substations.edit', params: { id: substation.id }, icon: 'edit.svg' },
+                      { name: 'Удалить', access: 'SubstationPolicy.delete', data: substation, path: 'substations.destroy', params: { id: substation.id }, icon: 'delete.svg' },
                     ],
                   })
                     <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">

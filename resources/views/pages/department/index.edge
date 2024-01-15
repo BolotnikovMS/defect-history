@@ -3,7 +3,7 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
   <div class="control">
-    @can('createDepartment')
+    @can('DepartmentPolicy.create')
       @buttons.add({ href: 'departments.create' })
         Добавить
       @end
@@ -33,12 +33,12 @@
                 {{ department.name }}
               </a>
             </div>
-            @if(!await bouncer.denies('updateDepartment') || !await bouncer.denies('deleteDepartment'))
+            @if(!await bouncer.with('DepartmentPolicy').denies('update') || !await bouncer.with('DepartmentPolicy').denies('delete'))
               @dropdown.dropdown({
                 classBtnDropdown: 'btn-dropdown-icon',
                 dropdownData: [
-                  { name: 'Редактировать', access: 'updateDepartment', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit.svg' },
-                  { name: 'Удалить', access: 'deleteDepartment', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
+                  { name: 'Редактировать', access: 'DepartmentPolicy.update', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit.svg' },
+                  { name: 'Удалить', access: 'DepartmentPolicy.delete', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
                 ],
               })
                 <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">

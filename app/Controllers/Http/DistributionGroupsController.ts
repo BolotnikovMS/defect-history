@@ -1,14 +1,15 @@
+import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
+
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { Departments } from 'App/Enums/Departments'
 import DistributionGroup from 'App/Models/DistributionGroup'
 import DistributionGroupsUser from 'App/Models/DistributionGroupsUser'
 import User from 'App/Models/User'
 import DistributionGroupValidator from 'App/Validators/DistributionGroupValidator'
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
-import { Departments } from 'App/Enums/Departments'
 
 export default class DistributionGroupsController {
   public async index({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр страницы!')
 
       return response.redirect().toPath('/')
@@ -26,7 +27,7 @@ export default class DistributionGroupsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -43,7 +44,7 @@ export default class DistributionGroupsController {
   }
 
   public async store({ request, response, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -57,7 +58,7 @@ export default class DistributionGroupsController {
   }
 
   public async show({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('showDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('show')) {
       session.flash('dangerMessage', 'У вас нет прав на просмотр группы!')
 
       return response.redirect().toPath('/')
@@ -97,7 +98,7 @@ export default class DistributionGroupsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    if (await bouncer.denies('addUserInGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('addUserInGroup')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление пользователя в группу!')
 
       return response.redirect().toPath('/')
@@ -128,7 +129,7 @@ export default class DistributionGroupsController {
   }
 
   public async removeUserFromGroup({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('removeUserFromGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('removeUserFromGroup')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление пользователя из группы!')
 
       return response.redirect().toPath('/')
@@ -154,7 +155,7 @@ export default class DistributionGroupsController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('updateDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -180,7 +181,7 @@ export default class DistributionGroupsController {
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('updateDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -197,7 +198,7 @@ export default class DistributionGroupsController {
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('deleteDistributionGroup')) {
+    if (await bouncer.with('DistributionGroupPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

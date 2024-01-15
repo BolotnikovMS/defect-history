@@ -104,6 +104,10 @@ export default class extends BaseSchema {
         },
         // Actions with defects
         {
+          access: 'viewDefectsTM',
+          description: 'Просмотр дефектов по ТМ',
+        },
+        {
           access: 'createDefect',
           description: 'Добавление нового дефекта',
         },
@@ -117,7 +121,7 @@ export default class extends BaseSchema {
         },
         {
           access: 'deleteDefect',
-          description: 'Удаление дефекта',
+          description: 'Удаление дефекта ТМ',
         },
         // Activities with defect checks and closures
         {
@@ -230,7 +234,7 @@ export default class extends BaseSchema {
         },
         // Defect OS
         {
-          access: 'viewDefectOS',
+          access: 'viewDefectsOS',
           description: 'Просмотр дефектов по ОС',
         },
         {

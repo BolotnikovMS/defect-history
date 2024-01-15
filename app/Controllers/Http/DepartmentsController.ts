@@ -1,10 +1,10 @@
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Department from 'App/Models/Department'
 import DepartmentValidator from 'App/Validators/DepartmentValidator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DepartmentsController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
@@ -24,7 +24,7 @@ export default class DepartmentsController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -41,7 +41,7 @@ export default class DepartmentsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -61,7 +61,7 @@ export default class DepartmentsController {
   }
 
   public async show({ response, params, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewingUsersForDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
@@ -83,7 +83,7 @@ export default class DepartmentsController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('updateDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -109,7 +109,7 @@ export default class DepartmentsController {
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('updateDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -131,7 +131,7 @@ export default class DepartmentsController {
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('deleteDepartment')) {
+    if (await bouncer.with('DepartmentPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

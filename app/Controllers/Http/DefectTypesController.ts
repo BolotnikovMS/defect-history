@@ -1,11 +1,11 @@
-import DefectType from '../../Models/DefectType'
-import DistributionGroup from 'App/Models/DistributionGroup'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import DistributionGroup from 'App/Models/DistributionGroup'
+import DefectType from '../../Models/DefectType'
 import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 
 export default class DefectTypesController {
   public async index({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('viewTypesDefects')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
@@ -28,7 +28,7 @@ export default class DefectTypesController {
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -48,7 +48,7 @@ export default class DefectTypesController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('createTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
       return response.redirect().toPath('/')
@@ -73,42 +73,48 @@ export default class DefectTypesController {
     response.redirect().toRoute('types-defects.index')
   }
 
-  public async show({ response, params, view, session }: HttpContextContract) {
+  public async show({ params, response, session }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
-    const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
-    const typesDefectsToSort = typesDefects.map((type) => ({
-      name: type.type_defect,
-      path: 'types-defects.show',
-      params: { id: type.id },
-    }))
 
     if (typeDefect) {
-      await typeDefect.load('defects', (query) => {
-        query
-          .orderBy('elimination_date', 'asc')
-          .preload('substation')
-          .preload('accession')
-          .preload('intermediate_checks')
-          .preload('user')
-          .preload('work_planning')
-      })
-
-      return view.render('pages/defect/index', {
-        title: `Дефекты '${typeDefect.type_defect}'`,
-        typeDefect,
-        typesDefects,
-        typesDefectsToSort,
-        defects: typeDefect.defects,
-        activeTabLink: typeDefect.id,
-      })
+      return response.redirect().toRoute('defects.index', {}, { qs: { typeDefect: typeDefect.id } })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().back()
     }
+
+    // const typeDefect = await DefectType.find(params.id)
+    // const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
+
+    // if (typeDefect) {
+    //   await typeDefect.load('defects', (query) => {
+    //     query
+    //       .orderBy('elimination_date', 'asc')
+    //       .preload('substation')
+    //       .preload('accession')
+    //       .preload('intermediate_checks')
+    //       .preload('user')
+    //       .preload('work_planning')
+    //   })
+
+    //   console.log(typeDefect)
+
+    //   return view.render('pages/defect/index', {
+    //     title: `Дефекты '${typeDefect.type_defect}'`,
+    //     typesDefects,
+    //     defects: typeDefect.defects,
+    //     filters: {
+    //       typeDefect,
+    //     },
+    //   })
+    // } else {
+    //   session.flash('dangerMessage', 'Что-то пошло не так!')
+    //   response.redirect().back()
+    // }
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('editTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
 
       return response.redirect().toPath('/')
@@ -139,7 +145,7 @@ export default class DefectTypesController {
   public async update({ request, response, params, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
 
-    if (await bouncer.denies('editTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
 
       return response.redirect().toPath('/')
@@ -173,7 +179,7 @@ export default class DefectTypesController {
   public async destroy({ params, response, session, bouncer }: HttpContextContract) {
     const typeDefect = await DefectType.find(params.id)
 
-    if (await bouncer.denies('deleteTypeDefect')) {
+    if (await bouncer.with('TypeDefectPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().back()

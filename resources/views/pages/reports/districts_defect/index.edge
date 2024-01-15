@@ -3,10 +3,7 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
   <div class="control">
-    @forms.post({
-      action: route('reports.get.district.defects'),
-      className: 'form form-row',
-    })
+    <form action="{{route('reports.get.district.defects')}}" method="GET" class="form form-row">
       <div class="form__content">
         @!inputs.select({
           name: 'district',
@@ -26,13 +23,17 @@
           },
         })
         @!inputs.select({
-          name: 'filter',
+          name: 'status',
           labelPositionText: 'label__text_left',
           optionClass: 'form__input-width_300 searchable-list',
           dataOptionsConfig: {
             dataOptions: [{ id: 'allDefects', name: 'Все дефекты' }, { id: 'openDefects', name: 'Открытые дефекты' }, { id: 'closeDefects', name: 'Закрытые дефекты' }],
             dataNameOption: 'name'
           },
+          currentDataConfig: {
+            currentData: { id: 'allDefects', name: 'Все дефекты' },
+            currentDataId: filters?.status ? filters.status : '',
+          }
         })
       </div>
       <div class="form__btns form__btns-row">
@@ -41,10 +42,9 @@
           className: 'btn-color_green btn-small'
         })
           <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
-          Применить
         @end
       </div>
-    @end
+    </form>
     @if(district?.substations.length)
       <div class="control__btns">
         @buttons.base({
@@ -57,13 +57,11 @@
           className: 'btn-color_green btn-small btn-save-pdf'
         })
           <img src="{{ asset('assets/images/icons/pdf.svg') }}" class="icon icon-size_20" alt="PDF">
-          PDF
         @end
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-excel'
         })
           <img src="{{ asset('assets/images/icons/excel-file.svg') }}" class="icon icon-size_20" alt="excel">
-          Excel
         @end
       </div>
       @endif

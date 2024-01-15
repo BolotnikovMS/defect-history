@@ -10,7 +10,7 @@ export default class AccessionSubstationsController {
   }
 
   public async create({ response, view, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('creatingAttachment')) {
+    if (await bouncer.with('SubstationPolicy').denies('creatingAttachment')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -29,7 +29,7 @@ export default class AccessionSubstationsController {
   }
 
   public async store({ request, response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('creatingAttachment')) {
+    if (await bouncer.with('SubstationPolicy').denies('creatingAttachment')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
       return response.redirect().toPath('/')
@@ -58,7 +58,7 @@ export default class AccessionSubstationsController {
   public async show({}: HttpContextContract) {}
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('editAttachment')) {
+    if (await bouncer.with('SubstationPolicy').denies('editAttachment')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -85,7 +85,7 @@ export default class AccessionSubstationsController {
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('editAttachment')) {
+    if (await bouncer.with('SubstationPolicy').denies('editAttachment')) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
 
       return response.redirect().toPath('/')
@@ -111,7 +111,7 @@ export default class AccessionSubstationsController {
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
-    if (await bouncer.denies('deleteAttachment')) {
+    if (await bouncer.with('SubstationPolicy').denies('deleteAttachment')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
 
       return response.redirect().toPath('/')

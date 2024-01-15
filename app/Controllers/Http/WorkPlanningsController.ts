@@ -1,5 +1,5 @@
-import Defect from 'App/Models/Defect'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Defect from 'App/Models/Defect'
 import WorkPlanning from 'App/Models/WorkPlanning'
 import WorkPlanningValidator from 'App/Validators/WorkPlanningValidator'
 
@@ -11,7 +11,7 @@ export default class WorkPlanningsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      if (await bouncer.denies('addingWorkPlanningEntry', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('addingWorkPlanningEntry', defect)) {
         session.flash(
           'dangerMessage',
           'У вас нет прав на добавление новой записи или дефект уже закрыт!'
@@ -37,7 +37,7 @@ export default class WorkPlanningsController {
     const defect = await Defect.find(idDefect)
 
     if (defect) {
-      if (await bouncer.denies('addingWorkPlanningEntry', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('addingWorkPlanningEntry', defect)) {
         session.flash(
           'dangerMessage',
           'У вас нет прав на добавление новой записи или дефект уже закрыт!'
@@ -74,7 +74,9 @@ export default class WorkPlanningsController {
     const defect = await Defect.find(idDefect)
 
     if (plannedWork && idDefect && defect) {
-      if (await bouncer.denies('editingPlannedWorkEntry', plannedWork, defect)) {
+      if (
+        await bouncer.with('DefectTMPolicy').denies('editingPlannedWorkEntry', plannedWork, defect)
+      ) {
         session.flash('dangerMessage', 'У вас нет прав на внесение изменений или дефект закрыт!')
 
         return response.redirect().toPath('/')
@@ -103,7 +105,9 @@ export default class WorkPlanningsController {
     const defect = await Defect.find(idDefect)
 
     if (plannedWork && idDefect && defect) {
-      if (await bouncer.denies('editingPlannedWorkEntry', plannedWork, defect)) {
+      if (
+        await bouncer.with('DefectTMPolicy').denies('editingPlannedWorkEntry', plannedWork, defect)
+      ) {
         session.flash('dangerMessage', 'У вас нет прав на внесение изменений или дефект закрыт!')
 
         return response.redirect().toPath('/')
@@ -126,7 +130,7 @@ export default class WorkPlanningsController {
     const defect = await Defect.find(plannedWork?.id_defect)
 
     if (plannedWork && defect) {
-      if (await bouncer.denies('deletingPlannedWorkEntry', defect)) {
+      if (await bouncer.with('DefectTMPolicy').denies('deletingPlannedWorkEntry', defect)) {
         session.flash('dangerMessage', 'У вас нет прав на удаление записи или дефект закрыт!')
 
         return response.redirect().toPath('/')

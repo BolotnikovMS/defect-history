@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  @can('addingPermissionToUser')
+  @can('PermissionPolicy.addPermissionToUser')
     <div class="control">
       @forms.post({
         action: route('users.add.permission', {idUser}),
@@ -36,7 +36,7 @@
             <div class="list__content">
               {{ permission.description }}
             </div>
-            @can('removeUserPermissions')
+            @can('PermissionPolicy.removeUserPermissions')
               <div class="list__control">
                 <a href="{{ route('users.remove.permission', {idPermission: permission.id, idUser}) }}">
                   <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">

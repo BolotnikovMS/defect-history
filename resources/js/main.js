@@ -210,12 +210,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnSave === null || table === null) return null
 
-    btnSave.addEventListener('click', () => {
-      /* Create worksheet from HTML DOM TABLE */
-      const wb = XLSX.utils.table_to_book(table, { sheet: 'sheet-1' })
+    // btnSave.addEventListener('click', () => {
+    //   /* Create worksheet from HTML DOM TABLE */
+    //   const wb = XLSX.utils.table_to_book(table, { sheet: 'sheet-1' })
 
-      /* Export to file (start a download) */
-      XLSX.writeFile(wb, `${filename}.xls`)
+    //   /* Export to file (start a download) */
+    //   XLSX.writeFile(wb, `${filename}.xls`)
+    // })
+    btnSave.addEventListener('click', () => {
+      const table2excel = new Table2Excel()
+
+      table2excel.export(table, filename)
     })
   }
 

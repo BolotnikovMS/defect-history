@@ -5,25 +5,24 @@
 @set('optionClass', optionClass ? optionClass : '')
 
 <div class="form__group">
-  <label class="form__label">
-    @if(label)
+  @if(label)
+    <label class="form__label" for="{{ name }}">
       <span
         class="label__text {{ labelPositionText ?? '' }}"
       >
         {{ label }}
       </span>
-    @endif
-
-    <input
-      type="{{ type ?? 'text' }}"
-      name="{{ name }}"
-      class="form__input {{ optionClass }} {{ classError }}"
-      {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
-      {{{ value ? 'value="' +  value + '"' : '' }}}
-      {{{ required ? 'required' : '' }}}
-    />
-  </label>
-
+    </label>
+  @endif
+  <input
+    type="{{ type ?? 'text' }}"
+    name="{{ name }}"
+    id="{{ name }}"
+    class="form__input {{ optionClass }} {{ classError }}"
+    {{{ placeholderText ? 'placeholder="' +  placeholderText + '"' : '' }}}
+    {{{ value ? 'value="' +  value + '"' : '' }}}
+    {{{ required ? 'required' : '' }}}
+  />
   @if(Array.isArray(errors) && errors.length)
     <span class="error-text form__error">
       {{ errors.join(', ') }}

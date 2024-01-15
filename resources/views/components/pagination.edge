@@ -1,4 +1,6 @@
 @set('resultPageDottedRange', pageDottedRange(pagination, deltaValue))
+@set('qs', pagination.getUrl().split('?')[1])
+{{--  {{inspect(url.split('?')[1])}}  --}}
 
 @if(pagination.hasPages)
 <nav class="pagination">
@@ -9,21 +11,23 @@
     </a>
   </div>
   @endif
-
   <ul class="pagination__list">
     @each(page in resultPageDottedRange.pages)
-    @if(page === '...')
-    <li class="pagination__item inactive">
-      <a href="#" class="pagination__link disabled">...</a>
-    </li>
-    @else
-    <li class="pagination__item {{ pagination.currentPage == page ? 'active ' : '' }}">
-      <a {{!isCurrent(resultPageDottedRange.pages, page) ? 'href=?page=' + page : '' }}
-        class="pagination__link {{ pagination.currentPage == page ? 'disabled ' : '' }}">
-        {{ page }}
-      </a>
-    </li>
-    @endif
+      @if(page === '...')
+        <li class="pagination__item inactive">
+          <a href="#" class="pagination__link disabled">...</a>
+        </li>
+      @else
+        <li class="pagination__item {{ pagination.currentPage == page ? 'active ' : '' }}">
+          {{--  <a {{!isCurrent(resultPageDottedRange.pages, page) ? 'href=?page=' + page : '' }}
+            class="pagination__link {{ pagination.currentPage == page ? 'disabled ' : '' }}">
+            {{ page }}
+          </a>  --}}
+          <a {{!isCurrent(resultPageDottedRange.pages, page) ? `href=?${qs}&page=${page}` : '' }} class="pagination__link {{ pagination.currentPage == page ? 'disabled ' : '' }}">
+            {{ page }}
+          </a>
+        </li>
+      @endif
     @endeach
   </ul>
 
