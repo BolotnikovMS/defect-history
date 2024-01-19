@@ -249,6 +249,10 @@ export default class extends BaseSchema {
           access: 'editDefectOS',
           description: 'Редактирование дефекта по ОС',
         },
+        {
+          access: 'updateCheckup',
+          description: 'Редактирование промежуточных проверок дефектов ТМ',
+        },
       ])
     })
   }

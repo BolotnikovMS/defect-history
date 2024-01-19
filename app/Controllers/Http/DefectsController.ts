@@ -298,6 +298,7 @@ export default class DefectsController {
 
       await defect.load('defect_imgs')
       await defect.related('intermediate_checks').query().delete()
+      await defect.related('work_planning').query().delete()
       defect.defect_imgs?.forEach(async (img) => {
         try {
           await unlink(`./tmp${img.path_img}`)
@@ -389,7 +390,7 @@ export default class DefectsController {
   }
 
   public async checkupCreate({ response, params, view, session, bouncer }: HttpContextContract) {
-    const idDefect = await params.idDefect
+    const idDefect = await params.id
     const defect = await Defect.find(idDefect)
 
     if (defect) {
@@ -416,10 +417,11 @@ export default class DefectsController {
         title: 'Добавление проверки',
         checkup: true,
         options: {
-          defect: idDefect,
+          idData: idDefect,
           routes: {
             saveData: 'defects.checkup.store',
             back: 'defects.show',
+            backParams: idDefect,
           },
         },
         users,
@@ -440,7 +442,7 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    const idDefect = await params.idDefect
+    const idDefect = await params.id
     const defect = await Defect.find(idDefect)
 
     if (defect) {
@@ -495,7 +497,7 @@ export default class DefectsController {
         }
 
         session.flash('successMessage', `Проверка успешно добавлена!`)
-        response.redirect().toRoute('DefectsController.show', { id: params.idDefect })
+        response.redirect().toRoute('DefectsController.show', { id: idDefect })
       } else {
         session.flash('dangerMessage', 'Что-то пошло не так!')
         response.redirect().toRoute('DefectsController.index')
@@ -507,8 +509,80 @@ export default class DefectsController {
     }
   }
 
+  public async checkupEdit({ response, params, view, session, bouncer }: HttpContextContract) {
+    const check = await IntermediateCheck.find(params.id)
+
+    if (check) {
+      const defect = await Defect.find(check.id_defect)
+      if (await bouncer.with('DefectTMPolicy').denies('updateCheckup', defect!, check)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+        return response.redirect().toRoute('DefectsController.show', { id: check.id_defect })
+      }
+
+      const users = await User.query().where((queryUser) => {
+        queryUser.where('blocked', '!=', true)
+        queryUser.where('id', '!=', 1)
+        queryUser.where('id_department', '!=', Departments.withoutDepartment)
+      })
+      const departments = await Department.query().where((queryDepartment) => {
+        queryDepartment.where('id', '!=', Departments.admins)
+        queryDepartment.where('id', '!=', Departments.withoutDepartment)
+      })
+
+      return view.render('pages/defect/form_checkupandclose', {
+        title: 'Редактирование промежуточных результатов',
+        checkup: true,
+        options: {
+          idData: check.id,
+          routes: {
+            saveData: 'defects.checkup.update',
+            back: 'defects.show',
+            backParams: check.id_defect,
+          },
+        },
+        users,
+        departments,
+        check,
+      })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
+  public async checkupUpdate({ request, response, params, session, bouncer }: HttpContextContract) {
+    const check = await IntermediateCheck.find(params.id)
+
+    if (check) {
+      const defect = await Defect.find(check.id_defect)
+      if (await bouncer.with('DefectTMPolicy').denies('updateCheckup', defect!, check)) {
+        session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+        return response.redirect().toRoute('DefectsController.show', { id: check.id_defect })
+      }
+
+      const validatedData = await request.validate(IntermediateCheckValidator)
+      const updCheckupDefect = {
+        id_defect: +check.id_defect,
+        id_inspector: +validatedData.employee,
+        check_date: DateTime.now(),
+        description_results: validatedData.description_results,
+        transferred: validatedData.transferred ? validatedData.transferred : null,
+      }
+
+      await check.merge(updCheckupDefect).save()
+
+      session.flash('successMessage', `Данные успешно обновлены.`)
+      response.redirect().toRoute('DefectsController.show', { id: check.id_defect })
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
+  }
+
   public async checkupDestroy({ response, params, session, bouncer }: HttpContextContract) {
-    const intermediateCheck = await IntermediateCheck.find(params.idInterCheck)
+    const intermediateCheck = await IntermediateCheck.find(params.id)
     const defect = await Defect.find(intermediateCheck?.id_defect)
 
     if (intermediateCheck && defect) {
@@ -534,7 +608,7 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    const idDefect = await params.idDefect
+    const idDefect = await params.id
     const defect = await Defect.find(idDefect)
 
     if (defect) {
@@ -553,10 +627,11 @@ export default class DefectsController {
       return view.render('pages/defect/form_checkupandclose', {
         title: 'Закрытие дефекта',
         options: {
-          defect: idDefect,
+          idData: idDefect,
           routes: {
             saveData: 'defects.close.store',
             back: 'defects.show',
+            backParams: idDefect,
           },
         },
         users,
@@ -575,7 +650,8 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    const defect = await Defect.find(params.idDefect)
+    const idDefect = await params.id
+    const defect = await Defect.find(idDefect)
 
     if (defect) {
       if (await bouncer.with('DefectTMPolicy').denies('close', defect)) {
@@ -592,7 +668,7 @@ export default class DefectsController {
       await defect.save()
 
       session.flash('successMessage', `Дефект закрыт.`)
-      response.redirect().toRoute('defects.show', { id: params.idDefect })
+      response.redirect().toRoute('defects.show', { id: idDefect })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().toRoute('defects.index')

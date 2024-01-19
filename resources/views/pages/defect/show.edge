@@ -8,7 +8,7 @@
           @can('DefectTMPolicy.close', defect)
             @buttons.base({
               href: 'defects.close.create',
-              params: {idDefect: defect.id},
+              params: {id: defect.id},
               className: 'btn-color_green'
             })
               <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Добавить">
@@ -18,7 +18,7 @@
           @can('DefectTMPolicy.createCheckup', defect)
             @buttons.base({
               href: 'defects.checkup-create',
-              params: {idDefect: defect.id},
+              params: {id: defect.id},
               className: 'btn-color_orange'
             })
               <img src="{{ asset('assets/images/icons/magnifier.svg') }}" alt="Добавить проверку">
@@ -190,11 +190,12 @@
                   }}
                 </td>
                 <td>
-                  @if(!await bouncer.with('DefectTMPolicy').denies('deleteCheckup', inter, defect))
+                  @if(!await bouncer.with('DefectTMPolicy').denies('deleteCheckup', inter, defect) || !await bouncer.with('DefectTMPolicy').denies('updateCheckup', defect, inter))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Удалить', access: 'DefectTMPolicy.deleteCheckup', data: inter, extraData: defect, path: 'defects.checkup.destroy', params: { idInterCheck: inter.id }, icon: 'delete.svg'},
+                        { name: 'Редактировать', access: 'DefectTMPolicy.updateCheckup', data: defect, extraData: inter, path: 'defects.checkup.edit', params: { id: inter.id }, icon: 'edit.svg'},
+                        { name: 'Удалить', access: 'DefectTMPolicy.deleteCheckup', data: inter, extraData: defect, path: 'defects.checkup.destroy', params: { id: inter.id }, icon: 'delete.svg'},
                       ],
                     })
                       <img src="{{ asset('assets/images/icons/menu.svg') }}">
