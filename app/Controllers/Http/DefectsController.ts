@@ -31,11 +31,6 @@ export default class DefectsController {
     const limit = 15
     const { status, typeDefect, sort = 'default' } = request.qs() as IQueryParams
     const typesDefects = await DefectType.query()
-    const typesDefectsToSort = typesDefects.map((type) => ({
-      name: type.type_defect,
-      path: 'types-defects.show',
-      params: { id: type.id },
-    }))
     const defects = await Defect.query()
       .if(status === 'open', (query) => query.whereNull('result'))
       .if(status === 'close', (query) => query.whereNotNull('result'))
@@ -75,7 +70,6 @@ export default class DefectsController {
     return view.render('pages/defect/index', {
       title: 'Дефекты по ТМ',
       typesDefects,
-      typesDefectsToSort,
       defects,
       filters: {
         status,
