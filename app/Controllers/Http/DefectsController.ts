@@ -67,7 +67,7 @@ export default class DefectsController {
       .paginate(page, limit)
 
     defects.baseUrl('/defects')
-    defects.queryString({ status })
+    defects.queryString({ status, typeDefect, sort })
 
     // const test = defects.map((defect) => defect.serialize())
     // console.log('test: ', test)
