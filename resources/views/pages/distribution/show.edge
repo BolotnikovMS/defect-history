@@ -46,7 +46,7 @@
             @can('DistributionGroupPolicy.removeUserFromGroup')
               <div class="list__control">
                 <a href="{{ route('distribution.remove-user', {idGroup: group.id, idUser: user.id}) }}">
-                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                  @!icons.delete()
                 </a>
               </div>
             @end

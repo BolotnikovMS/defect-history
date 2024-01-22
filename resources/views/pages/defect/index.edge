@@ -5,8 +5,7 @@
   <div class="control control-items_sb">
     <div class="control__btns">
       @can('DefectTMPolicy.create')
-        @buttons.base({ href: 'defects.create', className: 'btn-color_green' })
-          @!icons.add({ optionalClasses: 'icon-size_15' })
+        @buttons.add({ href: 'defects.create' })
           Добавить
         @end
       @endcan
@@ -65,7 +64,9 @@
             type: 'submit',
             className: 'btn-color_green btn-small'
           })
-            <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+            @!icons.checkmark({
+              optionalClasses: 'icon-size_20'
+            })
           @end
         </div>
       </form>
@@ -162,7 +163,7 @@
                         { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @!icons.menu()
                     @end
                   @endif
                 @end

@@ -2,9 +2,8 @@
   type="{{ type ?? 'button' }}"
   class="btn btn-color_green btn-color_green-save {{ className ?? '' }}"
 >
-  <img
-    src="{{ asset('assets/images/icons/save.svg') }}"
-    alt="Сохранить"
-  >
+  @!icons.save({
+    optionalClasses: 'icon-size_20'
+  })
   {{{ await $slots.main() }}}
 </button>

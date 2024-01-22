@@ -38,7 +38,7 @@
                         { name: 'Удалить', access: 'TypeDefectPolicy.delete', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">
+                      @!icons.menu()
                     @end
                   @endif
                 @end

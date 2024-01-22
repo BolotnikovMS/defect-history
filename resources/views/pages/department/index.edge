@@ -41,7 +41,7 @@
                   { name: 'Удалить', access: 'DepartmentPolicy.delete', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                @!icons.menu()
               @end
             @endif
           </li>

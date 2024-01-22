@@ -34,7 +34,7 @@
                   { name: 'Удалить', access: 'DistrictPolicy.delete', data: district, path: 'districts.destroy', params: { id: district.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                @!icons.menu()
               @end
             @endif
           </li>

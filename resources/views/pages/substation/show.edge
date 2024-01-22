@@ -68,7 +68,9 @@
               type: 'submit',
               className: 'btn-color_green btn-small'
             })
-              <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+              @!icons.checkmark({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           </div>
         </form>
@@ -157,7 +159,7 @@
                           { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
-                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                        @!icons.menu()
                       @end
                     @endif
                   @end
@@ -180,7 +182,7 @@
                           { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defect, path: 'defects-os.destroy', params: { id: defect.id }, icon: 'delete.svg' },
                         ],
                       })
-                        <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                        @!icons.menu()
                       @end
                     @endif
                   @end

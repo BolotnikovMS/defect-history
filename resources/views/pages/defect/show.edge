@@ -11,7 +11,9 @@
               params: {id: defect.id},
               className: 'btn-color_green'
             })
-              <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Добавить">
+              @!icons.close({
+                optionalClasses: 'icon-size_20'
+              })
               Закрыть дефект
             @end
           @endcan
@@ -21,7 +23,9 @@
               params: {id: defect.id},
               className: 'btn-color_orange'
             })
-              <img src="{{ asset('assets/images/icons/magnifier.svg') }}" alt="Добавить проверку">
+              @!icons.magnifier({
+                optionalClasses: 'icon-size_20'
+              })
               Добавить проверку
             @end
           @endcan
@@ -43,7 +47,7 @@
               params: {id: defect.id},
               className: 'btn-color_blue btn-color_blue-transparent'
             })
-              <img src="{{ asset('assets/images/icons/edit-2.svg') }}" alt="Редактировать дефект">
+              @!icons.edit()
               Редактировать дефект
             @end
           @endcan
@@ -63,7 +67,7 @@
         @buttons.base({
           className: 'btn-color_green btn-save-pdf'
         })
-          <img src="{{ asset('assets/images/icons/pdf.svg') }}" alt="PDF">
+          @!icons.pdf()
           PDF
         @end
 

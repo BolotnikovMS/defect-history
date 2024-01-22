@@ -7,9 +7,6 @@
   }}"
   class="btn btn-color_green {{ className ?? '' }}"
 >
-  <img
-    src="{{ asset('assets/images/icons/add.svg') }}"
-    alt="Добавить"
-  >
+  @!icons.add({ optionalClasses: 'icon-size_20' })
   {{{ await $slots.main() }}}
 </a>

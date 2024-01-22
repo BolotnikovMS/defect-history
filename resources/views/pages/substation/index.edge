@@ -39,7 +39,7 @@
                       { name: 'Удалить', access: 'SubstationPolicy.delete', data: substation, path: 'substations.destroy', params: { id: substation.id }, icon: 'delete.svg' },
                     ],
                   })
-                    <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                    @!icons.menu()
                   @end
                 @endif
               @end

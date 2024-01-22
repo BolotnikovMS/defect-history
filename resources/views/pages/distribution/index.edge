@@ -35,7 +35,7 @@
                   { name: 'Удалить', access: 'DistributionGroupPolicy.delete', data: distributionGroup, path: 'distribution.destroy', params: { id: distributionGroup.id }, icon: 'delete.svg' },
                 ],
               })
-                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                @!icons.menu()
               @end
             @endif
           </li>
