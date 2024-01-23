@@ -29,7 +29,9 @@
               ],
             })
               Дефекты
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @elseif(!await bouncer.with('DefectTMPolicy').denies('view'))
             <li  class="nav-list__item">
@@ -57,7 +59,9 @@
               ],
             })
               РЭС и ГП
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @endif
 
@@ -72,7 +76,9 @@
               ],
             })
               Пользователи
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @endif
           @if(!await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects') || !await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects') || !await bouncer.with('ReportPolicy').denies('viewReportAllDefects'))
@@ -85,7 +91,9 @@
               ],
             })
               Отчеты
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @endif
         </ul>
@@ -102,11 +110,13 @@
           })
             @!icons.user({ optionalClasses: 'icon-size_20' })
             {{ auth.user.shortUserName }}
-            <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+            @!icons.arrowDown({
+              optionalClasses: 'icon-size_20'
+            })
           @end
         @else
           @buttons.base({ href: 'auth.login.show', className: 'btn-small btn-color_blue btn-signup' })
-            <img src="{{ asset('assets/images/icons/login-3.svg') }}" alt="Войти">
+            @!icons.login()
             Войти
           @end
         @endif
