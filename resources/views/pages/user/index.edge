@@ -23,7 +23,7 @@
             <th>Email</th>
             @if(!await bouncer.with('PermissionPolicy').denies('viewPermissions') || !await bouncer.with('UserPolicy').denies('resetPassword') || !await bouncer.with('UserPolicy').denies('update') || !await bouncer.with('UserPolicy').denies('delete'))
               <th class="table__th-control">
-                <img src="{{ asset('assets/images/icons/settings.svg') }}" alt="Действия">
+                @!icons.settings()
               </th>
             @endif
           </tr>
@@ -43,13 +43,13 @@
                   @dropdown.dropdown({
                     classBtnDropdown: 'btn-dropdown-icon',
                     dropdownData: [
-                      { name: 'Права', access: 'PermissionPolicy.viewPermissions', data: user, path: 'users.show.permissions', params: { idUser: user.id }, icon: 'user-permission.svg'},
-                      { name: 'Сброс пароля', access: 'UserPolicy.resetPassword', path: 'users.reset.password', params: { idUser: user.id }, icon: 'key-reset.svg'},
-                      { name: 'Редактировать', access: 'UserPolicy.update', data: user, path: 'users.edit', params: { id: user.id }, icon: 'edit.svg' },
-                      { name: 'Удалить', access: 'UserPolicy.delete', data: user, path: 'users.destroy', params: { id: user.id }, icon: 'delete.svg' },
+                      { name: 'Права', access: 'PermissionPolicy.viewPermissions', data: user, path: 'users.show.permissions', params: { idUser: user.id }, icon: 'userPermission'},
+                      { name: 'Сброс пароля', access: 'UserPolicy.resetPassword', path: 'users.reset.password', params: { idUser: user.id }, icon: 'keyReset'},
+                      { name: 'Редактировать', access: 'UserPolicy.update', data: user, path: 'users.edit', params: { id: user.id }, icon: 'edit' },
+                      { name: 'Удалить', access: 'UserPolicy.delete', data: user, path: 'users.destroy', params: { id: user.id }, icon: 'delete' },
                     ],
                   })
-                    <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                    @!icons.menu()
                   @end
                 </td>
               @endif

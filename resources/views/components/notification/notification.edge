@@ -6,7 +6,9 @@
         {{ flashMessages.get('successMessage') }}
       </div>
       <button class="notification__btn notification__btn-success notification__btn-close">
-        <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Close">
+        @!icons.close({
+          optionalClasses: 'icon-size_15'
+        })
       </button>
     </div>
   @elseif(flashMessages.has('dangerMessage'))
@@ -15,7 +17,9 @@
         {{ flashMessages.get('dangerMessage') }}
       </div>
       <button class="notification__btn notification__btn-danger notification__btn-close">
-        <img src="{{ asset('assets/images/icons/close.svg') }}" alt="Close">
+        @!icons.close({
+          optionalClasses: 'icon-size_15'
+        })
       </button>
     </div>
   @endif

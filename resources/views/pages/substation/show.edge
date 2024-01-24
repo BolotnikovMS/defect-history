@@ -154,9 +154,9 @@
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
-                          { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
-                          { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                          { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendarOne' },
+                          { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit' },
+                          { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete' },
                         ],
                       })
                         @!icons.menu()
@@ -178,8 +178,8 @@
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
-                          { name: 'Редактировать', access: 'DefectOSPolicy.update', data: defect, path: 'defects-os.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                          { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defect, path: 'defects-os.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                          { name: 'Редактировать', access: 'DefectOSPolicy.update', data: defect, path: 'defects-os.edit', params: { id: defect.id }, icon: 'edit' },
+                          { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defect, path: 'defects-os.destroy', params: { id: defect.id }, icon: 'delete' },
                         ],
                       })
                         @!icons.menu()

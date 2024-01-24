@@ -152,11 +152,11 @@
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Редактировать', access: 'DefectTMPolicy.editingPlannedWorkEntry', data: work, extraData: defect, path: 'work-planning.edit', params: { idDefect: defect.id, id: work.id }, icon: 'edit.svg'},
-                        { name: 'Удалить', access: 'DefectTMPolicy.deletingPlannedWorkEntry', data: defect, path: 'work-planning.destroy', params: { id: work.id }, icon: 'delete.svg' },
+                        { name: 'Редактировать', access: 'DefectTMPolicy.editingPlannedWorkEntry', data: work, extraData: defect, path: 'work-planning.edit', params: { idDefect: defect.id, id: work.id }, icon: 'edit'},
+                        { name: 'Удалить', access: 'DefectTMPolicy.deletingPlannedWorkEntry', data: defect, path: 'work-planning.destroy', params: { id: work.id }, icon: 'delete' },
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @!icons.menu()
                     @end
                   @endif
                 </td>
@@ -198,11 +198,11 @@
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Редактировать', access: 'DefectTMPolicy.updateCheckup', data: defect, extraData: inter, path: 'defects.checkup.edit', params: { id: inter.id }, icon: 'edit.svg'},
-                        { name: 'Удалить', access: 'DefectTMPolicy.deleteCheckup', data: inter, extraData: defect, path: 'defects.checkup.destroy', params: { id: inter.id }, icon: 'delete.svg'},
+                        { name: 'Редактировать', access: 'DefectTMPolicy.updateCheckup', data: defect, extraData: inter, path: 'defects.checkup.edit', params: { id: inter.id }, icon: 'edit'},
+                        { name: 'Удалить', access: 'DefectTMPolicy.deleteCheckup', data: inter, extraData: defect, path: 'defects.checkup.destroy', params: { id: inter.id }, icon: 'delete'},
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @!icons.menu()
                     @end
                   @endif
                 </td>

@@ -32,48 +32,13 @@
                 href: 'users.change.password',
                 className: 'btn-small btn-color_blue',
               })
-                <img src="{{ asset('assets/images/icons/key.svg') }}">
+                @!icons.key()
                 Сменить пароль
               @end
             </div>
           </div>
         </div>
       </div>
-      @if(user.defects.length)
-        <h3 class="title">Последние внесенные дефекты.</h3>
-        <div class="cards">
-          @each(defect in user.defects)
-            <div class="card card-last_defects {{ defect.elimination_date !== null ? 'card-completed' : defect.importance === 'true' ? 'card-danger' : '' }}">
-              <div class="card__header">
-                <div class="card__header-content">
-                  <div class="card__object-info">
-                    <span class="card__text">
-                      <a href="{{ route('substations.show', {id: defect.substation.id}) }}" class="active-link">
-                        {{ defect.substation.name }}
-                      </a>
-                    </span>
-                    <span class="card__text">{{ defect.accession }}</span>
-                  </div>
-                  <div class="card__badge">
-                    <span class="card__text card__text-fs_17">{{ defect.defect_type.type_defect }}</span>
-                  </div>
-                </div>
-              </div>
-              <hr class="card__hr">
-              <div class="card__body">
-                <div class="card__body-content">
-                  <div class="card__text">
-                    <a href="{{ route('defects.show', {id: defect.id}) }}" class="active-link">
-                      {{ defect.excerptText }}
-                    </a>
-                    <img src="{{ asset('assets/images/icons/link.svg') }}">
-                  </div>
-                </div>
-              </div>
-            </div>
-          @endeach
-        </div>
-      @endif
     </div>
   </div>
 @endsection
