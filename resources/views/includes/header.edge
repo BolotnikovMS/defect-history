@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header-row">
       <div class="header__logo">
-        <img src="{{ asset('assets/images/icons/journal.svg') }}" alt="Журнал">
+        @!icons.journal()
       </div>
       {{-- <nav class="header__nav">
         <ul>
@@ -85,8 +85,8 @@
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Список дефектов ТМ ПС', access: 'ReportPolicy.viewReportSubstationDefects', path: 'reports.show.substation.defects' },
-                { name: 'Список дефектов ТМ РЭС или ГП', access: 'ReportPolicy.viewReportDistrictDefects', path: 'reports.show.district.defects' },
+                { name: 'Список дефектов ТМ по выбранной ПС', access: 'ReportPolicy.viewReportSubstationDefects', path: 'reports.show.substation.defects' },
+                { name: 'Список дефектов ТМ по выбранному РЭС или ГП', access: 'ReportPolicy.viewReportDistrictDefects', path: 'reports.show.district.defects' },
                 { name: 'Список дефектов ТМ по всем ПС', access: 'ReportPolicy.viewReportAllDefects', path: 'reports.show.all.defects' },
               ],
             })
