@@ -14,67 +14,10 @@
           @end
         </div>
       @end
-      <div class="substation__filters">
-        <form action="{{route('substations.show', {id: substation.id})}}" method="GET" class="form form-row">
-          <div class="form__content form__content-filters">
-            @!inputs.select({
-              name: 'sort',
-              labelPositionText: 'label__text_left',
-              optionClass: 'form__input form__input-filter',
-              dataOptionsConfig: {
-                dataOptions: [
-                  {id: 'default', sort_type: 'По умолчанию'},
-                  {id: 'elimination_date_desc', sort_type: 'По убыванию даты устранения'},
-                  {id: 'elimination_date_asc', sort_type: 'По возрастанию даты устранения'},
-                  {id: 'term_elimination_desc', sort_type: 'По убыванию срока устранения'},
-                  {id: 'term_elimination_asc', sort_type: 'По возрастанию срока устранения'},
-                ],
-                dataNameOption: 'sort_type'
-              },
-              currentDataConfig: {
-                currentData: filters?.sort ? filters.sort : '',
-                currentDataId: filters?.sort ? filters.sort : '',
-              }
-            })
-            @!inputs.select({
-              name: 'defectsClass',
-              labelPositionText: 'label__text_left',
-              optionClass: 'form__input form__input-filter',
-              dataOptionsConfig: {
-                dataOptions: [{ id: 'defects', name: 'Дефекты ТМ' }, { id: 'defectsOs', name: 'Дефекты ОС' }],
-                dataNameOption: 'name'
-              },
-              currentDataConfig: {
-                currentData: { id: 'defects', name: 'Дефекты ТМ' },
-                currentDataId: filters.defectsClass ? filters.defectsClass : '',
-              }
-            })
-            @!inputs.select({
-              name: 'status',
-              labelPositionText: 'label__text_left',
-              optionClass: 'form__input form__input-filter',
-              dataOptionsConfig: {
-                dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
-                dataNameOption: 'name'
-              },
-              currentDataConfig: {
-                currentData: { id: 'all', name: 'Все дефекты' },
-                currentDataId: filters.status ? filters.status : '',
-              }
-            })
-          </div>
-          <div class="form__btns form__btns-row">
-            @buttons.base({
-              type: 'submit',
-              className: 'btn-color_green btn-small'
-            })
-              @!icons.checkmark({
-                optionalClasses: 'icon-size_20'
-              })
-            @end
-          </div>
-        </form>
-      </div>
+      @!component('pages/substation/components/filters/filtersSubstation', {
+        substation,
+        filters,
+      })
     </div>
   <div class="substations__content">
     <hr>
@@ -194,7 +137,7 @@
       </div>
     @else
       <div class="no-content">
-        <p>Пока нет добавленых дефектов.</p>
+        <p>Пока нет добавленных дефектов.</p>
       </div>
     @endif
     <hr>
