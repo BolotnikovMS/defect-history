@@ -1,12 +1,10 @@
 {
   "assets/app.css": "http://localhost:8080/assets/app.css",
   "assets/app.js": "http://localhost:8080/assets/app.js",
-  "assets/images/icons/upload-file-1.svg": "http://localhost:8080/assets/images/icons/upload-file-1.99cb8b5d.svg",
   "assets/images/icons/arrow-right.svg": "http://localhost:8080/assets/images/icons/arrow-right.62f670c2.svg",
   "assets/images/icons/journal.svg": "http://localhost:8080/assets/images/icons/journal.844e7823.svg",
   "assets/images/icons/sort.svg": "http://localhost:8080/assets/images/icons/sort.91f35c05.svg",
   "assets/images/icons/arrow-left.svg": "http://localhost:8080/assets/images/icons/arrow-left.012c108a.svg",
-  "assets/images/icons/upload-file-2.svg": "http://localhost:8080/assets/images/icons/upload-file-2.b556a223.svg",
   "assets/images/icons/link.svg": "http://localhost:8080/assets/images/icons/link.c57ed2c2.svg",
   "assets/images/icons/star.svg": "http://localhost:8080/assets/images/icons/star.0a1dafbb.svg"
 }
