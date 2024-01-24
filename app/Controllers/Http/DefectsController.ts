@@ -88,7 +88,7 @@ export default class DefectsController {
     }
 
     const typeDefects = await DefectType.all()
-    const substations = await Substation.all()
+    const substations = await Substation.query().orderBy('name', 'asc')
 
     return view.render('pages/defect/form', {
       title: 'Добавление нового дефекта',
