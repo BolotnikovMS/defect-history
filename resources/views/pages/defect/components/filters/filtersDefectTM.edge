@@ -1,50 +1,15 @@
 <div class="filters filters-row">
   <form action="{{route('defects.index')}}" method="GET" class="form form-row">
     <div class="form__content form__content-filters">
-      @!inputs.select({
-        name: 'sort',
-        labelPositionText: 'label__text_left',
-        optionClass: 'form__input form__input-filter',
-        dataOptionsConfig: {
-          dataOptions: [
-            {id: 'default', sort_type: 'По умолчанию'},
-            {id: 'elimination_date_desc', sort_type: 'По убыванию даты устранения'},
-            {id: 'elimination_date_asc', sort_type: 'По возрастанию даты устранения'},
-            {id: 'term_elimination_desc', sort_type: 'По убыванию срока устранения'},
-            {id: 'term_elimination_asc', sort_type: 'По возрастанию срока устранения'},
-          ],
-          dataNameOption: 'sort_type'
-        },
-        currentDataConfig: {
-          currentData: filters?.sort ? filters.sort : '',
-          currentDataId: filters?.sort ? filters.sort : '',
-        }
+      @!filters.dateSort({
+        filters
       })
-      @!inputs.select({
-        name: 'typeDefect',
-        labelPositionText: 'label__text_left',
-        optionClass: 'form__input form__input-filter',
-        dataOptionsConfig: {
-          dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
-          dataNameOption: 'type_defect'
-        },
-        currentDataConfig: {
-          currentData: filters?.typeDefect ? filters.typeDefect : '',
-          currentDataId: filters?.typeDefect ? filters.typeDefect : '',
-        }
+      @!filters.typeDefect({
+        typesDefects,
+        filters,
       })
-      @!inputs.select({
-        name: 'status',
-        labelPositionText: 'label__text_left',
-        optionClass: 'form__input form__input-filter',
-        dataOptionsConfig: {
-          dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
-          dataNameOption: 'name'
-        },
-        currentDataConfig: {
-          currentData: { id: 'all', name: 'Все дефекты' },
-          currentDataId: filters ? filters.status : '',
-        }
+      @!filters.status({
+        filters
       })
     </div>
     <div class="form__btns form__btns-row">
