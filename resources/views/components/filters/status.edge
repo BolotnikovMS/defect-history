@@ -1,0 +1,13 @@
+@!inputs.select({
+  name: 'status',
+  labelPositionText: 'label__text_left',
+  optionClass: 'form__input form__input-filter',
+  dataOptionsConfig: {
+    dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
+    dataNameOption: 'name'
+  },
+  currentDataConfig: {
+    currentData: { id: 'all', name: 'Все дефекты' },
+    currentDataId: filters ? filters.status : '',
+  }
+})
