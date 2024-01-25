@@ -33,6 +33,21 @@
           currentDataId: filters.defectsClass ? filters.defectsClass : '',
         }
       })
+      @if(filters.defectsClass === 'defects')
+        @!inputs.select({
+          name: 'typeDefect',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input form__input-filter',
+          dataOptionsConfig: {
+            dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
+            dataNameOption: 'type_defect'
+          },
+          currentDataConfig: {
+            currentData: filters?.typeDefect ? filters.typeDefect : '',
+            currentDataId: filters?.typeDefect ? filters.typeDefect : '',
+          }
+        })
+      @endif
       @!inputs.select({
         name: 'status',
         labelPositionText: 'label__text_left',

@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
+import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
 import SubstationValidator from '../../Validators/SubstationValidator'
@@ -89,11 +90,20 @@ export default class SubstationsController {
     const substation = await Substation.find(params.id)
 
     if (substation) {
-      const { status, defectsClass = 'defects', sort = 'default' } = request.qs() as IQueryParams
+      const {
+        status,
+        typeDefect,
+        defectsClass = 'defects',
+        sort = 'default',
+      } = request.qs() as IQueryParams
+      const typesDefects = await DefectType.query()
 
       if (defectsClass === 'defects') {
         await substation.load('defects', (query) => {
           query
+            .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
+              query.where('id_type_defect', '=', typeDefect!)
+            )
             .if(sort === 'elimination_date_desc', (query) =>
               query.orderBy('elimination_date', 'desc')
             )
@@ -139,10 +149,12 @@ export default class SubstationsController {
       return view.render('pages/substation/show', {
         title: `Дефекты ${substation.name}`,
         substation,
+        typesDefects,
         filters: {
           status,
           defectsClass,
           sort,
+          typeDefect,
         },
       })
     } else {
