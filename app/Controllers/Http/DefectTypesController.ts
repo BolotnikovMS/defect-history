@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DistributionGroup from 'App/Models/DistributionGroup'
+import TypeDefectTMService from 'App/Services/TypeDefectTMService'
 import DefectType from '../../Models/DefectType'
 import TypesDefectValidator from '../../Validators/TypesDefectValidator'
 
@@ -11,14 +12,7 @@ export default class DefectTypesController {
       return response.redirect().toPath('/')
     }
 
-    const page = request.input('page', 1)
-    const limit = 10
-    const typesDefects = await DefectType.query()
-      .orderBy('created_at', 'asc')
-      .preload('group')
-      .paginate(page, limit)
-
-    typesDefects.baseUrl('/types-defects')
+    const typesDefects = await TypeDefectTMService.getTypeDefectTM(request)
 
     return view.render('pages/type-defect/index', {
       title: 'Типы дефектов',
