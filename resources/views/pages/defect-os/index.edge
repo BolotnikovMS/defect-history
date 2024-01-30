@@ -10,34 +10,9 @@
         @end
       @endcan
     </div>
-    <div class="defect__filters">
-      <form action="{{route('defects-os.index')}}" method="GET" class="form form-row">
-        <div class="form__content form__content-filters">
-          @!filters.status({
-            filters
-          })
-          {{--  @!inputs.select({
-            name: 'department',
-            labelPositionText: 'label__text_left',
-            optionClass: 'form__input-width_300 searchable-list',
-            dataOptionsConfig: {
-              dataOptions: [{name: 'Все', id: 0}, ...departments],
-              dataNameOption: 'name'
-            },
-          })  --}}
-        </div>
-        <div class="form__btns form__btns-row">
-          @buttons.base({
-            type: 'submit',
-            className: 'btn-color_green btn-small'
-          })
-            @!icons.checkmark({
-              optionalClasses: 'icon-size_20'
-            })
-          @end
-        </div>
-      </form>
-    </div>
+    @!component('pages/defect-os/components/filters/filtersDefectOS', {
+      filters,
+    })
   </div>
   <div class="defect__content">
     <hr>
@@ -46,23 +21,19 @@
         @each(defectOs in defectsOs)
           @card.card({
             optionalClasses: defectOs.elimination_date !== null ?
-              'card-completed' :
-              new Date(defectOs.term_elimination) < new Date() ?
-              'card-danger' :
-              defectOs.importance === true ?
-              'card-danger' :
-              ''
+            'card-completed' :
+            new Date(defectOs.term_elimination) < new Date() ? 'card-danger' : defectOs.importance===true ? 'card-danger' : ''
           })
-            @slot('cardHeader')
-              <div class="card__header-content">
-                @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
-                  @if(defectOs?.substation)
-                    <a href="{{ route('substations.show', {id: defectOs.substation.id}) }}" class="active-link">
-                      {{ defectOs.substation.name }}
-                      <img src="{{ asset('assets/images/icons/link.svg') }}">
-                    </a>
-                  @endif
-                  @!card.cardSpan({ text: defectOs.accession_substations, optionalClasses: 'card__text' })
+          @slot('cardHeader')
+            <div class="card__header-content">
+              @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
+              @if(defectOs?.substation)
+                <a href="{{ route('substations.show', {id: defectOs.substation.id}) }}" class="active-link">
+                  {{ defectOs.substation.name }}
+                  <img src="{{ asset('assets/images/icons/link.svg') }}">
+                </a>
+              @endif
+              @!card.cardSpan({ text: defectOs.accession_substations, optionalClasses: 'card__text' })
                   @if(defectOs?.departments?.length)
                     <span class="card__text">
                       Ответственный:
@@ -98,7 +69,7 @@
                     @!card.cardSpan({ text: 'Дата устранения:', optionalClasses: 'card__text card__text-bold' })
                     @!card.cardSpan({
                       text: defectOs.elimination_date === null ? 'Не устранен' : dateFormat(defectOs.elimination_date),
-                      optionalClasses: defectOs.elimination_date === null ? 'card__text card__text-red' :  'card__text'
+                      optionalClasses: defectOs.elimination_date === null ? 'card__text card__text-red' : 'card__text'
                     })
                   @end
                 </div>
@@ -116,7 +87,8 @@
                   @end
                 @end
                 @card.cardGroup()
-                  @if(!await bouncer.with('DefectOSPolicy').denies('update', defectOs) || !await bouncer.with('DefectOSPolicy').denies('delete', defectOs))
+                  @if(!await bouncer.with('DefectOSPolicy').denies('update', defectOs) || !await
+                    bouncer.with('DefectOSPolicy').denies('delete', defectOs))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
