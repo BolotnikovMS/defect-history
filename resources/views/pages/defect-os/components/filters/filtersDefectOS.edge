@@ -1,0 +1,28 @@
+<div class="defect__filters">
+  <form action="{{route('defects-os.index')}}" method="GET" class="form form-row">
+    <div class="form__content form__content-filters">
+      @!filters.status({
+        filters
+      })
+      {{-- @!inputs.select({
+      name: 'department',
+      labelPositionText: 'label__text_left',
+      optionClass: 'form__input-width_300 searchable-list',
+      dataOptionsConfig: {
+      dataOptions: [{name: 'Все', id: 0}, ...departments],
+      dataNameOption: 'name'
+      },
+      }) --}}
+    </div>
+    <div class="form__btns form__btns-row">
+      @buttons.base({
+        type: 'submit',
+        className: 'btn-color_green btn-small'
+      })
+        @!icons.checkmark({
+          optionalClasses: 'icon-size_20'
+        })
+      @end
+    </div>
+  </form>
+</div>
