@@ -48,63 +48,19 @@ export default class DefectTypesController {
       return response.redirect().toPath('/')
     }
 
-    const validateTypeDefectData = await request.validate(TypesDefectValidator)
-
-    await DefectType.create({
-      id_user_created: auth.user?.id,
-      id_distribution_group:
-        validateTypeDefectData.group === 0 ? null : validateTypeDefectData.group,
-      type_defect: validateTypeDefectData.type_defect,
-      defect_description: validateTypeDefectData.defect_description
-        ? validateTypeDefectData.defect_description
-        : 'Описание дефекта не добавлено...',
-    })
+    const newTypeDefect = await TypeDefectTMService.store(request, auth)
 
     session.flash(
       'successMessage',
-      `Тип дефекта с названием "${validateTypeDefectData.type_defect}" успешно добавлен!`
+      `Тип дефекта с названием "${newTypeDefect.type_defect}" успешно добавлен!`
     )
     response.redirect().toRoute('types-defects.index')
   }
 
-  public async show({ params, response, session }: HttpContextContract) {
-    const typeDefect = await DefectType.find(params.id)
+  public async show({ params, response }: HttpContextContract) {
+    const typeDefect = await DefectType.findOrFail(params.id)
 
-    if (typeDefect) {
-      return response.redirect().toRoute('defects.index', {}, { qs: { typeDefect: typeDefect.id } })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
-
-    // const typeDefect = await DefectType.find(params.id)
-    // const typesDefects = await DefectType.query().orderBy('created_at', 'asc')
-
-    // if (typeDefect) {
-    //   await typeDefect.load('defects', (query) => {
-    //     query
-    //       .orderBy('elimination_date', 'asc')
-    //       .preload('substation')
-    //       .preload('accession')
-    //       .preload('intermediate_checks')
-    //       .preload('user')
-    //       .preload('work_planning')
-    //   })
-
-    //   console.log(typeDefect)
-
-    //   return view.render('pages/defect/index', {
-    //     title: `Дефекты '${typeDefect.type_defect}'`,
-    //     typesDefects,
-    //     defects: typeDefect.defects,
-    //     filters: {
-    //       typeDefect,
-    //     },
-    //   })
-    // } else {
-    //   session.flash('dangerMessage', 'Что-то пошло не так!')
-    //   response.redirect().back()
-    // }
+    return response.redirect().toRoute('defects.index', {}, { qs: { typeDefect: typeDefect.id } })
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
@@ -114,30 +70,24 @@ export default class DefectTypesController {
       return response.redirect().toPath('/')
     }
 
-    const typeDefect = await DefectType.find(params.id)
+    const typeDefect = await DefectType.findOrFail(params.id)
+    const groups = await DistributionGroup.all()
 
-    if (typeDefect) {
-      const groups = await DistributionGroup.all()
-
-      return view.render('pages/type-defect/form', {
-        title: 'Редактирование',
-        options: {
-          idData: typeDefect.id,
-          routePath: {
-            saveData: 'types-defects.update',
-          },
+    return view.render('pages/type-defect/form', {
+      title: 'Редактирование',
+      options: {
+        idData: typeDefect.id,
+        routePath: {
+          saveData: 'types-defects.update',
         },
-        typeDefect,
-        groups,
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+      },
+      typeDefect,
+      groups,
+    })
   }
 
   public async update({ request, response, params, session, bouncer }: HttpContextContract) {
-    const typeDefect = await DefectType.find(params.id)
+    const typeDefect = await DefectType.findOrFail(params.id)
 
     if (await bouncer.with('TypeDefectPolicy').denies('update')) {
       session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
@@ -145,33 +95,28 @@ export default class DefectTypesController {
       return response.redirect().toPath('/')
     }
 
-    if (typeDefect) {
-      const validateTypeDefectData = await request.validate(TypesDefectValidator)
+    const validateTypeDefectData = await request.validate(TypesDefectValidator)
 
-      await typeDefect
-        .merge({
-          id_distribution_group:
-            validateTypeDefectData.group === 0 ? null : validateTypeDefectData.group,
-          type_defect: validateTypeDefectData.type_defect,
-          defect_description: validateTypeDefectData.defect_description
-            ? validateTypeDefectData.defect_description
-            : 'Описание дефекта не добавлено...',
-        })
-        .save()
+    await typeDefect
+      .merge({
+        id_distribution_group:
+          validateTypeDefectData.group === 0 ? null : validateTypeDefectData.group,
+        type_defect: validateTypeDefectData.type_defect,
+        defect_description: validateTypeDefectData.defect_description
+          ? validateTypeDefectData.defect_description
+          : 'Описание дефекта не добавлено...',
+      })
+      .save()
 
-      session.flash(
-        'successMessage',
-        `Данные "${validateTypeDefectData.type_defect}" успешно обновлены.`
-      )
-      response.redirect().toRoute('types-defects.index')
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    session.flash(
+      'successMessage',
+      `Данные "${validateTypeDefectData.type_defect}" успешно обновлены.`
+    )
+    response.redirect().toRoute('types-defects.index')
   }
 
   public async destroy({ params, response, session, bouncer }: HttpContextContract) {
-    const typeDefect = await DefectType.find(params.id)
+    const typeDefect = await DefectType.findOrFail(params.id)
 
     if (await bouncer.with('TypeDefectPolicy').denies('delete')) {
       session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
@@ -179,14 +124,9 @@ export default class DefectTypesController {
       return response.redirect().back()
     }
 
-    if (typeDefect) {
-      await typeDefect.delete()
+    await typeDefect.delete()
 
-      session.flash('successMessage', `Тип дефекта "${typeDefect.type_defect}" был удален!`)
-      response.redirect().back()
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toPath('/')
-    }
+    session.flash('successMessage', `Тип дефекта "${typeDefect.type_defect}" был удален!`)
+    response.redirect().back()
   }
 }
