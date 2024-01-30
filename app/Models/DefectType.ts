@@ -8,9 +8,9 @@ import {
   hasMany,
 } from '@ioc:Adonis/Lucid/Orm'
 
-import { DateTime } from 'luxon'
 import Defect from 'App/Models/Defect'
 import DistributionGroup from 'App/Models/DistributionGroup'
+import { DateTime } from 'luxon'
 
 export default class DefectType extends BaseModel {
   @column({ isPrimary: true })
@@ -19,13 +19,17 @@ export default class DefectType extends BaseModel {
   @column()
   public id_user_created: number
 
-  @column()
+  @column({
+    prepare: (value: number) => (value === 0 ? null : value),
+  })
   public id_distribution_group: number | null
 
   @column()
   public type_defect: string
 
-  @column()
+  @column({
+    prepare: (value: string) => (value ? value : 'Описание дефекта не добавлено...'),
+  })
   public defect_description: string
 
   @column.dateTime({
