@@ -8,7 +8,7 @@
     })
       <div class="form__content form__content-column">
         @!inputs.select({
-          label: 'Выберите отвенный отдел(ы)',
+          label: 'Подразделение(я) в чьем веденее оборудование',
           name: 'departments[]',
           optionClass: 'searchable-list',
           multiple: true,
@@ -18,6 +18,36 @@
           },
           currentDataConfig: {
             currentData: defectOs ? defectOs.departments : '',
+          }
+        })
+
+        @!inputs.select({
+          label: 'Выберите группу дефекта',
+          labelPositionText: 'label__text_left',
+          name: 'groupDefect',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите группу'
+          },
+          currentDataConfig: {
+            currentData: defectOs ? defectOs : '',
+            currentDataId: defectOs ? defectOs.id_substation : '',
+          }
+        })
+
+        @!inputs.select({
+          label: 'Выберите классификатор дефекта',
+          labelPositionText: 'label__text_left',
+          name: 'groupDefect',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите классификатор'
+          },
+          currentDataConfig: {
+            currentData: defectOs ? defectOs : '',
+            currentDataId: defectOs ? defectOs.id_substation : '',
           }
         })
 
