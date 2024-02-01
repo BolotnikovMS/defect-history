@@ -45,11 +45,14 @@
           </li>
           @end
           @can('TypeDefectPolicy.view')
-            <li  class="nav-list__item">
+            <li class="nav-list__item">
               <a href="{{ route('types-defects.index') }}"
                 class="{{ 'types-defects.index' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
             </li>
           @endcan
+          <li class="nav-list__item">
+            <a href="{{ route('defect-groups.index')}}">Группы дефектов</a>
+          </li>
           @if(!await bouncer.with('DistrictPolicy').denies('view') || !await bouncer.with('SubstationPolicy').denies('view'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
