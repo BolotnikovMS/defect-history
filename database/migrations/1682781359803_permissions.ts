@@ -253,6 +253,23 @@ export default class extends BaseSchema {
           access: 'updateCheckup',
           description: 'Редактирование промежуточных проверок дефектов ТМ',
         },
+        // Defect groups
+        {
+          access: 'viewDefectGroups',
+          description: 'Просмотр групп дефектов',
+        },
+        {
+          access: 'createDefectGroup',
+          description: 'Добавление новой группы дефектов',
+        },
+        {
+          access: 'editDefectGroup',
+          description: 'Редактирование группы дефектов',
+        },
+        {
+          access: 'deleteDefectGroup',
+          description: 'Удаление группы дефектов',
+        },
       ])
     })
   }
