@@ -33,6 +33,7 @@
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
+                          { name: 'Классификаторы', path: 'defect-classifiers.index', params: { idDefectGroup: defectGroup.id } },
                           { name: 'Редактировать', access: 'DefectGroupPolicy.update', data: defectGroup, path: 'defect-groups.edit', params: { id: defectGroup.id }, icon: 'edit' },
                           { name: 'Удалить', access: 'DefectGroupPolicy.delete', data: defectGroup, path: 'defect-groups.destroy', params: { id: defectGroup.id }, icon: 'delete' },
                         ],
