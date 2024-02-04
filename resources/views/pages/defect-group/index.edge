@@ -2,4 +2,53 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @can('DefectGroupPolicy.create')
+      @buttons.add({ href: 'defect-groups.create'})
+        Добавить
+      @end
+    @endcan
+  </div>
+  <div class="defect-groups__content">
+    <hr>
+      @if(defectGroups.length)
+        <div class="cards">
+          @each(defectGroup in defectGroups)
+            @card.card()
+              @slot('cardBody')
+                <p class="card__text card__text-fs_20">
+                  {{ defectGroup.name }}
+                </p>
+              @end
+              @slot('cardFooter')
+                <div class="card__footer-content">
+                  @card.cardGroup()
+                    @!badge.badge({
+                      badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lightorg',
+                      data: defectGroup.type
+                    })
+                  @end
+                  @card.cardGroup()
+                    @if(!await bouncer.with('DefectGroupPolicy').denies('update') || !await bouncer.with('DefectGroupPolicy').denies('delete'))
+                      @dropdown.dropdown({
+                        classBtnDropdown: 'btn-dropdown-icon',
+                        dropdownData: [
+                          { name: 'Редактировать', access: 'DefectGroupPolicy.update', data: defectGroup, path: 'defect-groups.edit', params: { id: defectGroup.id }, icon: 'edit' },
+                          { name: 'Удалить', access: 'DefectGroupPolicy.delete', data: defectGroup, path: 'defect-groups.destroy', params: { id: defectGroup.id }, icon: 'delete' },
+                        ],
+                      })
+                        @!icons.menu()
+                      @end
+                    @endif
+                  @end
+                </div>
+              @end
+            @end
+          @endeach
+        </div>
+      @else
+        @!notification.nocontent({ messageNoData: 'Пока нет добавленных групп дефектов.' })
+      @endif
+    <hr>
+  </div>
 @endsection
