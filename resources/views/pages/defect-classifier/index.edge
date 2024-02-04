@@ -1,0 +1,43 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @buttons.add({ href: 'defect-classifiers.create'})
+      Добавить
+    @end
+  </div>
+  <div class="defect-classifiers__content">
+    <hr>
+    @if(defectClassifiers.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Описание классификатора
+            </span>
+          </div>
+        </li>
+        @each(classifier in defectClassifiers)
+					<li class='list__item'>
+						<div class="list__content">
+							{{ classifier.name }}
+						</div>
+            @dropdown.dropdown({
+              classBtnDropdown: 'btn-dropdown-icon',
+              dropdownData: [
+                { name: 'Редактировать', path: 'defect-classifiers.edit', icon: 'edit' },
+                { name: 'Удалить', path: 'defect-classifiers.delete', icon: 'delete'}
+              ]
+            })
+              @!icons.menu()
+            @end
+					</li>
+        @endeach
+      </ul>
+    @else
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленных классификаторов дефектов.' })
+    @endif
+    <hr>
+  </div>
+@endsection
