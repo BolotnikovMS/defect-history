@@ -12,12 +12,13 @@ export default class DefectGroupValidator {
       rules.maxLength(100),
       rules.escape(),
     ]),
-    type: schema.string([rules.trim(), rules.minLength(2), rules.maxLength(20), rules.escape()]),
+    type: schema.string([rules.trim(), rules.alpha()]),
   })
 
   public messages: CustomMessages = {
     required: 'Поле является обязательным.',
     minLength: 'Минимальная длина поля {{ options.minLength }} символа.',
-    maxLength: 'Максимальная длина поля {{ options.maxLength }} символов',
+    maxLength: 'Максимальная длина поля {{ options.maxLength }} символов.',
+    alpha: 'Выберите тип для группы дефектов.',
   }
 }
