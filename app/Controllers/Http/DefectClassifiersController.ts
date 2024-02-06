@@ -14,11 +14,26 @@ export default class DefectClassifiersController {
 
     return view.render('pages/defect-classifier/index', {
       title: 'Классификаторы дефектов',
+      options: {
+        idDefectGroup,
+      },
       defectClassifiers,
     })
   }
 
-  public async create({}: HttpContextContract) {}
+  public async create({ params, response, view, session, bouncer }: HttpContextContract) {
+    const idDefectGroup = params.idDefectGroup
+
+    return view.render('pages/defect-classifier/form', {
+      title: 'Добавление нового классификатора дефекта',
+      options: {
+        idDefectGroup,
+        routePath: {
+          saveData: 'defect-groups.store.classifiers',
+        },
+      },
+    })
+  }
 
   public async store({}: HttpContextContract) {}
 
