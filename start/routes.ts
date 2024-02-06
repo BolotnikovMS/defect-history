@@ -34,7 +34,6 @@ Route.group(() => {
   require('./routes/reports')
   require('./routes/work_planning')
   require('./routes/defect_groups')
-  require('./routes/defect_classifiers')
 }).namespace('App/Controllers/Http')
 
 Route.group(() => {
