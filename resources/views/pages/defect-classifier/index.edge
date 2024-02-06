@@ -3,7 +3,7 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
   <div class="control">
-    @buttons.add({ href: 'defect-classifiers.create'})
+    @buttons.add({ href: 'defect-groups.create.classifiers', params: {idDefectGroup: options.idDefectGroup}})
       Добавить
     @end
   </div>
