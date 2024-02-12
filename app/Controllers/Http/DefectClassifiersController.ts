@@ -1,11 +1,14 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DefectClassifier from 'App/Models/DefectClassifier'
+import DefectGroup from 'App/Models/DefectGroup'
+import DefectClassifierValidator from 'App/Validators/DefectClassifierValidator'
 
 export default class DefectClassifiersController {
   public async index({ params, request, response, view, session, bouncer }: HttpContextContract) {
     const idDefectGroup = params.idDefectGroup
     const page = request.input('page', 1)
     const limit = 15
+    const defectGroup = await DefectGroup.findOrFail(idDefectGroup)
     const defectClassifiers = await DefectClassifier.query()
       .where('id_group_defect', '=', idDefectGroup)
       .paginate(page, limit)
@@ -13,7 +16,7 @@ export default class DefectClassifiersController {
     defectClassifiers.baseUrl('/defect-classifiers')
 
     return view.render('pages/defect-classifier/index', {
-      title: 'Классификаторы дефектов',
+      title: `Классификаторы дефектов "${defectGroup.name}"`,
       options: {
         idDefectGroup,
       },
@@ -21,7 +24,7 @@ export default class DefectClassifiersController {
     })
   }
 
-  public async create({ params, response, view, session, bouncer }: HttpContextContract) {
+  public async create({ params, view, session, bouncer }: HttpContextContract) {
     const idDefectGroup = params.idDefectGroup
 
     return view.render('pages/defect-classifier/form', {
@@ -35,13 +38,64 @@ export default class DefectClassifiersController {
     })
   }
 
-  public async store({}: HttpContextContract) {}
+  public async store({ params, request, response, auth, session, bouncer }: HttpContextContract) {
+    try {
+      const validatedData = await request.validate(DefectClassifierValidator)
+      const idDefectGroup = params.idDefectGroup
 
-  public async show({}: HttpContextContract) {}
+      await DefectClassifier.create({
+        id_user_created: auth.user?.id,
+        id_group_defect: idDefectGroup,
+        ...validatedData,
+      })
 
-  public async edit({}: HttpContextContract) {}
+      session.flash('successMessage', 'Запись успешно добавлена!')
 
-  public async update({}: HttpContextContract) {}
+      return response
+        .redirect()
+        .toRoute('defect-groups.index.classifiers', { idDefectGroup: idDefectGroup })
+    } catch (error) {
+      console.log(error)
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().toRoute('defect-groups.index')
+    }
+  }
 
-  public async destroy({}: HttpContextContract) {}
+  public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
+    const idDefectGroup = params.idDefectGroup
+    const defectClassifier = await DefectClassifier.findOrFail(params.id)
+
+    return view.render('pages/defect-classifier/form', {
+      title: 'Редактирование',
+      options: {
+        idData: params.id,
+        idDefectGroup: idDefectGroup,
+        routePath: {
+          saveData: 'defect-groups.update.classifiers',
+        },
+      },
+      defectClassifier,
+    })
+  }
+
+  public async update({ params, request, response, session, bouncer }: HttpContextContract) {
+    const defectClassifier = await DefectClassifier.findOrFail(params.id)
+    const validatedData = await request.validate(DefectClassifierValidator)
+
+    await defectClassifier.merge(validatedData).save()
+
+    session.flash('successMessage', 'Запись успешно обновлена!')
+    return response
+      .redirect()
+      .toRoute('defect-groups.index.classifiers', { idDefectGroup: params.idDefectGroup })
+  }
+
+  public async destroy({ params, response, session, bouncer }: HttpContextContract) {
+    const defectClassifier = await DefectClassifier.findOrFail(params.id)
+
+    await defectClassifier.delete()
+
+    session.flash('successMessage', 'Запись успешно удалена!')
+    return response.redirect().back()
+  }
 }
