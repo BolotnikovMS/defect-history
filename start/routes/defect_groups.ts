@@ -17,6 +17,17 @@ Route.group(() => {
   Route.post('/:idDefectGroup/defect-classifiers/store', 'DefectClassifiersController.store').as(
     'store.classifiers'
   )
+  Route.get('/:idDefectGroup/defect-classifiers/edit/:id', 'DefectClassifiersController.edit').as(
+    'edit.classifiers'
+  )
+  Route.post(
+    '/:idDefectGroup/defect-classifiers/edit/:id',
+    'DefectClassifiersController.update'
+  ).as('update.classifiers')
+  Route.get(
+    '/:idDefectGroup/defect-classifiers/delete/:id',
+    'DefectClassifiersController.destroy'
+  ).as('destroy.classifiers')
 })
   .prefix('/defect-groups')
   .as('defect-groups')
