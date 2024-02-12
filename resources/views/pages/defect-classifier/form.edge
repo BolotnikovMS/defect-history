@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="defect-classifiers__content">
     @forms.post({
-      action: route(options.routePath.saveData, {idDefectGroup: options.idDefectGroup})
+      action: route(options.routePath.saveData, {idDefectGroup: options.idDefectGroup, id: options.idData})
     })
       <div class="form__content form__content-column">
         @!inputs.textarea({
@@ -14,6 +14,7 @@
           rows: 8,
           placeholderText: 'Введите описание...',
           required: true,
+          value: defectClassifier ? defectClassifier.name : ''
         })
       </div>
       <div class="form__btns">
