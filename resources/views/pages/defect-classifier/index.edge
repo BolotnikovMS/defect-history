@@ -26,8 +26,8 @@
             @dropdown.dropdown({
               classBtnDropdown: 'btn-dropdown-icon',
               dropdownData: [
-                { name: 'Редактировать', path: 'defect-classifiers.edit', icon: 'edit' },
-                { name: 'Удалить', path: 'defect-classifiers.delete', icon: 'delete'}
+                { name: 'Редактировать', path: 'defect-groups.edit.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'edit' },
+                { name: 'Удалить', path: 'defect-groups.destroy.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'delete' }
               ]
             })
               @!icons.menu()
