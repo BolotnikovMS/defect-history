@@ -5,6 +5,12 @@ import DefectClassifierValidator from 'App/Validators/DefectClassifierValidator'
 
 export default class DefectClassifiersController {
   public async index({ params, request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('DefectClassifierPolicy').denies('view')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
+
+      return response.redirect().toPath('/')
+    }
+
     const idDefectGroup = params.idDefectGroup
     const page = request.input('page', 1)
     const limit = 15
@@ -24,7 +30,13 @@ export default class DefectClassifiersController {
     })
   }
 
-  public async create({ params, view, session, bouncer }: HttpContextContract) {
+  public async create({ params, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('DefectClassifierPolicy').denies('create')) {
+      session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+
+      return response.redirect().toPath('/')
+    }
+
     const idDefectGroup = params.idDefectGroup
 
     return view.render('pages/defect-classifier/form', {
@@ -40,6 +52,12 @@ export default class DefectClassifiersController {
 
   public async store({ params, request, response, auth, session, bouncer }: HttpContextContract) {
     try {
+      if (await bouncer.with('DefectClassifierPolicy').denies('create')) {
+        session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+
+        return response.redirect().toPath('/')
+      }
+
       const validatedData = await request.validate(DefectClassifierValidator)
       const idDefectGroup = params.idDefectGroup
 
@@ -62,6 +80,12 @@ export default class DefectClassifiersController {
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('DefectClassifierPolicy').denies('update')) {
+      session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
+
+      return response.redirect().toPath('/')
+    }
+
     const idDefectGroup = params.idDefectGroup
     const defectClassifier = await DefectClassifier.findOrFail(params.id)
 
@@ -79,6 +103,12 @@ export default class DefectClassifiersController {
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('DefectClassifierPolicy').denies('update')) {
+      session.flash('dangerMessage', 'У вас нет прав на внесение изменений!')
+
+      return response.redirect().toPath('/')
+    }
+
     const defectClassifier = await DefectClassifier.findOrFail(params.id)
     const validatedData = await request.validate(DefectClassifierValidator)
 
@@ -91,6 +121,12 @@ export default class DefectClassifiersController {
   }
 
   public async destroy({ params, response, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('DefectClassifierPolicy').denies('delete')) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+      return response.redirect().back()
+    }
+
     const defectClassifier = await DefectClassifier.findOrFail(params.id)
 
     await defectClassifier.delete()

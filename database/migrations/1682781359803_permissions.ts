@@ -17,19 +17,19 @@ export default class extends BaseSchema {
         // Actions with defect types
         {
           access: 'viewTypesDefects',
-          description: 'Просмотр классификаторов дефектов',
+          description: 'Просмотр типов дефектов',
         },
         {
           access: 'createTypeDefect',
-          description: 'Добавление нового классификатора дефекта',
+          description: 'Добавление нового типа дефекта',
         },
         {
           access: 'editTypeDefect',
-          description: 'Редактирование классификатора дефекта',
+          description: 'Редактирование типа дефекта',
         },
         {
           access: 'deleteTypeDefect',
-          description: 'Удаление классификатора дефекта',
+          description: 'Удаление типа дефекта',
         },
         // Actions with substations
         {
@@ -269,6 +269,23 @@ export default class extends BaseSchema {
         {
           access: 'deleteDefectGroup',
           description: 'Удаление группы дефектов',
+        },
+        // Defect classifiers
+        {
+          access: 'viewDefectClassifiers',
+          description: 'Просмотр классификаторов дефектов',
+        },
+        {
+          access: 'createDefectClassifier',
+          description: 'Добавление нового классификатора дефектов',
+        },
+        {
+          access: 'updateDefectClassifier',
+          description: 'Редактирование классификатора дефектов',
+        },
+        {
+          access: 'deleteDefectClassifier',
+          description: 'Удаление классификаторов дефектов',
         },
       ])
     })

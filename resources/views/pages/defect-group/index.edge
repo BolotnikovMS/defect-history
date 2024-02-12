@@ -29,11 +29,11 @@
                     })
                   @end
                   @card.cardGroup()
-                    @if(!await bouncer.with('DefectGroupPolicy').denies('update') || !await bouncer.with('DefectGroupPolicy').denies('delete'))
+                    @if(!await bouncer.with('DefectClassifierPolicy').denies('view') || !await bouncer.with('DefectGroupPolicy').denies('update') || !await bouncer.with('DefectGroupPolicy').denies('delete'))
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
-                          { name: 'Классификаторы', path: 'defect-groups.index.classifiers', params: { idDefectGroup: defectGroup.id } },
+                          { name: 'Классификаторы', access: 'DefectClassifierPolicy.view', path: 'defect-groups.index.classifiers', params: { idDefectGroup: defectGroup.id } },
                           { name: 'Редактировать', access: 'DefectGroupPolicy.update', data: defectGroup, path: 'defect-groups.edit', params: { id: defectGroup.id }, icon: 'edit' },
                           { name: 'Удалить', access: 'DefectGroupPolicy.delete', data: defectGroup, path: 'defect-groups.destroy', params: { id: defectGroup.id }, icon: 'delete' },
                         ],

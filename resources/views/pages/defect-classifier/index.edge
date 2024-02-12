@@ -3,8 +3,10 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
   <div class="control">
-    @buttons.add({ href: 'defect-groups.create.classifiers', params: {idDefectGroup: options.idDefectGroup}})
-      Добавить
+    @can('DefectClassifierPolicy.create')
+      @buttons.add({ href: 'defect-groups.create.classifiers', params: {idDefectGroup: options.idDefectGroup}})
+        Добавить
+      @end
     @end
   </div>
   <div class="defect-classifiers__content">
@@ -23,14 +25,16 @@
 						<div class="list__content">
 							{{ classifier.name }}
 						</div>
-            @dropdown.dropdown({
-              classBtnDropdown: 'btn-dropdown-icon',
-              dropdownData: [
-                { name: 'Редактировать', path: 'defect-groups.edit.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'edit' },
-                { name: 'Удалить', path: 'defect-groups.destroy.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'delete' }
-              ]
-            })
-              @!icons.menu()
+            @if(!await bouncer.with('DefectClassifierPolicy').denies('update') || !await bouncer.with('DefectClassifierPolicy').denies('delete'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'DefectClassifierPolicy.update', path: 'defect-groups.edit.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'edit' },
+                  { name: 'Удалить', access: 'DefectClassifierPolicy.delete', path: 'defect-groups.destroy.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'delete' }
+                ]
+              })
+                @!icons.menu()
+              @end
             @end
 					</li>
         @endeach
