@@ -6,7 +6,6 @@ export default class DefectClassifierValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    defect_group: schema.number(),
     name: schema.string([rules.trim(), rules.minLength(2), rules.escape()]),
   })
 
