@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { Departments } from 'App/Enums/Departments'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
+import DefectGroup from 'App/Models/DefectGroup'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
 import Department from 'App/Models/Department'
@@ -76,6 +77,7 @@ export default class DefectOsController {
       queryDepartment.where('id', '!=', Departments.withoutDepartment)
     })
     const substations = await Substation.query()
+    const defectGroups = await DefectGroup.query().where('type', '=', 'os')
 
     return view.render('pages/defect-os/form', {
       title: 'Добавление нового дефекта по ОС',
@@ -86,6 +88,7 @@ export default class DefectOsController {
       },
       departments,
       substations,
+      defectGroups,
     })
   }
 
