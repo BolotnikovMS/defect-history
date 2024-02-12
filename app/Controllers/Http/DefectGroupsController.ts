@@ -50,7 +50,6 @@ export default class DefectGroupsController {
       }
 
       const validatedData = await request.validate(DefectGroupValidator)
-      console.log('validatedData: ', validatedData)
 
       await DefectGroup.create({ id_user_created: auth.user?.id, ...validatedData })
 
@@ -62,8 +61,6 @@ export default class DefectGroupsController {
       response.redirect().toRoute('defect-groups.index')
     }
   }
-
-  public async show({}: HttpContextContract) {}
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.with('DefectGroupPolicy').denies('update')) {
