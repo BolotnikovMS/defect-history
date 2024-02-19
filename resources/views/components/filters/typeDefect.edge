@@ -1,0 +1,17 @@
+@set('optionClass', optionClass ? optionClass : '')
+
+@if(typesDefects)
+  @!inputs.select({
+    name: 'typeDefect',
+    labelPositionText: 'label__text_left',
+    optionClass: `form__input form__input-filter ${optionClass}`,
+    dataOptionsConfig: {
+      dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
+      dataNameOption: 'type_defect'
+    },
+    currentDataConfig: {
+      currentData: filters?.typeDefect ? filters.typeDefect : '',
+      currentDataId: filters?.typeDefect ? filters.typeDefect : '',
+    }
+  })
+@endif

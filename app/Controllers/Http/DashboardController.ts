@@ -1,11 +1,11 @@
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Defect from 'App/Models/Defect'
 import DefectOs from 'App/Models/DefectOs'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DashboardController {
-  public async index({ response, request, view }: HttpContextContract) {
+  public async index({ view }: HttpContextContract) {
     // Defects TM
     const numberDefectsTm = (await Defect.query().count('* as total'))[0].$extras.total
     const numberClosedDefectsTm = (

@@ -5,8 +5,7 @@
   <div class="control control-items_sb">
     <div class="control__btns">
       @can('DefectTMPolicy.create')
-        @buttons.base({ href: 'defects-os.create', className: 'btn-color_green' })
-          @!icons.add({ optionalClasses: 'icon-size_15' })
+        @buttons.add({ href: 'defects-os.create' })
           Добавить
         @end
       @endcan
@@ -14,18 +13,8 @@
     <div class="defect__filters">
       <form action="{{route('defects-os.index')}}" method="GET" class="form form-row">
         <div class="form__content form__content-filters">
-          @!inputs.select({
-            name: 'status',
-            labelPositionText: 'label__text_left',
-            optionClass: 'form__input form__input-filter',
-            dataOptionsConfig: {
-              dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
-              dataNameOption: 'name'
-            },
-            currentDataConfig: {
-              currentData: { id: 'all', name: 'Все дефекты' },
-              currentDataId: filters ? filters.status : '',
-            }
+          @!filters.status({
+            filters
           })
           {{--  @!inputs.select({
             name: 'department',
@@ -42,7 +31,9 @@
             type: 'submit',
             className: 'btn-color_green btn-small'
           })
-            <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+            @!icons.checkmark({
+              optionalClasses: 'icon-size_20'
+            })
           @end
         </div>
       </form>
@@ -129,11 +120,11 @@
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Редактировать', access: 'DefectOSPolicy.update', data: defectOs, path: 'defects-os.edit', params: { id: defectOs.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defectOs, path: 'defects-os.destroy', params: { id: defectOs.id }, icon: 'delete.svg' },
+                        { name: 'Редактировать', access: 'DefectOSPolicy.update', data: defectOs, path: 'defects-os.edit', params: { id: defectOs.id }, icon: 'edit' },
+                        { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defectOs, path: 'defects-os.destroy', params: { id: defectOs.id }, icon: 'delete' },
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @!icons.menu()
                     @end
                   @endif
                 @end

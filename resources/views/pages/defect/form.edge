@@ -87,9 +87,9 @@
         <div class="defect-info__imgs">
           @each(defect_img in defectSerialize.defect_imgs)
             <div class="defect-info__img-wrapper">
-              @can('editDefect', defectSerialize)
+              @can('DefectTMPolicy.update', defectSerialize)
                 <a href="{{ route('defects.delete.img', {id: defectSerialize.id, idImg: defect_img.id}, {qs: {imgName: defect_img.path_img}}) }}" class="defect-info__delete-img">
-                  <img src="{{ asset('assets/images/icons/delete.svg') }}" alt="Delete img">
+                  @!icons.delete()
                 </a>
               @end
               <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img defect-info__img-small">

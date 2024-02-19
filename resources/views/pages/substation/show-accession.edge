@@ -32,11 +32,11 @@
               @dropdown.dropdown({
                 classBtnDropdown: 'btn-dropdown-icon',
                 dropdownData: [
-                  { name: 'Редактировать', access: 'SubstationPolicy.editAttachment', path: 'accession-substations.edit', params: { id: accession.id }, icon: 'edit.svg' },
-                  { name: 'Удалить', access: 'SubstationPolicy.deleteAttachment', path: 'accession-substations.destroy', params: { id: accession.id }, icon: 'delete.svg' },
+                  { name: 'Редактировать', access: 'SubstationPolicy.editAttachment', path: 'accession-substations.edit', params: { id: accession.id }, icon: 'edit' },
+                  { name: 'Удалить', access: 'SubstationPolicy.deleteAttachment', path: 'accession-substations.destroy', params: { id: accession.id }, icon: 'delete' },
                 ],
               })
-                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                @!icons.menu()
               @end
             @endif
           </li>

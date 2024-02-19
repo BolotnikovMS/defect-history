@@ -34,11 +34,11 @@
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Редактировать', access: 'TypeDefectPolicy.update', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'TypeDefectPolicy.delete', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete.svg' },
+                        { name: 'Редактировать', access: 'TypeDefectPolicy.update', data: typeDefect, path: 'types-defects.edit', params: { id: typeDefect.id }, icon: 'edit' },
+                        { name: 'Удалить', access: 'TypeDefectPolicy.delete', data: typeDefect, path: 'types-defects.destroy', params: { id: typeDefect.id }, icon: 'delete' },
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon icon-size_20">
+                      @!icons.menu()
                     @end
                   @endif
                 @end

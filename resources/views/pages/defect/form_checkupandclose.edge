@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="defect__content">
     @forms.post({
-      action: route(options.routes.saveData, {idDefect: options.defect})
+      action: route(options.routes.saveData, {id: options.idData})
     })
       <div class="form__content form__content-column">
         @!inputs.select({
@@ -19,6 +19,10 @@
           dataOptionsConfig: {
             dataOptions: users,
             dataNameOption: 'fullName'
+          },
+          currentDataConfig: {
+            currentData: check ? check : '',
+            currentDataId: check ? check.id_inspector : '',
           }
         })
 
@@ -29,6 +33,7 @@
           rows: 6,
           placeholderText: 'Введите описание результатов...',
           required: true,
+          value: check ? check.description_results : ''
         })
 
         @if(checkup)
@@ -46,13 +51,17 @@
               dataOptions: departments,
               dataNameOption: 'name'
             },
+            currentDataConfig: {
+              currentData: check ? check : '',
+              currentDataId: check ? check.transferred : '',
+            }
           })
         @endif
       </div>
       <div class="form__btns">
         @buttons.cancel({
           href: options.routes.back,
-          params: {id: options.defect}
+          params: {id: options.routes.backParams}
         })
           Отмена
         @end

@@ -2,9 +2,8 @@
   href="{{ route(href, params ?? '') }}"
   class="btn btn-cancel {{ className ?? '' }}"
   >
-    <img
-      src="{{ asset('assets/images/icons/undo.svg') }}"
-      alt="Отмена"
-    >
+    @!icons.undo({
+      optionalClasses: 'icon-size_20'
+    })
   {{{ await $slots.main() }}}
 </a>

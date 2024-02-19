@@ -69,6 +69,17 @@ export default class DefectTMPolicy extends BasePolicy {
       user.id_role === Roles.MODERATOR || userPermissionCheck('createCheckup', user.permissions)
     )
   }
+  public async updateCheckup(user: User, defect: Defect, check: IntermediateCheck) {
+    await user.load('permissions')
+
+    if (defect.result !== null) return false
+
+    return (
+      check.id_user_created === user.id ||
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('updateCheckup', user.permissions)
+    )
+  }
   public async deleteCheckup(user: User, intermediateCheck: IntermediateCheck, defect: Defect) {
     await user.load('permissions')
 

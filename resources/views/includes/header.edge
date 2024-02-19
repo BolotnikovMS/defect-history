@@ -2,7 +2,7 @@
   <div class="container">
     <div class="header-row">
       <div class="header__logo">
-        <img src="{{ asset('assets/images/icons/journal.svg') }}" alt="Журнал">
+        @!icons.journal()
       </div>
       {{-- <nav class="header__nav">
         <ul>
@@ -29,7 +29,9 @@
               ],
             })
               Дефекты
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @elseif(!await bouncer.with('DefectTMPolicy').denies('view'))
             <li  class="nav-list__item">
@@ -57,7 +59,9 @@
               ],
             })
               РЭС и ГП
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @endif
 
@@ -72,20 +76,24 @@
               ],
             })
               Пользователи
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @endif
           @if(!await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects') || !await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects') || !await bouncer.with('ReportPolicy').denies('viewReportAllDefects'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Список дефектов ТМ ПС', access: 'ReportPolicy.viewReportSubstationDefects', path: 'reports.show.substation.defects' },
-                { name: 'Список дефектов ТМ РЭС или ГП', access: 'ReportPolicy.viewReportDistrictDefects', path: 'reports.show.district.defects' },
+                { name: 'Список дефектов ТМ по выбранной ПС', access: 'ReportPolicy.viewReportSubstationDefects', path: 'reports.show.substation.defects' },
+                { name: 'Список дефектов ТМ по выбранному РЭС или ГП', access: 'ReportPolicy.viewReportDistrictDefects', path: 'reports.show.district.defects' },
                 { name: 'Список дефектов ТМ по всем ПС', access: 'ReportPolicy.viewReportAllDefects', path: 'reports.show.all.defects' },
               ],
             })
               Отчеты
-              <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+              @!icons.arrowDown({
+                optionalClasses: 'icon-size_20'
+              })
             @end
           @endif
         </ul>
@@ -95,18 +103,20 @@
           @dropdown.dropdown({
             classDropdownMenu: 'dropdown__menu-menu_bottom',
             dropdownData: [
-              { name: 'Профиль', path: 'users.profile', params: {idUser: auth.user.id}, icon: 'profile.svg' },
-              { name: 'Сменить пароль', path: 'users.change.password', icon: 'key.svg' },
+              { name: 'Профиль', path: 'users.profile', params: {idUser: auth.user.id}, icon: 'profile' },
+              { name: 'Сменить пароль', path: 'users.change.password', icon: 'key' },
             ],
             dropdownLogout: true,
           })
             @!icons.user({ optionalClasses: 'icon-size_20' })
             {{ auth.user.shortUserName }}
-            <img src="{{ asset('assets/images/icons/arrow-down.svg') }}" class="dropdown-icon">
+            @!icons.arrowDown({
+              optionalClasses: 'icon-size_20'
+            })
           @end
         @else
           @buttons.base({ href: 'auth.login.show', className: 'btn-small btn-color_blue btn-signup' })
-            <img src="{{ asset('assets/images/icons/login-3.svg') }}" alt="Войти">
+            @!icons.login()
             Войти
           @end
         @endif

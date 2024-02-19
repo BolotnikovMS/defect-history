@@ -37,11 +37,11 @@
               @dropdown.dropdown({
                 classBtnDropdown: 'btn-dropdown-icon',
                 dropdownData: [
-                  { name: 'Редактировать', access: 'DepartmentPolicy.update', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit.svg' },
-                  { name: 'Удалить', access: 'DepartmentPolicy.delete', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete.svg' },
+                  { name: 'Редактировать', access: 'DepartmentPolicy.update', data: department, path: 'departments.edit', params: { id: department.id }, icon: 'edit' },
+                  { name: 'Удалить', access: 'DepartmentPolicy.delete', data: department, path: 'departments.destroy', params: { id: department.id }, icon: 'delete' },
                 ],
               })
-                <img src="{{ asset('assets/images/icons/menu.svg') }}" class="icon">
+                @!icons.menu()
               @end
             @endif
           </li>

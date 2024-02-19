@@ -1,6 +1,6 @@
 @set('resultPageDottedRange', pageDottedRange(pagination, deltaValue))
 @set('qs', pagination.getUrl().split('?')[1])
-{{--  {{inspect(url.split('?')[1])}}  --}}
+{{--  {{inspect(qs)}}  --}}
 
 @if(pagination.hasPages)
 <nav class="pagination">

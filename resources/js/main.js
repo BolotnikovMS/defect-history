@@ -67,12 +67,19 @@ document.addEventListener('DOMContentLoaded', () => {
   openDropdownMenu('.btn-dropdown', '.dropdown__menu')
 
   // Searchable list
-  $('.searchable-list').select2({
-    // width: '300px',
-    placeholder: 'Выберите вариант',
-    // maximumSelectionLength: 2,
-    language: 'ru',
-  })
+  $('.searchable-list')
+    .select2({
+      // width: '300px',
+      placeholder: 'Выберите вариант',
+      // maximumSelectionLength: 2,
+      language: 'ru',
+    })
+    .on('select2:opening', function (e) {
+      $(this)
+        .data('select2')
+        .$dropdown.find(':input.select2-search__field')
+        .attr('placeholder', 'Поиск...')
+    })
 
   $('.input__substation').on('select2:select', function (event) {
     const idSubstation = event.params.data.id

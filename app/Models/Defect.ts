@@ -10,8 +10,8 @@ import {
   hasOne,
 } from '@ioc:Adonis/Lucid/Orm'
 
+import { string } from '@ioc:Adonis/Core/Helpers'
 import AccessionSubstation from 'App/Models/AccessionSubstation'
-import { DateTime } from 'luxon'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
@@ -19,7 +19,7 @@ import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
 import WorkPlanning from 'App/Models/WorkPlanning'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
-import { string } from '@ioc:Adonis/Core/Helpers'
+import { DateTime } from 'luxon'
 
 export default class Defect extends BaseModel {
   @column({ isPrimary: true })

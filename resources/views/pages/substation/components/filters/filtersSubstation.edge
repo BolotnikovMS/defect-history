@@ -1,0 +1,41 @@
+<div class="substation__filters">
+  <form action="{{route('substations.show', {id: substation.id})}}" method="GET" class="form form-row">
+    <div class="form__content form__content-filters">
+      @!filters.dateSort({
+        filters
+      })
+      @!inputs.select({
+        name: 'defectsClass',
+        labelPositionText: 'label__text_left',
+        optionClass: 'form__input form__input-filter',
+        dataOptionsConfig: {
+          dataOptions: [{ id: 'defects', name: 'Дефекты ТМ' }, { id: 'defectsOs', name: 'Дефекты ОС' }],
+          dataNameOption: 'name'
+        },
+        currentDataConfig: {
+          currentData: { id: 'defects', name: 'Дефекты ТМ' },
+          currentDataId: filters.defectsClass ? filters.defectsClass : '',
+        }
+      })
+      @if(filters.defectsClass === 'defects')
+        @!filters.typeDefect({
+          typesDefects,
+          filters,
+        })
+      @endif
+      @!filters.status({
+        filters
+      })
+    </div>
+    <div class="form__btns form__btns-row">
+      @buttons.base({
+        type: 'submit',
+        className: 'btn-color_green btn-small'
+      })
+        @!icons.checkmark({
+          optionalClasses: 'icon-size_20'
+        })
+      @end
+    </div>
+  </form>
+</div>

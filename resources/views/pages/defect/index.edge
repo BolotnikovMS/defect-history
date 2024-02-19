@@ -5,71 +5,15 @@
   <div class="control control-items_sb">
     <div class="control__btns">
       @can('DefectTMPolicy.create')
-        @buttons.base({ href: 'defects.create', className: 'btn-color_green' })
-          @!icons.add({ optionalClasses: 'icon-size_15' })
+        @buttons.add({ href: 'defects.create' })
           Добавить
         @end
       @endcan
     </div>
-    <div class="filters filters-row">
-      <form action="{{route('defects.index')}}" method="GET" class="form form-row">
-        <div class="form__content form__content-filters">
-          @!inputs.select({
-            name: 'sort',
-            labelPositionText: 'label__text_left',
-            optionClass: 'form__input form__input-filter',
-            dataOptionsConfig: {
-              dataOptions: [
-                {id: 'default', sort_type: 'По умолчанию'},
-                {id: 'elimination_date_desc', sort_type: 'По убыванию даты устранения'},
-                {id: 'elimination_date_asc', sort_type: 'По возрастанию даты устранения'},
-                {id: 'term_elimination_desc', sort_type: 'По убыванию срока устранения'},
-                {id: 'term_elimination_asc', sort_type: 'По возрастанию срока устранения'},
-              ],
-              dataNameOption: 'sort_type'
-            },
-            currentDataConfig: {
-              currentData: filters?.sort ? filters.sort : '',
-              currentDataId: filters?.sort ? filters.sort : '',
-            }
-          })
-          @!inputs.select({
-            name: 'typeDefect',
-            labelPositionText: 'label__text_left',
-            optionClass: 'form__input form__input-filter',
-            dataOptionsConfig: {
-              dataOptions: [{id: 'all', type_defect: 'Все'}, ...typesDefects],
-              dataNameOption: 'type_defect'
-            },
-            currentDataConfig: {
-              currentData: filters?.typeDefect ? filters.typeDefect : '',
-              currentDataId: filters?.typeDefect ? filters.typeDefect : '',
-            }
-          })
-          @!inputs.select({
-            name: 'status',
-            labelPositionText: 'label__text_left',
-            optionClass: 'form__input form__input-filter',
-            dataOptionsConfig: {
-              dataOptions: [{ id: 'all', name: 'Все дефекты' }, { id: 'open', name: 'Открытые дефекты' }, { id: 'close', name: 'Закрытые дефекты' }],
-              dataNameOption: 'name'
-            },
-            currentDataConfig: {
-              currentData: { id: 'all', name: 'Все дефекты' },
-              currentDataId: filters ? filters.status : '',
-            }
-          })
-        </div>
-        <div class="form__btns form__btns-row">
-          @buttons.base({
-            type: 'submit',
-            className: 'btn-color_green btn-small'
-          })
-            <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
-          @end
-        </div>
-      </form>
-    </div>
+    @!component('pages/defect/components/filters/filtersDefectTM', {
+      typesDefects,
+      filters,
+    })
   </div>
   <div class="defect__content">
     {{--  {{inspect(defects[0]?.defect_type)}}  --}}
@@ -157,12 +101,12 @@
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
-                        { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendar-1.svg' },
-                        { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit.svg' },
-                        { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete.svg' },
+                        { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendarOne' },
+                        { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit' },
+                        { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete' },
                       ],
                     })
-                      <img src="{{ asset('assets/images/icons/menu.svg') }}">
+                      @!icons.menu()
                     @end
                   @endif
                 @end
@@ -172,7 +116,7 @@
         @endeach
       </div>
     @else
-      @!notification.nocontent({ messageNoData: 'Пока нет добавленых дефектов.' })
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленных дефектов.' })
     @endif
     <hr>
   </div>

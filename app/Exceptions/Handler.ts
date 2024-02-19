@@ -13,9 +13,9 @@
 |
 */
 
-import Logger from '@ioc:Adonis/Core/Logger'
-import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import Logger from '@ioc:Adonis/Core/Logger'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
   // protected disableStatusPagesInDevelopment = false
@@ -32,7 +32,12 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   public async handle(_error: any, ctx: HttpContextContract) {
     if (_error.code === 'E_ROUTE_NOT_FOUND') {
       ctx.session.flash('dangerMessage', 'Страницы не существует!')
-      return ctx.response.redirect().toRoute('defects.index')
+      return ctx.response.redirect().toRoute('dashboard.index')
+    }
+
+    if (_error.code === 'E_ROW_NOT_FOUND') {
+      ctx.session.flash('dangerMessage', 'Записи не существует!')
+      return ctx.response.redirect().toRoute('dashboard.index')
     }
 
     return super.handle(_error, ctx)

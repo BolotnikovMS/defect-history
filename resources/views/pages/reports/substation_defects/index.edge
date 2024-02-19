@@ -41,7 +41,9 @@
           type: 'submit',
           className: 'btn-color_green btn-small'
         })
-          <img src="{{ asset('assets/images/icons/checkmark.svg') }}" class="icon icon-size_20" alt="Checkmark">
+          @!icons.checkmark({
+            optionalClasses: 'icon-size_20'
+          })
         @end
       </div>
     </form>
@@ -50,12 +52,16 @@
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-pdf'
         })
-          <img src="{{ asset('assets/images/icons/pdf.svg') }}" class="icon icon-size_20" alt="PDF">
+          @!icons.pdf({
+            optionalClasses: 'icon-size_20'
+          })
         @end
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-excel'
         })
-          <img src="{{ asset('assets/images/icons/excel-file.svg') }}" class="icon icon-size_20" alt="excel">
+          @!icons.excel({
+            optionalClasses: 'icon-size_20'
+          })
         @end
       </div>
     @endif

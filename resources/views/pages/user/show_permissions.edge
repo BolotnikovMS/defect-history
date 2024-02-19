@@ -39,7 +39,7 @@
             @can('PermissionPolicy.removeUserPermissions')
               <div class="list__control">
                 <a href="{{ route('users.remove.permission', {idPermission: permission.id, idUser}) }}">
-                  <img src="{{ asset('assets/images/icons/delete.svg') }}" class="list__img" alt="Удалить" title="Удалить">
+                  @!icons.delete()
                 </a>
               </div>
             @endcan
