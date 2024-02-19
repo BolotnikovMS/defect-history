@@ -24,8 +24,8 @@
         @!inputs.select({
           label: 'Выберите группу дефекта',
           labelPositionText: 'label__text_left',
-          name: 'groupDefect',
-          optionClass: 'searchable-list',
+          name: 'defect_group',
+          optionClass: 'input__defect-group searchable-list',
           dataOptionsConfig: {
             dataOptions: defectGroups,
             dataNameOption: 'name',
@@ -36,22 +36,26 @@
           },
           currentDataConfig: {
             currentData: defectOs ? defectOs : '',
-            currentDataId: defectOs ? defectOs.id_substation : '',
+            currentDataId: defectOs ? defectOs.id_defect_group : '',
           }
         })
 
         @!inputs.select({
           label: 'Выберите классификатор дефекта',
           labelPositionText: 'label__text_left',
-          name: 'groupDefect',
-          optionClass: 'searchable-list',
+          name: 'defect_classifier',
+          optionClass: 'input__classifier searchable-list',
           defaultOptionConfig: {
             defaultOption: true,
             defaultOptionText: 'Выберите классификатор'
           },
+          dataOptionsConfig: {
+            dataOptions: defectClassifiers,
+            dataNameOption: 'name',
+          },
           currentDataConfig: {
             currentData: defectOs ? defectOs : '',
-            currentDataId: defectOs ? defectOs.id_substation : '',
+            currentDataId: defectOs ? defectOs.id_defect_classifier : '',
           }
         })
 
