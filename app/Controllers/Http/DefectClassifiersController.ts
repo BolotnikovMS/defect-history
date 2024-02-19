@@ -5,16 +5,23 @@ import DefectClassifierValidator from 'App/Validators/DefectClassifierValidator'
 
 export default class DefectClassifiersController {
   public async index({ params, request, response, view, session, bouncer }: HttpContextContract) {
+    const idDefectGroup = params.idDefectGroup
+    const defectGroup = await DefectGroup.findOrFail(idDefectGroup)
+
+    if (request.ajax()) {
+      await defectGroup.load('classifiers')
+
+      return response.status(200).json(defectGroup.classifiers)
+    }
+
     if (await bouncer.with('DefectClassifierPolicy').denies('view')) {
       session.flash('dangerMessage', 'У вас нет доступа к данному разделу!')
 
       return response.redirect().toPath('/')
     }
 
-    const idDefectGroup = params.idDefectGroup
     const page = request.input('page', 1)
     const limit = 15
-    const defectGroup = await DefectGroup.findOrFail(idDefectGroup)
     const defectClassifiers = await DefectClassifier.query()
       .where('id_group_defect', '=', idDefectGroup)
       .paginate(page, limit)
