@@ -44,17 +44,20 @@
                 class="{{ 'defects-os.index' == activeMenuLink ? 'active' : '' }}">Дефекты ОС</a>
           </li>
           @end
-          @can('TypeDefectPolicy.view')
-            <li class="nav-list__item">
-              <a href="{{ route('types-defects.index') }}"
-                class="{{ 'types-defects.index' == activeMenuLink ? 'active' : '' }}">Типы дефектов</a>
-            </li>
-          @endcan
-          @can('DefectGroupPolicy.view')
-            <li class="nav-list__item">
-              <a href="{{ route('defect-groups.index')}}">Группы дефектов</a>
-            </li>
-          @endcan
+          @if(!await bouncer.with('TypeDefectPolicy').denies('view') || !await bouncer.with('DefectGroupPolicy').denies('view'))
+            @dropdown.dropdown({
+                classDropdownMenu: 'dropdown__menu-menu_bottom',
+                dropdownData: [
+                  { name: 'Типы дефектов', access: 'TypeDefectPolicy.view', path: 'types-defects.index' },
+                  { name: 'Группы дефектов', access: 'DefectGroupPolicy.view', path: 'defect-groups.index' },
+                ],
+              })
+                Типы дефектов
+                @!icons.arrowDown({
+                  optionalClasses: 'icon-size_20'
+                })
+            @end
+          @endif
           @if(!await bouncer.with('DistrictPolicy').denies('view') || !await bouncer.with('SubstationPolicy').denies('view'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
