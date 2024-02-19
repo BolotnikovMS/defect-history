@@ -1,11 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Departments } from 'App/Enums/Departments'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectGroup from 'App/Models/DefectGroup'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
-import Department from 'App/Models/Department'
 import Substation from 'App/Models/Substation'
+import DepartmentService from 'App/Services/DepartmentService'
 import { addDays } from 'App/Utils/utils'
 import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
 import DefectOsValidator from 'App/Validators/DefectOValidator'
@@ -72,10 +71,7 @@ export default class DefectOsController {
       return response.redirect().toRoute('DefectOsController.index')
     }
 
-    const departments = await Department.query().where((queryDepartment) => {
-      queryDepartment.where('id', '!=', Departments.admins)
-      queryDepartment.where('id', '!=', Departments.withoutDepartment)
-    })
+    const departments = await DepartmentService.getCleanDepartments()
     const substations = await Substation.query()
     const defectGroups = await DefectGroup.query().where('type', '=', 'os')
 
@@ -172,10 +168,7 @@ export default class DefectOsController {
       }
 
       await defectOs.load('departments')
-      const departments = await Department.query().where((queryDepartment) => {
-        queryDepartment.where('id', '!=', Departments.admins)
-        queryDepartment.where('id', '!=', Departments.withoutDepartment)
-      })
+      const departments = await DepartmentService.getCleanDepartments()
       const substations = await Substation.query()
       const defectGroups = await DefectGroup.query().where('type', '=', 'os')
       const defectClassifiers = await DefectGroup.find(defectOs.id_defect_group)
