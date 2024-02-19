@@ -104,6 +104,8 @@ export default class DefectOsController {
     if (validatedDefectOsData) {
       const defectOs = {
         id_user_created: auth.user!.id,
+        id_defect_group: validatedDefectOsData.defect_group,
+        id_defect_classifier: validatedDefectOsData.defect_classifier,
         id_substation: validatedDefectOsData.substation,
         accession_substations: validatedDefectOsData.accession,
         description_defect: validatedDefectOsData.description_defect,
@@ -144,6 +146,10 @@ export default class DefectOsController {
       await defectOs.load('user')
       await defectOs.load('name_eliminated')
       await defectOs.load('departments')
+      await defectOs.load('defect_group')
+      await defectOs.load('defect_classifier')
+
+      // console.log(defectOs.serialize())
 
       return view.render('pages/defect-os/show', {
         title: 'Подробный просмотр',
@@ -171,6 +177,10 @@ export default class DefectOsController {
         queryDepartment.where('id', '!=', Departments.withoutDepartment)
       })
       const substations = await Substation.query()
+      const defectGroups = await DefectGroup.query().where('type', '=', 'os')
+      const defectClassifiers = await DefectGroup.find(defectOs.id_defect_group)
+
+      await defectClassifiers?.load('classifiers')
 
       return view.render('pages/defect-os/form', {
         title: 'Редактирование',
@@ -184,6 +194,8 @@ export default class DefectOsController {
         defectOs,
         departments,
         substations,
+        defectGroups,
+        defectClassifiers: defectClassifiers?.classifiers,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -202,14 +214,15 @@ export default class DefectOsController {
       }
 
       const validatedDefectOsData = await request.validate(DefectOsValidator)
-      console.log('validatedDefectOsData: ', validatedDefectOsData)
       const editedDefect = {
         id_user_updater: auth.user!.id,
         id_substation: validatedDefectOsData.substation,
+        id_defect_group: validatedDefectOsData.defect_group,
+        id_defect_classifier: validatedDefectOsData.defect_classifier,
         accession_substations: validatedDefectOsData.accession,
         description_defect: validatedDefectOsData.description_defect,
         comment: validatedDefectOsData.comment,
-        importance: validatedDefectOsData.importance,
+        importance: validatedDefectOsData.importance ? true : false,
       }
       const defectOsDepartments = await DefectOsDepartment.query().where(
         'id_defect',
