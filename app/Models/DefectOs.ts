@@ -10,12 +10,14 @@ import {
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 
-import { DateTime } from 'luxon'
+import { string } from '@ioc:Adonis/Core/Helpers'
+import DefectClassifier from 'App/Models/DefectClassifier'
+import DefectGroup from 'App/Models/DefectGroup'
 import Department from 'App/Models/Department'
 import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
-import { string } from '@ioc:Adonis/Core/Helpers'
+import { DateTime } from 'luxon'
 
 export default class DefectOs extends BaseModel {
   @column({ isPrimary: true })
@@ -26,6 +28,12 @@ export default class DefectOs extends BaseModel {
 
   @column()
   public id_user_updater: number | null
+
+  @column()
+  public id_defect_group: number
+
+  @column()
+  public id_defect_classifier: number
 
   @column()
   public id_substation: number
@@ -109,4 +117,16 @@ export default class DefectOs extends BaseModel {
     pivotTable: 'defect_os_departments',
   })
   public departments: ManyToMany<typeof Department>
+
+  @belongsTo(() => DefectGroup, {
+    foreignKey: 'id_defect_group',
+    localKey: 'id',
+  })
+  public defect_group: BelongsTo<typeof DefectGroup>
+
+  @belongsTo(() => DefectClassifier, {
+    foreignKey: 'id_defect_classifier',
+    localKey: 'id',
+  })
+  public defect_classifier: BelongsTo<typeof DefectClassifier>
 }
