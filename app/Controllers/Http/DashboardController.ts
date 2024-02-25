@@ -1,6 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import DefectOs from 'App/Models/DefectOs'
 import District from 'App/Models/District'
+import DefectOSService from 'App/Services/DefectOSService'
 import DefectTMService from 'App/Services/DefectTMService'
 
 export default class DashboardController {
@@ -14,23 +14,18 @@ export default class DashboardController {
     const typesOpenedDefectsOs = await DefectTMService.getDefectsByType({ openedDefects: true })
 
     // Defects OS
-    const numberDefectsOs = (await DefectOs.query().count('* as total'))[0].$extras.total
-    const numberClosedDefectsOs = (
-      await DefectOs.query().whereNotNull('result').count('* as total')
-    )[0].$extras.total
+    const numberDefectsOs = await DefectOSService.getNumberDefects()
+    const numberClosedDefectsOs = await DefectOSService.getNumberDefects({ closedDefects: true })
     const numberOpenedDefectsOs = numberDefectsOs - numberClosedDefectsOs
 
     // Districts Defects
     const numberDistrictsDefects = await District.query()
-      .orderBy('created_at', 'asc')
       .preload('district_defects')
       .preload('district_defects_os')
     const numberDistrictsOpenedDefects = await District.query()
-      .orderBy('created_at', 'asc')
       .preload('district_defects', (query) => query.whereNull('result'))
       .preload('district_defects_os', (query) => query.whereNull('result'))
     const numberDistrictsClosedDefects = await District.query()
-      .orderBy('created_at', 'asc')
       .preload('district_defects', (query) => query.whereNotNull('result'))
       .preload('district_defects_os', (query) => query.whereNotNull('result'))
 
