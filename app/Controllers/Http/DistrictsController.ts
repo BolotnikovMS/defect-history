@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import District from 'App/Models/District'
+import DistrictService from 'App/Services/DistrictService'
 import DistrictValidator from 'App/Validators/DistrictValidator'
 
 export default class DistrictsController {
@@ -10,15 +11,7 @@ export default class DistrictsController {
       return response.redirect().toPath('/')
     }
 
-    const page = request.input('page', 1)
-    const limit = 15
-    const districts = await District.query()
-      .orderBy('created_at', 'asc')
-      .preload('district_defects')
-      .preload('district_defects_os')
-      .paginate(page, limit)
-
-    districts.baseUrl('/districts')
+    const districts = await DistrictService.getDistricts({ req: request })
 
     return view.render('pages/district/index', {
       title: 'Список РЭС и ГП',
