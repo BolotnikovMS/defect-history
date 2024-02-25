@@ -1,28 +1,17 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Defect from 'App/Models/Defect'
 import DefectOs from 'App/Models/DefectOs'
-import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
-import DashboardService from 'App/Services/DashboardService'
+import DefectTMService from 'App/Services/DefectTMService'
 
 export default class DashboardController {
   public async index({ view }: HttpContextContract) {
     // Defects TM
-    const numberDefectsTm = (await Defect.query().count('* as total'))[0].$extras.total
-    const numberClosedDefectsTm = (
-      await Defect.query().whereNotNull('result').count('* as total')
-    )[0].$extras.total
+    const numberDefectsTm = await DefectTMService.getNumberDefects()
+    const numberClosedDefectsTm = await DefectTMService.getNumberDefects({ closedDefects: true })
     const numberOpenedDefectsTm = numberDefectsTm - numberClosedDefectsTm
-    // const typesDefectsTm = await DefectType.query().withCount('defects', (query) =>
-    //   query.as('totalDefects')
-    // )
-    const typesDefectsTm = await DashboardService.getTMDefectsByType()
-    const typesClosedDefectsTm = await DefectType.query().preload('defects', (query) => {
-      query.whereNotNull('result')
-    })
-    const typesOpenedDefectsOs = await DefectType.query().preload('defects', (query) => {
-      query.whereNull('result')
-    })
+    const typesDefectsTm = await DefectTMService.getDefectsByType()
+    const typesClosedDefectsTm = await DefectTMService.getDefectsByType({ closedDefects: true })
+    const typesOpenedDefectsOs = await DefectTMService.getDefectsByType({ openedDefects: true })
 
     // Defects OS
     const numberDefectsOs = (await DefectOs.query().count('* as total'))[0].$extras.total
