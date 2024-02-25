@@ -5,7 +5,14 @@ import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
+import DefectType from 'App/Models/DefectType'
 import DefectValidator from 'App/Validators/DefectValidator'
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+interface IDefectTMParams {
+  closedDefects?: boolean
+  openedDefects?: boolean
+}
 
 export default class DefectTMService {
   public static async getDefects(req: RequestContract, limit: number = 15) {
@@ -94,5 +101,24 @@ export default class DefectTMService {
     })
 
     return defect
+  }
+  public static async getNumberDefects(params?: IDefectTMParams): Promise<number> {
+    const number = (
+      await Defect.query()
+        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
+        .if(params?.openedDefects, (query) => query.whereNull('result'))
+        .count('* as total')
+    )[0].$extras.total
+
+    return number
+  }
+  public static async getDefectsByType(params?: IDefectTMParams) {
+    const typesDefects = await DefectType.query().preload('defects', (query) => {
+      query
+        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
+        .if(params?.openedDefects, (query) => query.whereNull('result'))
+    })
+
+    return typesDefects
   }
 }
