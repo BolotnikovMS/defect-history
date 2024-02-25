@@ -3,6 +3,7 @@ import Defect from 'App/Models/Defect'
 import DefectOs from 'App/Models/DefectOs'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
+import DashboardService from 'App/Services/DashboardService'
 
 export default class DashboardController {
   public async index({ view }: HttpContextContract) {
@@ -15,7 +16,7 @@ export default class DashboardController {
     // const typesDefectsTm = await DefectType.query().withCount('defects', (query) =>
     //   query.as('totalDefects')
     // )
-    const typesDefectsTm = await DefectType.query().preload('defects')
+    const typesDefectsTm = await DashboardService.getTMDefectsByType()
     const typesClosedDefectsTm = await DefectType.query().preload('defects', (query) => {
       query.whereNotNull('result')
     })
@@ -70,16 +71,4 @@ export default class DashboardController {
       },
     })
   }
-
-  public async create({}: HttpContextContract) {}
-
-  public async store({}: HttpContextContract) {}
-
-  public async show({}: HttpContextContract) {}
-
-  public async edit({}: HttpContextContract) {}
-
-  public async update({}: HttpContextContract) {}
-
-  public async destroy({}: HttpContextContract) {}
 }
