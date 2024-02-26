@@ -6,7 +6,6 @@ export default class DistrictService {
     const { req, limit = 15, closedDefects, openedDefects } = params
     const page = req ? req.input('page', 1) : 1
     const districts = await District.query()
-      .orderBy('created_at', 'asc')
       .preload('district_defects', (query) =>
         query
           .if(closedDefects, (query) => query.whereNotNull('result'))
