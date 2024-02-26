@@ -1,4 +1,3 @@
-import { ModelObject } from '@ioc:Adonis/Lucid/Orm'
 import { IDistrictParams } from 'App/Interfaces/DistrictParams'
 import District from 'App/Models/District'
 
@@ -23,9 +22,7 @@ export default class DistrictService {
 
     return districts
   }
-  public static async getDistrictSubstations(
-    params: Record<string, unknown>
-  ): Promise<ModelObject> {
+  public static async getDistrictSubstations(params: Record<string, unknown>): Promise<District> {
     const district = await District.findOrFail(params.id)
 
     await district.load('substations', (query) => {
