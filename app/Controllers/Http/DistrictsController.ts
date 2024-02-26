@@ -85,23 +85,18 @@ export default class DistrictsController {
       return response.redirect().toPath('/')
     }
 
-    const district = await District.find(params.id)
+    const district = await District.findOrFail(params.id)
 
-    if (district) {
-      return view.render('pages/district/form', {
-        title: 'Редактирование',
-        options: {
-          idData: district.id,
-          routePath: {
-            saveData: 'districts.update',
-          },
+    return view.render('pages/district/form', {
+      title: 'Редактирование',
+      options: {
+        idData: district.id,
+        routePath: {
+          saveData: 'districts.update',
         },
-        district,
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+      },
+      district,
+    })
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
@@ -111,19 +106,13 @@ export default class DistrictsController {
       return response.redirect().toPath('/')
     }
 
-    const district = await District.find(params.id)
+    const district = await District.findOrFail(params.id)
+    const validateData = await request.validate(DistrictValidator)
 
-    if (district) {
-      const validateData = await request.validate(DistrictValidator)
+    await district.merge(validateData).save()
 
-      await district.merge(validateData).save()
-
-      session.flash('successMessage', `Данные отдела успешно обновлены.`)
-      response.redirect().toRoute('districts.index')
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    session.flash('successMessage', `Данные отдела успешно обновлены.`)
+    response.redirect().toRoute('districts.index')
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
@@ -133,16 +122,11 @@ export default class DistrictsController {
       return response.redirect().toPath('/')
     }
 
-    const district = await District.find(params.id)
+    const district = await District.findOrFail(params.id)
 
-    if (district) {
-      await district.delete()
+    await district.delete()
 
-      session.flash('successMessage', `Район успешно удален из базы!`)
-      response.redirect().back()
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    session.flash('successMessage', `Район успешно удален из базы!`)
+    response.redirect().back()
   }
 }
