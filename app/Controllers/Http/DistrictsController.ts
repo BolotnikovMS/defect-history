@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import District from 'App/Models/District'
+import Substation from 'App/Models/Substation'
 import DistrictService from 'App/Services/DistrictService'
 import DistrictValidator from 'App/Validators/DistrictValidator'
 
@@ -64,26 +65,17 @@ export default class DistrictsController {
       return response.redirect().toPath('/')
     }
 
-    const district = await District.find(params.id)
+    const district = await DistrictService.getDistrictSubstations(params)
 
-    if (district) {
-      await district.load('substations', (query) => {
-        query.preload('defects')
-        query.preload('defectsOs')
-      })
+    district.substations.sort(
+      (prevItem: Substation, nextItem: Substation) =>
+        nextItem.numberOpenDefects - prevItem.numberOpenDefects
+    )
 
-      district.substations.sort(
-        (prevItem, nextItem) => nextItem.numberOpenDefects - prevItem.numberOpenDefects
-      )
-
-      return view.render('pages/district/show', {
-        title: district.name,
-        district,
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    return view.render('pages/district/show', {
+      title: district.name,
+      district,
+    })
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
