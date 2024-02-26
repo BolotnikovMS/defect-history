@@ -22,16 +22,6 @@ export default class DashboardController {
     const numberDistrictsDefects = await DistrictService.getDistricts({})
     const numberDistrictsOpenedDefects = await DistrictService.getDistricts({ openedDefects: true })
     const numberDistrictsClosedDefects = await DistrictService.getDistricts({ closedDefects: true })
-    // const numberDistrictsDefects = await District.query()
-    //   .preload('district_defects')
-    //   .preload('district_defects_os')
-    // const numberDistrictsOpenedDefects = await District.query()
-    //   .preload('district_defects', (query) => query.whereNull('result'))
-    //   .preload('district_defects_os', (query) => query.whereNull('result'))
-    // const numberDistrictsClosedDefects = await District.query()
-    //   .preload('district_defects', (query) => query.whereNotNull('result'))
-    //   .preload('district_defects_os', (query) => query.whereNotNull('result'))
-
     // const test = numberDistrictsDefects.map((type) => type.serialize())
     // console.log('test: ', numberDistrictsDefects)
 
