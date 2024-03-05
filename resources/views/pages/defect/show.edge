@@ -214,8 +214,14 @@
     @endif
 
     <div class="defect-info__close">
-      <div class="defect-info__titles">
+      <div class="defect-info__titles defect-info__titles-row">
         <h3 class="defect-info__title">Выполненные работы по устранению</h3>
+        @buttons.base({
+          href: 'defects.delete.close-defect-record',
+          params: {id: defect.id}
+        })
+          @!icons.delete()
+        @end
       </div>
       @if(defect.result)
         <div class="defect-info__group">
