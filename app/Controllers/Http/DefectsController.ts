@@ -520,4 +520,25 @@ export default class DefectsController {
     session.flash('successMessage', `Дефект закрыт.`)
     response.redirect().toRoute('defects.show', { id: idDefect })
   }
+
+  public async deletingCompletionRecord({
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const { id } = params
+    const defect = await Defect.findOrFail(id)
+    const updDefect = {
+      ...defect,
+      result: null,
+      elimination_date: null,
+      id_name_eliminated: null,
+    }
+
+    await defect.merge(updDefect).save()
+
+    session.flash('successMessage', `Запись удалена!`)
+    return response.redirect().back()
+  }
 }
