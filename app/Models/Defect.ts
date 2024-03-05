@@ -66,7 +66,7 @@ export default class Defect extends BaseModel {
   public result: string | null
 
   @column({ serializeAs: null })
-  public id_name_eliminated: number
+  public id_name_eliminated: number | null
 
   @column.dateTime({
     autoCreate: true,
