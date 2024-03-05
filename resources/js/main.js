@@ -29,20 +29,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnTrigger && dropdownContent) {
       btnTrigger.forEach((btn, i) => {
         btn.addEventListener('click', () => {
+          btn.classList.toggle('active')
           dropdownContent[i].classList.toggle('active')
           dropdownContent.forEach((item, j) => (i !== j ? item.classList.remove('active') : null))
-          closeDropdownMenu(dropdownContent[i])
+          closeDropdownMenu(dropdownContent[i], btn)
         })
       })
     }
 
-    const closeDropdownMenu = (dropdownItem) => {
+    const closeDropdownMenu = (dropdownTrigger, dropdownItem) => {
       window.addEventListener('click', (e) => {
         const target = e.target
 
         if (!target.closest('.btn-dropdown') && !target.closest('.dropdown-menu')) {
-          if (dropdownItem.classList.contains('active')) {
+          if (
+            dropdownItem.classList.contains('active') &&
+            dropdownTrigger.classList.contains('active')
+          ) {
             dropdownItem.classList.toggle('active')
+            dropdownTrigger.classList.toggle('active')
           }
         }
       })

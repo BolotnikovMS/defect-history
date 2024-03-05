@@ -86,5 +86,9 @@
     &:hover {
       background-color: #c9c6c6;
     }
+
+    &.active .icon-arrow {
+      transform: rotate(180deg);
+    }
   }
 }

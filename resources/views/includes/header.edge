@@ -30,7 +30,7 @@
             })
               Дефекты
               @!icons.arrowDown({
-                optionalClasses: 'icon-size_20'
+                optionalClasses: 'icon-arrow icon-size_20'
               })
             @end
           @elseif(!await bouncer.with('DefectTMPolicy').denies('view'))
@@ -54,7 +54,7 @@
               })
                 Типы дефектов
                 @!icons.arrowDown({
-                  optionalClasses: 'icon-size_20'
+                  optionalClasses: 'icon-arrow icon-size_20'
                 })
             @end
           @endif
@@ -68,7 +68,7 @@
             })
               РЭС и ГП
               @!icons.arrowDown({
-                optionalClasses: 'icon-size_20'
+                optionalClasses: 'icon-arrow icon-size_20'
               })
             @end
           @endif
@@ -85,7 +85,7 @@
             })
               Пользователи
               @!icons.arrowDown({
-                optionalClasses: 'icon-size_20'
+                optionalClasses: 'icon-arrow icon-size_20'
               })
             @end
           @endif
@@ -100,7 +100,7 @@
             })
               Отчеты
               @!icons.arrowDown({
-                optionalClasses: 'icon-size_20'
+                optionalClasses: 'icon-arrow icon-size_20'
               })
             @end
           @endif
@@ -119,7 +119,7 @@
             @!icons.user({ optionalClasses: 'icon-size_20' })
             {{ auth.user.shortUserName }}
             @!icons.arrowDown({
-              optionalClasses: 'icon-size_20'
+              optionalClasses: 'icon-arrow icon-size_20'
             })
           @end
         @else
