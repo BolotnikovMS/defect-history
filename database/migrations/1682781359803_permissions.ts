@@ -287,6 +287,10 @@ export default class extends BaseSchema {
           access: 'deleteDefectClassifier',
           description: 'Удаление классификаторов дефектов',
         },
+        {
+          access: 'deletingCompletionRecord',
+          description: 'Удаление записи о выполнении работы по дефекту',
+        },
       ])
     })
   }
