@@ -63,7 +63,6 @@ export default class DefectTMService {
       term_elimination: addDays(20),
       importance: data.importance,
     }
-
     const defect = await Defect.create(newDefect)
 
     data?.defect_img?.forEach(async (img) => {
