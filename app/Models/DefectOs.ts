@@ -39,7 +39,7 @@ export default class DefectOs extends BaseModel {
   public id_substation: number
 
   @column()
-  public id_name_eliminated: number
+  public id_name_eliminated: number | null
 
   @column()
   public accession_substations: string
