@@ -122,4 +122,14 @@ export default class DefectTMPolicy extends BasePolicy {
       userPermissionCheck('editingPlannedWorkEntry', user.permissions)
     )
   }
+  public async deletingCompletionRecord(user: User, defect: Defect) {
+    await user.load('permissions')
+
+    if (defect.result === null) return false
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('deletingCompletionRecord', user.permissions)
+    )
+  }
 }

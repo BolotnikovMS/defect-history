@@ -529,6 +529,13 @@ export default class DefectsController {
   }: HttpContextContract) {
     const { id } = params
     const defect = await Defect.findOrFail(id)
+
+    if (await bouncer.with('DefectTMPolicy').denies('deletingCompletionRecord', defect)) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление или у дефекта нету результатов!')
+
+      return response.redirect().toRoute('DefectsController.index')
+    }
+
     const updDefect = {
       ...defect,
       result: null,
