@@ -99,8 +99,16 @@
       </div>
 
       <div class="defect-info__close">
-        <div class="defect-info__titles">
+        <div class="defect-info__titles defect-info__titles-row">
           <h3 class="defect-info__title">Выполненные работы по устранению</h3>
+          @can('DefectTMPolicy.deletingCompletionRecord', defectOs)
+            @buttons.base({
+              href: 'defects-os.delete.close-defect-record',
+              params: {id: defectOs.id}
+            })
+              @!icons.delete()
+            @end
+          @endcan
         </div>
         @if(defectOs.result)
           <div class="defect-info__group">

@@ -121,10 +121,10 @@ export default class DefectOsController {
       })
 
       session.flash('successMessage', `Дефект по ОС успешно добавлен!`)
-      response.redirect().toRoute('defects-os.index')
+      response.redirect().toRoute('DefectOsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects-os.index')
+      response.redirect().toRoute('DefectOsController.index')
     }
   }
 
@@ -153,7 +153,7 @@ export default class DefectOsController {
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects.index')
+      response.redirect().toRoute('DefectOsController.index')
     }
   }
 
@@ -323,10 +323,38 @@ export default class DefectOsController {
       await defectOs.save()
 
       session.flash('successMessage', `Дефект закрыт.`)
-      response.redirect().toRoute('defects-os.show', { id })
+      response.redirect().toRoute('DefectOsController.show', { id })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects-os.index')
+      response.redirect().toRoute('DefectOsController.index')
     }
+  }
+
+  public async deletingCompletionRecord({
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const { id } = params
+    const defectOs = await DefectOs.findOrFail(id)
+
+    if (await bouncer.with('DefectTMPolicy').denies('deletingCompletionRecord', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление или у дефекта нету результатов!')
+
+      return response.redirect().toRoute('DefectOsController.index')
+    }
+
+    const updDefectOs = {
+      ...defectOs,
+      result: null,
+      elimination_date: null,
+      id_name_eliminated: null,
+    }
+
+    await defectOs.merge(updDefectOs).save()
+
+    session.flash('successMessage', `Запись удалена!`)
+    return response.redirect().back()
   }
 }
