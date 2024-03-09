@@ -100,10 +100,10 @@ export default class DefectsController {
       }
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
-      response.redirect().toRoute('defects.index')
+      response.redirect().toRoute('DefectsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects.index')
+      response.redirect().toRoute('DefectsController.index')
     }
   }
 
@@ -518,7 +518,7 @@ export default class DefectsController {
     await defect.save()
 
     session.flash('successMessage', `Дефект закрыт.`)
-    response.redirect().toRoute('defects.show', { id: idDefect })
+    response.redirect().toRoute('DefectsController.show', { id: idDefect })
   }
 
   public async deletingCompletionRecord({
