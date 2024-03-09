@@ -1,5 +1,6 @@
 import Roles from 'App/Enums/Roles'
 import Defect from 'App/Models/Defect'
+import DefectOs from 'App/Models/DefectOs'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import User from 'App/Models/User'
 import WorkPlanning from 'App/Models/WorkPlanning'
@@ -122,7 +123,7 @@ export default class DefectTMPolicy extends BasePolicy {
       userPermissionCheck('editingPlannedWorkEntry', user.permissions)
     )
   }
-  public async deletingCompletionRecord(user: User, defect: Defect) {
+  public async deletingCompletionRecord(user: User, defect: Defect | DefectOs) {
     await user.load('permissions')
 
     if (defect.result === null) return false
