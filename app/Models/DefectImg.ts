@@ -1,6 +1,7 @@
-import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+
 import Defect from 'App/Models/Defect'
+import { DateTime } from 'luxon'
 
 export default class DefectImg extends BaseModel {
   @column({ isPrimary: true })
@@ -11,6 +12,15 @@ export default class DefectImg extends BaseModel {
 
   @column()
   public path_img: string
+
+  @column()
+  public status: string
+
+  @column()
+  public extname: string
+
+  @column()
+  public size: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
