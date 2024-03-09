@@ -67,11 +67,15 @@ export default class DefectTMService {
     const defect = await Defect.create(newDefect)
 
     data?.defect_img?.forEach(async (img) => {
+      console.log('img: ', img)
       const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
 
       await DefectImg.create({
         id_defect: defect.id,
         path_img: `/uploads/images/defects/${imgName}`,
+        status: 'open',
+        extname: img.extname,
+        size: +(img.size / 1024).toFixed(3),
       })
       await img.moveToDisk('images/defects/', { name: imgName })
     })
