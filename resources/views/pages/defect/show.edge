@@ -119,7 +119,9 @@
         @if(defect.defect_imgs.length)
           <div class="defect-info__imgs">
             @each(defect_img in defect.defect_imgs)
-              <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
+              @if(defect_img.status === 'open')
+                <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
+              @end
             @endeach
           </div>
         @endif
@@ -240,6 +242,15 @@
           <div class="defect-info__text">Результаты:
             <span>{{ defect.result }}</span>
           </div>
+          @if(defect.defect_imgs.length)
+            <div class="defect-info__imgs">
+              @each(defect_img in defect.defect_imgs)
+                @if(defect_img.status === 'close')
+                  <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
+                @end
+              @endeach
+            </div>
+          @endif
         </div>
       @else
         <div class="defect-info__group">
