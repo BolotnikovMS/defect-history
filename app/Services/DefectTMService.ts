@@ -8,6 +8,9 @@ import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
 import DefectValidator from 'App/Validators/DefectValidator'
+import { unlink } from 'node:fs/promises'
+
+type TDefectImageStatus = 'open' | 'close' | 'intermediate'
 
 export default class DefectTMService {
   public static async getDefects(req: RequestContract, limit: number = 15) {
@@ -117,5 +120,29 @@ export default class DefectTMService {
     })
 
     return typesDefects
+  }
+  public static async removeDefectImages(
+    defect: Defect,
+    status?: TDefectImageStatus
+  ): Promise<void> {
+    await defect.load('defect_imgs', (query) =>
+      query.if(status, (query) => query.where('status', '=', status!))
+    )
+
+    defect.defect_imgs.forEach(async (img) => {
+      try {
+        await unlink(`./tmp${img.path_img}`)
+      } catch (error) {
+        console.log(`there was an error: ${error.message}`)
+      }
+    })
+
+    await defect
+      .related('defect_imgs')
+      .query()
+      .if(status, (query) => query.where('status', '=', status!))
+      .delete()
+
+    return
   }
 }
