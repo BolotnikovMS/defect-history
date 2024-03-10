@@ -66,7 +66,6 @@ export default class DefectTMService {
     const defect = await Defect.create(newDefect)
 
     data?.defect_img?.forEach(async (img) => {
-      console.log('img: ', img)
       const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
 
       await DefectImg.create({
