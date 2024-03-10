@@ -211,17 +211,9 @@ export default class DefectsController {
         return response.redirect().toPath('/')
       }
 
-      await defect.load('defect_imgs')
       await defect.related('intermediate_checks').query().delete()
       await defect.related('work_planning').query().delete()
-      defect.defect_imgs?.forEach(async (img) => {
-        try {
-          await unlink(`./tmp${img.path_img}`)
-        } catch (error) {
-          console.log(`there was an error: ${error.message}`)
-        }
-      })
-      await defect.related('defect_imgs').query().delete()
+      await DefectTMService.removeDefectImages(defect)
       await defect.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
@@ -511,11 +503,26 @@ export default class DefectsController {
     }
     const validateData = await request.validate(CloseDefectValidator)
 
-    defect.id_name_eliminated = +validateData.employee
-    defect.result = validateData.description_results
-    defect.elimination_date = DateTime.now()
+    await defect
+      .merge({
+        id_name_eliminated: +validateData.employee,
+        result: validateData.description_results,
+        elimination_date: DateTime.now(),
+      })
+      .save()
 
-    await defect.save()
+    validateData?.defect_img?.forEach(async (img) => {
+      const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+
+      await DefectImg.create({
+        id_defect: defect.id,
+        path_img: `/uploads/images/defects/${imgName}`,
+        status: 'close',
+        extname: img.extname,
+        size: +(img.size / 1024).toFixed(3),
+      })
+      await img.moveToDisk('images/defects/', { name: imgName })
+    })
 
     session.flash('successMessage', `Дефект закрыт.`)
     response.redirect().toRoute('DefectsController.show', { id: idDefect })
@@ -544,6 +551,8 @@ export default class DefectsController {
     }
 
     await defect.merge(updDefect).save()
+
+    await DefectTMService.removeDefectImages(defect, 'close')
 
     session.flash('successMessage', `Запись удалена!`)
     return response.redirect().back()
