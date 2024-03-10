@@ -13,6 +13,10 @@ export default class CloseDefectValidator {
       rules.maxLength(700),
       rules.escape(),
     ]),
+    defect_img: schema.array
+      .optional()
+      .members(schema.file({ size: '1mb', extnames: ['jpg', 'png', 'jpeg'] })),
+    importance: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {
