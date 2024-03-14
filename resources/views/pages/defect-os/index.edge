@@ -36,7 +36,11 @@
               @!card.cardSpan({ text: defectOs.accession_substations, optionalClasses: 'card__text' })
                   @if(defectOs?.departments?.length)
                     <span class="card__text">
-                      Ответственный:
+                      @if(defectOs?.departments?.length >= 2)
+                        Ответственные:
+                      @else
+                        Ответственный:
+                      @end
                       @each(department in defectOs.departments)
                         @!badge.badge({
                           badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lightorg',
