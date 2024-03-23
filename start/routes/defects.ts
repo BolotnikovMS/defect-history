@@ -18,6 +18,9 @@ Route.group(() => {
   Route.get('/delete-checkup/:id', 'DefectsController.checkupDestroy').as('checkup.destroy')
   Route.get('/close-defect/:id', 'DefectsController.closeDefectCreate').as('close.create')
   Route.post('/close-defect/:id', 'DefectsController.closeDefectStore').as('close.store')
+  Route.get('/delete-close-defect-record/:id', 'DefectsController.deletingCompletionRecord').as(
+    'delete.close-defect-record'
+  )
 })
   .prefix('/defects')
   .as('defects')

@@ -1,0 +1,31 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="defect-classifiers__content">
+    @forms.post({
+      action: route(options.routePath.saveData, {idDefectGroup: options.idDefectGroup, id: options.idData})
+    })
+      <div class="form__content form__content-column">
+        @!inputs.textarea({
+          label: 'Описание классификатора',
+          labelPositionText: 'label__text_left',
+          name: 'name',
+          rows: 8,
+          placeholderText: 'Введите описание...',
+          required: true,
+          value: defectClassifier ? defectClassifier.name : ''
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'defect-groups.index.classifiers', params: {idDefectGroup: options.idDefectGroup} })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection

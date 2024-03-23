@@ -36,6 +36,16 @@
           optionalClasses: 'icon-size_20'
         })
       @end
+      @buttons.base({
+        type: 'button',
+        className: 'btn-color_green btn-small',
+        href: 'substations.show',
+        params: { id: substation.id }
+      })
+        @!icons.reset({
+          optionalClasses: 'icon-size_20'
+        })
+      @end
     </div>
   </form>
 </div>

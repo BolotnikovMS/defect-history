@@ -24,7 +24,7 @@
             params: {id: defectOs.id},
             className: 'btn-color_blue btn-color_blue-transparent'
           })
-            @!icons.edit({})
+            @!icons.edit()
             Редактировать дефект
           @end
         @endcan
@@ -52,6 +52,16 @@
             @each(department in defectOs.departments)
               <span>{{ department.name }}</span>
             @end
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Группа дефекта:
+            <span>{{ defectOs.defect_group.name }}</span>
+          </div>
+        </div>
+        <div class="defect-info__group">
+          <div class="defect-info__text">Классификатор дефекта:
+            <span>{{ defectOs.defect_classifier.name }}</span>
           </div>
         </div>
         <div class="defect-info__group defect-info__group-line">
@@ -89,8 +99,16 @@
       </div>
 
       <div class="defect-info__close">
-        <div class="defect-info__titles">
+        <div class="defect-info__titles defect-info__titles-row">
           <h3 class="defect-info__title">Выполненные работы по устранению</h3>
+          @can('DefectTMPolicy.deletingCompletionRecord', defectOs)
+            @buttons.base({
+              href: 'defects-os.delete.close-defect-record',
+              params: {id: defectOs.id}
+            })
+              @!icons.delete()
+            @end
+          @endcan
         </div>
         @if(defectOs.result)
           <div class="defect-info__group">

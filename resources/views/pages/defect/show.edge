@@ -11,9 +11,7 @@
               params: {id: defect.id},
               className: 'btn-color_green'
             })
-              @!icons.close({
-                optionalClasses: 'icon-size_20'
-              })
+              @!icons.close()
               Закрыть дефект
             @end
           @endcan
@@ -23,9 +21,7 @@
               params: {id: defect.id},
               className: 'btn-color_orange'
             })
-              @!icons.magnifier({
-                optionalClasses: 'icon-size_20'
-              })
+              @!icons.magnifier()
               Добавить проверку
             @end
           @endcan
@@ -37,7 +33,7 @@
               className: 'btn-color_blue btn-color_blue-transparent'
             })
               @!icons.calendarTwo()
-              Планироване работ
+              Планирование работ
             @end
           @endcan
 
@@ -97,7 +93,7 @@
           <span>{{ defect.defect_type.type_defect }}</span>
         </div>
       </div>
-      <div class="defect-info__group defect-info_group-line">
+      <div class="defect-info__group defect-info__group-line">
         <div class="defect-info__text">Объект:
           <span>{{ defect.substation.name }}</span>
         </div>
@@ -123,7 +119,9 @@
         @if(defect.defect_imgs.length)
           <div class="defect-info__imgs">
             @each(defect_img in defect.defect_imgs)
-              <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
+              @if(defect_img.status === 'open')
+                <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
+              @end
             @endeach
           </div>
         @endif
@@ -218,8 +216,16 @@
     @endif
 
     <div class="defect-info__close">
-      <div class="defect-info__titles">
+      <div class="defect-info__titles defect-info__titles-row">
         <h3 class="defect-info__title">Выполненные работы по устранению</h3>
+        @can('DefectTMPolicy.deletingCompletionRecord', defect)
+          @buttons.base({
+            href: 'defects.delete.close-defect-record',
+            params: {id: defect.id}
+          })
+            @!icons.delete()
+          @end
+        @endcan
       </div>
       @if(defect.result)
         <div class="defect-info__group">
@@ -236,6 +242,15 @@
           <div class="defect-info__text">Результаты:
             <span>{{ defect.result }}</span>
           </div>
+          @if(defect.defect_imgs.length)
+            <div class="defect-info__imgs">
+              @each(defect_img in defect.defect_imgs)
+                @if(defect_img.status === 'close')
+                  <img src="{{ defect_img.path_img }}" alt="{{ defect_img }}" class="defect-info__img">
+                @end
+              @endeach
+            </div>
+          @endif
         </div>
       @else
         <div class="defect-info__group">

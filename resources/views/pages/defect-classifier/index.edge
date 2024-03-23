@@ -1,0 +1,47 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    @can('DefectClassifierPolicy.create')
+      @buttons.add({ href: 'defect-groups.create.classifiers', params: {idDefectGroup: options.idDefectGroup}})
+        Добавить
+      @end
+    @end
+  </div>
+  <div class="defect-classifiers__content">
+    <hr>
+    @if(defectClassifiers.length)
+      <ul class="list">
+        <li class="list__item">
+          <div class="list__content">
+            <span class="list__text list__text-header">
+              Описание классификатора
+            </span>
+          </div>
+        </li>
+        @each(classifier in defectClassifiers)
+					<li class='list__item'>
+						<div class="list__content">
+							{{ classifier.name }}
+						</div>
+            @if(!await bouncer.with('DefectClassifierPolicy').denies('update') || !await bouncer.with('DefectClassifierPolicy').denies('delete'))
+              @dropdown.dropdown({
+                classBtnDropdown: 'btn-dropdown-icon',
+                dropdownData: [
+                  { name: 'Редактировать', access: 'DefectClassifierPolicy.update', path: 'defect-groups.edit.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'edit' },
+                  { name: 'Удалить', access: 'DefectClassifierPolicy.delete', path: 'defect-groups.destroy.classifiers', params: { idDefectGroup: classifier.id_group_defect, id: classifier.id }, icon: 'delete' }
+                ]
+              })
+                @!icons.menu()
+              @end
+            @end
+					</li>
+        @endeach
+      </ul>
+    @else
+      @!notification.nocontent({ messageNoData: 'Пока нет добавленных классификаторов дефектов.' })
+    @endif
+    <hr>
+  </div>
+@endsection

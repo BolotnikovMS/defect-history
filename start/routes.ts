@@ -33,6 +33,7 @@ Route.group(() => {
   require('./routes/accession_substations')
   require('./routes/reports')
   require('./routes/work_planning')
+  require('./routes/defect_groups')
 }).namespace('App/Controllers/Http')
 
 Route.group(() => {

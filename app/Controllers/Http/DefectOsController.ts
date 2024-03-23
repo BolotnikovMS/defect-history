@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { Departments } from 'App/Enums/Departments'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
+import DefectGroup from 'App/Models/DefectGroup'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
-import Department from 'App/Models/Department'
 import Substation from 'App/Models/Substation'
+import DepartmentService from 'App/Services/DepartmentService'
 import { addDays } from 'App/Utils/utils'
 import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
 import DefectOsValidator from 'App/Validators/DefectOValidator'
@@ -71,11 +71,9 @@ export default class DefectOsController {
       return response.redirect().toRoute('DefectOsController.index')
     }
 
-    const departments = await Department.query().where((queryDepartment) => {
-      queryDepartment.where('id', '!=', Departments.admins)
-      queryDepartment.where('id', '!=', Departments.withoutDepartment)
-    })
+    const departments = await DepartmentService.getCleanDepartments()
     const substations = await Substation.query()
+    const defectGroups = await DefectGroup.query().where('type', '=', 'os')
 
     return view.render('pages/defect-os/form', {
       title: 'Добавление нового дефекта по ОС',
@@ -86,6 +84,7 @@ export default class DefectOsController {
       },
       departments,
       substations,
+      defectGroups,
     })
   }
 
@@ -101,6 +100,8 @@ export default class DefectOsController {
     if (validatedDefectOsData) {
       const defectOs = {
         id_user_created: auth.user!.id,
+        id_defect_group: validatedDefectOsData.defect_group,
+        id_defect_classifier: validatedDefectOsData.defect_classifier,
         id_substation: validatedDefectOsData.substation,
         accession_substations: validatedDefectOsData.accession,
         description_defect: validatedDefectOsData.description_defect,
@@ -120,10 +121,10 @@ export default class DefectOsController {
       })
 
       session.flash('successMessage', `Дефект по ОС успешно добавлен!`)
-      response.redirect().toRoute('defects-os.index')
+      response.redirect().toRoute('DefectOsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects-os.index')
+      response.redirect().toRoute('DefectOsController.index')
     }
   }
 
@@ -141,6 +142,10 @@ export default class DefectOsController {
       await defectOs.load('user')
       await defectOs.load('name_eliminated')
       await defectOs.load('departments')
+      await defectOs.load('defect_group')
+      await defectOs.load('defect_classifier')
+
+      // console.log(defectOs.serialize())
 
       return view.render('pages/defect-os/show', {
         title: 'Подробный просмотр',
@@ -148,7 +153,7 @@ export default class DefectOsController {
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects.index')
+      response.redirect().toRoute('DefectOsController.index')
     }
   }
 
@@ -163,11 +168,12 @@ export default class DefectOsController {
       }
 
       await defectOs.load('departments')
-      const departments = await Department.query().where((queryDepartment) => {
-        queryDepartment.where('id', '!=', Departments.admins)
-        queryDepartment.where('id', '!=', Departments.withoutDepartment)
-      })
+      const departments = await DepartmentService.getCleanDepartments()
       const substations = await Substation.query()
+      const defectGroups = await DefectGroup.query().where('type', '=', 'os')
+      const defectClassifiers = await DefectGroup.find(defectOs.id_defect_group)
+
+      await defectClassifiers?.load('classifiers')
 
       return view.render('pages/defect-os/form', {
         title: 'Редактирование',
@@ -181,6 +187,8 @@ export default class DefectOsController {
         defectOs,
         departments,
         substations,
+        defectGroups,
+        defectClassifiers: defectClassifiers?.classifiers,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -199,14 +207,15 @@ export default class DefectOsController {
       }
 
       const validatedDefectOsData = await request.validate(DefectOsValidator)
-      console.log('validatedDefectOsData: ', validatedDefectOsData)
       const editedDefect = {
         id_user_updater: auth.user!.id,
         id_substation: validatedDefectOsData.substation,
+        id_defect_group: validatedDefectOsData.defect_group,
+        id_defect_classifier: validatedDefectOsData.defect_classifier,
         accession_substations: validatedDefectOsData.accession,
         description_defect: validatedDefectOsData.description_defect,
         comment: validatedDefectOsData.comment,
-        importance: validatedDefectOsData.importance,
+        importance: validatedDefectOsData.importance ? true : false,
       }
       const defectOsDepartments = await DefectOsDepartment.query().where(
         'id_defect',
@@ -314,10 +323,38 @@ export default class DefectOsController {
       await defectOs.save()
 
       session.flash('successMessage', `Дефект закрыт.`)
-      response.redirect().toRoute('defects-os.show', { id })
+      response.redirect().toRoute('DefectOsController.show', { id })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects-os.index')
+      response.redirect().toRoute('DefectOsController.index')
     }
+  }
+
+  public async deletingCompletionRecord({
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const { id } = params
+    const defectOs = await DefectOs.findOrFail(id)
+
+    if (await bouncer.with('DefectTMPolicy').denies('deletingCompletionRecord', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление или у дефекта нету результатов!')
+
+      return response.redirect().toRoute('DefectOsController.index')
+    }
+
+    const updDefectOs = {
+      ...defectOs,
+      result: null,
+      elimination_date: null,
+      id_name_eliminated: null,
+    }
+
+    await defectOs.merge(updDefectOs).save()
+
+    session.flash('successMessage', `Запись удалена!`)
+    return response.redirect().back()
   }
 }

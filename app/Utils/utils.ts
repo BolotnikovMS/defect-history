@@ -74,3 +74,29 @@ export const userPermissionCheck = (
 
   return userPermissionsArray.find((elem: Permission) => elem.access === permission) ? true : false
 }
+
+export const fileStreamValidation = (file, validationRules) => {
+  const validationErrors: string[] = []
+  console.log(file)
+
+  if (!RegExp(/^[0-9a-zA-Z_\-.]+$/).test(file._clientName)) {
+    validationErrors.push(
+      `${file._clientName}'s name should only contain alphanumeric, underscore, dot, hypen`
+    )
+  }
+
+  if (validationRules.extnames && validationRules.extnames.length) {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const [_, fileExtension] = file._clientName.split(/\.(?=[^.]+$)/)
+    if (!validationRules.extnames.includes(fileExtension)) {
+      validationErrors.push(`${file._clientName}'s extension is not acceptable`)
+    }
+  }
+
+  if (validationRules.maxFileSizeInMb) {
+    if (file.stream.byteCount > validationRules.maxFileSizeInMb * 1000000) {
+      validationErrors.push(`${file._clientName}'s size exceeded limit`)
+    }
+  }
+  return validationErrors
+}

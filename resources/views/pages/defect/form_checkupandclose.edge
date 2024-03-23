@@ -4,7 +4,8 @@
   <h2 class="title">{{ title }}</h2>
   <div class="defect__content">
     @forms.post({
-      action: route(options.routes.saveData, {id: options.idData})
+      action: route(options.routes.saveData, {id: options.idData}),
+      uploadFile: true
     })
       <div class="form__content form__content-column">
         @!inputs.select({
@@ -57,6 +58,21 @@
             }
           })
         @endif
+
+        @if(!checkup)
+          @!inputs.fileManager({
+            label: 'Прикрепить изображение',
+            labelPositionText: 'label__text_left',
+            name: 'defect_img[]',
+            multiple: true,
+            acceptData: '.png, .jpeg, .jpg',
+          })
+
+          @!notification.message({
+            messageText: 'Поле необязательное. Расширения для изображения(jpg, png, jpeg), размер не больше 1мб.',
+            optionClass: 'message-text_red'
+          })
+        @end
       </div>
       <div class="form__btns">
         @buttons.cancel({

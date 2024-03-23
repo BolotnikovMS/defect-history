@@ -8,10 +8,10 @@ import {
   hasManyThrough,
 } from '@ioc:Adonis/Lucid/Orm'
 
-import { DateTime } from 'luxon'
 import Defect from 'App/Models/Defect'
 import DefectOs from 'App/Models/DefectOs'
 import Substation from 'App/Models/Substation'
+import { DateTime } from 'luxon'
 
 export default class District extends BaseModel {
   @column({ isPrimary: true })
@@ -49,7 +49,7 @@ export default class District extends BaseModel {
   @computed()
   public get numberDefects() {
     return this.substations
-      .map((substation) => substation.numberOpenDefects)
+      ?.map((substation) => substation.numberOpenDefects)
       .reduce((sum, nextValue) => sum + nextValue)
   }
 

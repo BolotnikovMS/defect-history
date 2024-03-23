@@ -14,6 +14,8 @@ export default class DefectOsValidator {
       rules.maxLength(250),
       rules.escape(),
     ]),
+    defect_group: schema.number(),
+    defect_classifier: schema.number(),
     description_defect: schema.string({}, [
       rules.trim(),
       rules.minLength(2),

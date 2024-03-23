@@ -1,0 +1,50 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="defect-groups__content">
+    @forms.post({
+      action: route(options.routePath.saveData, {id: options.idData}),
+    })
+      <div class="form__content form__content-column">
+        @!inputs.base({
+          label: 'Название группы',
+          labelPositionText: 'label__text_left',
+          name: 'name',
+          placeholderText: 'Введите название...',
+          required: true,
+          value: defectGroup ? defectGroup.name : ''
+        })
+
+        @!inputs.select({
+          label: 'Выберете тип группы',
+          labelPositionText: 'label__text_left',
+          name: 'type',
+          optionClass: '',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите тип группы',
+            disabledOption: false,
+          },
+          dataOptionsConfig: {
+            dataOptions: typesGroups,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: defectGroup ? defectGroup : '',
+            currentDataId: defectGroup ? defectGroup.type : '',
+          }
+        })
+      </div>
+      <div class="form__btns">
+        @buttons.cancel({ href: 'defect-groups.index' })
+          Отмена
+        @end
+
+        @buttons.save({ type: 'submit'})
+          Сохранить
+        @end
+      </div>
+    @end
+  </div>
+@endsection

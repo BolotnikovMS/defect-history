@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Department from 'App/Models/Department'
+import DepartmentService from 'App/Services/DepartmentService'
 import DepartmentValidator from 'App/Validators/DepartmentValidator'
 
 export default class DepartmentsController {
@@ -10,11 +11,7 @@ export default class DepartmentsController {
       return response.redirect().toPath('/')
     }
 
-    const page = request.input('page', 1)
-    const limit = 15
-    const departments = await Department.query().preload('department_users').paginate(page, limit)
-
-    departments.baseUrl('/departments')
+    const departments = await DepartmentService.getDepartments(request)
 
     return view.render('pages/department/index', {
       title: 'Список отделов',
@@ -53,9 +50,7 @@ export default class DepartmentsController {
 
     session.flash('successMessage', `Отдел "${validateData.name}" успешно добавлен!`)
 
-    if (validateData.addNext) {
-      return response.redirect().back()
-    }
+    if (validateData.addNext) return response.redirect().back()
 
     response.redirect().toRoute('departments.index')
   }
@@ -67,19 +62,12 @@ export default class DepartmentsController {
       return response.redirect().toPath('/')
     }
 
-    const department = await Department.find(params.id)
+    const department = await DepartmentService.getDepartment(params)
 
-    if (department) {
-      await department.load('department_users')
-
-      return view.render('pages/department/show', {
-        title: `Пользователи отдела ${department.name}`,
-        department,
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    return view.render('pages/department/show', {
+      title: `Пользователи отдела ${department.name}`,
+      department,
+    })
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
@@ -89,23 +77,18 @@ export default class DepartmentsController {
       return response.redirect().toPath('/')
     }
 
-    const department = await Department.find(params.id)
+    const department = await Department.findOrFail(params.id)
 
-    if (department) {
-      return view.render('pages/department/form', {
-        title: 'Редактирование',
-        options: {
-          idData: department.id,
-          routePath: {
-            saveData: 'departments.update',
-          },
+    return view.render('pages/department/form', {
+      title: 'Редактирование',
+      options: {
+        idData: department.id,
+        routePath: {
+          saveData: 'departments.update',
         },
-        department,
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+      },
+      department,
+    })
   }
 
   public async update({ params, request, response, session, bouncer }: HttpContextContract) {
@@ -115,19 +98,14 @@ export default class DepartmentsController {
       return response.redirect().toPath('/')
     }
 
-    const department = await Department.find(params.id)
+    const department = await Department.findOrFail(params.id)
 
-    if (department) {
-      const validateData = await request.validate(DepartmentValidator)
+    const validateData = await request.validate(DepartmentValidator)
 
-      await department.merge(validateData).save()
+    await department.merge(validateData).save()
 
-      session.flash('successMessage', `Данные отдела успешно обновлены.`)
-      response.redirect().toRoute('departments.index')
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    session.flash('successMessage', `Данные отдела успешно обновлены.`)
+    response.redirect().toRoute('departments.index')
   }
 
   public async destroy({ response, params, session, bouncer }: HttpContextContract) {
@@ -137,16 +115,11 @@ export default class DepartmentsController {
       return response.redirect().toPath('/')
     }
 
-    const department = await Department.find(params.id)
+    const department = await Department.findOrFail(params.id)
 
-    if (department) {
-      await department.delete()
+    await department.delete()
 
-      session.flash('successMessage', `Отдел успешно удален из базы!`)
-      response.redirect().back()
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().back()
-    }
+    session.flash('successMessage', `Отдел успешно удален из базы!`)
+    response.redirect().back()
   }
 }

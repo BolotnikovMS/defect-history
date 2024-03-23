@@ -100,10 +100,10 @@ export default class DefectsController {
       }
 
       session.flash('successMessage', `Дефект успешно добавлен!`)
-      response.redirect().toRoute('defects.index')
+      response.redirect().toRoute('DefectsController.index')
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defects.index')
+      response.redirect().toRoute('DefectsController.index')
     }
   }
 
@@ -211,17 +211,9 @@ export default class DefectsController {
         return response.redirect().toPath('/')
       }
 
-      await defect.load('defect_imgs')
       await defect.related('intermediate_checks').query().delete()
       await defect.related('work_planning').query().delete()
-      defect.defect_imgs?.forEach(async (img) => {
-        try {
-          await unlink(`./tmp${img.path_img}`)
-        } catch (error) {
-          console.log(`there was an error: ${error.message}`)
-        }
-      })
-      await defect.related('defect_imgs').query().delete()
+      await DefectTMService.removeDefectImages(defect)
       await defect.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
@@ -511,13 +503,58 @@ export default class DefectsController {
     }
     const validateData = await request.validate(CloseDefectValidator)
 
-    defect.id_name_eliminated = +validateData.employee
-    defect.result = validateData.description_results
-    defect.elimination_date = DateTime.now()
+    await defect
+      .merge({
+        id_name_eliminated: +validateData.employee,
+        result: validateData.description_results,
+        elimination_date: DateTime.now(),
+      })
+      .save()
 
-    await defect.save()
+    validateData?.defect_img?.forEach(async (img) => {
+      const imgName = `${new Date().getTime()}${randomStr()}.${img.extname}`
+
+      await DefectImg.create({
+        id_defect: defect.id,
+        path_img: `/uploads/images/defects/${imgName}`,
+        status: 'close',
+        extname: img.extname,
+        size: +(img.size / 1024).toFixed(3),
+      })
+      await img.moveToDisk('images/defects/', { name: imgName })
+    })
 
     session.flash('successMessage', `Дефект закрыт.`)
-    response.redirect().toRoute('defects.show', { id: idDefect })
+    response.redirect().toRoute('DefectsController.show', { id: idDefect })
+  }
+
+  public async deletingCompletionRecord({
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const { id } = params
+    const defect = await Defect.findOrFail(id)
+
+    if (await bouncer.with('DefectTMPolicy').denies('deletingCompletionRecord', defect)) {
+      session.flash('dangerMessage', 'У вас нет прав на удаление или у дефекта нету результатов!')
+
+      return response.redirect().toRoute('DefectsController.index')
+    }
+
+    const updDefect = {
+      ...defect,
+      result: null,
+      elimination_date: null,
+      id_name_eliminated: null,
+    }
+
+    await defect.merge(updDefect).save()
+
+    await DefectTMService.removeDefectImages(defect, 'close')
+
+    session.flash('successMessage', `Запись удалена!`)
+    return response.redirect().back()
   }
 }

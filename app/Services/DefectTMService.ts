@@ -2,10 +2,15 @@ import { addDays, randomStr } from 'App/Utils/utils'
 
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
+import { IDefectParams } from 'App/Interfaces/DefectParams'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
+import DefectType from 'App/Models/DefectType'
 import DefectValidator from 'App/Validators/DefectValidator'
+import { unlink } from 'node:fs/promises'
+
+type TDefectImageStatus = 'open' | 'close' | 'intermediate'
 
 export default class DefectTMService {
   public static async getDefects(req: RequestContract, limit: number = 15) {
@@ -61,7 +66,6 @@ export default class DefectTMService {
       term_elimination: addDays(20),
       importance: data.importance,
     }
-
     const defect = await Defect.create(newDefect)
 
     data?.defect_img?.forEach(async (img) => {
@@ -70,6 +74,9 @@ export default class DefectTMService {
       await DefectImg.create({
         id_defect: defect.id,
         path_img: `/uploads/images/defects/${imgName}`,
+        status: 'open',
+        extname: img.extname,
+        size: +(img.size / 1024).toFixed(3),
       })
       await img.moveToDisk('images/defects/', { name: imgName })
     })
@@ -94,5 +101,48 @@ export default class DefectTMService {
     })
 
     return defect
+  }
+  public static async getNumberDefects(params?: IDefectParams): Promise<number> {
+    const numberDefects = (
+      await Defect.query()
+        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
+        .if(params?.openedDefects, (query) => query.whereNull('result'))
+        .count('* as total')
+    )[0].$extras.total
+
+    return numberDefects
+  }
+  public static async getDefectsByType(params?: IDefectParams) {
+    const typesDefects = await DefectType.query().preload('defects', (query) => {
+      query
+        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
+        .if(params?.openedDefects, (query) => query.whereNull('result'))
+    })
+
+    return typesDefects
+  }
+  public static async removeDefectImages(
+    defect: Defect,
+    status?: TDefectImageStatus
+  ): Promise<void> {
+    await defect.load('defect_imgs', (query) =>
+      query.if(status, (query) => query.where('status', '=', status!))
+    )
+
+    defect.defect_imgs.forEach(async (img) => {
+      try {
+        await unlink(`./tmp${img.path_img}`)
+      } catch (error) {
+        console.log(`there was an error: ${error.message}`)
+      }
+    })
+
+    await defect
+      .related('defect_imgs')
+      .query()
+      .if(status, (query) => query.where('status', '=', status!))
+      .delete()
+
+    return
   }
 }

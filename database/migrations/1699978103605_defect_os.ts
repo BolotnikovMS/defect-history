@@ -15,6 +15,20 @@ export default class extends BaseSchema {
         .inTable('users')
       table.integer('id_user_updater', 10).nullable()
       table
+        .integer('id_defect_group', 10)
+        .notNullable()
+        .unsigned()
+        .index()
+        .references('id')
+        .inTable('defect_groups')
+      table
+        .integer('id_defect_classifier', 10)
+        .notNullable()
+        .unsigned()
+        .index()
+        .references('id')
+        .inTable('defect_classifiers')
+      table
         .integer('id_substation', 10)
         .notNullable()
         .unsigned()
