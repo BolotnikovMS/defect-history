@@ -298,4 +298,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   exportExcel('.btn-save-excel', '.table', 'Report')
+
+  // Chart
+  // !! попробовать сделать запрос на сервер
+
+  const createChart = (containerChart, selectorOpen, selectorClose) => {
+    const containerChrt = document.querySelector(containerChart)
+    const openDefects = document.querySelector(selectorOpen)
+    const closeDefects = document.querySelector(selectorClose)
+
+    if (openDefects && closeDefects) {
+      const optionsPie = {
+        chart: {
+          type: 'pie',
+        },
+        series: [+openDefects.innerHTML, +closeDefects.innerHTML],
+        labels: ['Открытые дефекты', 'Закрытые дефекты'],
+        colors: ['#f38585', '#a3d581'],
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: 'clamp(13px, 2vw, 16px)',
+            colors: ['#000'],
+          },
+          dropShadow: {
+            enabled: false,
+          },
+        },
+        legend: {
+          position: 'top',
+        },
+      }
+      new ApexCharts(containerChrt, optionsPie).render()
+    }
+  }
+
+  createChart('.chart-defect-tm', '.open-tm-defects', '.close-tm-defects')
+  createChart('.chart-defect-os', '.open-os-defects', '.close-os-defects')
 })
