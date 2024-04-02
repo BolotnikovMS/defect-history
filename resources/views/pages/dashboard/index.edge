@@ -14,8 +14,9 @@
         @slot('cardBody')
           <div class="card__body-content">
             <div class="card__colum">
-              <div class="card__content colum-1">
+              <div class="card__content card__content-center colum-1">
                 @!card.cardSpan({ text: 'Дефекты по ТМ',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+                <div class="chart-defect-tm"></div>
                 @if(dataAllDefects.numberDefectsTm)
                   @card.cardGroup()
                     <a href="{{ route('defects.index') }}">
@@ -26,21 +27,22 @@
                   @card.cardGroup()
                     <a href="{{ route('defects.index',{}, { qs: {status: 'open'} }) }}">
                       @!card.cardSpan({ text: 'Открытых дефектов:',  optionalClasses: 'card__text' })
-                      @!card.cardSpan({ text: dataAllDefects.numberOpenedDefectsTm,  optionalClasses: 'card__text card__text-bold' })
+                      @!card.cardSpan({ text: dataAllDefects.numberOpenedDefectsTm,  optionalClasses: 'card__text card__text-bold open-tm-defects' })
                     </a>
                   @end
                   @card.cardGroup()
                     <a href="{{ route('defects.index', {}, { qs: {status: 'close'} }) }}">
                       @!card.cardSpan({ text: 'Закрытых дефектов:',  optionalClasses: 'card__text' })
-                      @!card.cardSpan({ text: dataAllDefects.numberClosedDefectsTm,  optionalClasses: 'card__text card__text-bold' })
+                      @!card.cardSpan({ text: dataAllDefects.numberClosedDefectsTm,  optionalClasses: 'card__text card__text-bold close-tm-defects' })
                     </a>
                   @end
                 @else
                   <p>Пока статистики нету</p>
                 @end
               </div>
-              <div class="card__content colum-2">
+              <div class="card__content card__content-center colum-2">
                 @!card.cardSpan({ text: 'Дефекты по ОС',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+                <div class="chart-defect-os"></div>
                 @if(dataAllDefects.numberDefectsOs)
                   @card.cardGroup()
                     <a href="{{ route('defects-os.index') }}">
@@ -51,20 +53,20 @@
                   @card.cardGroup()
                     <a href="{{ route('defects-os.index', {}, { qs: {status: 'open'} }) }}">
                       @!card.cardSpan({ text: 'Открытых дефектов:',  optionalClasses: 'card__text' })
-                      @!card.cardSpan({ text: dataAllDefects.numberOpenedDefectsOs,  optionalClasses: 'card__text card__text-bold' })
+                      @!card.cardSpan({ text: dataAllDefects.numberOpenedDefectsOs,  optionalClasses: 'card__text card__text-bold open-os-defects' })
                     </a>
                   @end
                   @card.cardGroup()
                     <a href="{{ route('defects-os.index', {}, { qs: {status: 'close'} }) }}">
                       @!card.cardSpan({ text: 'Закрытых дефектов:',  optionalClasses: 'card__text' })
-                      @!card.cardSpan({ text: dataAllDefects.numberClosedDefectsOs,  optionalClasses: 'card__text card__text-bold' })
+                      @!card.cardSpan({ text: dataAllDefects.numberClosedDefectsOs,  optionalClasses: 'card__text card__text-bold close-os-defects' })
                     </a>
                   @end
                 @else
                   <p>Пока статистики нету</p>
                 @end
               </div>
-              <div class="card__content colum-3">
+              <div class="card__content card__content-center colum-3">
                 @!card.cardSpan({ text: 'Дефекты по РС',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
                 <p>Пока статистики нет</p>
               </div>
