@@ -71,7 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .attr('placeholder', 'Поиск...')
     })
 
-  const getDataForSelect = (url, classInput, defaultOptionText) => {
+  const getDataForSelect = (
+    url,
+    classInput,
+    defaultOptionText,
+    optionalOutputtingSelector = ''
+  ) => {
     $.ajax({
       url: url,
       method: 'GET',
@@ -82,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach((item) => {
           $(classInput).append(`<option value=${item.id}>${item.name}</option>`)
         })
+        if (optionalOutputtingSelector) {
+          $(optionalOutputtingSelector).html('')
+          data.forEach((item) => {
+            $(optionalOutputtingSelector).append(`<p class='text-hint-field'>- ${item.name}</p>`)
+          })
+        }
       },
       error: function (jqXHR) {
         if (jqXHR.status === 0) {
@@ -113,69 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
     getDataForSelect(
       `/defect-groups/${idDefectGroup}/defect-classifiers`,
       '.input__classifier',
-      'Выберите классификатор'
+      'Выберите классификатор',
+      '.hint-field-defects-classifier'
     )
   })
-
-  // $('.input__substation').on('select2:select', function (event) {
-  //   const idSubstation = event.params.data.id
-
-  //   $.ajax({
-  //     url: `/substations/show-accession/${idSubstation}`,
-  //     method: 'GET',
-  //     dataType: 'json',
-  //     success: function (options) {
-  //       $('.input__accession').html('')
-  //       $('.input__accession').append(
-  //         '<option value="0" selected disabled>Выберите присоединение</option>'
-  //       )
-  //       options.forEach((option) => {
-  //         $('.input__accession').append(`<option value=${option.id}>${option.name}</option>`)
-  //       })
-  //     },
-  //     error: function (jqXHR) {
-  //       if (jqXHR.status === 0) {
-  //         console.log('Not connect. Verify Network.')
-  //       } else if (jqXHR.status === 404) {
-  //         console.log('Requested page not found (404).')
-  //         $('.input__accession').html('')
-  //         $('.input__accession').append(
-  //           '<option value="0" selected disabled>Произошла ошибка при получении данных с сервера</option>'
-  //         )
-  //       }
-  //     },
-  //   })
-  // })
-
-  // $('.input__defect-group').on('select2:select', function (event) {
-  //   const idDefectGroup = event.params.data.id
-
-  //   $.ajax({
-  //     url: `/defect-groups/${idDefectGroup}/defect-classifiers`,
-  //     method: 'GET',
-  //     dataType: 'json',
-  //     success: function (data) {
-  //       $('.input__classifier').html('')
-  //       $('.input__classifier').append(
-  //         '<option value="0" selected disabled>Выберите классификатор</option>'
-  //       )
-  //       data.forEach((item) => {
-  //         $('.input__classifier').append(`<option value=${item.id}>${item.name}</option>`)
-  //       })
-  //     },
-  //     error: function (jqXHR) {
-  //       if (jqXHR.status === 0) {
-  //         console.log('Not connect. Verify Network.')
-  //       } else if (jqXHR.status === 404) {
-  //         console.log('Requested page not found (404).')
-  //         $('.input__classifier').html('')
-  //         $('.input__classifier').append(
-  //           '<option value="0" selected disabled>Произошла ошибка при получении данных с сервера</option>'
-  //         )
-  //       }
-  //     },
-  //   })
-  // })
 
   // Print PDF
   $('.btn-save-pdf').on('click', () => {
