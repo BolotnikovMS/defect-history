@@ -120,3 +120,9 @@ hr {
     gap: 7px;
   }
 }
+
+.text-hint-field {
+  & + * {
+    margin-top: 9px;
+  }
+}
