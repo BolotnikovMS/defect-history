@@ -13,6 +13,8 @@ Route.group(() => {
   Route.get('/delete-close-defect-record/:id', 'DefectOsController.deletingCompletionRecord').as(
     'delete.close-defect-record'
   )
+  Route.get('/edit-deadline/:id', 'DefectOsController.editDeadline').as('edit.deadline')
+  Route.post('/edit-deadline/:id', 'DefectOsController.updateDeadline').as('update.deadline')
 })
   .prefix('/defects-os')
   .as('defects-os')
