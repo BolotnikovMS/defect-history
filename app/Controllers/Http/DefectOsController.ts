@@ -4,9 +4,11 @@ import DefectGroup from 'App/Models/DefectGroup'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
 import Substation from 'App/Models/Substation'
+import DefectOSService from 'App/Services/DefectOSService'
 import DepartmentService from 'App/Services/DepartmentService'
 import { addDays } from 'App/Utils/utils'
 import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
 import DefectOsValidator from 'App/Validators/DefectOValidator'
 import { DateTime } from 'luxon'
 
@@ -356,5 +358,49 @@ export default class DefectOsController {
 
     session.flash('successMessage', `Запись удалена!`)
     return response.redirect().back()
+  }
+
+  public async editDeadline({ response, params, view, session, bouncer }: HttpContextContract) {
+    const defectOs = await DefectOSService.getDefectById(params.id)
+
+    if (await bouncer.with('DefectOSPolicy').denies('updateDeadline', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+      return response.redirect().toRoute('DefectOsController.index')
+    }
+
+    return view.render('pages/deadline-edit/form', {
+      title: 'Изменение даты устранения дефекта',
+      options: {
+        routePath: {
+          savePath: 'defects-os.update.deadline',
+          backPath: 'defects-os.index',
+        },
+      },
+      defect: defectOs.serialize(),
+    })
+  }
+
+  public async updateDeadline({
+    request,
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const defectOs = await DefectOSService.getDefectById(params.id)
+
+    if (await bouncer.with('DefectOSPolicy').denies('updateDeadline', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+      return response.redirect().toRoute('DefectOsController.index')
+    }
+
+    const validatedData = await request.validate(DefectDeadlineValidator)
+
+    await defectOs.merge(validatedData).save()
+
+    session.flash('successMessage', `Сроки устранения дефекта успешно обновлены!`)
+    response.redirect().toRoute('DefectOsController.index')
   }
 }
