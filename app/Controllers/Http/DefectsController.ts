@@ -114,7 +114,7 @@ export default class DefectsController {
       return response.redirect().toPath('/')
     }
 
-    const defect = await DefectTMService.getDefect(params)
+    const defect = await DefectTMService.getDefectById(params.id)
 
     return view.render('pages/defect/show', {
       title: 'Подробный просмотр',
@@ -249,17 +249,23 @@ export default class DefectsController {
   }
 
   public async editDeadline({ response, params, view, session, bouncer }: HttpContextContract) {
-    const defect = await Defect.findOrFail(params.id)
+    const defectTm = await DefectTMService.getDefectById(params.id)
 
-    if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect)) {
+    if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defectTm)) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
 
       return response.redirect().toPath('/')
     }
 
-    return view.render('pages/defect/form_edit_deadline', {
+    return view.render('pages/deadline-edit/form', {
       title: 'Изменение даты устранения дефекта',
-      defect: defect.serialize(),
+      options: {
+        routePath: {
+          savePath: 'defects.update.deadline',
+          backPath: 'defects.index',
+        },
+      },
+      defect: defectTm.serialize(),
     })
   }
 
@@ -270,7 +276,7 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    const defect = await Defect.findOrFail(params.id)
+    const defect = await DefectTMService.getDefectById(params.id)
 
     if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect)) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
@@ -278,9 +284,9 @@ export default class DefectsController {
       return response.redirect().toPath('/')
     }
 
-    const validateDefectData = await request.validate(DefectDeadlineValidator)
+    const validatedData = await request.validate(DefectDeadlineValidator)
 
-    await defect.merge(validateDefectData).save()
+    await defect.merge(validatedData).save()
 
     session.flash('successMessage', `Сроки устранения дефекта успешно обновлены!!`)
     response.redirect().toRoute('DefectsController.index')
