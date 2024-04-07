@@ -137,26 +137,12 @@ export default class DefectOsController {
       return response.redirect().toRoute('DefectOsController.index')
     }
 
-    const defectOs = await DefectOs.find(params.id)
+    const defectOs = await DefectOSService.getDefectById(params.id)
 
-    if (defectOs) {
-      await defectOs.load('substation')
-      await defectOs.load('user')
-      await defectOs.load('name_eliminated')
-      await defectOs.load('departments')
-      await defectOs.load('defect_group')
-      await defectOs.load('defect_classifier')
-
-      // console.log(defectOs.serialize())
-
-      return view.render('pages/defect-os/show', {
-        title: 'Подробный просмотр',
-        defectOs: defectOs.serialize(),
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('DefectOsController.index')
-    }
+    return view.render('pages/defect-os/show', {
+      title: 'Подробный просмотр',
+      defectOs: defectOs.serialize(),
+    })
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
