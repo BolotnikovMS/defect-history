@@ -1,13 +1,13 @@
 import { addDays, randomStr } from 'App/Utils/utils'
 
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { IDefectParams } from 'App/Interfaces/DefectParams'
-import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
 import DefectValidator from 'App/Validators/DefectValidator'
+import { IDefectParams } from 'App/Interfaces/DefectParams'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
+import { RequestContract } from '@ioc:Adonis/Core/Request'
 import { unlink } from 'node:fs/promises'
 
 type TDefectImageStatus = 'open' | 'close' | 'intermediate'
@@ -83,8 +83,8 @@ export default class DefectTMService {
 
     return defect
   }
-  public static async getDefect(params: Record<string, any>): Promise<Defect> {
-    const defect = await Defect.findOrFail(params.id)
+  public static async getDefectById(id: number): Promise<Defect> {
+    const defect = await Defect.findOrFail(id)
 
     await defect.load('substation')
     await defect.load('accession')
