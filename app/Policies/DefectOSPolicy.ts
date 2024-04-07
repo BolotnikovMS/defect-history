@@ -43,4 +43,16 @@ export default class DefectOSPolicy extends BasePolicy {
       )
     }
   }
+  public async updateDeadline(user: User, defectOs: DefectOs) {
+    await user.load('permissions')
+
+    if (defectOs.elimination_date !== null && defectOs.result !== null) {
+      return false
+    } else {
+      return (
+        user.id_role === Roles.MODERATOR ||
+        userPermissionCheck('editDefectDeadline', user.permissions)
+      )
+    }
+  }
 }
