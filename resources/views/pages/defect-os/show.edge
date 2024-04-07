@@ -28,6 +28,16 @@
             Редактировать дефект
           @end
         @endcan
+        @can('DefectOSPolicy.updateDeadline', defectOs)
+          @buttons.base({
+            href: 'defects-os.edit.deadline',
+            params: {id: defectOs.id},
+            className: 'btn-color_blue btn-color_blue-transparent'
+          })
+            @!icons.calendarOne()
+            Изменить срок
+          @end
+        @endcan
         @buttons.base({
           className: 'btn-color_green btn-save-pdf'
         })

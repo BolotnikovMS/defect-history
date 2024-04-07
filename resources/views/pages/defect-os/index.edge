@@ -92,10 +92,12 @@
                 @end
                 @card.cardGroup()
                   @if(!await bouncer.with('DefectOSPolicy').denies('update', defectOs) || !await
-                    bouncer.with('DefectOSPolicy').denies('delete', defectOs))
+                    bouncer.with('DefectOSPolicy').denies('delete', defectOs) || !await
+                    bouncer.with('DefectOSPolicy').denies('updateDeadline', defectOs))
                     @dropdown.dropdown({
                       classBtnDropdown: 'btn-dropdown-icon',
                       dropdownData: [
+                        { name: 'Изменить срок', access: 'DefectOSPolicy.updateDeadline', data: defectOs, path: 'defects-os.edit.deadline', params: { id: defectOs.id }, icon: 'calendarOne' },
                         { name: 'Редактировать', access: 'DefectOSPolicy.update', data: defectOs, path: 'defects-os.edit', params: { id: defectOs.id }, icon: 'edit' },
                         { name: 'Удалить', access: 'DefectOSPolicy.delete', data: defectOs, path: 'defects-os.destroy', params: { id: defectOs.id }, icon: 'delete' },
                       ],
