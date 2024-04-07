@@ -12,4 +12,16 @@ export default class DefectOSService {
 
     return numberDefects
   }
+  public static async getDefectById(id: number): Promise<DefectOs> {
+    const defectOs = await DefectOs.findOrFail(id)
+
+    await defectOs.load('substation')
+    await defectOs.load('user')
+    await defectOs.load('name_eliminated')
+    await defectOs.load('departments')
+    await defectOs.load('defect_group')
+    await defectOs.load('defect_classifier')
+
+    return defectOs
+  }
 }
