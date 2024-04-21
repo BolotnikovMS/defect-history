@@ -31,6 +31,10 @@
     flex-direction: column;
     gap: 2px;
     text-align: center;
+
+    &-hidden {
+      display: none;
+    }
   }
 
   &__label {
