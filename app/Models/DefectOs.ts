@@ -1,11 +1,13 @@
 import {
   BaseModel,
   BelongsTo,
+  HasMany,
   HasOne,
   ManyToMany,
   belongsTo,
   column,
   computed,
+  hasMany,
   hasOne,
   manyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
@@ -18,6 +20,7 @@ import Substation from 'App/Models/Substation'
 import User from 'App/Models/User'
 import { replacementEscapeSymbols } from 'App/Utils/utils'
 import { DateTime } from 'luxon'
+import IntermediateCheck from './IntermediateCheck'
 
 export default class DefectOs extends BaseModel {
   @column({ isPrimary: true })
@@ -129,4 +132,13 @@ export default class DefectOs extends BaseModel {
     localKey: 'id',
   })
   public defect_classifier: BelongsTo<typeof DefectClassifier>
+
+  @hasMany(() => IntermediateCheck, {
+    foreignKey: 'id_defect',
+    localKey: 'id',
+    onQuery: (query) => {
+      query.where('type_defect', '=', 'os')
+    },
+  })
+  public intermediate_checks: HasMany<typeof IntermediateCheck>
 }
