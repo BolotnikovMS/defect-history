@@ -6,7 +6,7 @@ export default class CloseDefectOsValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    result: schema.string({}, [
+    description_results: schema.string({}, [
       rules.trim(),
       rules.minLength(2),
       rules.maxLength(700),
