@@ -1,6 +1,7 @@
 import Env from '@ioc:Adonis/Core/Env'
 import Event from '@ioc:Adonis/Core/Event'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { TypeDefects } from 'App/Enums/TypeDefects'
 import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
@@ -310,6 +311,7 @@ export default class DefectsController {
       checkup: true,
       options: {
         idData: idDefect,
+        typeDefect: TypeDefects.TM,
         routes: {
           saveData: 'defects.checkup.store',
           back: 'defects.show',
@@ -404,6 +406,7 @@ export default class DefectsController {
       checkup: true,
       options: {
         idData: check.id,
+        typeDefect: TypeDefects.TM,
         routes: {
           saveData: 'defects.checkup.update',
           back: 'defects.show',
