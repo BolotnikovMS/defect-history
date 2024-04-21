@@ -1,8 +1,9 @@
-import { DateTime } from 'luxon'
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
-import { replacementEscapeSymbols } from 'App/Utils/utils'
+
 import Department from 'App/Models/Department'
 import User from 'App/Models/User'
+import { replacementEscapeSymbols } from 'App/Utils/utils'
+import { DateTime } from 'luxon'
 
 export default class IntermediateCheck extends BaseModel {
   @column({ isPrimary: true })
@@ -16,6 +17,9 @@ export default class IntermediateCheck extends BaseModel {
 
   @column({ serializeAs: null })
   public id_inspector: number
+
+  @column()
+  public type_defect: string
 
   @column.dateTime({
     serialize: (value) => value.toFormat('dd.MM.yyyy HH:mm'),
