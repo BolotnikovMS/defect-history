@@ -21,6 +21,10 @@ export default class DefectOSService {
     await defectOs.load('departments')
     await defectOs.load('defect_group')
     await defectOs.load('defect_classifier')
+    await defectOs.load('intermediate_checks', (query) => {
+      query.preload('name_inspector')
+      query.preload('responsible_department')
+    })
 
     return defectOs
   }
