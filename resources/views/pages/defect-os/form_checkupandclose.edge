@@ -4,22 +4,72 @@
   <h2 class="title">{{ title }}</h2>
   <div class="defect__content">
     @forms.post({
-      action: route(options.routes.saveData, {id: options.defectOs})
+      action: route(options.routes.saveData, {id: options.idData})
     })
       <div class="form__content form__content-column">
+        @if(checkup)
+          @!inputs.select({
+            label: 'Сотрудник',
+            labelPositionText: 'label__text_left',
+            name: 'employee',
+            optionClass: 'searchable-list',
+            defaultOptionConfig: {
+              defaultOption: true,
+              defaultOptionText: 'Выберите сотрудника'
+            },
+            dataOptionsConfig: {
+              dataOptions: users,
+              dataNameOption: 'fullName'
+            },
+            currentDataConfig: {
+              currentData: check ? check : '',
+              currentDataId: check ? check.id_inspector : '',
+            }
+          })
+
+          @!inputs.base({
+            type: 'hidden',
+            name: 'type_defect',
+            value: options.typeDefect,
+          })
+        @endif
+
         @!inputs.textarea({
           label: 'Описание результатов работы',
           labelPositionText: 'label__text_left',
-          name: 'result',
+          name: 'description_results',
           rows: 6,
           placeholderText: 'Введите описание результатов...',
           required: true,
+          value: check ? check.description_results : ''
         })
+
+        @if(checkup)
+          @!inputs.select({
+            label: 'Передано для дальнейших действий',
+            labelPositionText: 'label__text_left',
+            name: 'transferred',
+            optionClass: 'searchable-list',
+            defaultOptionConfig: {
+              defaultOption: true,
+              defaultOptionText: '---',
+              disabledOption: false,
+            },
+            dataOptionsConfig: {
+              dataOptions: departments,
+              dataNameOption: 'name'
+            },
+            currentDataConfig: {
+              currentData: check ? check : '',
+              currentDataId: check ? check.transferred : '',
+            }
+          })
+        @end
       </div>
       <div class="form__btns">
         @buttons.cancel({
           href: options.routes.back,
-          params: {id: options.defectOs}
+          params: {id: options.routes.backParams}
         })
           Отмена
         @end

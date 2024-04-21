@@ -57,6 +57,14 @@
               currentDataId: check ? check.transferred : '',
             }
           })
+
+          @inputs.base({
+            type: 'hidden',
+            name: 'type_defect',
+            value: options.typeDefect,
+          })
+
+          @end
         @endif
 
         @if(!checkup)
