@@ -111,6 +111,9 @@ export default class Defect extends BaseModel {
   @hasMany(() => IntermediateCheck, {
     foreignKey: 'id_defect',
     localKey: 'id',
+    onQuery: (query) => {
+      query.where('type_defect', '=', 'tm')
+    },
   })
   public intermediate_checks: HasMany<typeof IntermediateCheck>
 
