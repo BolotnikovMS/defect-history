@@ -15,6 +15,8 @@ Route.group(() => {
   )
   Route.get('/all-defects', 'ReportsController.showAllDefects').as('show.all.defects')
   Route.get('/all-defects/get', 'ReportsController.getAllDefects').as('get.all.defects')
+  Route.get('/all-defects-tm', 'ReportsController.showAllDefectsTM').as('show.all.defectsTm')
+  Route.get('/all-defects-tm/get', 'ReportsController.getAllDefectsTM').as('get.all.defectsTm')
 })
   .prefix('/reports')
   .as('reports')

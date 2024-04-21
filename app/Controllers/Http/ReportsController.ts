@@ -1,6 +1,7 @@
 import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
@@ -268,6 +269,52 @@ export default class ReportsController {
       filters: {
         status: validateData.status,
       },
+    })
+  }
+
+  public async showAllDefectsTM({ response, view, session, bouncer }: HttpContextContract) {
+    //  !! Access
+    const districts = await District.query()
+    const typesDefects = await DefectType.query()
+
+    return view.render('pages/reports/all-defects-tm/index', {
+      title: 'Список всех дефектов по ТМ',
+      messages: {
+        noContent: 'Отчет не сформирован.',
+      },
+      districts,
+      typesDefects,
+    })
+  }
+
+  public async getAllDefectsTM({ request, response, view, session, bouncer }: HttpContextContract) {
+    const { district, typeDefect, status } = request.qs() as IQueryParams
+    const districts = await District.query()
+    const typesDefects = await DefectType.query()
+    const districtsData = await District.find(district)
+    await districtsData?.load('substations', (substationQuery) => {
+      substationQuery.preload('defects', (defectQuery) => {
+        defectQuery
+          .if(status === 'open', (query) => query.whereNull('result'))
+          .if(status === 'close', (query) => query.whereNotNull('result'))
+          .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
+            query.where('id_type_defect', '=', typeDefect!)
+          )
+      })
+    })
+
+    console.log(districtsData?.serialize())
+
+    return view.render('pages/reports/all-defects-tm/index', {
+      title: 'Список всех дефектов по ТМ',
+      filters: {
+        district,
+        typeDefect,
+        status,
+      },
+      districts,
+      typesDefects,
+      districtsData,
     })
   }
 

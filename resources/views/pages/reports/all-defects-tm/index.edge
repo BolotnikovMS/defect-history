@@ -1,0 +1,83 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control">
+    <form action="{{route('reports.get.all.defectsTm')}}" method="GET" class="form form-row">
+      <div class="form__content">
+        @!inputs.select({
+          name: 'district',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input-width_300 searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите РЭС или ГП'
+          },
+          dataOptionsConfig: {
+            dataOptions: districts,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: district ? district : '',
+            currentDataId: district ? district.id : '',
+          },
+        })
+        @!filters.typeDefect({
+          optionClass: 'searchable-list',
+          typesDefects,
+          filters,
+        })
+        @!filters.status({
+          optionClass: 'searchable-list',
+          filters,
+        })
+      </div>
+      <div class="form__btns form__btns-row">
+        @buttons.base({
+          type: 'submit',
+          className: 'btn-color_green btn-small'
+        })
+          @!icons.checkmark({
+            optionalClasses: 'icon-size_20'
+          })
+        @end
+      </div>
+    </form>
+  </div>
+  <div class="report save-info-pdf">
+    <div class="reports__content">
+      <table class='table'>
+        <thead>
+          <tr>
+            <th>Дата добавления</th>
+            <th>ПС</th>
+            <th>Тип</th>
+            <th>Присоединение</th>
+            <th>Описание дефекта</th>
+            <th>Срок устранения</th>
+            <th>Дата устранения</th>
+            <th>Результат работ</th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(substation in districtsData.substations)
+
+            <tr>
+              <td>{{ substation.name }}</td>
+            </tr>
+          @end
+          <tr>
+            <td>21.04.2024 18:50</td>
+            <td>ПС 110 кВ Русский Ангасяк</td>
+            <td>ТС</td>
+            <td>ВЛ 35 кВ Вострецово</td>
+            <td>Не верное положение коммутационного аппарата. Показывает включенное положение, по факту отключен.</td>
+            <td>10.05.2024 18:50</td>
+            <td>Не устранен</td>
+            <td>Пока нету</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+@endsection
