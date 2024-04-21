@@ -291,6 +291,18 @@ export default class extends BaseSchema {
           access: 'deletingCompletionRecord',
           description: 'Удаление записи о выполнении работы по дефекту',
         },
+        {
+          access: 'createCheckupOs',
+          description: 'Добавление промежуточной проверки для дефекта ОС',
+        },
+        {
+          access: 'updateCheckupOs',
+          description: 'Редактирование промежуточных проверок дефектов ОС',
+        },
+        {
+          access: 'deleteCheckupOs',
+          description: 'Удаление промежуточных проверок дефектов ОС',
+        },
       ])
     })
   }
