@@ -2,6 +2,7 @@ import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
+import Defect from 'App/Models/Defect'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
@@ -274,7 +275,7 @@ export default class ReportsController {
 
   public async showAllDefectsTM({ response, view, session, bouncer }: HttpContextContract) {
     //  !! Access
-    const districts = await District.query()
+    const substations = await Substation.query()
     const typesDefects = await DefectType.query()
 
     return view.render('pages/reports/all-defects-tm/index', {
@@ -282,39 +283,39 @@ export default class ReportsController {
       messages: {
         noContent: 'Отчет не сформирован.',
       },
-      districts,
+      substations,
       typesDefects,
     })
   }
 
   public async getAllDefectsTM({ request, response, view, session, bouncer }: HttpContextContract) {
-    const { district, typeDefect, status } = request.qs() as IQueryParams
-    const districts = await District.query()
+    const { substation, typeDefect, status } = request.qs() as IQueryParams
+    const substations = await Substation.query()
     const typesDefects = await DefectType.query()
-    const districtsData = await District.find(district)
-    await districtsData?.load('substations', (substationQuery) => {
-      substationQuery.preload('defects', (defectQuery) => {
-        defectQuery
-          .if(status === 'open', (query) => query.whereNull('result'))
-          .if(status === 'close', (query) => query.whereNotNull('result'))
-          .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
-            query.where('id_type_defect', '=', typeDefect!)
-          )
-      })
-    })
-
-    console.log(districtsData?.serialize())
+    const defects = await Defect.query()
+      .where('id_substation', '=', substation)
+      .preload('substation')
+      .preload('accession')
+      .preload('defect_type')
+      .if(status === 'open', (query) => query.whereNull('result'))
+      .if(status === 'close', (query) => query.whereNotNull('result'))
+      .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
+        query.where('id_type_defect', '=', typeDefect!)
+      )
 
     return view.render('pages/reports/all-defects-tm/index', {
       title: 'Список всех дефектов по ТМ',
+      messages: {
+        noContent: 'Дефектов нету или не выбрана ПС',
+      },
       filters: {
-        district,
+        substation,
         typeDefect,
         status,
       },
-      districts,
+      substations,
       typesDefects,
-      districtsData,
+      defects,
     })
   }
 
