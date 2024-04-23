@@ -283,7 +283,7 @@ export default class ReportsController {
       messages: {
         noContent: 'Отчет не сформирован.',
       },
-      substations,
+      substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
       typesDefects,
     })
   }
@@ -293,7 +293,9 @@ export default class ReportsController {
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
     const defects = await Defect.query()
-      .where('id_substation', '=', substation)
+      .if(substation !== 'all' && substation !== undefined, (query) => {
+        query.where('id_substation', '=', substation)
+      })
       .preload('substation')
       .preload('accession')
       .preload('defect_type')
@@ -313,7 +315,7 @@ export default class ReportsController {
         typeDefect,
         status,
       },
-      substations,
+      substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
       typesDefects,
       defects,
     })
