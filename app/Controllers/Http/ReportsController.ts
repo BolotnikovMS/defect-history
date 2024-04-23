@@ -274,7 +274,12 @@ export default class ReportsController {
   }
 
   public async showAllDefectsTM({ response, view, session, bouncer }: HttpContextContract) {
-    //  !! Access
+    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefectsTm')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
+
+      return response.redirect().toPath('/')
+    }
+
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
 
@@ -289,6 +294,12 @@ export default class ReportsController {
   }
 
   public async getAllDefectsTM({ request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefectsTm')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
+
+      return response.redirect().toPath('/')
+    }
+
     const { substation, typeDefect, status } = request.qs() as IQueryParams
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()

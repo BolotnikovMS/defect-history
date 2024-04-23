@@ -28,4 +28,12 @@ export default class ReportPolicy extends BasePolicy {
       userPermissionCheck('viewReportAllDefects', user.permissions)
     )
   }
+  public async viewReportAllDefectsTm(user: User) {
+    await user.load('permissions')
+
+    return (
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('viewReportAllDefectsTm', user.permissions)
+    )
+  }
 }

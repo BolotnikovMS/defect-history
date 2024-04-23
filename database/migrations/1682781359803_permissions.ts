@@ -303,6 +303,10 @@ export default class extends BaseSchema {
           access: 'deleteCheckupOs',
           description: 'Удаление промежуточных проверок дефектов ОС',
         },
+        {
+          access: 'viewReportAllDefectsTm',
+          description: 'Формирование отчета "Все дефекты по ТМ"',
+        },
       ])
     })
   }
