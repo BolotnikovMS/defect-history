@@ -4,7 +4,7 @@ export interface IQueryParams {
   department: number
   typeDefect: string | number | undefined
   defectsClass: string
-  substation: number
+  substation: number | string
   district: number
   sort: string
 }
