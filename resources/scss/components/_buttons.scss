@@ -70,7 +70,7 @@
 
   &-dropdown {
     padding: 5px 10px;
-    font-size: 20px;
+    font-size: clamp(15px, 2.0vw, 20px);
     color: #000;
 
     &-icon {
