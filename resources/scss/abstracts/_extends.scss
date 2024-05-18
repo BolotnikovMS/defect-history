@@ -46,17 +46,17 @@
     color: #ffffff;
     background-color: #5cadf8;
 
-    &:nth-child(odd) {
-      color: #000;
-      background-color: #fff;
-    }
+    // &:nth-child(odd) {
+    //   color: #000;
+    //   background-color: #fff;
+    // }
   }
 
   tr {
     transition: all 0.3s ease-in;
 
     &:hover {
-      background-color: rgba(51, 51, 153, .1) !important;
+      background-color: rgba(125, 187, 245, 0.2) !important;
     }
   }
 }
