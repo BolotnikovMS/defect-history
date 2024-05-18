@@ -22,7 +22,6 @@ export default class DefectOsValidator {
       rules.maxLength(700),
       rules.escape(),
     ]),
-    importance: schema.boolean.optional(),
     comment: schema.string.optional({}, [
       rules.trim(),
       rules.minLength(2),
