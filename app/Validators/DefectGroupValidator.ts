@@ -13,6 +13,7 @@ export default class DefectGroupValidator {
       rules.escape(),
     ]),
     type: schema.string([rules.trim(), rules.alpha()]),
+    importance: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {
