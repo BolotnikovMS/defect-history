@@ -35,6 +35,14 @@
             currentDataId: defectGroup ? defectGroup.type : '',
           }
         })
+
+        @!inputs.checkbox({
+          label: 'Важность устранения дефектов группы',
+          classlabel: 'form__label-row',
+          classLabelText: 'label__text_nomargin',
+          name: 'importance',
+          checked: defectGroup ? defectGroup.importance : null
+        })
       </div>
       <div class="form__btns">
         @buttons.cancel({ href: 'defect-groups.index' })
