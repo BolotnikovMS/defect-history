@@ -22,7 +22,7 @@
           @card.card({
             optionalClasses: defectOs.elimination_date !== null ?
             'card-completed' :
-            new Date(defectOs.term_elimination) < new Date() ? 'card-danger' : defectOs.importance===true ? 'card-danger' : ''
+            new Date(defectOs.term_elimination) < new Date() ? 'card-danger' : defectOs.defect_group.importance===true ? 'card-danger' : ''
           })
           @slot('cardHeader')
             <div class="card__header-content">
