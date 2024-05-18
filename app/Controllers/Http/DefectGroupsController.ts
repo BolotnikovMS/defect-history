@@ -94,7 +94,9 @@ export default class DefectGroupsController {
     const defectGroup = await DefectGroup.findOrFail(params.id)
     const validatedData = await request.validate(DefectGroupValidator)
 
-    await defectGroup.merge(validatedData).save()
+    await defectGroup
+      .merge({ ...validatedData, importance: validatedData.importance ? true : false })
+      .save()
 
     session.flash('successMessage', 'Запись успешно обновлена!')
     return response.redirect().toRoute('defect-groups.index')
