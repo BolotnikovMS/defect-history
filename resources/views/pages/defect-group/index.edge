@@ -27,6 +27,12 @@
                       badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lightorg',
                       data: defectGroup.type
                     })
+                    @if(defectGroup.importance)
+                      @!badge.badge({
+                        badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_red',
+                        data: '*'
+                      })
+                    @end
                   @end
                   @card.cardGroup()
                     @if(!await bouncer.with('DefectClassifierPolicy').denies('view') || !await bouncer.with('DefectGroupPolicy').denies('update') || !await bouncer.with('DefectGroupPolicy').denies('delete'))
