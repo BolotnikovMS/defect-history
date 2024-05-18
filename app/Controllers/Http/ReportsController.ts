@@ -304,6 +304,7 @@ export default class ReportsController {
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
     const defects = await Defect.query()
+      .orderBy('id_substation', 'asc')
       .if(substation !== 'all' && substation !== undefined, (query) => {
         query.where('id_substation', '=', substation)
       })
