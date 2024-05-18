@@ -10,6 +10,11 @@
     gap: 20px;
   }
 
+  &__logo {
+    display: flex;
+    flex-shrink: 0;
+  }
+
   &__nav {
     .nav-list {
       display: flex;
