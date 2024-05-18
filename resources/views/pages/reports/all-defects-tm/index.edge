@@ -37,9 +37,7 @@
           type: 'submit',
           className: 'btn-color_green btn-small'
         })
-          @!icons.checkmark({
-            optionalClasses: 'icon-size_20'
-          })
+          @!icons.checkmark()
         @end
       </div>
     </form>
@@ -49,24 +47,18 @@
         className: 'btn-color_green btn-small',
         href: 'reports.show.all.defectsTm'
       })
-        @!icons.reset({
-          optionalClasses: 'icon-size_20'
-        })
+        @!icons.reset()
       @end
       @if(defects?.length)
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-pdf'
         })
-          @!icons.pdf({
-            optionalClasses: 'icon-size_20'
-          })
+          @!icons.pdf()
         @end
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-excel'
         })
-          @!icons.excel({
-            optionalClasses: 'icon-size_20'
-          })
+          @!icons.excel()
         @end
       @end
     </div>

@@ -41,9 +41,7 @@
           type: 'submit',
           className: 'btn-color_green btn-small'
         })
-          @!icons.checkmark({
-            optionalClasses: 'icon-size_20'
-          })
+          @!icons.checkmark()
         @end
       </div>
     </form>
@@ -58,16 +56,12 @@
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-pdf'
         })
-          @!icons.pdf({
-            optionalClasses: 'icon-size_20'
-          })
+          @!icons.pdf()
         @end
         @buttons.base({
           className: 'btn-color_green btn-small btn-save-excel'
         })
-          @!icons.excel({
-            optionalClasses: 'icon-size_20'
-          })
+          @!icons.excel()
         @end
       </div>
       @endif
