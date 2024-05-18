@@ -62,11 +62,6 @@ export default class DefectOs extends BaseModel {
   })
   public term_elimination: DateTime
 
-  @column({
-    consume: (value: string): boolean => Boolean(value),
-  })
-  public importance: boolean
-
   @column.dateTime({
     serialize: (value) => value?.toFormat('dd.MM.yyyy HH:mm'),
   })
