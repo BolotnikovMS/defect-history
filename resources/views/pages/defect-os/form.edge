@@ -98,14 +98,6 @@
             value: defectOs ? defectOs.description_defect : ''
           })
 
-          @!inputs.checkbox({
-            label: 'Важность устранения дефекта',
-            classlabel: 'form__label-row',
-            classLabelText: 'label__text_nomargin',
-            name: 'importance',
-            checked: defectOs ? defectOs.importance : null
-          })
-
           @!inputs.textarea({
             label: 'Примечание',
             labelPositionText: 'label__text_left',
