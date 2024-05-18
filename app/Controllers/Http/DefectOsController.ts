@@ -50,6 +50,7 @@ export default class DefectOsController {
         },
       ])
       .preload('substation')
+      .preload('defect_group')
       .preload('user')
       .preload('departments')
       .paginate(page, limit)
@@ -113,7 +114,6 @@ export default class DefectOsController {
         description_defect: validatedDefectOsData.description_defect,
         comment: validatedDefectOsData.comment,
         term_elimination: addDays(20),
-        importance: validatedDefectOsData.importance,
       }
 
       const newDefectOs = await DefectOs.create(defectOs)
@@ -207,7 +207,6 @@ export default class DefectOsController {
         accession_substations: validatedDefectOsData.accession,
         description_defect: validatedDefectOsData.description_defect,
         comment: validatedDefectOsData.comment,
-        importance: validatedDefectOsData.importance ? true : false,
       }
       const defectOsDepartments = await DefectOsDepartment.query().where(
         'id_defect',
