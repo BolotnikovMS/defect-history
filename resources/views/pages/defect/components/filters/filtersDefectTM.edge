@@ -2,13 +2,16 @@
   <form action="{{route('defects.index')}}" method="GET" class="form form-row">
     <div class="form__content form__content-filters">
       @!filters.dateSort({
+        optionClass: 'select-filter',
         filters
       })
       @!filters.typeDefect({
+        optionClass: 'select-filter',
         typesDefects,
         filters,
       })
       @!filters.status({
+        optionClass: 'select-filter',
         filters
       })
     </div>
