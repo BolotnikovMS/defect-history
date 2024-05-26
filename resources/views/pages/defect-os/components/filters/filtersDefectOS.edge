@@ -2,17 +2,22 @@
   <form action="{{route('defects-os.index')}}" method="GET" class="form form-row">
     <div class="form__content form__content-filters">
       @!filters.status({
+        optionClass: 'select-filter',
         filters
       })
-      {{-- @!inputs.select({
-      name: 'department',
-      labelPositionText: 'label__text_left',
-      optionClass: 'form__input-width_300 searchable-list',
-      dataOptionsConfig: {
-      dataOptions: [{name: 'Все', id: 0}, ...departments],
-      dataNameOption: 'name'
-      },
-      }) --}}
+      @!inputs.select({
+        name: 'department',
+        labelPositionText: 'label__text_left',
+        optionClass: 'form__input-width_200 searchable-list',
+        dataOptionsConfig: {
+          dataOptions: [{name: 'Все отделы', id: 'all'}, ...filters.departments],
+          dataNameOption: 'name',
+        },
+        currentDataConfig: {
+          currentData: filters ? filters.department : '',
+          currentDataId: filters ? filters.department : '',
+        }
+      })
     </div>
     <div class="form__btns form__btns-row">
       @buttons.base({
