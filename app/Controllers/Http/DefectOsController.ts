@@ -4,6 +4,7 @@ import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectGroup from 'App/Models/DefectGroup'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
+import Department from 'App/Models/Department'
 import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Substation from 'App/Models/Substation'
 import DefectOSService from 'App/Services/DefectOSService'
@@ -26,49 +27,82 @@ export default class DefectOsController {
 
     const page = request.input('page', 1)
     const limit = 15
-    const { status } = request.qs() as IQueryParams
-    // const departments = await Department.query().where((queryDepartment) => {
-    //   queryDepartment.where('id', '!=', Departments.admins)
-    //   queryDepartment.where('id', '!=', Departments.withoutDepartment)
-    // })
+    const { status, department } = request.qs() as IQueryParams
+    const departments = await DepartmentService.getCleanDepartments()
 
-    const defectsOs = await DefectOs.query()
-      .if(status === 'open', (query) => query.whereNull('result'))
-      .if(status === 'close', (query) => query.whereNotNull('result'))
-      // .if(department && +department !== 0, (query) =>
-      //   // query.preload('departments', (queryDep) => queryDep.where('id_department', '=', department))
-      //   // query.where('id', '=', query.preload('departments', (queryDep) => queryDep.where('id_department', '=', department))[0])
-      // )
-      .orderBy([
-        {
-          column: 'elimination_date',
-          order: 'asc',
+    if (department && department.toString() !== 'all') {
+      const departmentQuery = await Department.findOrFail(department)
+      const defectsOs = await departmentQuery
+        .related('defect_os')
+        .query()
+        .if(status === 'open', (query) => query.whereNull('result'))
+        .if(status === 'close', (query) => query.whereNotNull('result'))
+        .orderBy([
+          {
+            column: 'elimination_date',
+            order: 'asc',
+          },
+          {
+            column: 'created_at',
+            order: 'desc',
+          },
+        ])
+        .preload('substation')
+        .preload('defect_group')
+        .preload('user')
+        .preload('departments')
+        .paginate(page, limit)
+
+      defectsOs.baseUrl('/defects-os')
+      defectsOs.queryString({ status, department })
+
+      // const test = defectsOs.map((defectOs) => {
+      //   return defectOs.serialize()
+      // })
+      // console.log(test)
+
+      return view.render('pages/defect-os/index', {
+        title: 'Дефекты по ОС',
+        defectsOs,
+        filters: {
+          status,
+          departments,
+          department,
         },
-        {
-          column: 'created_at',
-          order: 'desc',
+      })
+    } else {
+      const defectsOs = await DefectOs.query()
+        .if(status === 'open', (query) => query.whereNull('result'))
+        .if(status === 'close', (query) => query.whereNotNull('result'))
+        .orderBy([
+          {
+            column: 'elimination_date',
+            order: 'asc',
+          },
+          {
+            column: 'created_at',
+            order: 'desc',
+          },
+        ])
+        .preload('substation')
+        .preload('defect_group')
+        .preload('user')
+        .preload('departments')
+        .paginate(page, limit)
+
+      defectsOs.baseUrl('/defects-os')
+      defectsOs.queryString({ status, department })
+
+      return view.render('pages/defect-os/index', {
+        title: 'Дефекты по ОС',
+        defectsOs,
+        filters: {
+          status,
+          departments,
+          department,
         },
-      ])
-      .preload('substation')
-      .preload('defect_group')
-      .preload('user')
-      .preload('departments')
-      .paginate(page, limit)
-
-    defectsOs.baseUrl('/defects-os')
-    defectsOs.queryString({ status })
-    // const test = defectsOs.map((defectOs) => {
-    //   return defectOs.serialize()
-    // })
-    // console.log(test)
-
-    return view.render('pages/defect-os/index', {
-      title: 'Дефекты по ОС',
-      defectsOs,
-      filters: {
-        status,
-      },
-    })
+      })
+    }
   }
 
   public async create({ response, view, session, bouncer }: HttpContextContract) {
