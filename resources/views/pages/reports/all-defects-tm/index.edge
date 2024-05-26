@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="control">
     <form action="{{route('reports.get.all.defectsTm')}}" method="GET" class="form form-row">
-      <div class="form__content">
+      <div class="form__content form__content-wrap">
         @!inputs.select({
           name: 'substation',
           labelPositionText: 'label__text_left',
@@ -30,6 +30,26 @@
         @!filters.status({
           optionClass: 'searchable-list',
           filters,
+        })
+        @!inputs.base({
+          classGroup: 'form__group-row',
+          label: 'От',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input-date',
+          type: 'date',
+          name: 'dateStart',
+          placeholderText: 'Дата от',
+          value: filters ? filters.dateStart : ''
+        })
+        @!inputs.base({
+          classGroup: 'form__group-row',
+          label: 'До',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input-date',
+          type: 'date',
+          name: 'dateEnd',
+          placeholderText: 'Дата до',
+          value: filters ? filters.dateEnd : ''
         })
       </div>
       <div class="form__btns form__btns-row">
