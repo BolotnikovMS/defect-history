@@ -300,11 +300,13 @@ export default class ReportsController {
       return response.redirect().toPath('/')
     }
 
-    const { substation, typeDefect, status } = request.qs() as IQueryParams
+    const { substation, typeDefect, status, dateStart, dateEnd } = request.qs() as IQueryParams
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
     const defects = await Defect.query()
-      // .whereBetween('elimination_date', ['2023-11-01', '2023-12-31'])
+      .if(dateStart && dateEnd, (query) => {
+        query.whereBetween('elimination_date', [dateStart, dateEnd])
+      })
       .orderBy('id_substation', 'asc')
       .if(substation !== 'all' && substation !== undefined, (query) => {
         query.where('id_substation', '=', substation)
@@ -327,6 +329,8 @@ export default class ReportsController {
         substation,
         typeDefect,
         status,
+        dateStart,
+        dateEnd,
       },
       substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
       typesDefects,
