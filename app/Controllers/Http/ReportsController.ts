@@ -304,6 +304,7 @@ export default class ReportsController {
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
     const defects = await Defect.query()
+      // .whereBetween('elimination_date', ['2023-11-01', '2023-12-31'])
       .orderBy('id_substation', 'asc')
       .if(substation !== 'all' && substation !== undefined, (query) => {
         query.where('id_substation', '=', substation)
