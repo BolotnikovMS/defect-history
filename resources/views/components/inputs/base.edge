@@ -3,8 +3,9 @@
 @set('errors', flashMessages.get(`errors.${name}`) ?? errors)
 @set('classError', errors ? 'form__input-invalid' : '')
 @set('optionClass', optionClass ? optionClass : '')
+@set('classGroup', classGroup ?? '')
 
-<div class="form__group {{ type === 'hidden' ? 'form__group-hidden' : '' }}">
+<div class="form__group {{ classGroup }} {{ type === 'hidden' ? 'form__group-hidden' : '' }}">
   @if(label)
     <label class="form__label" for="{{ name }}">
       <span
