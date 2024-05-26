@@ -7,4 +7,6 @@ export interface IQueryParams {
   substation: number | string
   district: number
   sort: string
+  dateStart: string
+  dateEnd: string
 }
