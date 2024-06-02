@@ -143,6 +143,7 @@ export default class SubstationsController {
             .if(status === 'open', (query) => query.whereNull('result'))
             .if(status === 'close', (query) => query.whereNotNull('result'))
             .preload('user')
+            .preload('defect_group')
         })
       }
 
