@@ -223,7 +223,9 @@
             href: 'defects.delete.close-defect-record',
             params: {id: defect.id}
           })
-            @!icons.delete()
+            @!icons.delete({
+              optionalClasses: 'icon-cl_black'
+            })
           @end
         @endcan
       </div>
