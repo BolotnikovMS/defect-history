@@ -16,6 +16,12 @@
       right: 0;
     }
 
+    &-flx {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     &-pad_48 {
       padding: 4px 8px;
     }
