@@ -27,14 +27,19 @@
             optionalClasses: defect.elimination_date !== null ?
               'card-completed' :
               new Date(defect.term_elimination) < new Date() ?
-              'card-danger' :
-              defect.importance === true ?
-              'card-danger' :
-              ''
+              'card-danger' : ''
           })
             @slot('cardHeader')
               <div class="card__header-content">
                 @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
+                  @if(defect.importance)
+                    @badge.badge({
+                      badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_red badge__content-flx',
+                      component: true,
+                    })
+                      @!icons.important()
+                    @end
+                  @end
                   @if(defect?.defect_type)
                     @!badge.badge({
                       badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lb',

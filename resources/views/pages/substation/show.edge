@@ -27,16 +27,22 @@
         @each(defect in substation[filters.defectsClass])
           @card.card({
             optionalClasses: defect.elimination_date !== null ? 'card-completed' : new Date(defect.term_elimination) < new Date() ?
-            'card-danger' :
-            defect.importance === true ?
-            'card-danger' :
-            ''
+            'card-danger' : ''
           })
             @slot('cardHeader')
               <div class="card__header-content">
                 @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
                   @if(filters.defectsClass === 'defectsOs')
                     @if(defect.defect_group.importance)
+                      @badge.badge({
+                        badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_red badge__content-flx',
+                        component: true,
+                      })
+                        @!icons.important()
+                      @end
+                    @end
+                  @elseif(filters.defectsClass === 'defects')
+                    @if(defect.importance)
                       @badge.badge({
                         badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_red badge__content-flx',
                         component: true,
@@ -108,7 +114,7 @@
                       @dropdown.dropdown({
                         classBtnDropdown: 'btn-dropdown-icon',
                         dropdownData: [
-                          { name: 'Увеличить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendarOne' },
+                          { name: 'Изменить срок', access: 'DefectTMPolicy.updateDeadline', data: defect, path: 'defects.edit.deadline', params: { id: defect.id }, icon: 'calendarOne' },
                           { name: 'Редактировать', access: 'DefectTMPolicy.update', data: defect, path: 'defects.edit', params: { id: defect.id }, icon: 'edit' },
                           { name: 'Удалить', access: 'DefectTMPolicy.delete', data: defect, path: 'defects.destroy', params: { id: defect.id }, icon: 'delete' },
                         ],
