@@ -204,6 +204,7 @@ export default class DefectOsController {
       }
 
       await defectOs.related('departments').query().delete()
+      await defectOs.related('intermediate_checks').query().delete()
       await defectOs.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
@@ -402,12 +403,12 @@ export default class DefectOsController {
 
     const validateData = await request.validate(IntermediateCheckValidator)
     const checkupDefectOs = {
-      id_defect: params.id,
+      id_defect: +params.id,
       id_user_created: auth.user?.id,
       id_inspector: +validateData.employee,
       check_date: DateTime.now(),
       description_results: validateData.description_results,
-      transferred: validateData.transferred ? validateData.transferred : null,
+      transferred: validateData.transferred ? +validateData.transferred : null,
       type_defect: validateData.type_defect,
     }
 
