@@ -35,6 +35,16 @@
             @slot('cardHeader')
               <div class="card__header-content">
                 @card.cardGroup({ optionalClasses: 'card__group-cg_15'})
+                  @if(filters.defectsClass === 'defectsOs')
+                    @if(defect.defect_group.importance)
+                      @badge.badge({
+                        badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_red badge__content-flx',
+                        component: true,
+                      })
+                        @!icons.important()
+                      @end
+                    @end
+                  @end
                   @if(defect.defect_type)
                     @!badge.badge({
                       badgeContentOptionalClasses: 'badge__content-pad_48 badge__content-bgc_lb',
