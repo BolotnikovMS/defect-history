@@ -319,6 +319,7 @@ export default class ReportsController {
       .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
         query.where('id_type_defect', '=', typeDefect!)
       )
+    const countDefect = defects.length
 
     return view.render('pages/reports/all-defects-tm/index', {
       title: 'Список всех дефектов по ТМ',
@@ -335,6 +336,7 @@ export default class ReportsController {
       substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
       typesDefects,
       defects,
+      countDefect,
     })
   }
 

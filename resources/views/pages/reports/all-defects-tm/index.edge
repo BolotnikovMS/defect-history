@@ -83,8 +83,13 @@
       @end
     </div>
   </div>
-  <div class="report save-info-pdf">
-    <div class="reports__content">
+  <div class="report">
+    @if(countDefect)
+      <div>
+        Кол-во дефектов в выборке: {{ countDefect }}
+      </div>
+    @end
+    <div class="reports__content save-info-pdf">
       @if(defects?.length)
         <table class='table'>
           <thead>
