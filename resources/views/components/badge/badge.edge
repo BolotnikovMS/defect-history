@@ -1,5 +1,9 @@
 <div class="badge {{ badgeOptionalClasses ?? '' }}">
-  <div class="badge__content {{ badgeContentOptionalClasses }}" title={{ titleText ? titleText : '' }}>
-    {{ data }}
+  <div class="badge__content {{ badgeContentOptionalClasses ?? '' }}" title={{ titleText ? titleText : '' }}>
+    @if(component)
+      {{{ await $slots.main() }}}
+    @else
+      {{ data }}
+    @end
   </div>
 </div>
