@@ -1,6 +1,7 @@
 import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { EDateQueryType } from 'App/Enums/DateQueryType'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
 import DefectType from 'App/Models/DefectType'
@@ -300,12 +301,13 @@ export default class ReportsController {
       return response.redirect().toPath('/')
     }
 
-    const { substation, typeDefect, status, dateStart, dateEnd } = request.qs() as IQueryParams
+    const { substation, typeDefect, status, dateStart, dateEnd, dateQueryType } =
+      request.qs() as IQueryParams
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
     const defects = await Defect.query()
-      .if(dateStart && dateEnd, (query) => {
-        query.whereBetween('elimination_date', [dateStart, dateEnd])
+      .if(dateStart && dateEnd && EDateQueryType[dateQueryType], (query) => {
+        query.whereBetween(EDateQueryType[dateQueryType], [dateStart, dateEnd])
       })
       .orderBy('id_substation', 'asc')
       .if(substation !== 'all' && substation !== undefined, (query) => {
@@ -332,6 +334,7 @@ export default class ReportsController {
         status,
         dateStart,
         dateEnd,
+        dateQueryType,
       },
       substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
       typesDefects,
