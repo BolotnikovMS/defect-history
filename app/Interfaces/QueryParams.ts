@@ -9,4 +9,5 @@ export interface IQueryParams {
   sort: string
   dateStart: string
   dateEnd: string
+  dateQueryType: string
 }
