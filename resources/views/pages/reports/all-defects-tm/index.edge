@@ -39,25 +39,28 @@
             <label>
               <input
                 type="radio"
-                name="browser"
-                value="ie"
-              >
+                name="dateQueryType"
+                value="eliminationDate"
+                {{ filters?.dateQueryType === 'eliminationDate' ? 'checked' : '' }}
+              />
               По устранению
             </label>
             <label>
               <input
                 type="radio"
-                name="browser"
-                value="ie"
-              >
+                name="dateQueryType"
+                value="createDate"
+                {{ filters?.dateQueryType === 'createDate' ? 'checked' : '' }}
+              />
               <span>По добавлению</span>
             </label>
             <label>
               <input
                 type="radio"
-                name="browser"
-                value="ie"
-              >
+                name="dateQueryType"
+                value="termEliminationDate"
+                {{ filters?.dateQueryType === 'termEliminationDate' ? 'checked' : '' }}
+              />
               <span class="radio-title">По сроку</span>
             </label>
           </div>
