@@ -8,7 +8,7 @@
         @!inputs.select({
           name: 'substation',
           labelPositionText: 'label__text_left',
-          optionClass: 'form__input-width_300 searchable-list',
+          optionClass: 'form__input-width_200 searchable-list',
           defaultOptionConfig: {
             defaultOption: true,
             defaultOptionText: 'Выберите ПС'
@@ -31,26 +31,60 @@
           optionClass: 'searchable-list',
           filters,
         })
-        @!inputs.base({
-          classGroup: 'form__group-row',
-          label: 'От',
-          labelPositionText: 'label__text_left',
-          optionClass: 'form__input-date',
-          type: 'date',
-          name: 'dateStart',
-          placeholderText: 'Дата от',
-          value: filters ? filters.dateStart : ''
+
+        @group.group({
+          optionalClasses: 'group-col group-aic'
         })
-        @!inputs.base({
-          classGroup: 'form__group-row',
-          label: 'До',
-          labelPositionText: 'label__text_left',
-          optionClass: 'form__input-date',
-          type: 'date',
-          name: 'dateEnd',
-          placeholderText: 'Дата до',
-          value: filters ? filters.dateEnd : ''
-        })
+          <div class='group__content'>
+            <label>
+              <input
+                type="radio"
+                name="browser"
+                value="ie"
+              >
+              По устранению
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="browser"
+                value="ie"
+              >
+              <span>По добавлению</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="browser"
+                value="ie"
+              >
+              <span class="radio-title">По сроку</span>
+            </label>
+          </div>
+          <div class='group__content'>
+            @!inputs.base({
+              classGroup: 'form__group-row',
+              label: 'От',
+              labelPositionText: 'label__text_left',
+              optionClass: 'form__input-date',
+              type: 'date',
+              name: 'dateStart',
+              placeholderText: 'Дата от',
+              value: filters ? filters.dateStart : ''
+            })
+            @!inputs.base({
+              classGroup: 'form__group-row',
+              label: 'До',
+              labelPositionText: 'label__text_left',
+              optionClass: 'form__input-date',
+              type: 'date',
+              name: 'dateEnd',
+              placeholderText: 'Дата до',
+              value: filters ? filters.dateEnd : ''
+            })
+          </div>
+        @end
+
       </div>
       <div class="form__btns form__btns-row">
         @buttons.base({
