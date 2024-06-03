@@ -1,0 +1,19 @@
+.group {
+  display: flex;
+  gap: 8px;
+  font-size: clamp(15px, 2.0vw, 18px);
+
+  &-col {
+    flex-direction: column;
+  }
+
+  &-aic {
+    align-items: center;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
