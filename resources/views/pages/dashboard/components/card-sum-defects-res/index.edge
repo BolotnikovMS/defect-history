@@ -1,0 +1,40 @@
+@card.card()
+  @slot('cardHeader')
+    <div class="card__header-content card__header-content-center">
+      <p>Общее количество дефектов с разбивкой по РЭС и ГП.</p>
+    </div>
+  @end
+  @slot('cardBody')
+  <div class="card__body-content">
+    <div class="card__colum">
+      <div class="card__content colum-1">
+        @!card.cardSpan({ text: 'Всего дефектов',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+        @each(district in dataDistrictsDefects.numberDistrictsDefects)
+          @card.cardGroup()
+            @!card.cardSpan({ text: `${district.name}:`,  optionalClasses: 'card__text' })
+            @!card.cardSpan({ text: district.district_defects.length + district.district_defects_os.length,  optionalClasses: 'card__text card__text-bold' })
+          @end
+        @end
+      </div>
+      <div class="card__content colum-2">
+        @!card.cardSpan({ text: 'Открытых дефектов',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+        @each(district in dataDistrictsDefects.numberDistrictsOpenedDefects)
+          @card.cardGroup()
+            @!card.cardSpan({ text: `${district.name}:`,  optionalClasses: 'card__text' })
+            @!card.cardSpan({ text: district.district_defects.length + district.district_defects_os.length,  optionalClasses: 'card__text card__text-bold' })
+          @end
+        @end
+      </div>
+      <div class="card__content colum-3">
+        @!card.cardSpan({ text: 'Закрытых дефектов',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+        @each(district in dataDistrictsDefects.numberDistrictsClosedDefects)
+          @card.cardGroup()
+            @!card.cardSpan({ text: `${district.name}:`,  optionalClasses: 'card__text' })
+            @!card.cardSpan({ text: district.district_defects.length + district.district_defects_os.length,  optionalClasses: 'card__text card__text-bold' })
+          @end
+        @end
+      </div>
+    </div>
+  </div>
+  @end
+@end
