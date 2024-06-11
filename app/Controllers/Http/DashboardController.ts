@@ -18,7 +18,7 @@ export default class DashboardController {
     const numberClosedDefectsOs = await DefectOSService.getNumberDefects({ closedDefects: true })
     const numberOpenedDefectsOs = numberDefectsOs - numberClosedDefectsOs
 
-    // Districts Defects
+    // Districts defects используется для карточки с дефектами с разбивкой по ТМ ОС РС
     const numberDistrictsDefects = await DistrictService.getDistricts({})
     const numberDistrictsOpenedDefects = await DistrictService.getDistricts({ openedDefects: true })
     const numberDistrictsClosedDefects = await DistrictService.getDistricts({ closedDefects: true })
