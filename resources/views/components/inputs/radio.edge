@@ -1,0 +1,15 @@
+@set('labelOptionClass', labelClass ?? '')
+
+<label class="label-radio {{ labelOptionClass }}">
+  <input
+    type="radio"
+    name="{{ name }}"
+    value="{{ value }}"
+    {{ checked }}
+  />
+  @if(labelText)
+    <span class='text'>
+      {{ labelText }}
+    </span>
+  @end
+</label>
