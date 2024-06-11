@@ -28,7 +28,7 @@ a {
 }
 
 .container {
-  max-width: 1400px;
+  max-width: 1650px;
   padding: 0 30px;
   margin: 0 auto;
   // box-shadow: 2px 32px 47px -37px #000000;
@@ -93,6 +93,13 @@ hr {
   width: 95%;
   align-items: center;
   z-index: -2;
+}
+
+.verticle-line {
+  height: 90%;
+  width: 1px;
+  border-left: 1px solid black;
+  background-color: #000;
 }
 
 .dialog {
