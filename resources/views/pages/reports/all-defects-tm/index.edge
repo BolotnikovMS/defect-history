@@ -3,101 +3,11 @@
 @section('content')
   <h2 class="title">{{ title }}</h2>
   <div class="control">
-    <form action="{{route('reports.get.all.defectsTm')}}" method="GET" class="form form-row">
-      <div class="form__content form__content-wrap">
-        @!inputs.select({
-          name: 'substation',
-          labelPositionText: 'label__text_left',
-          optionClass: 'form__input-width_200 searchable-list',
-          defaultOptionConfig: {
-            defaultOption: true,
-            defaultOptionText: 'Выберите ПС'
-          },
-          dataOptionsConfig: {
-            dataOptions: substations,
-            dataNameOption: 'name'
-          },
-          currentDataConfig: {
-            currentData: filters?.substation ? filters.substation : '',
-            currentDataId: filters?.substation ? filters.substation : '',
-          },
-        })
-        @!filters.typeDefect({
-          optionClass: 'searchable-list',
-          typesDefects,
-          filters,
-        })
-        @!filters.status({
-          optionClass: 'searchable-list',
-          filters,
-        })
-
-        @group.group({
-          optionalClasses: 'group-col group-aic'
-        })
-          <div class='group__content'>
-            <label>
-              <input
-                type="radio"
-                name="dateQueryType"
-                value="eliminationDate"
-                {{ filters?.dateQueryType === 'eliminationDate' ? 'checked' : '' }}
-              />
-              По устранению
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="dateQueryType"
-                value="createDate"
-                {{ filters?.dateQueryType === 'createDate' ? 'checked' : '' }}
-              />
-              <span>По добавлению</span>
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="dateQueryType"
-                value="termEliminationDate"
-                {{ filters?.dateQueryType === 'termEliminationDate' ? 'checked' : '' }}
-              />
-              <span class="radio-title">По сроку</span>
-            </label>
-          </div>
-          <div class='group__content'>
-            @!inputs.base({
-              classGroup: 'form__group-row',
-              label: 'От',
-              labelPositionText: 'label__text_left',
-              optionClass: 'form__input-date',
-              type: 'date',
-              name: 'dateStart',
-              placeholderText: 'Дата от',
-              value: filters ? filters.dateStart : ''
-            })
-            @!inputs.base({
-              classGroup: 'form__group-row',
-              label: 'До',
-              labelPositionText: 'label__text_left',
-              optionClass: 'form__input-date',
-              type: 'date',
-              name: 'dateEnd',
-              placeholderText: 'Дата до',
-              value: filters ? filters.dateEnd : ''
-            })
-          </div>
-        @end
-
-      </div>
-      <div class="form__btns form__btns-row">
-        @buttons.base({
-          type: 'submit',
-          className: 'btn-color_green btn-small'
-        })
-          @!icons.checkmark()
-        @end
-      </div>
-    </form>
+    @!component('pages/reports/all-defects-tm/components/filters/filters', {
+      filters,
+      substations,
+      typesDefects
+    })
     <div class='control__btns'>
       @buttons.base({
         type: 'button',
