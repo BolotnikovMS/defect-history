@@ -4,104 +4,13 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { EDateQueryType } from 'App/Enums/DateQueryType'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
+import DefectGroup from 'App/Models/DefectGroup'
+import DefectOs from 'App/Models/DefectOs'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
 
 export default class ReportsController {
-  public async showSubstationDefects({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects')) {
-      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
-
-      return response.redirect().toPath('/')
-    }
-
-    const substations = await Substation.query()
-
-    return view.render('pages/reports/substation_defects/index', {
-      title: 'Список дефектов по ПС',
-      messages: {
-        noContent: 'Отчет не сформирован.',
-      },
-      substations,
-    })
-  }
-
-  public async getSubstationDefects({
-    request,
-    response,
-    view,
-    session,
-    bouncer,
-  }: HttpContextContract) {
-    if (await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects')) {
-      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
-
-      return response.redirect().toPath('/')
-    }
-
-    const validationSchema = schema.create({
-      substation: schema.number(),
-      status: schema.string(),
-    })
-    const customMessages: CustomMessages = {
-      required: 'Поле является обязательным.',
-    }
-    const validateData = await request.validate({
-      schema: validationSchema,
-      messages: customMessages,
-    })
-    const substations = await Substation.query()
-    const substationData = await Substation.find(validateData.substation)
-    let noContent: string | null = null
-    let titleText: string = ''
-
-    if (substationData) {
-      await substationData.load((loader) => {
-        loader.load('defects', (defectQuery) => {
-          titleText = 'всех'
-          noContent = 'По ПС нету открытых дефектов'
-          defectQuery
-            .preload('defect_type')
-            .preload('accession')
-            .preload('intermediate_checks')
-            .if(validateData.status === 'openDefects', (query) => {
-              titleText = 'открытых дефектов'
-              noContent = substationData?.defects?.length ? null : 'По ПС нету открытых дефектов.'
-              query.whereNull('result')
-            })
-            .if(validateData.status === 'openDefectsWithResults', (query) => {
-              titleText = 'открытых дефектов с промежуточными результатами'
-              noContent = substationData?.defects?.length
-                ? null
-                : 'По ПС нету открытых дефектов с промежуточными результатами.'
-              query.has('intermediate_checks')
-            })
-            .if(validateData.status === 'closeDefects', (query) => {
-              titleText = 'закрытых дефектов'
-              noContent = substationData?.defects?.length ? null : 'По ПС нету закрытых дефектов.'
-              query.whereNotNull('result')
-            })
-        })
-      })
-
-      return view.render('pages/reports/substation_defects/index', {
-        title: `Список ${titleText} дефектов по ПС '${substationData.name}'`,
-        messages: {
-          noContent: noContent,
-        },
-        substations,
-        substation: substationData,
-        filters: {
-          status: validateData.status,
-        },
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('reports.show.substation.defects')
-    }
-  }
-
   public async showDistrictDefects({ response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
@@ -191,89 +100,6 @@ export default class ReportsController {
     }
   }
 
-  public async showAllDefects({ response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefects')) {
-      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
-
-      return response.redirect().toPath('/')
-    }
-
-    const typesDefects = await DefectType.query()
-
-    return view.render('pages/reports/all_defects/index', {
-      title: 'Список дефектов',
-      messages: {
-        noContent: 'Отчет не сформирован.',
-      },
-      typesDefects,
-    })
-  }
-
-  public async getAllDefects({ request, response, view, session, bouncer }: HttpContextContract) {
-    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefects')) {
-      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
-
-      return response.redirect().toPath('/')
-    }
-
-    const validationSchema = schema.create({
-      status: schema.string(),
-      type: schema.number(),
-    })
-    const customMessages: CustomMessages = {
-      required: 'Поле является обязательным.',
-    }
-    const validateData = await request.validate({
-      schema: validationSchema,
-      messages: customMessages,
-    })
-    let noContentDefect: string | null = null
-    let titleText: string = 'всех'
-    const typesDefects = await DefectType.query()
-    const districts = await District.query()
-      .preload('district_defects')
-      .preload('substations', (substationQuery) => {
-        substationQuery.preload('defects', (defectQuery) => {
-          titleText = 'всех'
-          noContentDefect = 'Дефектов нету'
-          defectQuery
-            .if(validateData?.type !== undefined && validateData?.type, (query) => {
-              query.where('id_type_defect', '=', validateData.type)
-            })
-            .if(validateData.status === 'openDefects', (query) => {
-              titleText = 'открытых'
-              noContentDefect = 'По ПС нету открытых дефектов'
-              query.whereNull('result')
-            })
-            .if(validateData.status === 'closeDefects', (query) => {
-              titleText = 'закрытых'
-              noContentDefect = 'По ПС нету закрытых дефектов'
-              query.whereNotNull('result')
-            })
-            .orderBy('term_elimination', 'asc')
-            .preload('defect_type')
-            .preload('accession')
-        })
-      })
-
-    // const test = districts.map((district) => district.serialize())
-    // console.log(test[0])
-
-    return view.render('pages/reports/all_defects/index', {
-      title: `Список ${titleText} дефектов`,
-      messages: {
-        noContent: 'Нету дефектов',
-        noContentDefect: noContentDefect,
-      },
-      districts,
-      typesDefects,
-      currentTypeDefect: validateData.type,
-      filters: {
-        status: validateData.status,
-      },
-    })
-  }
-
   public async showAllDefectsTM({ response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.with('ReportPolicy').denies('viewReportAllDefectsTm')) {
       session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
@@ -343,17 +169,71 @@ export default class ReportsController {
     })
   }
 
-  public async index({}: HttpContextContract) {}
+  public async showAllDefectsOS({ response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefectsOs')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
-  public async create({}: HttpContextContract) {}
+      return response.redirect().toPath('/')
+    }
 
-  public async store({}: HttpContextContract) {}
+    const substations = await Substation.query()
+    const defectOsGroups = await DefectGroup.query()
 
-  public async show({}: HttpContextContract) {}
+    return view.render('pages/reports/all-defects-os/index', {
+      title: 'Все дефекты по ОС',
+      messages: {
+        noContent: 'Отчет не сформирован.',
+      },
+      substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
+      defectGroups: [{ id: 'all', name: 'Все категории' }, ...defectOsGroups],
+    })
+  }
 
-  public async edit({}: HttpContextContract) {}
+  public async getAllDefectsOS({ request, response, view, session, bouncer }: HttpContextContract) {
+    if (await bouncer.with('ReportPolicy').denies('viewReportAllDefectsOs')) {
+      session.flash('dangerMessage', 'У вас нет доступа к данной странице!')
 
-  public async update({}: HttpContextContract) {}
+      return response.redirect().toPath('/')
+    }
 
-  public async destroy({}: HttpContextContract) {}
+    const { substation, status, dateStart, dateEnd, dateQueryType, groupDefect } =
+      request.qs() as IQueryParams
+    const substations = await Substation.query()
+    const defectOsGroups = await DefectGroup.query()
+    const defectsOs = await DefectOs.query()
+      .if(groupDefect && groupDefect !== 'all', (query) => {
+        query.where('id_defect_group', '=', groupDefect)
+      })
+      .if(dateStart && dateEnd && EDateQueryType[dateQueryType], (query) => {
+        query.whereBetween(EDateQueryType[dateQueryType], [dateStart, dateEnd])
+      })
+      .orderBy('id_substation', 'asc')
+      .if(substation !== 'all' && substation !== undefined, (query) => {
+        query.where('id_substation', '=', substation)
+      })
+      .if(status === 'open', (query) => query.whereNull('result'))
+      .if(status === 'close', (query) => query.whereNotNull('result'))
+      .preload('substation')
+      .preload('defect_group')
+    const countDefectOs = defectsOs.length
+
+    return view.render('pages/reports/all-defects-os/index', {
+      title: 'Все дефекты по ОС',
+      messages: {
+        noContent: 'Дефектов нету или не выбрана ПС.',
+      },
+      filters: {
+        substation,
+        status,
+        dateStart,
+        dateEnd,
+        dateQueryType,
+        groupDefect,
+      },
+      substations: [{ id: 'all', name: 'Все ПС' }, ...substations],
+      defectGroups: [{ id: 'all', name: 'Все категории' }, ...defectOsGroups],
+      defectsOs,
+      countDefectOs,
+    })
+  }
 }
