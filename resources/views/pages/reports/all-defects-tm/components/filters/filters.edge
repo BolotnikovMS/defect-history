@@ -1,13 +1,9 @@
-<form action="{{route('reports.get.all.defectsTm')}}" method="GET" class="form form-row">
+<form action="{{route('reports.get.all.defectsTm')}}" method="GET" class="form form-row form-ai_end">
   <div class="form__content form__content-wrap">
     @!inputs.select({
       name: 'substation',
       labelPositionText: 'label__text_left',
       optionClass: 'form__input-width_200 searchable-list',
-      defaultOptionConfig: {
-        defaultOption: true,
-        defaultOptionText: 'Выберите ПС'
-      },
       dataOptionsConfig: {
         dataOptions: substations,
         dataNameOption: 'name'
