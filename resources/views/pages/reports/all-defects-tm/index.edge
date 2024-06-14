@@ -2,7 +2,7 @@
 
 @section('content')
   <h2 class="title">{{ title }}</h2>
-  <div class="control">
+  <div class="control control-ai_end">
     @!component('pages/reports/all-defects-tm/components/filters/filters', {
       filters,
       substations,
@@ -54,17 +54,17 @@
           <tbody>
             @each(defect in defects)
               <tr>
-                <td>{{ dateFormat(defect.created_at) }}</td>
+                <td>{{ dateFormat(defect.created_at, false) }}</td>
                 <td>{{ defect.substation.name }}</td>
                 <td>{{ defect.defect_type.type_defect }}</td>
                 <td>{{ defect.accession.name }}</td>
                 <td>{{ defect.description_defect }}</td>
-                <td>{{ dateFormat(defect.term_elimination) }}</td>
+                <td>{{ dateFormat(defect.term_elimination, false) }}</td>
                 <td>
                   @if(defect.elimination_date === null)
                     Не устранен
                   @else
-                    {{ dateFormat(defect.elimination_date) }}
+                    {{ dateFormat(defect.elimination_date, false) }}
                   @endif
                 </td>
                 <td>
