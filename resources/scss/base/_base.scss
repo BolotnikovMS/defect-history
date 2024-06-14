@@ -78,6 +78,10 @@ a {
     justify-content: space-between;
   }
 
+  &-ai_end {
+    align-items: flex-end;
+  }
+
   & + * {
     margin-top: 25px;
   }

@@ -6,6 +6,10 @@
     column-gap: 15px;
   }
 
+  &-ai_end {
+    align-items: flex-end;
+  }
+
   &__content {
     display: flex;
     align-items: flex-end;
