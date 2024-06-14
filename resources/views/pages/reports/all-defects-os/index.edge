@@ -1,0 +1,86 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control control-ai_end">
+    @!component('pages/reports/all-defects-os/components/filters/filters', {
+      filters,
+      substations,
+      defectGroups,
+    })
+    <div class='control__btns'>
+      @buttons.base({
+        type: 'button',
+        className: 'btn-color_green btn-small',
+        href: 'reports.show.all.defectsOs'
+      })
+        @!icons.reset()
+      @end
+      @if(defectsOs?.length)
+        @buttons.base({
+          className: 'btn-color_green btn-small btn-save-pdf'
+        })
+          @!icons.pdf()
+        @end
+        @buttons.base({
+          className: 'btn-color_green btn-small btn-save-excel'
+        })
+          @!icons.excel()
+        @end
+      @end
+    </div>
+  </div>
+  <div class="report">
+    @if(countDefectOs)
+      <div>
+        Кол-во дефектов в выборке: {{ countDefectOs }}
+      </div>
+    @end
+    <div class="reports__content save-info-pdf">
+      @if(defectsOs?.length)
+        <table class='table'>
+          <thead>
+            <tr>
+              <th>Дата добавления</th>
+              <th>ПС</th>
+              <th>Категория</th>
+              <th>Присоединение</th>
+              <th>Описание дефекта</th>
+              <th>Срок устранения</th>
+              <th>Дата устранения</th>
+              <th>Результат работ</th>
+            </tr>
+          </thead>
+          <tbody>
+            @each(defect in defectsOs)
+              <tr>
+                <td>{{ dateFormat(defect.created_at, false) }}</td>
+                <td>{{ defect.substation.name }}</td>
+                <td>{{ defect.defect_group.name }}</td>
+                <td>{{ defect.accession_substations }}</td>
+                <td>{{ defect.description_defect }}</td>
+                <td>{{ dateFormat(defect.term_elimination, false) }}</td>
+                <td>
+                  @if(defect.elimination_date === null)
+                    Не устранен
+                  @else
+                    {{ dateFormat(defect.elimination_date, false) }}
+                  @endif
+                </td>
+                <td>
+                  @if(defect.result)
+                    {{ defect.result }}
+                  @else
+                    Не устранен
+                  @end
+                </td>
+              </tr>
+            @end
+          </tbody>
+        </table>
+      @else
+        @!notification.nocontent({ messageNoData: messages.noContent })
+      @end
+    </div>
+  </div>
+@endsection

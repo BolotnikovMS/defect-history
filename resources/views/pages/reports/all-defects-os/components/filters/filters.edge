@@ -1,0 +1,93 @@
+<form action="{{route('reports.get.all.defectsOs')}}" method="GET" class="form form-row form-ai_end">
+  <div class="form__content form__content-wrap">
+    @!inputs.select({
+      name: 'substation',
+      labelPositionText: 'label__text_left',
+      optionClass: 'form__input-width_200 searchable-list',
+      dataOptionsConfig: {
+        dataOptions: substations,
+        dataNameOption: 'name'
+      },
+      currentDataConfig: {
+        currentData: filters?.substation ? filters.substation : '',
+        currentDataId: filters?.substation ? filters.substation : '',
+      },
+    })
+    @!inputs.select({
+      name: 'groupDefect',
+      labelPositionText: 'label__text_left',
+      optionClass: 'form__input-width_200 searchable-list',
+      defaultOptionConfig: {
+        defaultOption: true,
+        defaultOptionText: 'Категорию'
+      },
+      dataOptionsConfig: {
+        dataOptions: defectGroups,
+        dataNameOption: 'name'
+      },
+      currentDataConfig: {
+        currentData: filters?.groupDefect ? filters.groupDefect : '',
+        currentDataId: filters?.groupDefect ? filters.groupDefect : '',
+      },
+    })
+    @!filters.status({
+      optionClass: 'searchable-list',
+      filters,
+    })
+{{-- defectGroups --}}
+    @group.group({
+      optionalClasses: 'group-col group-aic'
+    })
+      <div class='group__content'>
+        @!inputs.radio({
+          labelText: 'По устранению',
+          name: 'dateQueryType',
+          value: 'eliminationDate',
+          checked: filters?.dateQueryType === 'eliminationDate' ? 'checked' : ''
+        })
+        @!inputs.radio({
+          labelText: 'По добавлению',
+          name: 'dateQueryType',
+          value: 'createDate',
+          checked: filters?.dateQueryType === 'createDate' ? 'checked' : ''
+        })
+        @!inputs.radio({
+          labelText: 'По сроку',
+          name: 'dateQueryType',
+          value: 'termEliminationDate',
+          checked: filters?.dateQueryType === 'termEliminationDate' ? 'checked' : ''
+        })
+      </div>
+      <div class='group__content'>
+        @!inputs.base({
+          classGroup: 'form__group-row',
+          label: 'От',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input-date',
+          type: 'date',
+          name: 'dateStart',
+          placeholderText: 'Дата от',
+          value: filters ? filters.dateStart : ''
+        })
+        @!inputs.base({
+          classGroup: 'form__group-row',
+          label: 'До',
+          labelPositionText: 'label__text_left',
+          optionClass: 'form__input-date',
+          type: 'date',
+          name: 'dateEnd',
+          placeholderText: 'Дата до',
+          value: filters ? filters.dateEnd : ''
+        })
+      </div>
+    @end
+  </div>
+  <div class="form__btns form__btns-row">
+    @buttons.base({
+      type: 'submit',
+      className: 'btn-color_green btn-small'
+    })
+      @!icons.checkmark()
+    @end
+  </div>
+</form>
