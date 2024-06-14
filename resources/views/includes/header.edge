@@ -89,14 +89,13 @@
               })
             @end
           @endif
-          @if(!await bouncer.with('ReportPolicy').denies('viewReportSubstationDefects') || !await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects') || !await bouncer.with('ReportPolicy').denies('viewReportAllDefects'))
+          @if(!await bouncer.with('ReportPolicy').denies('viewReportDistrictDefects') || !await bouncer.with('ReportPolicy').denies('viewReportAllDefectsTm') || !await bouncer.with('ReportPolicy').denies('viewReportAllDefectsOs'))
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'Список дефектов ТМ по выбранной ПС', access: 'ReportPolicy.viewReportSubstationDefects', path: 'reports.show.substation.defects' },
                 { name: 'Список дефектов ТМ по выбранному РЭС или ГП', access: 'ReportPolicy.viewReportDistrictDefects', path: 'reports.show.district.defects' },
-                { name: 'Список дефектов ТМ по всем ПС', access: 'ReportPolicy.viewReportAllDefects', path: 'reports.show.all.defects' },
                 { name: 'Список всех дефектов по ТМ', access: 'ReportPolicy.viewReportAllDefectsTm', path: 'reports.show.all.defectsTm' },
+                { name: 'Список всех дефектов по ОС', access: 'ReportPolicy.viewReportAllDefectsOs', path: 'reports.show.all.defectsOs' },
               ],
             })
               Отчеты
