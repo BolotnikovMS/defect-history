@@ -8,25 +8,6 @@
     })
       <div class="form__content form__content-column">
         @if(checkup)
-          @!inputs.select({
-            label: 'Сотрудник',
-            labelPositionText: 'label__text_left',
-            name: 'employee',
-            optionClass: 'searchable-list',
-            defaultOptionConfig: {
-              defaultOption: true,
-              defaultOptionText: 'Выберите сотрудника'
-            },
-            dataOptionsConfig: {
-              dataOptions: users,
-              dataNameOption: 'fullName'
-            },
-            currentDataConfig: {
-              currentData: check ? check : '',
-              currentDataId: check ? check.id_inspector : '',
-            }
-          })
-
           @!inputs.base({
             type: 'hidden',
             name: 'type_defect',

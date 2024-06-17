@@ -7,12 +7,11 @@ import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Substation from 'App/Models/Substation'
 import DefectOSService from 'App/Services/DefectOSService'
 import DepartmentService from 'App/Services/DepartmentService'
-import UserService from 'App/Services/UserService'
 import { addDays } from 'App/Utils/utils'
 import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
 import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
 import DefectOsValidator from 'App/Validators/DefectOValidator'
-import IntermediateCheckValidator from 'App/Validators/IntermediateCheckValidator'
+import IntermediateCheckOsValidator from 'App/Validators/IntermediateCheckOsValidator'
 import { DateTime } from 'luxon'
 
 export default class DefectOsController {
@@ -365,7 +364,6 @@ export default class DefectOsController {
       return response.redirect().toPath('/')
     }
 
-    const users = await UserService.getCleanUsers()
     const departments = await DepartmentService.getCleanDepartments()
 
     return view.render('pages/defect-os/form_checkupandclose', {
@@ -380,7 +378,6 @@ export default class DefectOsController {
           backParams: params.id,
         },
       },
-      users,
       departments,
     })
   }
@@ -401,11 +398,11 @@ export default class DefectOsController {
       return response.redirect().toPath('/')
     }
 
-    const validateData = await request.validate(IntermediateCheckValidator)
+    const validateData = await request.validate(IntermediateCheckOsValidator)
     const checkupDefectOs = {
       id_defect: +params.id,
       id_user_created: auth.user?.id,
-      id_inspector: +validateData.employee,
+      id_inspector: auth.user?.id,
       check_date: DateTime.now(),
       description_results: validateData.description_results,
       transferred: validateData.transferred ? +validateData.transferred : null,
@@ -428,7 +425,6 @@ export default class DefectOsController {
       return response.redirect().toRoute('DefectOsController.show', { id: check.id_defect })
     }
 
-    const users = await UserService.getCleanUsers()
     const departments = await DepartmentService.getCleanDepartments()
 
     return view.render('pages/defect-os/form_checkupandclose', {
@@ -443,7 +439,6 @@ export default class DefectOsController {
           backParams: check.id_defect,
         },
       },
-      users,
       departments,
       check,
     })
@@ -459,10 +454,9 @@ export default class DefectOsController {
       return response.redirect().toRoute('DefectOsController.show', { id: check.id_defect })
     }
 
-    const validatedData = await request.validate(IntermediateCheckValidator)
+    const validatedData = await request.validate(IntermediateCheckOsValidator)
     const updCheckupDefectOs = {
       id_defect: +check.id_defect,
-      id_inspector: +validatedData.employee,
       check_date: DateTime.now(),
       description_results: validatedData.description_results,
       transferred: validatedData.transferred ? validatedData.transferred : null,
