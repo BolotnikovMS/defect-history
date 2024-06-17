@@ -16,7 +16,6 @@ export default class CloseDefectValidator {
     defect_img: schema.array
       .optional()
       .members(schema.file({ size: '1mb', extnames: ['jpg', 'png', 'jpeg'] })),
-    importance: schema.boolean.optional(),
   })
 
   public messages: CustomMessages = {
