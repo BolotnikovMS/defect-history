@@ -171,10 +171,11 @@
         </div>
         <table class="table defect-info__table">
           <thead>
-            <th>Сотрудник</th>
-            <th>Дата проверки</th>
+            <th>Выполнил проверку</th>
+            <th>Дата добавления проверки</th>
             <th colspan="2">Результаты проверки</th>
             <th>Кому передано</th>
+            <th>Автор записи</th>
             <th style="width: 50px"></th>
           </thead>
           <tbody>
@@ -190,6 +191,9 @@
                     :
                       '-'
                   }}
+                </td>
+                <td>
+                  {{ inter.author.shortUserName }}
                 </td>
                 <td>
                   @if(!await bouncer.with('DefectTMPolicy').denies('deleteCheckup', inter, defect) || !await bouncer.with('DefectTMPolicy').denies('updateCheckup', defect, inter))
