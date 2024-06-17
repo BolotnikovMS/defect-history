@@ -231,7 +231,7 @@ export default class DefectOsController {
         return response.redirect().toRoute('DefectOsController.index')
       }
 
-      return view.render('pages/defect-os/form_checkupandclose', {
+      return view.render('pages/close-checkup-defect/form', {
         title: 'Закрытие дефекта',
         options: {
           idData: id,

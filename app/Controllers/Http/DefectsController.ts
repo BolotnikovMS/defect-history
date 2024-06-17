@@ -487,9 +487,13 @@ export default class DefectsController {
 
     const users = await UserService.getCleanUsers()
 
-    return view.render('pages/defect/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Закрытие дефекта',
       options: {
+        form: {
+          employee: true,
+          img: true,
+        },
         idData: idDefect,
         routes: {
           saveData: 'defects.close.store',
