@@ -306,10 +306,13 @@ export default class DefectsController {
     const users = await UserService.getCleanUsers()
     const departments = await DepartmentService.getCleanDepartments()
 
-    return view.render('pages/defect/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Добавление проверки',
       checkup: true,
       options: {
+        form: {
+          employee: true,
+        },
         idData: idDefect,
         typeDefect: TypeDefects.TM,
         routes: {
@@ -401,10 +404,13 @@ export default class DefectsController {
     const users = await UserService.getCleanUsers()
     const departments = await DepartmentService.getCleanDepartments()
 
-    return view.render('pages/defect/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Редактирование промежуточных результатов',
       checkup: true,
       options: {
+        form: {
+          employee: true,
+        },
         idData: check.id,
         typeDefect: TypeDefects.TM,
         routes: {

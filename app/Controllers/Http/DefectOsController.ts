@@ -366,7 +366,7 @@ export default class DefectOsController {
 
     const departments = await DepartmentService.getCleanDepartments()
 
-    return view.render('pages/defect-os/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Добавление проверки',
       checkup: true,
       options: {
@@ -427,7 +427,7 @@ export default class DefectOsController {
 
     const departments = await DepartmentService.getCleanDepartments()
 
-    return view.render('pages/defect-os/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Редактирование промежуточных результатов',
       checkup: true,
       options: {
