@@ -56,4 +56,10 @@ export default class IntermediateCheck extends BaseModel {
     localKey: 'id',
   })
   public responsible_department: BelongsTo<typeof Department>
+
+  @belongsTo(() => User, {
+    foreignKey: 'id_user_created',
+    localKey: 'id',
+  })
+  public author: BelongsTo<typeof User>
 }
