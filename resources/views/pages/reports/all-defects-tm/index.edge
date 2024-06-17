@@ -45,10 +45,10 @@
               <th>ПС</th>
               <th>Тип</th>
               <th>Присоединение</th>
-              <th>Описание дефекта</th>
+              <th colspan='2'>Описание дефекта</th>
               <th>Срок устранения</th>
               <th>Дата устранения</th>
-              <th>Результат работ</th>
+              <th colspan='2'>Результат работ</th>
             </tr>
           </thead>
           <tbody>
@@ -58,7 +58,7 @@
                 <td>{{ defect.substation.name }}</td>
                 <td>{{ defect.defect_type.type_defect }}</td>
                 <td>{{ defect.accession.name }}</td>
-                <td>{{ defect.description_defect }}</td>
+                <td colspan='2'>{{ defect.description_defect }}</td>
                 <td>{{ dateFormat(defect.term_elimination, false) }}</td>
                 <td>
                   @if(defect.elimination_date === null)
@@ -67,7 +67,7 @@
                     {{ dateFormat(defect.elimination_date, false) }}
                   @endif
                 </td>
-                <td>
+                <td colspan='2'>
                   @if(defect.result)
                     {{ defect.result }}
                   @else
