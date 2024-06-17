@@ -4,12 +4,12 @@
   <h2 class="title">{{ title }}</h2>
   <div class="defect__content">
     @forms.post({
-      action: route(options.routes.saveData, {id: options.idData})
+      action: route(options.routes.saveData, {id: options.idData}), uploadFile: options.form?.img
     })
       <div class="form__content form__content-column">
         @if(options?.form?.employee)
           @!inputs.select({
-            label: 'Сотрудник',
+            label: 'Выполнил работу',
             labelPositionText: 'label__text_left',
             name: 'employee',
             optionClass: 'searchable-list',
