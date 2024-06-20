@@ -42,24 +42,20 @@ export default class DefectGroupsController {
   }
 
   public async store({ request, response, session, auth, bouncer }: HttpContextContract) {
-    try {
-      if (await bouncer.with('DefectGroupPolicy').denies('create')) {
-        session.flash('dangerMessage', 'У вас нет прав на создание записи!')
+    if (await bouncer.with('DefectGroupPolicy').denies('create')) {
+      session.flash('dangerMessage', 'У вас нет прав на создание записи!')
 
-        return response.redirect().toPath('/')
-      }
-
-      const validatedData = await request.validate(DefectGroupValidator)
-
-      await DefectGroup.create({ id_user_created: auth.user?.id, ...validatedData })
-
-      session.flash('successMessage', 'Запись успешно добавлена!')
-
-      return response.redirect().toRoute('defect-groups.index')
-    } catch (error) {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('defect-groups.index')
+      return response.redirect().toPath('/')
     }
+
+    const validatedData = await request.validate(DefectGroupValidator)
+    console.log(validatedData)
+
+    await DefectGroup.create({ id_user_created: auth.user?.id, ...validatedData })
+
+    session.flash('successMessage', 'Запись успешно добавлена!')
+
+    return response.redirect().toRoute('defect-groups.index')
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
