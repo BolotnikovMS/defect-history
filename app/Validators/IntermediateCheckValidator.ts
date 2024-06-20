@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
-
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
+import { text700, numberCheck, numberOptional, typeDefect } from './fields'
 
 export default class IntermediateCheckValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    employee: schema.string(),
-    description_results: schema.string({}, [rules.trim(), rules.escape(), rules.minLength(2), rules.maxLength(700)]),
-    transferred: schema.number.optional(),
-    type_defect: schema.enum(['tm', 'os', 'rs'] as const),
+    employee: numberCheck,
+    description_results: text700,
+    transferred: numberOptional,
+    type_defect: typeDefect,
   })
 
   public messages: CustomMessages = {

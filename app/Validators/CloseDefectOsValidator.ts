@@ -1,17 +1,13 @@
-import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
+import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { text700 } from './fields'
 
 export default class CloseDefectOsValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    description_results: schema.string({}, [
-      rules.trim(),
-      rules.minLength(2),
-      rules.maxLength(700),
-      rules.escape(),
-    ]),
+    description_results: text700,
   })
 
   public messages: CustomMessages = {

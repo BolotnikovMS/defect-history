@@ -1,18 +1,14 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { booleanCheckOptional, text250 } from './fields'
 
 export default class AccessionSubstationValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    name: schema.string({}, [
-      rules.trim(),
-      rules.escape(),
-      rules.minLength(2),
-      rules.maxLength(240),
-    ]),
-    importance: schema.boolean.optional(),
-    addNext: schema.boolean.optional(),
+    name: text250,
+    importance: booleanCheckOptional,
+    addNext: booleanCheckOptional,
   })
 
   public messages: CustomMessages = {

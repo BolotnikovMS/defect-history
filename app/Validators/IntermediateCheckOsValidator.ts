@@ -1,22 +1,13 @@
-import { CustomMessages, rules, schema } from '@ioc:Adonis/Core/Validator'
-
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-
-const descriptionResults = schema.string([
-  rules.trim(),
-  rules.escape(),
-  rules.minLength(2),
-  rules.maxLength(700),
-])
-const transferred = schema.number.optional()
-const typeDefect = schema.enum(['tm', 'os', 'rs'] as const)
+import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
+import { text700, numberOptional, typeDefect } from './fields'
 
 export default class IntermediateCheckOsValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    description_results: descriptionResults,
-    transferred,
+    description_results: text700,
+    transferred: numberOptional,
     type_defect: typeDefect,
   })
 

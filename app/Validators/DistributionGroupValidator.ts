@@ -1,16 +1,13 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
+import { text350Optional, text250 } from './fields'
 
 export default class DistributionGroupValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    name: schema.string({}, [rules.trim(), rules.minLength(2), rules.maxLength(250)]),
-    description: schema.string.optional({}, [
-      rules.trim(),
-      rules.minLength(2),
-      rules.maxLength(350),
-    ]),
+    name: text250,
+    description: text350Optional,
   })
 
   public messages: CustomMessages = {

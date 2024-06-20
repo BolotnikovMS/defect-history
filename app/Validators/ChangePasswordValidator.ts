@@ -2,10 +2,10 @@ import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ChangePasswordValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    password: schema.string([rules.confirmed(), rules.minLength(8)]),
+    password: schema.string([rules.confirmed(), rules.minLength(8), rules.maxLength(160)]),
   })
 
   public messages: CustomMessages = {
