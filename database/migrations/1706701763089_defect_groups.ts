@@ -15,6 +15,7 @@ export default class extends BaseSchema {
         .inTable('users')
       table.string('name', 100).notNullable()
       table.string('type', 20).notNullable()
+      table.boolean('importance').defaultTo(false)
 
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
