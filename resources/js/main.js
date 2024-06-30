@@ -229,24 +229,25 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // Save table excel
+  const XLSX = require('../../public/js/libs/xlsx/xlsx.full.min.js')
   const exportExcel = (btnSelector, tableSelector, filename = 'excel-file') => {
     const btnSave = document.querySelector(btnSelector)
     const table = document.querySelector(tableSelector)
 
     if (btnSave === null || table === null) return null
 
-    // btnSave.addEventListener('click', () => {
-    //   /* Create worksheet from HTML DOM TABLE */
-    //   const wb = XLSX.utils.table_to_book(table, { sheet: 'sheet-1' })
-
-    //   /* Export to file (start a download) */
-    //   XLSX.writeFile(wb, `${filename}.xls`)
-    // })
     btnSave.addEventListener('click', () => {
-      const table2excel = new Table2Excel()
+      /* Create worksheet from HTML DOM TABLE */
+      const wb = XLSX.utils.table_to_book(table)
 
-      table2excel.export(table, filename)
+      /* Export to file (start a download) */
+      XLSX.writeFile(wb, `${filename}.xlsx`)
     })
+    // btnSave.addEventListener('click', () => {
+    //   const table2excel = new Table2Excel()
+
+    //   table2excel.export(table, filename)
+    // })
   }
 
   exportExcel('.btn-save-excel', '.table', 'Report')
