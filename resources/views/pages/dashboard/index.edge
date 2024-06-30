@@ -13,7 +13,9 @@
 
       {{-- Карточка с разбивкой по дефектами РЭС/ГП по ТМ ОС РС --}}
       @!component('pages/dashboard/components/card-sum-defects-tm-os-rs/index', {
-        dataDistrictsDefects
+        dataDistrictsDefects,
+        numberDefectsTmAll: dataAllDefects.numberDefectsTm,
+        numberDefectsOsAll: dataAllDefects.numberDefectsOs,
       })
       {{-- ----- --}}
 
