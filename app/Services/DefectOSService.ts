@@ -1,9 +1,9 @@
-import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { IDefectParams } from 'App/Interfaces/DefectParams'
-import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectOs from 'App/Models/DefectOs'
 import Department from 'App/Models/Department'
 import DepartmentService from 'App/Services/DepartmentService'
+import { IDefectParams } from 'App/Interfaces/DefectParams'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
+import { RequestContract } from '@ioc:Adonis/Core/Request'
 
 export default class DefectOSService {
   public static async getDefects(req: RequestContract, limit: number = 15) {
