@@ -1,7 +1,7 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DefectOSService from 'App/Services/DefectOSService'
 import DefectTMService from 'App/Services/DefectTMService'
 import DistrictService from 'App/Services/DistrictService'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DashboardController {
   public async index({ view }: HttpContextContract) {
