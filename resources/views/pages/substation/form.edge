@@ -26,6 +26,25 @@
           }
         })
 
+        @!inputs.select({
+          label: 'Выберете тип объекта',
+          labelPositionText: 'label__text_left',
+          name: 'type',
+          optionClass: 'searchable-list',
+          defaultOptionConfig: {
+            defaultOption: true,
+            defaultOptionText: 'Выберите тип объекта',
+            disabledOption: false,
+          },
+          dataOptionsConfig: {
+            dataOptions: typesObject,
+            dataNameOption: 'name'
+          },
+          currentDataConfig: {
+            currentData: substation ? substation : options.routeParams.back,
+            currentDataId: substation ? substation.type : options.routeParams.back,
+          }
+        })
         @!inputs.base({
           label: 'Название объекта',
           labelPositionText: 'label__text_left',
@@ -54,7 +73,7 @@
         </div>
       @end
       <div class="form__btns">
-        @buttons.cancel({ href: 'substations.index' })
+        @buttons.cancel({ href: 'substations.index', params: { qs: { typeObject: options.routeParams.back } }})
           Отмена
         @end
 
