@@ -1,4 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { typesObject } from 'App/Constants/TypesObject'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
@@ -15,26 +16,30 @@ export default class SubstationsController {
 
     const page = request.input('page', 1)
     const limit = 20
+    const { typeObject } = request.qs() as IQueryParams
+    const customTitle = typeObject === 'ps' ? 'ПС' : 'ВЛ'
     const substations = await Substation.query()
+      .if(typeObject, (query) => query.where('type', typeObject))
       .orderBy('name', 'asc')
       .preload('defects')
       .preload('defectsOs')
       .paginate(page, limit)
 
     substations.baseUrl('/substations')
+    substations.queryString({ typeObject })
 
     // substations.sort(
     //   (prevItem, nextItem) => nextItem.numberOpenDefects - prevItem.numberOpenDefects
     // )
 
     return view.render('pages/substation/index', {
-      title: 'Список ПС',
+      title: `Список ${customTitle}`,
       substations,
-      activeMenuLink: 'substations.index',
+      typeObject,
     })
   }
 
-  public async create({ response, view, session, bouncer }: HttpContextContract) {
+  public async create({ request, response, view, session, bouncer }: HttpContextContract) {
     if (await bouncer.with('SubstationPolicy').denies('create')) {
       session.flash('dangerMessage', 'У вас нет прав на добавление новой записи!')
 
@@ -42,6 +47,7 @@ export default class SubstationsController {
     }
 
     const districts = await District.query()
+    const { typeObject } = request.qs() as IQueryParams
 
     return view.render('pages/substation/form', {
       title: 'Добавление нового объкта',
@@ -50,7 +56,11 @@ export default class SubstationsController {
         routePath: {
           saveData: 'substations.store',
         },
+        routeParams: {
+          back: typeObject,
+        },
       },
+      typesObject,
     })
   }
 
@@ -68,6 +78,7 @@ export default class SubstationsController {
         id_district: validateSubstation.district,
         id_user_created: auth.user?.id,
         name: validateSubstation.name,
+        type: validateSubstation.type,
       })
 
       session.flash(
@@ -79,7 +90,9 @@ export default class SubstationsController {
         return response.redirect().back()
       }
 
-      response.redirect().toRoute('substations.index')
+      response
+        .redirect()
+        .toRoute('substations.index', { qs: { typeObject: validateSubstation.type } })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       response.redirect().toRoute('substations.index')
@@ -218,9 +231,13 @@ export default class SubstationsController {
           routePath: {
             saveData: 'substations.update',
           },
+          routeParams: {
+            back: substation.type,
+          },
         },
         districts,
         substation,
+        typesObject,
       })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
@@ -243,13 +260,16 @@ export default class SubstationsController {
       await substation
         .merge({
           id_district: validateSubstation.district,
+          type: validateSubstation.type,
           name: validateSubstation.name,
           importance: validateSubstation.importance ? true : false,
         })
         .save()
 
       session.flash('successmessage', `Данные "${validateSubstation.name}" успешно обновлены.`)
-      return response.redirect().toRoute('SubstationsController.index')
+      return response
+        .redirect()
+        .toRoute('SubstationsController.index', { qs: { typeObject: validateSubstation.type } })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       return response.redirect().back()
@@ -269,7 +289,9 @@ export default class SubstationsController {
       await substation.delete()
 
       session.flash('successMessage', `Объект успешно удален!`)
-      return response.redirect().back()
+      return response
+        .redirect()
+        .toRoute('SubstationsController.index', { qs: { typeObject: substation.type } })
     } else {
       session.flash('dangerMessage', 'Что-то пошло не так!')
       return response.redirect().back()
