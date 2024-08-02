@@ -1,13 +1,15 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
-import { booleanCheckOptional, text100, numberCheck } from './fields'
+import { booleanCheckOptional, numberCheck, text100 } from './fields'
+
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class SubstationValidator {
-  constructor(protected ctx: HttpContextContract) { }
+  constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
     district: numberCheck,
     name: text100,
+    type: schema.enum(['ps', 'vl'] as const),
     importance: booleanCheckOptional,
     addNext: booleanCheckOptional,
   })
