@@ -11,4 +11,5 @@ export interface IQueryParams {
   dateEnd: string
   dateQueryType: string
   groupDefect: string
+  typeObject: string
 }
