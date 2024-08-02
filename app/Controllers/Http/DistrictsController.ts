@@ -15,7 +15,7 @@ export default class DistrictsController {
     const districts = await DistrictService.getDistricts({ req: request })
 
     return view.render('pages/district/index', {
-      title: 'Список РЭС и ГП',
+      title: 'Список РЭС,ГП,ВЛ',
       districts,
       activeMenuLink: 'districts.index',
     })
