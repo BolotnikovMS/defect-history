@@ -62,11 +62,12 @@
             @dropdown.dropdown({
               classDropdownMenu: 'dropdown__menu-menu_bottom',
               dropdownData: [
-                { name: 'РЭС и ГП', access: 'DistrictPolicy.view', path: 'districts.index' },
-                { name: 'Список ПС', access: 'SubstationPolicy.view', path: 'substations.index' },
+                { name: 'РЭС,ГП,ВЛ', access: 'DistrictPolicy.view', path: 'districts.index' },
+                { name: 'Список ПС', access: 'SubstationPolicy.view', path: 'substations.index', params: {qs: {typeObject: 'ps'}} },
+                { name: 'Список ВЛ', access: 'SubstationPolicy.view', path: 'substations.index', params: {qs: {typeObject: 'vl'}} },
               ],
             })
-              РЭС и ГП
+              РЭС,ГП,ВЛ
               @!icons.arrowDown({
                 optionalClasses: 'icon-arrow icon-size_20'
               })
