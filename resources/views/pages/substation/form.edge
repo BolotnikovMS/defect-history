@@ -21,8 +21,8 @@
             dataNameOption: 'name'
           },
           currentDataConfig: {
-            currentData: substation ? substation : '',
-            currentDataId: substation ? substation.id_district : '',
+            currentData: substation ? substation : options.routeParams.district,
+            currentDataId: substation ? substation.id_district : options.routeParams.district,
           }
         })
 
