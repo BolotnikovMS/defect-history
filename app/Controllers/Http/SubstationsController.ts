@@ -17,7 +17,7 @@ export default class SubstationsController {
     const page = request.input('page', 1)
     const limit = 20
     const { typeObject } = request.qs() as IQueryParams
-    const customTitle = typeObject === 'ps' ? 'ПС' : 'ВЛ'
+    const customTitle = typeObject === 'ps' ? 'ПС' : typeObject === 'vl' ? 'ВЛ' : 'всех объектов'
     const substations = await Substation.query()
       .if(typeObject, (query) => query.where('type', typeObject))
       .orderBy('name', 'asc')
@@ -47,7 +47,7 @@ export default class SubstationsController {
     }
 
     const districts = await District.query()
-    const { typeObject } = request.qs() as IQueryParams
+    const { typeObject, district } = request.qs() as IQueryParams
 
     return view.render('pages/substation/form', {
       title: 'Добавление нового объкта',
@@ -58,6 +58,7 @@ export default class SubstationsController {
         },
         routeParams: {
           back: typeObject,
+          district,
         },
       },
       typesObject,
