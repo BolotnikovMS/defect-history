@@ -49,7 +49,7 @@ export default class DefectsController {
     }
 
     const typeDefects = await DefectType.all()
-    const substations = await Substation.query().orderBy('name', 'asc')
+    const substations = await Substation.query().orderBy('name', 'asc').where('type', '=', 'ps')
 
     return view.render('pages/defect/form', {
       title: 'Добавление нового дефекта',
@@ -137,7 +137,7 @@ export default class DefectsController {
 
       const defectSerialize = defect.serialize()
       const typeDefects = await DefectType.all()
-      const substations = await Substation.all()
+      const substations = await Substation.query().where('type', '=', 'ps')
       const accessionSubstations = await Substation.find(defectSerialize.id_substation)
 
       await accessionSubstations?.load('accession')
