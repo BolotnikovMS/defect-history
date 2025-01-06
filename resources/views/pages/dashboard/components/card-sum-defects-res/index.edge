@@ -14,6 +14,10 @@
             @!card.cardSpan({ text: `${district.name}:`,  optionalClasses: 'card__text' })
             @!card.cardSpan({ text: district.district_defects.length + district.district_defects_os.length,  optionalClasses: 'card__text card__text-bold' })
           @end
+        @else
+          <div class="card__content">
+            <p>Пока статистики нет</p>
+          </div>
         @end
       </div>
       <div class="card__content colum-2">
@@ -23,6 +27,10 @@
             @!card.cardSpan({ text: `${district.name}:`,  optionalClasses: 'card__text' })
             @!card.cardSpan({ text: district.district_defects.length + district.district_defects_os.length,  optionalClasses: 'card__text card__text-bold' })
           @end
+        @else
+          <div class="card__content">
+            <p>Пока статистики нет</p>
+          </div>
         @end
       </div>
       <div class="card__content colum-3">
@@ -32,6 +40,10 @@
             @!card.cardSpan({ text: `${district.name}:`,  optionalClasses: 'card__text' })
             @!card.cardSpan({ text: district.district_defects.length + district.district_defects_os.length,  optionalClasses: 'card__text card__text-bold' })
           @end
+        @else
+          <div class="card__content">
+            <p>Пока статистики нет</p>
+          </div>
         @end
       </div>
     </div>
