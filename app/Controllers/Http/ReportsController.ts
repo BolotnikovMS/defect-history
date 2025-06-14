@@ -1,6 +1,5 @@
-import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
-
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { CustomMessages, schema } from '@ioc:Adonis/Core/Validator'
 import { EDateQueryType } from 'App/Enums/DateQueryType'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
@@ -9,6 +8,7 @@ import DefectOs from 'App/Models/DefectOs'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
+import ReportService from 'App/Services/ReportService'
 
 export default class ReportsController {
   public async showDistrictDefects({ response, view, session, bouncer }: HttpContextContract) {
@@ -142,6 +142,8 @@ export default class ReportsController {
       .preload('substation')
       .preload('accession')
       .preload('defect_type')
+      .preload('intermediate_checks')
+      .preload('work_planning')
       .if(status === 'open', (query) => query.whereNull('result'))
       .if(status === 'close', (query) => query.whereNotNull('result'))
       .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
@@ -235,5 +237,16 @@ export default class ReportsController {
       defectsOs,
       countDefectOs,
     })
+  }
+
+  public async downloadExcelReportDefectsTM({ request, response }: HttpContextContract) {
+    const buffer = await ReportService.createExcelAllDefectsTM(request)
+
+    response.header(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+    response.header('Content-Disposition', 'attachment; filename="report.xlsx"')
+    response.send(buffer)
   }
 }
