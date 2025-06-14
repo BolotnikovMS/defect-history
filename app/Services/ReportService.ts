@@ -60,8 +60,12 @@ export default class ReportService {
       .preload('substation')
       .preload('accession')
       .preload('defect_type')
-      .preload('intermediate_checks')
-      .preload('work_planning')
+      .preload('intermediate_checks', (query) => {
+        query.preload('name_inspector')
+      })
+      .preload('work_planning', (query) => {
+        query.preload('user_created')
+      })
       .if(status === 'open', (query) => query.whereNull('result'))
       .if(status === 'close', (query) => query.whereNotNull('result'))
       .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
@@ -96,10 +100,13 @@ export default class ReportService {
         eliminationDate: defect.elimination_date?.toFormat('dd.MM.yyyy HH:mm'),
         result: defect.result,
         intermediateChecks: defect.intermediate_checks
-          .map((check, i) => `${i + 1}. ${check.description_results}`)
+          .map(
+            (check, i) =>
+              `${i + 1}. ${check.description_results}. ${check.name_inspector.shortUserName}`
+          )
           .join(',\n'),
         workPlanning: defect.work_planning
-          .map((work, i) => `${i + 1}. ${work.comment}`)
+          .map((work, i) => `${i + 1}. ${work.comment}. ${work.user_created.shortUserName}`)
           .join(',\n'),
       })
     })
