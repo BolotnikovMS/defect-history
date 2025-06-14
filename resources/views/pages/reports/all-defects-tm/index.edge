@@ -23,7 +23,10 @@
           @!icons.pdf()
         @end
         @buttons.base({
-          className: 'btn-color_green btn-small btn-save-excel'
+          type: 'button',
+          className: 'btn-color_green btn-small',
+          href: 'reports.download.excel.defectstm',
+          qs: filters
         })
           @!icons.excel()
         @end
@@ -49,6 +52,8 @@
               <th>Срок устранения</th>
               <th>Дата устранения</th>
               <th colspan='2'>Результат работ</th>
+              <th colspan='2'>Промежуточные результаты</th>
+              <th colspan='2'>Подготовительные работы</th>
             </tr>
           </thead>
           <tbody>
@@ -73,6 +78,26 @@
                   @else
                     Не устранен
                   @end
+                </td>
+                <td colspan='2'>
+                  @if(defect.intermediate_checks.length)
+                    @each((check, i ) in defect.intermediate_checks)
+                      <b>{{ i + 1 }}.</b> {{ check.description_results }}
+                      <br />
+                    @end
+                  @else
+                    Проверок нет
+                  @endif
+                </td>
+                <td colspan='2'>
+                  @if(defect.work_planning.length)
+                    @each((work, i ) in defect.work_planning)
+                      <b>{{ i + 1 }}.</b> {{ work.comment }}
+                      <br />
+                    @end
+                  @else
+                    Планов нет
+                  @endif
                 </td>
               </tr>
             @end
