@@ -82,7 +82,7 @@
                 <td colspan='2'>
                   @if(defect.intermediate_checks.length)
                     @each((check, i ) in defect.intermediate_checks)
-                      <b>{{ i + 1 }}.</b> {{ check.description_results }}. <b>{{ check.name_inspector.shortUserName }}</b>
+                      <b>{{ i + 1 }}.</b> {{ check.description_results }}. <b>{{ check.name_inspector.shortUserName }} ({{ check.name_inspector.department.name }})</b>
                       <br />
                     @end
                   @else
@@ -92,7 +92,7 @@
                 <td colspan='2'>
                   @if(defect.work_planning.length)
                     @each((work, i ) in defect.work_planning)
-                      <b>{{ i + 1 }}.</b> {{ work.comment }}. <b>{{ work.user_created.shortUserName }}</b>
+                      <b>{{ i + 1 }}.</b> {{ work.comment }}. <b>{{ work.user_created.shortUserName }} ({{ work.user_created.department.name }})</b>
                       <br />
                     @end
                   @else
