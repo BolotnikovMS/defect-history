@@ -1,6 +1,7 @@
 import Env from '@ioc:Adonis/Core/Env'
 import Event from '@ioc:Adonis/Core/Event'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { TypeDefects } from 'App/Enums/TypeDefects'
 import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
@@ -48,7 +49,7 @@ export default class DefectsController {
     }
 
     const typeDefects = await DefectType.all()
-    const substations = await Substation.query().orderBy('name', 'asc')
+    const substations = await Substation.query().orderBy('name', 'asc').where('type', '=', 'ps')
 
     return view.render('pages/defect/form', {
       title: 'Добавление нового дефекта',
@@ -114,7 +115,7 @@ export default class DefectsController {
       return response.redirect().toPath('/')
     }
 
-    const defect = await DefectTMService.getDefect(params)
+    const defect = await DefectTMService.getDefectById(params.id)
 
     return view.render('pages/defect/show', {
       title: 'Подробный просмотр',
@@ -136,7 +137,7 @@ export default class DefectsController {
 
       const defectSerialize = defect.serialize()
       const typeDefects = await DefectType.all()
-      const substations = await Substation.all()
+      const substations = await Substation.query().where('type', '=', 'ps')
       const accessionSubstations = await Substation.find(defectSerialize.id_substation)
 
       await accessionSubstations?.load('accession')
@@ -249,17 +250,23 @@ export default class DefectsController {
   }
 
   public async editDeadline({ response, params, view, session, bouncer }: HttpContextContract) {
-    const defect = await Defect.findOrFail(params.id)
+    const defectTm = await DefectTMService.getDefectById(params.id)
 
-    if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect)) {
+    if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defectTm)) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
 
       return response.redirect().toPath('/')
     }
 
-    return view.render('pages/defect/form_edit_deadline', {
+    return view.render('pages/deadline-edit/form', {
       title: 'Изменение даты устранения дефекта',
-      defect: defect.serialize(),
+      options: {
+        routePath: {
+          savePath: 'defects.update.deadline',
+          backPath: 'defects.index',
+        },
+      },
+      defect: defectTm.serialize(),
     })
   }
 
@@ -270,7 +277,7 @@ export default class DefectsController {
     session,
     bouncer,
   }: HttpContextContract) {
-    const defect = await Defect.findOrFail(params.id)
+    const defect = await DefectTMService.getDefectById(params.id)
 
     if (await bouncer.with('DefectTMPolicy').denies('updateDeadline', defect)) {
       session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
@@ -278,9 +285,9 @@ export default class DefectsController {
       return response.redirect().toPath('/')
     }
 
-    const validateDefectData = await request.validate(DefectDeadlineValidator)
+    const validatedData = await request.validate(DefectDeadlineValidator)
 
-    await defect.merge(validateDefectData).save()
+    await defect.merge(validatedData).save()
 
     session.flash('successMessage', `Сроки устранения дефекта успешно обновлены!!`)
     response.redirect().toRoute('DefectsController.index')
@@ -299,11 +306,15 @@ export default class DefectsController {
     const users = await UserService.getCleanUsers()
     const departments = await DepartmentService.getCleanDepartments()
 
-    return view.render('pages/defect/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Добавление проверки',
       checkup: true,
       options: {
+        form: {
+          employee: true,
+        },
         idData: idDefect,
+        typeDefect: TypeDefects.TM,
         routes: {
           saveData: 'defects.checkup.store',
           back: 'defects.show',
@@ -393,11 +404,15 @@ export default class DefectsController {
     const users = await UserService.getCleanUsers()
     const departments = await DepartmentService.getCleanDepartments()
 
-    return view.render('pages/defect/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Редактирование промежуточных результатов',
       checkup: true,
       options: {
+        form: {
+          employee: true,
+        },
         idData: check.id,
+        typeDefect: TypeDefects.TM,
         routes: {
           saveData: 'defects.checkup.update',
           back: 'defects.show',
@@ -472,9 +487,13 @@ export default class DefectsController {
 
     const users = await UserService.getCleanUsers()
 
-    return view.render('pages/defect/form_checkupandclose', {
+    return view.render('pages/close-checkup-defect/form', {
       title: 'Закрытие дефекта',
       options: {
+        form: {
+          employee: true,
+          img: true,
+        },
         idData: idDefect,
         routes: {
           saveData: 'defects.close.store',

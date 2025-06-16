@@ -21,7 +21,7 @@
               params: {id: defect.id},
               className: 'btn-color_orange'
             })
-              @!icons.magnifier()
+              @!icons.check()
               Добавить проверку
             @end
           @endcan
@@ -55,7 +55,7 @@
               className: 'btn-color_blue btn-color_blue-transparent'
             })
               @!icons.calendarOne()
-              Увеличить срок
+              Изменить срок
             @end
           @endcan
         @endif
@@ -171,10 +171,11 @@
         </div>
         <table class="table defect-info__table">
           <thead>
-            <th>Сотрудник</th>
-            <th>Дата проверки</th>
+            <th>Выполнил проверку</th>
+            <th>Дата добавления проверки</th>
             <th colspan="2">Результаты проверки</th>
             <th>Кому передано</th>
+            <th>Автор записи</th>
             <th style="width: 50px"></th>
           </thead>
           <tbody>
@@ -190,6 +191,9 @@
                     :
                       '-'
                   }}
+                </td>
+                <td>
+                  {{ inter.author.shortUserName }}
                 </td>
                 <td>
                   @if(!await bouncer.with('DefectTMPolicy').denies('deleteCheckup', inter, defect) || !await bouncer.with('DefectTMPolicy').denies('updateCheckup', defect, inter))
@@ -223,7 +227,9 @@
             href: 'defects.delete.close-defect-record',
             params: {id: defect.id}
           })
-            @!icons.delete()
+            @!icons.delete({
+              optionalClasses: 'icon-cl_black'
+            })
           @end
         @endcan
       </div>
@@ -234,7 +240,7 @@
           </div>
         </div>
         <div class="defect-info__group">
-          <div class="defect-info__text">Сотрудник:
+          <div class="defect-info__text">Дефект устранил:
             <span>{{ defect.name_eliminated.fullName }}</span>
           </div>
         </div>

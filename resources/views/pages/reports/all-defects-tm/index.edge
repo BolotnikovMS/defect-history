@@ -1,0 +1,111 @@
+@layout('layout/master')
+
+@section('content')
+  <h2 class="title">{{ title }}</h2>
+  <div class="control control-ai_end">
+    @!component('pages/reports/all-defects-tm/components/filters/filters', {
+      filters,
+      substations,
+      typesDefects
+    })
+    <div class='control__btns'>
+      @buttons.base({
+        type: 'button',
+        className: 'btn-color_green btn-small',
+        href: 'reports.show.all.defectsTm'
+      })
+        @!icons.reset()
+      @end
+      @if(defects?.length)
+        @buttons.base({
+          className: 'btn-color_green btn-small btn-save-pdf'
+        })
+          @!icons.pdf()
+        @end
+        @buttons.base({
+          type: 'button',
+          className: 'btn-color_green btn-small',
+          href: 'reports.download.excel.defectstm',
+          qs: filters
+        })
+          @!icons.excel()
+        @end
+      @end
+    </div>
+  </div>
+  <div class="report">
+    @if(countDefect)
+      <div>
+        Кол-во дефектов в выборке: {{ countDefect }}
+      </div>
+    @end
+    <div class="reports__content save-info-pdf">
+      @if(defects?.length)
+        <table class='table'>
+          <thead>
+            <tr>
+              <th>Дата добавления</th>
+              <th>ПС</th>
+              <th>Тип</th>
+              <th>Присоединение</th>
+              <th colspan='2'>Описание дефекта</th>
+              <th>Срок устранения</th>
+              <th>Дата устранения</th>
+              <th colspan='2'>Результат работ</th>
+              <th colspan='2'>Промежуточные результаты</th>
+              <th colspan='2'>Подготовительные работы</th>
+            </tr>
+          </thead>
+          <tbody>
+            @each(defect in defects)
+              <tr>
+                <td>{{ dateFormat(defect.created_at, false) }}</td>
+                <td>{{ defect.substation.name }}</td>
+                <td>{{ defect.defect_type.type_defect }}</td>
+                <td>{{ defect.accession.name }}</td>
+                <td colspan='2'>{{ defect.description_defect }}</td>
+                <td>{{ dateFormat(defect.term_elimination, false) }}</td>
+                <td>
+                  @if(defect.elimination_date === null)
+                    Не устранен
+                  @else
+                    {{ dateFormat(defect.elimination_date, false) }}
+                  @endif
+                </td>
+                <td colspan='2'>
+                  @if(defect.result)
+                    {{ defect.result }}
+                  @else
+                    Не устранен
+                  @end
+                </td>
+                <td colspan='2'>
+                  @if(defect.intermediate_checks.length)
+                    @each((check, i ) in defect.intermediate_checks)
+                      <b>{{ i + 1 }}.</b> {{ check.description_results }}. <b>{{ check.name_inspector.shortUserName }} ({{ check.name_inspector.department.name }})</b>
+                      <br />
+                    @end
+                  @else
+                    Проверок нет
+                  @endif
+                </td>
+                <td colspan='2'>
+                  @if(defect.work_planning.length)
+                    @each((work, i ) in defect.work_planning)
+                      <b>{{ i + 1 }}.</b> {{ work.comment }}. <b>{{ work.user_created.shortUserName }} ({{ work.user_created.department.name }})</b>
+                      <br />
+                    @end
+                  @else
+                    Планов нет
+                  @endif
+                </td>
+              </tr>
+            @end
+          </tbody>
+        </table>
+      @else
+        @!notification.nocontent({ messageNoData: messages.noContent })
+      @end
+    </div>
+  </div>
+@endsection

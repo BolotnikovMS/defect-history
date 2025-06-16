@@ -1,7 +1,9 @@
+@set('optionClass', optionClass ? optionClass : '')
+
 @!inputs.select({
   name: 'sort',
   labelPositionText: 'label__text_left',
-  optionClass: 'form__input form__input-filter',
+  optionClass: `form__input form__input-filter ${optionClass}`,
   dataOptionsConfig: {
     dataOptions: [
       {id: 'default', sort_type: 'По умолчанию'},

@@ -40,7 +40,6 @@ export default class extends BaseSchema {
       table.text('comment').nullable()
       // Срок устранения
       table.dateTime('term_elimination').notNullable()
-      table.boolean('importance').defaultTo(false)
       // Дата устранения
       table.dateTime('elimination_date').nullable().defaultTo(null)
       table.text('result').nullable().defaultTo(null)

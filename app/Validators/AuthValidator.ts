@@ -1,38 +1,20 @@
-import { schema, CustomMessages, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { email, text40, text20, numberCheck, password, username } from './fields'
 
 export default class AuthValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
-    username: schema.string({ trim: true }, [
-      rules.minLength(2),
-      rules.maxLength(20),
-      rules.unique({ table: 'users', column: 'username', caseInsensitive: true }),
-      rules.escape(),
-    ]),
-    surname: schema.string([rules.minLength(2), rules.maxLength(20), rules.trim(), rules.escape()]),
-    name: schema.string([rules.minLength(2), rules.maxLength(20), rules.trim(), rules.escape()]),
-    patronymic: schema.string([
-      rules.minLength(2),
-      rules.maxLength(20),
-      rules.trim(),
-      rules.escape(),
-    ]),
-    position: schema.string([
-      rules.minLength(2),
-      rules.maxLength(40),
-      rules.trim(),
-      rules.escape(),
-    ]),
-    department: schema.number(),
-    role: schema.number(),
-    email: schema.string({ trim: true }, [
-      rules.email(),
-      rules.unique({ table: 'users', column: 'email', caseInsensitive: true }),
-      rules.escape(),
-    ]),
-    password: schema.string({}, [rules.minLength(8)]),
+    username: username,
+    surname: text20,
+    name: text20,
+    patronymic: text20,
+    position: text40,
+    department: numberCheck,
+    role: numberCheck,
+    email: email,
+    password: password,
   })
 
   public messages: CustomMessages = {

@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   <div class="defect__content">
     @forms.post({
-      action: route('defects.update.deadline', {id: defect.id})
+      action: route(options.routePath.savePath, {id: defect.id})
     })
       <div class="form__content form__content-column">
         @!inputs.base({
@@ -16,7 +16,7 @@
         })
       </div>
       <div class="form__btns">
-        @buttons.cancel({ href: 'defects.index' })
+        @buttons.cancel({ href: options.routePath.backPath })
           Отмена
         @end
 

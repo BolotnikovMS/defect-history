@@ -1,13 +1,17 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { IQueryParams } from 'App/Interfaces/QueryParams'
+import { TypeDefects } from 'App/Enums/TypeDefects'
 import DefectGroup from 'App/Models/DefectGroup'
 import DefectOs from 'App/Models/DefectOs'
 import DefectOsDepartment from 'App/Models/DefectOsDepartment'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
 import Substation from 'App/Models/Substation'
+import DefectOSService from 'App/Services/DefectOSService'
 import DepartmentService from 'App/Services/DepartmentService'
 import { addDays } from 'App/Utils/utils'
 import CloseDefectOsValidator from 'App/Validators/CloseDefectOsValidator'
+import DefectDeadlineValidator from 'App/Validators/DefectDeadlineValidator'
 import DefectOsValidator from 'App/Validators/DefectOValidator'
+import IntermediateCheckOsValidator from 'App/Validators/IntermediateCheckOsValidator'
 import { DateTime } from 'luxon'
 
 export default class DefectOsController {
@@ -18,49 +22,12 @@ export default class DefectOsController {
       return response.redirect().toPath('/')
     }
 
-    const page = request.input('page', 1)
-    const limit = 15
-    const { status } = request.qs() as IQueryParams
-    // const departments = await Department.query().where((queryDepartment) => {
-    //   queryDepartment.where('id', '!=', Departments.admins)
-    //   queryDepartment.where('id', '!=', Departments.withoutDepartment)
-    // })
-
-    const defectsOs = await DefectOs.query()
-      .if(status === 'open', (query) => query.whereNull('result'))
-      .if(status === 'close', (query) => query.whereNotNull('result'))
-      // .if(department && +department !== 0, (query) =>
-      //   // query.preload('departments', (queryDep) => queryDep.where('id_department', '=', department))
-      //   // query.where('id', '=', query.preload('departments', (queryDep) => queryDep.where('id_department', '=', department))[0])
-      // )
-      .orderBy([
-        {
-          column: 'elimination_date',
-          order: 'asc',
-        },
-        {
-          column: 'created_at',
-          order: 'desc',
-        },
-      ])
-      .preload('substation')
-      .preload('user')
-      .preload('departments')
-      .paginate(page, limit)
-
-    defectsOs.baseUrl('/defects-os')
-    defectsOs.queryString({ status })
-    // const test = defectsOs.map((defectOs) => {
-    //   return defectOs.serialize()
-    // })
-    // console.log(test)
+    const data = await DefectOSService.getDefects(request)
 
     return view.render('pages/defect-os/index', {
       title: 'Дефекты по ОС',
-      defectsOs,
-      filters: {
-        status,
-      },
+      defectsOs: data.defectsOs,
+      filters: data.filters,
     })
   }
 
@@ -107,7 +74,6 @@ export default class DefectOsController {
         description_defect: validatedDefectOsData.description_defect,
         comment: validatedDefectOsData.comment,
         term_elimination: addDays(20),
-        importance: validatedDefectOsData.importance,
       }
 
       const newDefectOs = await DefectOs.create(defectOs)
@@ -135,26 +101,12 @@ export default class DefectOsController {
       return response.redirect().toRoute('DefectOsController.index')
     }
 
-    const defectOs = await DefectOs.find(params.id)
+    const defectOs = await DefectOSService.getDefectById(params.id)
 
-    if (defectOs) {
-      await defectOs.load('substation')
-      await defectOs.load('user')
-      await defectOs.load('name_eliminated')
-      await defectOs.load('departments')
-      await defectOs.load('defect_group')
-      await defectOs.load('defect_classifier')
-
-      // console.log(defectOs.serialize())
-
-      return view.render('pages/defect-os/show', {
-        title: 'Подробный просмотр',
-        defectOs: defectOs.serialize(),
-      })
-    } else {
-      session.flash('dangerMessage', 'Что-то пошло не так!')
-      response.redirect().toRoute('DefectOsController.index')
-    }
+    return view.render('pages/defect-os/show', {
+      title: 'Подробный просмотр',
+      defectOs: defectOs.serialize(),
+    })
   }
 
   public async edit({ params, response, view, session, bouncer }: HttpContextContract) {
@@ -215,7 +167,6 @@ export default class DefectOsController {
         accession_substations: validatedDefectOsData.accession,
         description_defect: validatedDefectOsData.description_defect,
         comment: validatedDefectOsData.comment,
-        importance: validatedDefectOsData.importance ? true : false,
       }
       const defectOsDepartments = await DefectOsDepartment.query().where(
         'id_defect',
@@ -252,6 +203,7 @@ export default class DefectOsController {
       }
 
       await defectOs.related('departments').query().delete()
+      await defectOs.related('intermediate_checks').query().delete()
       await defectOs.delete()
 
       session.flash('successMessage', `Дефект успешно удален!`)
@@ -279,13 +231,14 @@ export default class DefectOsController {
         return response.redirect().toRoute('DefectOsController.index')
       }
 
-      return view.render('pages/defect-os/form_checkupandclose', {
+      return view.render('pages/close-checkup-defect/form', {
         title: 'Закрытие дефекта',
         options: {
-          defectOs: id,
+          idData: id,
           routes: {
             saveData: 'defects-os.close.store',
             back: 'defects-os.show',
+            backParams: params.id,
           },
         },
       })
@@ -316,7 +269,7 @@ export default class DefectOsController {
 
       const validateData = await request.validate(CloseDefectOsValidator)
 
-      defectOs.result = validateData.result
+      defectOs.result = validateData.description_results
       defectOs.id_name_eliminated = auth?.user!.id
       defectOs.elimination_date = DateTime.now()
 
@@ -356,5 +309,185 @@ export default class DefectOsController {
 
     session.flash('successMessage', `Запись удалена!`)
     return response.redirect().back()
+  }
+
+  public async editDeadline({ response, params, view, session, bouncer }: HttpContextContract) {
+    const defectOs = await DefectOSService.getDefectById(params.id)
+
+    if (await bouncer.with('DefectOSPolicy').denies('updateDeadline', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+      return response.redirect().toRoute('DefectOsController.index')
+    }
+
+    return view.render('pages/deadline-edit/form', {
+      title: 'Изменение даты устранения дефекта',
+      options: {
+        routePath: {
+          savePath: 'defects-os.update.deadline',
+          backPath: 'defects-os.index',
+        },
+      },
+      defect: defectOs.serialize(),
+    })
+  }
+
+  public async updateDeadline({
+    request,
+    response,
+    params,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const defectOs = await DefectOSService.getDefectById(params.id)
+
+    if (await bouncer.with('DefectOSPolicy').denies('updateDeadline', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование срока устранения дефекта!')
+
+      return response.redirect().toRoute('DefectOsController.index')
+    }
+
+    const validatedData = await request.validate(DefectDeadlineValidator)
+
+    await defectOs.merge(validatedData).save()
+
+    session.flash('successMessage', `Сроки устранения дефекта успешно обновлены!`)
+    response.redirect().toRoute('DefectOsController.index')
+  }
+
+  public async checkupCreate({ response, params, view, session, bouncer }: HttpContextContract) {
+    const defectOs = await DefectOs.findOrFail(params.id)
+
+    if (await bouncer.with('DefectOSPolicy').denies('createCheckup', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление проверки или дефект уже закрыт!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const departments = await DepartmentService.getCleanDepartments()
+
+    return view.render('pages/close-checkup-defect/form', {
+      title: 'Добавление проверки',
+      checkup: true,
+      options: {
+        idData: params.id,
+        typeDefect: TypeDefects.OS,
+        routes: {
+          saveData: 'defects-os.checkup.store',
+          back: 'defects-os.show',
+          backParams: params.id,
+        },
+      },
+      departments,
+    })
+  }
+
+  public async checkupStore({
+    params,
+    request,
+    response,
+    auth,
+    session,
+    bouncer,
+  }: HttpContextContract) {
+    const defectOs = await DefectOs.findOrFail(params.id)
+
+    if (await bouncer.with('DefectOSPolicy').denies('createCheckup', defectOs)) {
+      session.flash('dangerMessage', 'У вас нет прав на добавление проверки или дефект уже закрыт!')
+
+      return response.redirect().toPath('/')
+    }
+
+    const validateData = await request.validate(IntermediateCheckOsValidator)
+    const checkupDefectOs = {
+      id_defect: +params.id,
+      id_user_created: auth.user?.id,
+      id_inspector: auth.user?.id,
+      check_date: DateTime.now(),
+      description_results: validateData.description_results,
+      transferred: validateData.transferred ? +validateData.transferred : null,
+      type_defect: validateData.type_defect,
+    }
+
+    await IntermediateCheck.create(checkupDefectOs)
+
+    session.flash('successMessage', `Проверка успешно добавлена!`)
+    response.redirect().toRoute('DefectOsController.show', { id: params.id })
+  }
+
+  public async checkupEdit({ response, params, view, session, bouncer }: HttpContextContract) {
+    const check = await IntermediateCheck.findOrFail(params.id)
+    const defectOs = await DefectOs.find(check.id_defect)
+
+    if (await bouncer.with('DefectOSPolicy').denies('updateCheckup', defectOs!, check)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toRoute('DefectOsController.show', { id: check.id_defect })
+    }
+
+    const departments = await DepartmentService.getCleanDepartments()
+
+    return view.render('pages/close-checkup-defect/form', {
+      title: 'Редактирование промежуточных результатов',
+      checkup: true,
+      options: {
+        idData: check.id,
+        typeDefect: TypeDefects.OS,
+        routes: {
+          saveData: 'defects-os.checkup.update',
+          back: 'defects-os.show',
+          backParams: check.id_defect,
+        },
+      },
+      departments,
+      check,
+    })
+  }
+
+  public async checkupUpdate({ request, response, params, session, bouncer }: HttpContextContract) {
+    const check = await IntermediateCheck.findOrFail(params.id)
+    const defectOs = await DefectOs.find(check.id_defect)
+
+    if (await bouncer.with('DefectOSPolicy').denies('updateCheckup', defectOs!, check)) {
+      session.flash('dangerMessage', 'У вас нет прав на редактирование записи!')
+
+      return response.redirect().toRoute('DefectOsController.show', { id: check.id_defect })
+    }
+
+    const validatedData = await request.validate(IntermediateCheckOsValidator)
+    const updCheckupDefectOs = {
+      id_defect: +check.id_defect,
+      check_date: DateTime.now(),
+      description_results: validatedData.description_results,
+      transferred: validatedData.transferred ? validatedData.transferred : null,
+    }
+
+    await check.merge(updCheckupDefectOs).save()
+
+    session.flash('successMessage', `Данные успешно обновлены.`)
+    response.redirect().toRoute('DefectOsController.show', { id: check.id_defect })
+  }
+
+  public async checkupDestroy({ response, params, session, bouncer }: HttpContextContract) {
+    const intermediateCheck = await IntermediateCheck.find(params.id)
+    const defectOs = await DefectOs.find(intermediateCheck?.id_defect)
+
+    if (intermediateCheck && defectOs) {
+      if (
+        await bouncer.with('DefectOSPolicy').denies('deleteCheckup', intermediateCheck, defectOs)
+      ) {
+        session.flash('dangerMessage', 'У вас нет прав на удаление записи!')
+
+        return response.redirect().toPath('/')
+      }
+
+      await intermediateCheck.delete()
+
+      session.flash('successMessage', `Промежуточная проверка удалена!`)
+      response.redirect().back()
+    } else {
+      session.flash('dangerMessage', 'Что-то пошло не так!')
+      response.redirect().back()
+    }
   }
 }

@@ -1,0 +1,51 @@
+@card.card()
+  @slot('cardHeader')
+  {{--  {{ route('defects-os.index', {}, { qs: {status: 'open'} }) }}  --}}
+    <div class="card__header-content card__header-content-center">
+      <p>Количество дефектов по ТМ с разбивкой по типам.</p>
+    </div>
+  @end
+  @slot('cardBody')
+    @if(dataDefectsTm.typesDefectsTm.length)
+      <div class="card__colum">
+        <div class="card__content colum-1">
+          @!card.cardSpan({ text: 'Всего дефектов',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+          @each(type in dataDefectsTm.typesDefectsTm)
+            @card.cardGroup()
+              <a href="{{ route('defects.index', {}, { qs: {typeDefect: type.id} }) }}">
+                @!card.cardSpan({ text: `${type.type_defect}:`,  optionalClasses: 'card__text' })
+                @!card.cardSpan({ text: type.numberDefects,  optionalClasses: 'card__text card__text-bold' })
+              </a>
+            @end
+          @endeach
+        </div>
+        <div class="card__content colum-2">
+          @!card.cardSpan({ text: 'Открытых дефектов',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+          @each(type in dataDefectsTm.typesOpenedDefectsOs)
+            @card.cardGroup()
+              <a href="{{ route('defects.index', {}, { qs: {typeDefect: type.id, status: 'open'} }) }}">
+                @!card.cardSpan({ text: `${type.type_defect}:`,  optionalClasses: 'card__text' })
+                @!card.cardSpan({ text: type.numberDefects,  optionalClasses: 'card__text card__text-bold' })
+              </a>
+            @end
+          @endeach
+        </div>
+        <div class="card__content colum-3">
+          @!card.cardSpan({ text: 'Закрытых дефектов',  optionalClasses: 'card__text card__text-bold card__text-mt_8' })
+          @each(type in dataDefectsTm.typesClosedDefectsTm)
+            @card.cardGroup()
+              <a href="{{ route('defects.index', {}, { qs: {typeDefect: type.id, status: 'close'} }) }}">
+                @!card.cardSpan({ text: `${type.type_defect}:`,  optionalClasses: 'card__text' })
+                @!card.cardSpan({ text: type.numberDefects,  optionalClasses: 'card__text card__text-bold' })
+              </a>
+            @end
+          @endeach
+        </div>
+      </div>
+    @else
+      <div class="card__content card__content-center">
+        <p>Пока статистики нет</p>
+      </div>
+    @endif
+  @end
+@end

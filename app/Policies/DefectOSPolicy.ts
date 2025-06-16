@@ -1,5 +1,6 @@
 import Roles from 'App/Enums/Roles'
 import DefectOs from 'App/Models/DefectOs'
+import IntermediateCheck from 'App/Models/IntermediateCheck'
 import User from 'App/Models/User'
 import BasePolicy from 'App/Policies/BasePolicy'
 import { userPermissionCheck } from 'App/Utils/utils'
@@ -42,5 +43,48 @@ export default class DefectOSPolicy extends BasePolicy {
         user.id_role === Roles.MODERATOR || userPermissionCheck('deleteDefectOS', user.permissions)
       )
     }
+  }
+  public async updateDeadline(user: User, defectOs: DefectOs) {
+    await user.load('permissions')
+
+    if (defectOs.elimination_date !== null && defectOs.result !== null) {
+      return false
+    } else {
+      return (
+        user.id_role === Roles.MODERATOR ||
+        userPermissionCheck('editDefectDeadline', user.permissions)
+      )
+    }
+  }
+  public async createCheckup(user: User, defectOs: DefectOs) {
+    await user.load('permissions')
+
+    if (defectOs.result !== null) return false
+
+    return (
+      user.id_role === Roles.MODERATOR || userPermissionCheck('createCheckupOs', user.permissions)
+    )
+  }
+  public async updateCheckup(user: User, defectOs: DefectOs, check: IntermediateCheck) {
+    await user.load('permissions')
+
+    if (defectOs.result !== null) return false
+
+    return (
+      check.id_user_created === user.id ||
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('updateCheckupOs', user.permissions)
+    )
+  }
+  public async deleteCheckup(user: User, intermediateCheck: IntermediateCheck, defectOs: DefectOs) {
+    await user.load('permissions')
+
+    if (defectOs.result !== null) return false
+
+    return (
+      intermediateCheck?.id_user_created === user.id ||
+      user.id_role === Roles.MODERATOR ||
+      userPermissionCheck('deleteCheckupOs', user.permissions)
+    )
   }
 }

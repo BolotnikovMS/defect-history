@@ -205,16 +205,8 @@ export default class extends BaseSchema {
         },
         // Reports
         {
-          access: 'viewReportSubstationDefects',
-          description: 'Формирование отчета "Дефекты ПС"',
-        },
-        {
           access: 'viewReportDistrictDefects',
           description: 'Формирование отчета "Дефекты по районам или ГП"',
-        },
-        {
-          access: 'viewReportAllDefects',
-          description: 'Формирование отчета "Дефекты по всем ПС"',
         },
         {
           access: 'addingWorkPlanningEntry',
@@ -290,6 +282,26 @@ export default class extends BaseSchema {
         {
           access: 'deletingCompletionRecord',
           description: 'Удаление записи о выполнении работы по дефекту',
+        },
+        {
+          access: 'createCheckupOs',
+          description: 'Добавление промежуточной проверки для дефекта ОС',
+        },
+        {
+          access: 'updateCheckupOs',
+          description: 'Редактирование промежуточных проверок дефектов ОС',
+        },
+        {
+          access: 'deleteCheckupOs',
+          description: 'Удаление промежуточных проверок дефектов ОС',
+        },
+        {
+          access: 'viewReportAllDefectsTm',
+          description: 'Формирование отчета "Все дефекты по ТМ"',
+        },
+        {
+          access: 'viewReportAllDefectsOs',
+          description: 'Формирование отчета Все дефекты по ОС',
         },
       ])
     })

@@ -1,7 +1,7 @@
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import DefectOSService from 'App/Services/DefectOSService'
 import DefectTMService from 'App/Services/DefectTMService'
 import DistrictService from 'App/Services/DistrictService'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class DashboardController {
   public async index({ view }: HttpContextContract) {
@@ -18,7 +18,7 @@ export default class DashboardController {
     const numberClosedDefectsOs = await DefectOSService.getNumberDefects({ closedDefects: true })
     const numberOpenedDefectsOs = numberDefectsOs - numberClosedDefectsOs
 
-    // Districts Defects
+    // Districts defects используется для карточки с дефектами с разбивкой по ТМ ОС РС
     const numberDistrictsDefects = await DistrictService.getDistricts({})
     const numberDistrictsOpenedDefects = await DistrictService.getDistricts({ openedDefects: true })
     const numberDistrictsClosedDefects = await DistrictService.getDistricts({ closedDefects: true })

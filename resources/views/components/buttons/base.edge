@@ -1,7 +1,8 @@
 @if(href)
 {{-- {{ inspect(params ?? '')}} --}}
+{{-- {{ inspect(qs ?? '') }} --}}
   <a
-    href="{{ route(href, params ?? '') }}"
+    href="{{ route(href, params ?? '', qs ? {qs: qs} : '') }}"
     class="btn {{ className ?? '' }}"
   >
     {{{ await $slots.main() }}}

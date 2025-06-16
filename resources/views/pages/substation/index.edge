@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   @can('SubstationPolicy.create')
     <div class="control">
-      @buttons.add({ href: 'substations.create' })
+      @buttons.add({ href: 'substations.create', params: { qs: {typeObject} } })
         Добавить
       @end
     </div>

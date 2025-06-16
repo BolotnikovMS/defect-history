@@ -1,8 +1,16 @@
-import { BaseModel, HasMany, column, computed, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  HasMany,
+  ManyToMany,
+  column,
+  computed,
+  hasMany,
+  manyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 
+import User from 'App/Models/User'
 import { DateTime } from 'luxon'
 import DefectOs from './DefectOs'
-import User from 'App/Models/User'
 
 export default class Department extends BaseModel {
   @column({ isPrimary: true })
@@ -31,9 +39,12 @@ export default class Department extends BaseModel {
   })
   public department_users: HasMany<typeof User>
 
-  @hasMany(() => DefectOs, {
+  @manyToMany(() => DefectOs, {
     localKey: 'id',
-    foreignKey: 'id_department',
+    pivotForeignKey: 'id_department',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'id_defect',
+    pivotTable: 'defect_os_departments',
   })
-  public defect_os: HasMany<typeof DefectOs>
+  public defect_os: ManyToMany<typeof DefectOs>
 }

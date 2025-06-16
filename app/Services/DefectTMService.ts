@@ -1,12 +1,12 @@
-import { addDays, randomStr } from 'App/Utils/utils'
-
 import { AuthContract } from '@ioc:Adonis/Addons/Auth'
 import { RequestContract } from '@ioc:Adonis/Core/Request'
+import { EDateQueryType } from 'App/Enums/DateQueryType'
 import { IDefectParams } from 'App/Interfaces/DefectParams'
 import { IQueryParams } from 'App/Interfaces/QueryParams'
 import Defect from 'App/Models/Defect'
 import DefectImg from 'App/Models/DefectImg'
 import DefectType from 'App/Models/DefectType'
+import { addDays, randomStr } from 'App/Utils/utils'
 import DefectValidator from 'App/Validators/DefectValidator'
 import { unlink } from 'node:fs/promises'
 
@@ -83,8 +83,8 @@ export default class DefectTMService {
 
     return defect
   }
-  public static async getDefect(params: Record<string, any>): Promise<Defect> {
-    const defect = await Defect.findOrFail(params.id)
+  public static async getDefectById(id: number): Promise<Defect> {
+    const defect = await Defect.findOrFail(id)
 
     await defect.load('substation')
     await defect.load('accession')
@@ -93,6 +93,7 @@ export default class DefectTMService {
     await defect.load('intermediate_checks', (query) => {
       query.preload('name_inspector')
       query.preload('responsible_department')
+      query.preload('author')
     })
     await defect.load('name_eliminated')
     await defect.load('defect_imgs')
@@ -144,5 +145,41 @@ export default class DefectTMService {
       .delete()
 
     return
+  }
+
+  public static async getDefectsReport(req: RequestContract) {
+    const { substation, typeDefect, status, dateStart, dateEnd, dateQueryType } =
+      req.qs() as IQueryParams
+    console.log(typeDefect)
+    const defects = await Defect.query()
+      .if(dateStart && dateEnd && EDateQueryType[dateQueryType], (query) => {
+        query.whereBetween(EDateQueryType[dateQueryType], [dateStart, dateEnd])
+      })
+      .orderBy('id_substation', 'asc')
+      .if(substation !== 'all' && substation !== undefined, (query) => {
+        query.where('id_substation', '=', substation)
+      })
+      .preload('substation')
+      .preload('accession')
+      .preload('defect_type')
+      .preload('intermediate_checks', (query) => {
+        query.preload('name_inspector', (query) => {
+          query.preload('department')
+        })
+      })
+      .preload('work_planning', (query) => {
+        query.preload('user_created', (query) => {
+          query.preload('department')
+        })
+      })
+      .if(status === 'open', (query) => query.whereNull('result'))
+      .if(status === 'close', (query) => query.whereNotNull('result'))
+      .if(
+        typeDefect !== undefined && typeDefect !== 'all',
+        (query) => query.where('id_type_defect', '=', typeDefect!)
+        // query.whereIn('id_type_defect', [...typeDefect])
+      )
+
+    return defects
   }
 }

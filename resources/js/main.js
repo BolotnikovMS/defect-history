@@ -71,7 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .attr('placeholder', 'Поиск...')
     })
 
-  const getDataForSelect = (url, classInput, defaultOptionText) => {
+  const getDataForSelect = (
+    url,
+    classInput,
+    defaultOptionText,
+    optionalOutputtingSelector = ''
+  ) => {
     $.ajax({
       url: url,
       method: 'GET',
@@ -82,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
         data.forEach((item) => {
           $(classInput).append(`<option value=${item.id}>${item.name}</option>`)
         })
+        if (optionalOutputtingSelector) {
+          $(optionalOutputtingSelector).html('')
+          data.forEach((item) => {
+            $(optionalOutputtingSelector).append(`<p class='text-hint-field'>- ${item.name}</p>`)
+          })
+        }
       },
       error: function (jqXHR) {
         if (jqXHR.status === 0) {
@@ -113,69 +124,10 @@ document.addEventListener('DOMContentLoaded', () => {
     getDataForSelect(
       `/defect-groups/${idDefectGroup}/defect-classifiers`,
       '.input__classifier',
-      'Выберите классификатор'
+      'Выберите классификатор',
+      '.hint-field-defects-classifier'
     )
   })
-
-  // $('.input__substation').on('select2:select', function (event) {
-  //   const idSubstation = event.params.data.id
-
-  //   $.ajax({
-  //     url: `/substations/show-accession/${idSubstation}`,
-  //     method: 'GET',
-  //     dataType: 'json',
-  //     success: function (options) {
-  //       $('.input__accession').html('')
-  //       $('.input__accession').append(
-  //         '<option value="0" selected disabled>Выберите присоединение</option>'
-  //       )
-  //       options.forEach((option) => {
-  //         $('.input__accession').append(`<option value=${option.id}>${option.name}</option>`)
-  //       })
-  //     },
-  //     error: function (jqXHR) {
-  //       if (jqXHR.status === 0) {
-  //         console.log('Not connect. Verify Network.')
-  //       } else if (jqXHR.status === 404) {
-  //         console.log('Requested page not found (404).')
-  //         $('.input__accession').html('')
-  //         $('.input__accession').append(
-  //           '<option value="0" selected disabled>Произошла ошибка при получении данных с сервера</option>'
-  //         )
-  //       }
-  //     },
-  //   })
-  // })
-
-  // $('.input__defect-group').on('select2:select', function (event) {
-  //   const idDefectGroup = event.params.data.id
-
-  //   $.ajax({
-  //     url: `/defect-groups/${idDefectGroup}/defect-classifiers`,
-  //     method: 'GET',
-  //     dataType: 'json',
-  //     success: function (data) {
-  //       $('.input__classifier').html('')
-  //       $('.input__classifier').append(
-  //         '<option value="0" selected disabled>Выберите классификатор</option>'
-  //       )
-  //       data.forEach((item) => {
-  //         $('.input__classifier').append(`<option value=${item.id}>${item.name}</option>`)
-  //       })
-  //     },
-  //     error: function (jqXHR) {
-  //       if (jqXHR.status === 0) {
-  //         console.log('Not connect. Verify Network.')
-  //       } else if (jqXHR.status === 404) {
-  //         console.log('Requested page not found (404).')
-  //         $('.input__classifier').html('')
-  //         $('.input__classifier').append(
-  //           '<option value="0" selected disabled>Произошла ошибка при получении данных с сервера</option>'
-  //         )
-  //       }
-  //     },
-  //   })
-  // })
 
   // Print PDF
   $('.btn-save-pdf').on('click', () => {
@@ -277,25 +229,63 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 
   // Save table excel
+  const XLSX = require('../../public/js/libs/xlsx/xlsx.full.min.js')
   const exportExcel = (btnSelector, tableSelector, filename = 'excel-file') => {
     const btnSave = document.querySelector(btnSelector)
     const table = document.querySelector(tableSelector)
 
     if (btnSave === null || table === null) return null
 
-    // btnSave.addEventListener('click', () => {
-    //   /* Create worksheet from HTML DOM TABLE */
-    //   const wb = XLSX.utils.table_to_book(table, { sheet: 'sheet-1' })
-
-    //   /* Export to file (start a download) */
-    //   XLSX.writeFile(wb, `${filename}.xls`)
-    // })
     btnSave.addEventListener('click', () => {
-      const table2excel = new Table2Excel()
+      /* Create worksheet from HTML DOM TABLE */
+      const wb = XLSX.utils.table_to_book(table)
 
-      table2excel.export(table, filename)
+      /* Export to file (start a download) */
+      XLSX.writeFile(wb, `${filename}.xlsx`)
     })
+    // btnSave.addEventListener('click', () => {
+    //   const table2excel = new Table2Excel()
+
+    //   table2excel.export(table, filename)
+    // })
   }
 
   exportExcel('.btn-save-excel', '.table', 'Report')
+
+  // Chart
+  // !! попробовать сделать запрос на сервер
+
+  const createChart = (containerChart, selectorOpen, selectorClose) => {
+    const containerChrt = document.querySelector(containerChart)
+    const openDefects = document.querySelector(selectorOpen)
+    const closeDefects = document.querySelector(selectorClose)
+
+    if (openDefects && closeDefects) {
+      const optionsPie = {
+        chart: {
+          type: 'pie',
+        },
+        series: [+openDefects.innerHTML, +closeDefects.innerHTML],
+        labels: ['Открытые дефекты', 'Закрытые дефекты'],
+        colors: ['#f38585', '#a3d581'],
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: 'clamp(13px, 2vw, 16px)',
+            colors: ['#000'],
+          },
+          dropShadow: {
+            enabled: false,
+          },
+        },
+        legend: {
+          position: 'top',
+        },
+      }
+      new ApexCharts(containerChrt, optionsPie).render()
+    }
+  }
+
+  createChart('.chart-defect-tm', '.open-tm-defects', '.close-tm-defects')
+  createChart('.chart-defect-os', '.open-os-defects', '.close-os-defects')
 })

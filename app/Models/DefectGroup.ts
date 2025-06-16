@@ -17,6 +17,11 @@ export default class DefectGroup extends BaseModel {
   @column()
   public type: string
 
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  public importance: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

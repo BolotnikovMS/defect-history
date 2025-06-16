@@ -11,12 +11,20 @@
               params: {id: defectOs.id},
               className: 'btn-color_green'
             })
-              @!icons.close({
-                optionalClasses: 'icon-size_20'
-              })
+              @!icons.close()
               Закрыть дефект
             @end
           @endcan
+          @can('DefectOSPolicy.createCheckup', defectOs)
+            @buttons.base({
+              href: 'defects-os.checkup-create',
+              params: {id: defectOs.id},
+              className: 'btn-color_orange'
+            })
+              @!icons.check()
+              Добавить проверку
+            @end
+          @end
         @endif
         @can('DefectOSPolicy.update', defectOs)
           @buttons.base({
@@ -26,6 +34,16 @@
           })
             @!icons.edit()
             Редактировать дефект
+          @end
+        @endcan
+        @can('DefectOSPolicy.updateDeadline', defectOs)
+          @buttons.base({
+            href: 'defects-os.edit.deadline',
+            params: {id: defectOs.id},
+            className: 'btn-color_blue btn-color_blue-transparent'
+          })
+            @!icons.calendarOne()
+            Изменить срок
           @end
         @endcan
         @buttons.base({
@@ -97,7 +115,52 @@
           @end
         </div>
       </div>
-
+      @if(defectOs.intermediate_checks.length)
+        <div class="defect-info__checks">
+          <div class="defect-info__titles">
+            <h3 class="defect-info__title">Промежуточные результаты</h3>
+          </div>
+          <table class="table defect-info__table">
+            <thead>
+              <th>Добавил запись</th>
+              <th>Дата добавления проверки</th>
+              <th colspan="2">Результаты проверки</th>
+              <th>Кому передано</th>
+              <th style="width: 50px"></th>
+            </thead>
+            <tbody>
+              @each(inter in defectOs.intermediate_checks)
+                <tr>
+                  <td>{{ inter.name_inspector.fullName }}</td>
+                  <td>{{ inter.check_date }}</td>
+                  <td colspan="2">{{ inter.description_results }}</td>
+                  <td>
+                    {{
+                      inter.responsible_department ?
+                        inter.responsible_department.name
+                      :
+                        '-'
+                    }}
+                  </td>
+                  <td>
+                    @if(!await bouncer.with('DefectOSPolicy').denies('deleteCheckup', inter, defectOs) || !await bouncer.with('DefectOSPolicy').denies('updateCheckup', defectOs, inter))
+                      @dropdown.dropdown({
+                        classBtnDropdown: 'btn-dropdown-icon',
+                        dropdownData: [
+                          { name: 'Редактировать', access: 'DefectOSPolicy.updateCheckup', data: defectOs, extraData: inter, path: 'defects-os.checkup.edit', params: { id: inter.id }, icon: 'edit'},
+                          { name: 'Удалить', access: 'DefectOSPolicy.deleteCheckup', data: inter, extraData: defectOs, path: 'defects-os.checkup.destroy', params: { id: inter.id }, icon: 'delete'},
+                        ],
+                      })
+                        @!icons.menu()
+                      @end
+                    @endif
+                  </td>
+                </tr>
+              @end
+            </tbody>
+          </table>
+        </div>
+      @end
       <div class="defect-info__close">
         <div class="defect-info__titles defect-info__titles-row">
           <h3 class="defect-info__title">Выполненные работы по устранению</h3>
@@ -106,7 +169,9 @@
               href: 'defects-os.delete.close-defect-record',
               params: {id: defectOs.id}
             })
-              @!icons.delete()
+              @!icons.delete({
+                optionalClasses: 'icon-cl_black'
+              })
             @end
           @endcan
         </div>
@@ -117,7 +182,7 @@
             </div>
           </div>
           <div class="defect-info__group">
-            <div class="defect-info__text">Сотрудник:
+            <div class="defect-info__text">Дефект устранил:
               <span>{{ defectOs.name_eliminated.fullName }}</span>
             </div>
           </div>

@@ -2,8 +2,6 @@
   href="{{ route(href, params ?? '') }}"
   class="btn btn-cancel {{ className ?? '' }}"
   >
-    @!icons.undo({
-      optionalClasses: 'icon-size_20'
-    })
+    @!icons.undo()
   {{{ await $slots.main() }}}
 </a>

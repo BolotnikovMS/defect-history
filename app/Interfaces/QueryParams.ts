@@ -2,9 +2,14 @@
 export interface IQueryParams {
   status: string
   department: number
-  typeDefect: string | number | undefined
+  typeDefect: string
   defectsClass: string
-  substation: number
+  substation: number | string
   district: number
   sort: string
+  dateStart: string
+  dateEnd: string
+  dateQueryType: string
+  groupDefect: string
+  typeObject: string
 }

@@ -4,7 +4,7 @@
   <h2 class="title">{{ title }}</h2>
   @can('SubstationPolicy.create')
     <div class="control">
-      @buttons.add({ href: 'substations.create' })
+      @buttons.add({ href: 'substations.create', params: { qs: { district: district.id }} })
         Добавить
       @end
     </div>
@@ -16,7 +16,7 @@
         <li class="list__item">
           <div class="list__content">
             <span class="list__text list__text-header">
-              Название ПС
+              Наименование объекта
             </span>
           </div>
         </li>

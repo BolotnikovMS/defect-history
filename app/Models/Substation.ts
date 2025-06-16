@@ -16,6 +16,9 @@ export default class Substation extends BaseModel {
   @column()
   public id_district: number
 
+  @column()
+  public type: string
+
   @column({
     consume: (value: string) => replacementEscapeSymbols(value),
   })
