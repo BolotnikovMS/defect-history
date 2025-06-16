@@ -8,6 +8,7 @@ import DefectOs from 'App/Models/DefectOs'
 import DefectType from 'App/Models/DefectType'
 import District from 'App/Models/District'
 import Substation from 'App/Models/Substation'
+import DefectTMService from 'App/Services/DefectTMService'
 import ReportService from 'App/Services/ReportService'
 
 export default class ReportsController {
@@ -131,32 +132,7 @@ export default class ReportsController {
       request.qs() as IQueryParams
     const substations = await Substation.query()
     const typesDefects = await DefectType.query()
-    const defects = await Defect.query()
-      .if(dateStart && dateEnd && EDateQueryType[dateQueryType], (query) => {
-        query.whereBetween(EDateQueryType[dateQueryType], [dateStart, dateEnd])
-      })
-      .orderBy('id_substation', 'asc')
-      .if(substation !== 'all' && substation !== undefined, (query) => {
-        query.where('id_substation', '=', substation)
-      })
-      .preload('substation')
-      .preload('accession')
-      .preload('defect_type')
-      .preload('intermediate_checks', (query) => {
-        query.preload('name_inspector', (query) => {
-          query.preload('department')
-        })
-      })
-      .preload('work_planning', (query) => {
-        query.preload('user_created', (query) => {
-          query.preload('department')
-        })
-      })
-      .if(status === 'open', (query) => query.whereNull('result'))
-      .if(status === 'close', (query) => query.whereNotNull('result'))
-      .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
-        query.where('id_type_defect', '=', typeDefect!)
-      )
+    const defects = await DefectTMService.getDefectsReport(request)
     const countDefect = defects.length
 
     return view.render('pages/reports/all-defects-tm/index', {

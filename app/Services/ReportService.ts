@@ -1,8 +1,6 @@
 import { RequestContract } from '@ioc:Adonis/Core/Request'
-import { EDateQueryType } from 'App/Enums/DateQueryType'
-import { IQueryParams } from 'App/Interfaces/QueryParams'
-import Defect from 'App/Models/Defect'
 import ExcelJS, { Cell } from 'exceljs'
+import DefectTMService from './DefectTMService'
 
 export default class ReportService {
   static #applyStylesRowTitle(worksheet: ExcelJS.Worksheet): void {
@@ -47,34 +45,7 @@ export default class ReportService {
     }
   }
   public static async createExcelAllDefectsTM(req: RequestContract) {
-    const { substation, typeDefect, status, dateStart, dateEnd, dateQueryType } =
-      req.qs() as IQueryParams
-    const defects = await Defect.query()
-      .if(dateStart && dateEnd && EDateQueryType[dateQueryType], (query) => {
-        query.whereBetween(EDateQueryType[dateQueryType], [dateStart, dateEnd])
-      })
-      .orderBy('id_substation', 'asc')
-      .if(substation !== 'all' && substation !== undefined, (query) => {
-        query.where('id_substation', '=', substation)
-      })
-      .preload('substation')
-      .preload('accession')
-      .preload('defect_type')
-      .preload('intermediate_checks', (query) => {
-        query.preload('name_inspector', (query) => {
-          query.preload('department')
-        })
-      })
-      .preload('work_planning', (query) => {
-        query.preload('user_created', (query) => {
-          query.preload('department')
-        })
-      })
-      .if(status === 'open', (query) => query.whereNull('result'))
-      .if(status === 'close', (query) => query.whereNotNull('result'))
-      .if(typeDefect !== undefined && typeDefect !== 'all', (query) =>
-        query.where('id_type_defect', '=', typeDefect!)
-      )
+    const defects = await DefectTMService.getDefectsReport(req)
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet1')
 
