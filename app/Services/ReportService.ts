@@ -61,10 +61,14 @@ export default class ReportService {
       .preload('accession')
       .preload('defect_type')
       .preload('intermediate_checks', (query) => {
-        query.preload('name_inspector')
+        query.preload('name_inspector', (query) => {
+          query.preload('department')
+        })
       })
       .preload('work_planning', (query) => {
-        query.preload('user_created')
+        query.preload('user_created', (query) => {
+          query.preload('department')
+        })
       })
       .if(status === 'open', (query) => query.whereNull('result'))
       .if(status === 'close', (query) => query.whereNotNull('result'))
@@ -102,11 +106,18 @@ export default class ReportService {
         intermediateChecks: defect.intermediate_checks
           .map(
             (check, i) =>
-              `${i + 1}. ${check.description_results}. ${check.name_inspector.shortUserName}`
+              `${i + 1}. ${check.description_results}. ${check.name_inspector.shortUserName} (${
+                check.name_inspector.department.name
+              })`
           )
           .join(',\n'),
         workPlanning: defect.work_planning
-          .map((work, i) => `${i + 1}. ${work.comment}. ${work.user_created.shortUserName}`)
+          .map(
+            (work, i) =>
+              `${i + 1}. ${work.comment}. ${work.user_created.shortUserName} (${
+                work.user_created.department.name
+              })`
+          )
           .join(',\n'),
       })
     })

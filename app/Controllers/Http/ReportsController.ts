@@ -143,10 +143,14 @@ export default class ReportsController {
       .preload('accession')
       .preload('defect_type')
       .preload('intermediate_checks', (query) => {
-        query.preload('name_inspector')
+        query.preload('name_inspector', (query) => {
+          query.preload('department')
+        })
       })
       .preload('work_planning', (query) => {
-        query.preload('user_created')
+        query.preload('user_created', (query) => {
+          query.preload('department')
+        })
       })
       .if(status === 'open', (query) => query.whereNull('result'))
       .if(status === 'close', (query) => query.whereNotNull('result'))
