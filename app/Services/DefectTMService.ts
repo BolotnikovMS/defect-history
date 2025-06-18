@@ -150,7 +150,6 @@ export default class DefectTMService {
   public static async getDefectsReport(req: RequestContract) {
     const { substation, typeDefect, status, dateStart, dateEnd, dateQueryType } =
       req.qs() as IQueryParams
-    console.log(typeDefect)
     const defects = await Defect.query()
       .if(dateStart && dateEnd && EDateQueryType[dateQueryType], (query) => {
         query.whereBetween(EDateQueryType[dateQueryType], [dateStart, dateEnd])
