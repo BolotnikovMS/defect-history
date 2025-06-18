@@ -50,7 +50,7 @@ export default class ReportService {
     const worksheet = workbook.addWorksheet('Sheet1')
 
     worksheet.columns = [
-      { header: 'Дата добавления', key: 'createdAt', width: 16 },
+      { header: 'Дата добавления', key: 'createdAt', width: 17 },
       { header: 'Тип', key: 'typeDefect', width: 15 },
       { header: 'Объект', key: 'substation', width: 26 },
       { header: 'Присоединение', key: 'accession', width: 30 },
@@ -75,17 +75,13 @@ export default class ReportService {
         workPlanning: defect.work_planning
           .map(
             (work, i) =>
-              `${i + 1}. ${work.comment}. ${work.user_created.shortUserName} (${
-                work.user_created.department.name
-              })`
+              `${i + 1}. ${work.created_at.toFormat('dd.MM.yyyy')}. ${work.comment}. ${work.user_created.shortUserName} (${work.user_created.department.name})`
           )
           .join(',\n'),
         intermediateChecks: defect.intermediate_checks
           .map(
             (check, i) =>
-              `${i + 1}. ${check.description_results}. ${check.name_inspector.shortUserName} (${
-                check.name_inspector.department.name
-              })`
+              `${i + 1}. ${check.createdAt.toFormat('dd.MM.yyyy')}. ${check.description_results}. ${check.name_inspector.shortUserName}(${check.name_inspector.department.name})`
           )
           .join(',\n'),
         eliminationDate: defect.elimination_date?.toFormat('dd.MM.yyyy'),
