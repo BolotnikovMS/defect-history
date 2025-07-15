@@ -1,9 +1,9 @@
+import { RequestContract } from '@ioc:Adonis/Core/Request'
+import { IDefectParams } from 'App/Interfaces/DefectParams'
+import { IQueryParams } from 'App/Interfaces/QueryParams'
 import DefectOs from 'App/Models/DefectOs'
 import Department from 'App/Models/Department'
 import DepartmentService from 'App/Services/DepartmentService'
-import { IDefectParams } from 'App/Interfaces/DefectParams'
-import { IQueryParams } from 'App/Interfaces/QueryParams'
-import { RequestContract } from '@ioc:Adonis/Core/Request'
 
 export default class DefectOSService {
   public static async getDefects(req: RequestContract, limit: number = 15) {
@@ -67,8 +67,8 @@ export default class DefectOSService {
   public static async getNumberDefects(params?: IDefectParams): Promise<number> {
     const numberDefects = (
       await DefectOs.query()
-        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
-        .if(params?.openedDefects, (query) => query.whereNull('result'))
+        .if(params?.status === 'close', (query) => query.whereNotNull('result'))
+        .if(params?.status === 'open', (query) => query.whereNull('result'))
         .count('* as total')
     )[0].$extras.total
 
