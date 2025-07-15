@@ -9,9 +9,9 @@ const validatedParamsSchema = schema.create({
 export const defectsCountValidationParams = {
   schema: validatedParamsSchema,
   messages: {
-    exists: 'Не удалось найти объект по указанному идентификатору!',
+    exists: 'Не удалось найти объект по указанному ключу!',
     number: 'Некорректный формат числа. Параметр должен содержать числовое значение!',
     enum: 'Допустимые значения параметра: "{{ options.choices }}".',
   },
-  reporter: validator.reporters.jsonapi,
+  reporter: validator.reporters.api,
 }
