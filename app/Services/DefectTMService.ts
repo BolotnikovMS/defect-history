@@ -103,21 +103,35 @@ export default class DefectTMService {
 
     return defect
   }
+  // Текущая реализаци для дашборда по ТМ
   public static async getNumberDefects(params?: IDefectParams): Promise<number> {
+    const { status } = params || {}
     const numberDefects = (
       await Defect.query()
-        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
-        .if(params?.openedDefects, (query) => query.whereNull('result'))
+        .if(status === 'close', (query) => query.whereNotNull('result'))
+        .if(status === 'open', (query) => query.whereNull('result'))
         .count('* as total')
     )[0].$extras.total
 
     return numberDefects
   }
+  // API
+  public static async getNumberDefectsByIdSubstation(params: IDefectParams): Promise<number> {
+    const { idSubstation, status } = params
+
+    const numberDefects = await Defect.query()
+      .where('id_substation', '=', idSubstation!)
+      .if(status === 'open', (query) => query.whereNull('result'))
+      .if(status === 'close', (query) => query.whereNotNull('result'))
+      .count('* as total')
+
+    return numberDefects[0].$extras.total
+  }
   public static async getDefectsByType(params?: IDefectParams) {
     const typesDefects = await DefectType.query().preload('defects', (query) => {
       query
-        .if(params?.closedDefects, (query) => query.whereNotNull('result'))
-        .if(params?.openedDefects, (query) => query.whereNull('result'))
+        .if(params?.status === 'close', (query) => query.whereNotNull('result'))
+        .if(params?.status === 'open', (query) => query.whereNull('result'))
     })
 
     return typesDefects
