@@ -10,6 +10,8 @@ export default class extends BaseSchema {
   }
 
   public async down() {
-    this.schema.alterTable(this.tableName, (table) => {})
+    this.schema.alterTable(this.tableName, (table) => {
+      table.dropColumn('type')
+    })
   }
 }

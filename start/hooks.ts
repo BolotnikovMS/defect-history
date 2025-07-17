@@ -62,7 +62,7 @@ View.global('pageDottedRange', (pagination, delta: number = 2) => {
       }
     }
 
-    pages.push(i)
+    pages.push(i.toString())
     l = i
   })
 
