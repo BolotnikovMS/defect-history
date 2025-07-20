@@ -9,6 +9,7 @@ const validatedParamsSchema = schema.create({
 export const defectsCountValidationParams = {
   schema: validatedParamsSchema,
   messages: {
+    required: 'Параметр "id" обязателен!',
     exists: 'Не удалось получить дефекты по указанному ключу!',
     number: 'Некорректный формат числа. Параметр должен содержать числовое значение!',
     enum: 'Допустимые значения параметра: "{{ options.choices }}".',
