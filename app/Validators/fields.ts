@@ -74,3 +74,5 @@ export const email = schema.string([
   rules.escape(),
 ])
 export const password = schema.string([rules.minLength(8), rules.maxLength(160)])
+export const status = schema.enum.optional(['open', 'close'] as const)
+export const idSubstation = schema.number([rules.exists({ table: 'substations', column: 'id' })])
